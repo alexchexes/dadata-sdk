@@ -52,7 +52,8 @@ const suggestion = ref(undefined);
 | locationOptions  | No       | `object`  | Location options for choosing cities or countries                                                                 | `undefined`                                                                                                               |
 | classes          | No       | `object`  | classes                                                                                                           | [DEFAULT_CLASSES](https://github.com/rusproject/vue-dadata/blob/rewritten/src/const/classes.const.ts)                     |
 | highlightOptions | No       | `object`  | highlight options for [vue-word-highlighter](https://github.com/kawamataryo/vue-word-highlighter)                 | [DEFAULT_HIGHLIGHT_OPTIONS](https://github.com/rusproject/vue-dadata/blob/rewritten/src/const/highlight-options.const.ts) |
-| selectOnBlur     | No       | `boolean` | if `true`, automatically select suitable suggestion when input loses focus                                        | `undefined`                                                                                                               |
+| selectOnBlur     | No       | `boolean` | if `true`, automatically select first suggestion when input loses focus                                           | `undefined`                                                                                                               |
+| selectOnEnter    | No       | `boolean` | if `true`, automatically select first suggestion when Enter pressed while suggestions visible                     | `true`                                                                                                                    |
 
 ## Peer dependencies
 

@@ -72,6 +72,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  selectOnEnter: {
+    type: Boolean,
+    default: true,
+  },
   /** Controls browser built-in autocompletion. If "off" doesn't work for you, try "one-time-code" or "new-password" */
   inputAutocomplete: {
     type: String,
@@ -117,6 +121,7 @@ const mergedHighlightOptions = computed(() => {
 
 const {
   queryProxy,
+  visibleQuery,
   suggestionProxy,
   inputFocused,
   suggestionsVisible,
@@ -136,7 +141,6 @@ const {
     <div :class="proxyClasses.search">
       <input
         :name="inputName"
-        v-model="queryProxy"
         :class="proxyClasses.input"
         :autocapitalize="inputAutocapitalize"
         :autocomplete="inputAutocomplete"
@@ -144,6 +148,7 @@ const {
         :disabled="disabled"
         :placeholder="placeholder"
         :spellcheck="inputSpellcheck"
+        :value="visibleQuery"
         type="text"
         @blur="onInputBlur"
         @focus="onInputFocus"

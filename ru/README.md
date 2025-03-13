@@ -60,6 +60,7 @@ import VueDadata from 'vue-dadata'  Vue.use(VueDadata)
 | autoload             | Нет         | boolean                                        | Если `true` , то запрос на подсказки будет инициирован в фоновом режиме в созданном хуке                            |
 | onChange             | Нет         | function(suggestion: DadataSuggestion) -> void | Функция вызывается при выборе всплывающей подсказки                                                                 |
 | selectOnBlur         | Нет         | string                                         |                                                                                                                     |
+| selectOnEnter        | Нет         | boolean                                        | Если `true`, выбирает первую подсказку по нажатию Enter                                                             |
 | defaultClass         | Нет         | string                                         | Компонент класса по умолчанию, значение по умолчанию - `vue-dadata`                                                 |
 | classes              | Нет         | string                                         | Дополнительные классы                                                                                               |
 | inputName            | Нет         | string                                         | Input name атрибут                                                                                                  |

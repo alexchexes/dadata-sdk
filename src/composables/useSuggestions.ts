@@ -17,6 +17,7 @@ export function useSuggestions(
     fromBound?: BoundsType;
     locationOptions?: LocationOptions;
     selectOnBlur: boolean;
+    selectOnEnter: boolean;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emit: (event: 'update:modelValue' | 'update:suggestion' | 'handleError', ...args: any[]) => void,
@@ -25,6 +26,8 @@ export function useSuggestions(
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value),
   });
+
+  const visibleQuery = ref('');
 
   const suggestionProxy = computed({
     get: () => props.suggestion,
@@ -62,7 +65,14 @@ export function useSuggestions(
     suggestionsList.value = await fetchSuggestions();
   }, props.debounceWait);
 
-  watch(queryProxy, async () => {
+  const inputedQuery = ref('');
+
+  watch(queryProxy, async (newVal) => {
+    visibleQuery.value = queryProxy.value;
+
+    activeIndex.value = -1;
+    inputedQuery.value = newVal;
+
     fetchWithDebounce();
   });
 
@@ -86,17 +96,20 @@ export function useSuggestions(
     }
   };
 
-  const onInputChange = () => {
+  const onInputChange = (evt: Event) => {
     if (props.disabled) {
       return;
     }
+
+    const target = evt.target as HTMLInputElement;
+    queryProxy.value = target.value;
 
     suggestionsVisible.value = true;
   };
 
   const canGoDown = computed(() => activeIndex.value < suggestionsList.value.length - 1);
   const canGoUp = computed(() => activeIndex.value >= 0);
-  const canSelect = computed(() => canGoUp.value && canGoDown.value);
+  const haveActiveToSelect = computed(() => canGoUp.value && canGoDown.value);
 
   const onKeyPress = (keyboardEvent: KeyboardEvent, keyEvent: KeyEvent) => {
     if (props.disabled) {
@@ -106,25 +119,46 @@ export function useSuggestions(
     keyboardEvent.preventDefault();
 
     if (keyEvent === KeyEvent.Enter) {
-      if (canSelect.value) {
-        selectSuggestion(activeIndex.value);
-        resetDropdown();
+      if (suggestionsVisible.value && suggestionsList.value.length) {
+        let indexToSelect = null;
+        if (haveActiveToSelect.value) {
+          indexToSelect = activeIndex.value;
+        } else if (props.selectOnEnter) {
+          indexToSelect = 0;
+        }
+        if (indexToSelect !== null) {
+          selectSuggestion(indexToSelect);
+          resetDropdown();
+        }
       }
     }
 
     if (keyEvent === KeyEvent.Esc) {
       suggestionsVisible.value = false;
+      activeIndex.value = -1;
+      visibleQuery.value = queryProxy.value;
     }
 
     if (keyEvent === KeyEvent.Up) {
-      if (canGoUp.value) {
+      if (canGoUp.value && suggestionsVisible.value) {
         activeIndex.value -= 1;
+
+        if (activeIndex.value > -1) {
+          visibleQuery.value = suggestionsList.value[activeIndex.value].value;
+        } else if (activeIndex.value === -1) {
+          visibleQuery.value = queryProxy.value;
+        }
       }
     }
 
     if (keyEvent === KeyEvent.Down) {
-      if (canGoDown.value) {
-        activeIndex.value += 1;
+      if (suggestionsVisible.value) {
+        if (canGoDown.value) {
+          activeIndex.value += 1;
+          visibleQuery.value = suggestionsList.value[activeIndex.value].value;
+        }
+      } else if (suggestionsList.value.length) {
+        suggestionsVisible.value = true;
       }
     }
   };
@@ -151,6 +185,7 @@ export function useSuggestions(
       }
     }
 
+    visibleQuery.value = queryProxy.value;
     inputFocused.value = false;
   };
 
@@ -165,6 +200,7 @@ export function useSuggestions(
 
   return {
     queryProxy,
+    visibleQuery,
     suggestionProxy,
     inputFocused,
     suggestionsVisible,
