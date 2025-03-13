@@ -33,8 +33,8 @@ export function useSuggestions(
 
   const inputFocused = ref(false);
   const suggestionsVisible = ref(true);
-  const suggestionIndex = ref(-1);
-  const suggestionList: Ref<Suggestion[]> = ref([]);
+  const activeIndex = ref(-1);
+  const suggestionsList: Ref<Suggestion[]> = ref([]);
   const suggestionItem: Ref<Suggestion | undefined> = ref(undefined);
 
   const fetchSuggestions = async (count?: number): Promise<Suggestion[]> => {
@@ -60,20 +60,20 @@ export function useSuggestions(
   };
 
   const fetchWithDebounce = useDebounceFn(async () => {
-    suggestionList.value = await fetchSuggestions();
+    suggestionsList.value = await fetchSuggestions();
   }, props.debounceWait);
 
   watch(queryProxy, async () => {
     fetchWithDebounce();
   });
 
-  const resetSuggestions = () => {
+  const resetDropdown = () => {
     if (props.disabled) {
       return;
     }
 
     suggestionsVisible.value = false;
-    suggestionIndex.value = -1;
+    activeIndex.value = -1;
   };
 
   const selectSuggestion = (index: number) => {
@@ -81,10 +81,10 @@ export function useSuggestions(
       return;
     }
 
-    if (suggestionList.value.length >= index - 1) {
-      queryProxy.value = suggestionList.value[index].value;
-      suggestionItem.value = suggestionList.value[index];
-      suggestionProxy.value = suggestionList.value[index];
+    if (suggestionsList.value.length >= index - 1) {
+      queryProxy.value = suggestionsList.value[index].value;
+      suggestionItem.value = suggestionsList.value[index];
+      suggestionProxy.value = suggestionsList.value[index];
     }
   };
 
@@ -96,9 +96,9 @@ export function useSuggestions(
     suggestionsVisible.value = true;
   };
 
-  const limitUp = computed(() => suggestionIndex.value < suggestionList.value.length - 1);
-  const limitDown = computed(() => suggestionIndex.value >= 0);
-  const withinTheBoundaries = computed(() => limitDown.value && limitUp.value);
+  const canGoDown = computed(() => activeIndex.value < suggestionsList.value.length - 1);
+  const canGoUp = computed(() => activeIndex.value >= 0);
+  const canSelect = computed(() => canGoUp.value && canGoDown.value);
 
   const onKeyPress = (keyboardEvent: KeyboardEvent, keyEvent: KeyEvent) => {
     if (props.disabled) {
@@ -108,9 +108,9 @@ export function useSuggestions(
     keyboardEvent.preventDefault();
 
     if (keyEvent === KeyEvent.Enter) {
-      if (withinTheBoundaries.value) {
-        selectSuggestion(suggestionIndex.value);
-        resetSuggestions();
+      if (canSelect.value) {
+        selectSuggestion(activeIndex.value);
+        resetDropdown();
       }
     }
 
@@ -119,14 +119,14 @@ export function useSuggestions(
     }
 
     if (keyEvent === KeyEvent.Up) {
-      if (limitDown.value) {
-        suggestionIndex.value -= 1;
+      if (canGoUp.value) {
+        activeIndex.value -= 1;
       }
     }
 
     if (keyEvent === KeyEvent.Down) {
-      if (limitUp.value) {
-        suggestionIndex.value += 1;
+      if (canGoDown.value) {
+        activeIndex.value += 1;
       }
     }
   };
@@ -157,7 +157,7 @@ export function useSuggestions(
     }
 
     selectSuggestion(index);
-    resetSuggestions();
+    resetDropdown();
   };
 
   return {
@@ -165,8 +165,8 @@ export function useSuggestions(
     suggestionProxy,
     inputFocused,
     suggestionsVisible,
-    suggestionIndex,
-    suggestionList,
+    activeIndex,
+    suggestionsList,
 
     onInputChange,
     onKeyPress,

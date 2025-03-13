@@ -94,6 +94,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:suggestion', 'handleError']);
 
 const proxyClasses: ComputedRef<VueDadataClasses> = useClasses(props.classes);
+
 const proxyHighlightOptions: ComputedRef<HighlightOptions> = useHighlightOptions(
   props.highlightOptions,
 );
@@ -102,9 +103,11 @@ const mergedHighlightOptions = computed(() => {
   const wrapperClass = proxyHighlightOptions.value.wrapperClass
     ? proxyHighlightOptions.value.wrapperClass
     : proxyClasses.value.suggestionItem;
+
   const highlightClass = proxyHighlightOptions.value.highlightClass
     ? proxyHighlightOptions.value.highlightClass
     : proxyClasses.value.suggestionTextHighlight;
+
   return {
     ...proxyHighlightOptions.value,
     wrapperClass,
@@ -117,8 +120,8 @@ const {
   suggestionProxy,
   inputFocused,
   suggestionsVisible,
-  suggestionIndex,
-  suggestionList,
+  activeIndex,
+  suggestionsList,
 
   onInputChange,
   onKeyPress,
@@ -152,24 +155,24 @@ const {
       />
     </div>
     <div
-      v-if="inputFocused && suggestionsVisible && suggestionList.length && !disabled"
+      v-if="inputFocused && suggestionsVisible && suggestionsList.length && !disabled"
       :class="proxyClasses.suggestions"
     >
       <slot
         name="suggestions"
+        :active-index="activeIndex"
         :query="queryProxy"
         :suggestion="suggestionProxy"
-        :suggestion-index="suggestionIndex"
-        :suggestion-list="suggestionList"
+        :suggestions-list="suggestionsList"
       >
         <WordHighlighter
-          v-for="(suggestionItemList, suggestionIndexList) in suggestionList"
-          :key="`suggestion_${suggestionIndexList}`"
-          :class="suggestionIndexList === suggestionIndex ? proxyClasses.suggestionCurrentItem : ''"
+          v-for="(suggestion, suggestionIndex) in suggestionsList"
+          :key="`suggestion_${suggestionIndex}`"
+          :class="suggestionIndex === activeIndex ? proxyClasses.suggestionCurrentItem : ''"
           :query="queryProxy"
-          :text-to-highlight="suggestionItemList.value"
+          :text-to-highlight="suggestion.value"
           v-bind="mergedHighlightOptions"
-          @mousedown="onSuggestionClick(suggestionIndexList)"
+          @mousedown="onSuggestionClick(suggestionIndex)"
         />
       </slot>
     </div>
