@@ -35,7 +35,6 @@ export function useSuggestions(
   const suggestionsVisible = ref(true);
   const activeIndex = ref(-1);
   const suggestionsList: Ref<Suggestion[]> = ref([]);
-  const suggestionItem: Ref<Suggestion | undefined> = ref(undefined);
 
   const fetchSuggestions = async (count?: number): Promise<Suggestion[]> => {
     try {
@@ -83,7 +82,6 @@ export function useSuggestions(
 
     if (suggestionsList.value.length >= index - 1) {
       queryProxy.value = suggestionsList.value[index].value;
-      suggestionItem.value = suggestionsList.value[index];
       suggestionProxy.value = suggestionsList.value[index];
     }
   };
@@ -145,7 +143,12 @@ export function useSuggestions(
     }
 
     if (props.selectOnBlur) {
-      queryProxy.value = suggestionItem.value ? suggestionItem.value?.value : '';
+      if (suggestionsList.value.length) {
+        // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
+        selectSuggestion(0);
+      } else {
+        suggestionProxy.value = undefined;
+      }
     }
 
     inputFocused.value = false;
