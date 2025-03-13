@@ -15,16 +15,39 @@ const reset = () => {
   query.value = '';
   suggestion.value = undefined;
 };
+
+const selectOnBlur = ref(false);
+const selectOnEnter = ref(true);
+const disabled = ref(false);
 </script>
 
 <template>
   <main>
+    <div class="developer-meta">
+      <label class="checkbox-label">
+        selectOnBlur: <input v-model="selectOnBlur" type="checkbox" />
+      </label>
+
+      <label class="checkbox-label">
+        selectOnEnter: <input v-model="selectOnEnter" type="checkbox" />
+      </label>
+
+      <label class="checkbox-label"> disabled: <input v-model="disabled" type="checkbox" /> </label>
+
+      <div>
+        query: <b>{{ query }}</b>
+      </div>
+    </div>
+
     <VueDadata
       v-model="query"
       v-model:suggestion="suggestion"
+      :disabled="disabled"
       :highlight-options="highlightOptions"
-      :selectOnBlur="true"
+      :select-on-blur="selectOnBlur"
+      :select-on-enter="selectOnEnter"
       :token="token"
+      placeholder="Start typing..."
     />
 
     <section v-if="suggestion">
@@ -60,5 +83,21 @@ section {
 pre {
   white-space: pre-wrap;
   font-size: 14px;
+}
+
+.developer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+.checkbox-label input {
+  margin: 0;
 }
 </style>
