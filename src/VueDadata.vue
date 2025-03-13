@@ -148,10 +148,10 @@ const {
         @blur="onInputBlur"
         @focus="onInputFocus"
         @input="onInputChange"
-        @keyup.down="onKeyPress($event, KeyEvent.Down)"
-        @keyup.enter="onKeyPress($event, KeyEvent.Enter)"
-        @keyup.esc="onKeyPress($event, KeyEvent.Esc)"
-        @keyup.up="onKeyPress($event, KeyEvent.Up)"
+        @keydown.down="onKeyPress($event, KeyEvent.Down)"
+        @keydown.enter="onKeyPress($event, KeyEvent.Enter)"
+        @keydown.esc="onKeyPress($event, KeyEvent.Esc)"
+        @keydown.up="onKeyPress($event, KeyEvent.Up)"
       />
     </div>
     <div
