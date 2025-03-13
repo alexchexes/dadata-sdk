@@ -1,7 +1,7 @@
-import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
-import pluginVitest from '@vitest/eslint-plugin'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import pluginVue from 'eslint-plugin-vue';
+import vueTsEslintConfig from '@vue/eslint-config-typescript';
+import pluginVitest from '@vitest/eslint-plugin';
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
 
 export default [
   {
@@ -22,4 +22,11 @@ export default [
     files: ['src/**/__tests__/*'],
   },
   skipFormatting,
-]
+
+  {
+    name: 'custom-rules',
+    rules: {
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+    },
+  },
+];

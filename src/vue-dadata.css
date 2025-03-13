@@ -1,7 +1,7 @@
 /*
- * Styles adapted from react-dadata by Vitaly Baev (https://github.com/vitalybaev/react-dadata)
- * License: MIT. Try to keep it in sync. Original source:
- * https://github.com/vitalybaev/react-dadata/blob/main/packages/react-dadata/src/react-dadata.css
+ * Styles adapted from "react-dadata" by Vitaly Baev (https://github.com/vitalybaev/react-dadata)
+ * Original source: https://github.com/vitalybaev/react-dadata/blob/main/packages/react-dadata/src/react-dadata.css
+ * License: MIT
  */
 .vue-dadata__container {
   position: relative;
@@ -42,6 +42,7 @@
   z-index: 10;
 }
 
+/** NOT IMPLEMENTED YET: */
 /* .vue-dadata__suggestion-note {
   color: #828282;
   font-size: 14px;
@@ -59,6 +60,8 @@
   text-align: left;
   width: 100%;
 }
+
+/** NOT IMPLEMENTED YET: */
 
 /* .vue-dadata__suggestion--line-through {
   text-decoration: line-through;
