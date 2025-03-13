@@ -2,7 +2,7 @@ import type { VueDadataClasses } from '../types';
 
 export const DEFAULT_CLASSES: VueDadataClasses = {
   container: 'vue-dadata vue-dadata__container',
-  search: 'vue-dadata__search',
+  inputWrapper: 'vue-dadata__input-wrapper',
   input: 'vue-dadata__input',
   suggestions: 'vue-dadata__suggestions_container',
   suggestionItem: 'vue-dadata__suggestion',

@@ -138,7 +138,7 @@ const {
 
 <template>
   <div :class="proxyClasses.container">
-    <div :class="proxyClasses.search">
+    <div :class="proxyClasses.inputWrapper">
       <input
         :name="inputName"
         :class="proxyClasses.input"
@@ -158,7 +158,9 @@ const {
         @keydown.esc="onKeyPress($event, KeyEvent.Esc)"
         @keydown.up="onKeyPress($event, KeyEvent.Up)"
       />
+      <slot name="inputOverlay"></slot>
     </div>
+
     <div
       v-if="inputFocused && suggestionsVisible && suggestionsList.length && !disabled"
       :class="proxyClasses.suggestions"

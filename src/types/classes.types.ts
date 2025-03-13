@@ -1,6 +1,6 @@
 export interface VueDadataClasses {
   container?: string;
-  search?: string;
+  inputWrapper?: string;
   input?: string;
   suggestions?: string;
   suggestionItem?: string;

@@ -6,7 +6,7 @@ import { DEFAULT_CLASSES } from '../const';
 export function useClasses(classes?: VueDadataClasses): ComputedRef<VueDadataClasses> {
   return computed(() => ({
     container: classes?.container ?? DEFAULT_CLASSES.container,
-    search: classes?.search ?? DEFAULT_CLASSES.search,
+    inputWrapper: classes?.inputWrapper ?? DEFAULT_CLASSES.inputWrapper,
     input: classes?.input ?? DEFAULT_CLASSES.input,
     suggestions: classes?.suggestions ?? DEFAULT_CLASSES.suggestions,
     suggestionItem: classes?.suggestionItem ?? DEFAULT_CLASSES.suggestionItem,

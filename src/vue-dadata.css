@@ -5,10 +5,11 @@
  */
 .vue-dadata__container {
   position: relative;
+  border-radius: 6px; /* to allow inherit default border-radius when using inputOverlay slot */
 }
 
 .vue-dadata__input {
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid #ccc;
   box-sizing: border-box;
   display: block;
@@ -28,7 +29,7 @@
 
 .vue-dadata__suggestions_container {
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 6px;
   box-shadow: 0 1px 6px 3px rgba(0, 0, 0, 0.1);
   left: 0;
   right: 0;
