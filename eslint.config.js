@@ -26,6 +26,8 @@ export default [
   {
     name: 'custom-rules',
     rules: {
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'prefer-const': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     },
   },
