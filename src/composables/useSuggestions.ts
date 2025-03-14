@@ -23,6 +23,7 @@ export function useSuggestions(
     locationOptions?: LocationOptions;
     selectOnBlur: boolean;
     selectOnEnter: boolean;
+    count: number;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emit: (event: 'update:modelValue' | 'update:suggestion' | 'handleError', ...args: any[]) => void,
@@ -53,7 +54,7 @@ export function useSuggestions(
         toBound: props.toBound,
         fromBound: props.fromBound,
         locationOptions: props.locationOptions,
-        count,
+        count: count ? count : props.count,
       };
 
       return getSuggestions(params);

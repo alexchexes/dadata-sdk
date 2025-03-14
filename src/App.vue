@@ -19,20 +19,27 @@ const reset = () => {
 const selectOnBlur = ref(false);
 const selectOnEnter = ref(true);
 const disabled = ref(false);
+const count = ref(10);
 </script>
 
 <template>
   <main>
     <div class="developer-meta">
-      <label class="checkbox-label">
+      <label class="developer-meta-item">
         selectOnBlur: <input v-model="selectOnBlur" type="checkbox" />
       </label>
 
-      <label class="checkbox-label">
+      <label class="developer-meta-item">
         selectOnEnter: <input v-model="selectOnEnter" type="checkbox" />
       </label>
 
-      <label class="checkbox-label"> disabled: <input v-model="disabled" type="checkbox" /> </label>
+      <div class="developer-meta-item">
+        count: <input v-model="count" max="20" min="1" step="1" type="range" /> {{ count }}
+      </div>
+
+      <label class="developer-meta-item">
+        disabled: <input v-model="disabled" type="checkbox" />
+      </label>
 
       <div>
         query: <b>{{ query }}</b>
@@ -42,6 +49,7 @@ const disabled = ref(false);
     <VueDadata
       v-model="query"
       v-model:suggestion="suggestion"
+      :count="Number(count)"
       :disabled="disabled"
       :highlight-options="highlightOptions"
       :select-on-blur="selectOnBlur"
@@ -96,12 +104,12 @@ pre {
   margin-bottom: 10px;
 }
 
-.checkbox-label {
+.developer-meta-item {
   align-items: center;
   display: flex;
   gap: 8px;
 }
-.checkbox-label input {
+.developer-meta-item input {
   margin: 0;
 }
 .clear-button {

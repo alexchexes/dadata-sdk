@@ -93,6 +93,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  count: {
+    type: Number,
+    default: 10,
+  },
 });
 
 const emit = defineEmits(['update:modelValue', 'update:suggestion', 'handleError']);
