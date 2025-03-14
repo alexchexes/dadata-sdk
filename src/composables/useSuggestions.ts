@@ -6,18 +6,13 @@ import type { AddressSuggestion, AddressSuggestionsParams } from '../types';
 import type { VueDadataEmits, VueDadataProps } from '../VueDadata.vue';
 import { getSuggestions } from '../api';
 
-export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
-  const queryProxy = computed({
-    get: () => props.modelValue,
-    set: (value) => emit('update:modelValue', value),
-  });
-
+export function useSuggestions(
+  queryModel: Ref<string>,
+  suggestionModel: Ref<AddressSuggestion | undefined>,
+  props: VueDadataProps,
+  emit: VueDadataEmits,
+) {
   const visibleQuery = ref('');
-
-  const suggestionProxy = computed({
-    get: () => props.suggestion,
-    set: (value) => emit('update:suggestion', value),
-  });
 
   const inputFocused = ref(false);
   const suggestionsVisible = ref(true);
@@ -38,7 +33,7 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
   const fetchSuggestions = async (): Promise<AddressSuggestion[]> => {
     const params: AddressSuggestionsParams = {
       token: props.token,
-      query: queryProxy.value,
+      query: queryModel.value,
       url: props.url,
       toBound: props.toBound,
       fromBound: props.fromBound,
@@ -54,8 +49,8 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
   }, props.debounceWait);
 
   let dontFetchOnQueryChange = false;
-  watch(queryProxy, async () => {
-    visibleQuery.value = queryProxy.value;
+  watch(queryModel, async () => {
+    visibleQuery.value = queryModel.value;
     activeIndex.value = -1;
 
     if (dontFetchOnQueryChange) {
@@ -86,7 +81,8 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     }
 
     const selectedSuggestion = suggestionsList.value[index];
-    suggestionProxy.value = selectedSuggestion;
+
+    suggestionModel.value = selectedSuggestion;
 
     if (!props.continueSelecting) {
       dontFetchOnQueryChange = true;
@@ -94,27 +90,29 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     }
 
     if (props.addSpace) {
-      queryProxy.value = selectedSuggestion.value + ' ';
+      queryModel.value = selectedSuggestion.value + ' ';
     } else {
-      queryProxy.value = selectedSuggestion.value;
+      queryModel.value = selectedSuggestion.value;
     }
 
     if (props.enrichOnSelect) {
-      const suggestions = await callSuggestionsApi({
-        token: props.token,
-        query: selectedSuggestion.unrestricted_value,
-        count: 1,
-      });
+      enrichSuggestion(selectedSuggestion);
+    }
+  };
 
-      if (suggestions.length) {
-        suggestionProxy.value = suggestions[0];
-        emit('enriched', suggestions[0]);
-      } else {
-        suggestionProxy.value = selectedSuggestion;
-        console.warn(
-          `Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`,
-        );
-      }
+  const enrichSuggestion = async (selectedSuggestion: AddressSuggestion) => {
+    const suggestions = await callSuggestionsApi({
+      token: props.token,
+      query: selectedSuggestion.unrestricted_value,
+      count: 1,
+    });
+
+    if (suggestions.length) {
+      suggestionModel.value = suggestions[0];
+      emit('enriched', suggestions[0]);
+    } else {
+      suggestionModel.value = selectedSuggestion;
+      console.warn(`Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`);
     }
   };
 
@@ -124,7 +122,7 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     }
 
     const target = evt.target as HTMLInputElement;
-    queryProxy.value = target.value;
+    queryModel.value = target.value;
 
     suggestionsVisible.value = true;
   };
@@ -157,7 +155,7 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     if (keyEvent === KeyEvent.Esc) {
       suggestionsVisible.value = false;
       activeIndex.value = -1;
-      visibleQuery.value = queryProxy.value;
+      visibleQuery.value = queryModel.value;
     }
 
     if (keyEvent === KeyEvent.Up) {
@@ -167,7 +165,7 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
         if (activeIndex.value > -1) {
           visibleQuery.value = suggestionsList.value[activeIndex.value].value;
         } else if (activeIndex.value === -1) {
-          visibleQuery.value = queryProxy.value;
+          visibleQuery.value = queryModel.value;
         }
       }
     }
@@ -202,11 +200,11 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0);
       } else {
-        suggestionProxy.value = undefined;
+        suggestionModel.value = undefined;
       }
     }
 
-    visibleQuery.value = queryProxy.value;
+    visibleQuery.value = queryModel.value;
     inputFocused.value = false;
   };
 
@@ -219,9 +217,7 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
   };
 
   return {
-    queryProxy,
     visibleQuery,
-    suggestionProxy,
     inputFocused,
     suggestionsVisible,
     activeIndex,

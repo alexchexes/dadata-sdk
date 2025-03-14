@@ -85,12 +85,12 @@
   margin-right: 0;
 } */
 
-.vue-dadata__suggestion--current {
-  background-color: rgba(0, 124, 214, 0.15);
+.vue-dadata__suggestion:where(:hover) {
+  background-color: rgba(32, 154, 241, 0.067);
 }
 
-.vue-dadata__suggestion:hover {
-  background-color: rgba(0, 124, 214, 0.1);
+.vue-dadata__suggestion--current {
+  background-color: rgba(0, 124, 214, 0.15);
 }
 
 .vue-dadata mark {

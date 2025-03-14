@@ -20,14 +20,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  modelValue: {
-    type: String,
-    required: true,
-  },
-  suggestion: {
-    type: Object as PropType<AddressSuggestion | undefined>,
-    default: () => undefined,
-  },
   placeholder: {
     type: String,
     default: '',
@@ -114,9 +106,13 @@ const props = defineProps({
 });
 export type VueDadataProps = typeof props;
 
+const queryModel = defineModel({ type: String, required: true });
+
+const suggestionModel = defineModel('suggestion', {
+  type: Object as PropType<AddressSuggestion | undefined>,
+});
+
 const emit = defineEmits<{
-  'update:modelValue': [value: string];
-  'update:suggestion': [suggestion: AddressSuggestion | undefined];
   'handleError': [error: unknown];
   'enriched': [suggestion: AddressSuggestion];
 }>();
@@ -145,9 +141,7 @@ const mergedHighlightOptions = computed(() => {
 });
 
 const {
-  queryProxy,
   visibleQuery,
-  suggestionProxy,
   inputFocused,
   suggestionsVisible,
   activeIndex,
@@ -158,7 +152,7 @@ const {
   onInputFocus,
   onInputBlur,
   onSuggestionClick,
-} = useSuggestions(props, emit);
+} = useSuggestions(queryModel, suggestionModel, props, emit);
 </script>
 
 <template>
@@ -193,15 +187,15 @@ const {
       <slot
         name="suggestions"
         :active-index="activeIndex"
-        :query="queryProxy"
-        :suggestion="suggestionProxy"
+        :query="queryModel"
+        :suggestion="suggestionModel"
         :suggestions-list="suggestionsList"
       >
         <WordHighlighter
           v-for="(suggestion, index) in suggestionsList"
           :key="index"
           :class="index === activeIndex ? proxyClasses.suggestionCurrentItem : ''"
-          :query="queryProxy"
+          :query="queryModel"
           :text-to-highlight="suggestion.value"
           v-bind="mergedHighlightOptions"
           @mousedown.prevent="onSuggestionClick(index)"
