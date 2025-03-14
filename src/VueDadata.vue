@@ -198,13 +198,13 @@ const {
         :suggestions-list="suggestionsList"
       >
         <WordHighlighter
-          v-for="(suggestion, suggestionIndex) in suggestionsList"
-          :key="`suggestion_${suggestionIndex}`"
-          :class="suggestionIndex === activeIndex ? proxyClasses.suggestionCurrentItem : ''"
+          v-for="(suggestion, index) in suggestionsList"
+          :key="index"
+          :class="index === activeIndex ? proxyClasses.suggestionCurrentItem : ''"
           :query="queryProxy"
           :text-to-highlight="suggestion.value"
           v-bind="mergedHighlightOptions"
-          @mousedown.prevent="onSuggestionClick(suggestionIndex)"
+          @mousedown.prevent="onSuggestionClick(index)"
         />
       </slot>
     </div>
