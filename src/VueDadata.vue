@@ -179,7 +179,7 @@ const {
           :query="queryProxy"
           :text-to-highlight="suggestion.value"
           v-bind="mergedHighlightOptions"
-          @mousedown="onSuggestionClick(suggestionIndex)"
+          @mousedown.prevent="onSuggestionClick(suggestionIndex)"
         />
       </slot>
     </div>
