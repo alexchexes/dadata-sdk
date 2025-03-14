@@ -71,14 +71,9 @@ export function useSuggestions(
     suggestionsList.value = await fetchSuggestions();
   }, props.debounceWait);
 
-  const inputedQuery = ref('');
-
-  watch(queryProxy, async (newVal) => {
+  watch(queryProxy, async () => {
     visibleQuery.value = queryProxy.value;
-
     activeIndex.value = -1;
-    inputedQuery.value = newVal;
-
     fetchWithDebounce();
   });
 
