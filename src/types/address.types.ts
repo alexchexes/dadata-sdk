@@ -49,7 +49,7 @@ export interface DadataAddress {
   flat_type_full: string;
   geo_lat: string;
   geo_lon: string;
-  history_values: string;
+  history_values: string[];
   house: string;
   house_fias_id: string;
   house_kladr_id: string;
