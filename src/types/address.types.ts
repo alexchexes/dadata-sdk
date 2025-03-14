@@ -7,6 +7,12 @@ export type CapitalMarkerType = '0' | '1' | '2' | '3' | '4';
 export type FiasLevel = '0' | '1' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '65' | '75' | '-1';
 export type QCGeoType = '0' | '1' | '2' | '3' | '4' | '5';
 
+/**
+ * For more details, see the links:
+ * @see {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669103}
+ * @see {@link https://dadata.ru/suggestions/usage/address/}
+ * @see {@link https://dadata.ru/api/suggest/address/#response}
+ */
 export interface DadataAddress {
   area: string;
   area_fias_id: string;
