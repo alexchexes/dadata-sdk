@@ -1,44 +1,69 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import VueDadata from './VueDadata.vue';
-import type { HighlightOptions, AddressSuggestion } from './types';
+import type { AddressSuggestion } from './types';
 
-const token = import.meta.env.VITE_APP_DADATA_API_KEY as string;
+const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
+const userProvidedToken = ref<string | undefined>();
+const usedToken = computed(() => userProvidedToken.value || envToken);
+const visibleToken = computed({
+  get: () => userProvidedToken.value || '',
+  set: (val) => (userProvidedToken.value = val),
+});
 
 const query = ref('');
 const suggestion = ref<AddressSuggestion | undefined>(undefined);
-const highlightOptions: HighlightOptions = {
-  highlightTag: 'span',
-};
 
 const reset = () => {
   query.value = '';
   suggestion.value = undefined;
 };
 
-const selectOnBlur = ref(false);
-const selectOnEnter = ref(true);
-const disabled = ref(false);
-const count = ref(10);
+type DadataProps = InstanceType<typeof VueDadata>['$props'];
+type PartialDadataProps = Pick<
+  DadataProps,
+  'selectOnBlur' | 'selectOnEnter' | 'disabled' | 'count' | 'highlightOptions' | 'placeholder'
+>;
+
+const options = ref<PartialDadataProps>({
+  disabled: false,
+  placeholder: 'Start typing...',
+  count: 10,
+  selectOnBlur: false,
+  selectOnEnter: true,
+  highlightOptions: {
+    highlightTag: 'span',
+  },
+});
 </script>
 
 <template>
   <main>
     <div class="developer-meta">
       <label class="developer-meta-item">
-        selectOnBlur: <input v-model="selectOnBlur" type="checkbox" />
+        token:
+        <input v-model.trim="visibleToken" placeholder="***************************" type="text" />
       </label>
 
       <label class="developer-meta-item">
-        selectOnEnter: <input v-model="selectOnEnter" type="checkbox" />
+        disabled: <input v-model="options.disabled" type="checkbox" />
+      </label>
+
+      <label class="developer-meta-item">
+        placeholder: <input v-model.trim="options.placeholder" type="text" />
       </label>
 
       <div class="developer-meta-item">
-        count: <input v-model="count" max="20" min="1" step="1" type="range" /> {{ count }}
+        count: <input v-model.number="options.count" max="20" min="1" step="1" type="range" />
+        {{ options.count }}
+      </div>
+
+      <div class="developer-meta-item">
+        selectOnBlur: <input v-model="options.selectOnBlur" type="checkbox" />
       </div>
 
       <label class="developer-meta-item">
-        disabled: <input v-model="disabled" type="checkbox" />
+        selectOnEnter: <input v-model="options.selectOnEnter" type="checkbox" />
       </label>
 
       <div>
@@ -46,19 +71,9 @@ const count = ref(10);
       </div>
     </div>
 
-    <VueDadata
-      v-model="query"
-      v-model:suggestion="suggestion"
-      :count="Number(count)"
-      :disabled="disabled"
-      :highlight-options="highlightOptions"
-      :select-on-blur="selectOnBlur"
-      :select-on-enter="selectOnEnter"
-      :token="token"
-      placeholder="Start typing..."
-    >
+    <VueDadata v-model="query" v-model:suggestion="suggestion" :token="usedToken" v-bind:="options">
       <template #inputOverlay>
-        <button v-if="query && !disabled" class="clear-button" @click="reset">x</button>
+        <button v-if="query && !options.disabled" class="clear-button" @click="reset">x</button>
       </template>
     </VueDadata>
 
