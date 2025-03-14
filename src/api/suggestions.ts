@@ -1,5 +1,9 @@
 import axios from 'axios';
-import type { SuggestionDto, SuggestionPayload, Suggestion } from '../types';
+import type {
+  AddressSuggestionsParams,
+  AddressSuggestionsPayload,
+  AddressSuggestion,
+} from '../types';
 
 const DEFAULT_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
 
@@ -8,42 +12,44 @@ const DEFAULT_HEADERS = {
   Accept: 'application/json',
 };
 
-export const getSuggestions = async (suggestion: SuggestionDto): Promise<Suggestion[]> => {
-  const url = suggestion.url ?? DEFAULT_URL;
-  const count = suggestion.count ?? 10;
+export const getSuggestions = async (
+  params: AddressSuggestionsParams,
+): Promise<AddressSuggestion[]> => {
+  const url = params.url ?? DEFAULT_URL;
+  const count = params.count ?? 10;
 
-  let payload: SuggestionPayload = {
-    query: suggestion.query,
+  let payload: AddressSuggestionsPayload = {
+    query: params.query,
     count,
   };
 
-  if (suggestion.toBound) {
+  if (params.toBound) {
     payload = {
       ...payload,
-      to_bound: { value: suggestion.toBound },
+      to_bound: { value: params.toBound },
     };
   }
 
-  if (suggestion.fromBound) {
+  if (params.fromBound) {
     payload = {
       ...payload,
-      from_bound: { value: suggestion.fromBound },
+      from_bound: { value: params.fromBound },
     };
   }
 
-  if (suggestion.locationOptions) {
+  if (params.locationOptions) {
     payload = {
       ...payload,
-      language: suggestion.locationOptions.language,
-      locations: suggestion.locationOptions.locations,
-      locations_boost: suggestion.locationOptions.locationsBoost,
+      language: params.locationOptions.language,
+      locations: params.locationOptions.locations,
+      locations_boost: params.locationOptions.locationsBoost,
     };
   }
 
   const config = {
     headers: {
       ...DEFAULT_HEADERS,
-      Authorization: `Token ${suggestion.token}`,
+      Authorization: `Token ${params.token}`,
     },
   };
 

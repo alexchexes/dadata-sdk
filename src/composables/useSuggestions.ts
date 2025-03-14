@@ -2,13 +2,18 @@ import { computed, ref, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { KeyEvent } from '../types';
-import type { BoundsType, LocationOptions, Suggestion, SuggestionDto } from '../types';
+import type {
+  BoundsType,
+  LocationOptions,
+  AddressSuggestion,
+  AddressSuggestionsParams,
+} from '../types';
 import { getSuggestions } from '../api';
 
 export function useSuggestions(
   props: {
     modelValue: string;
-    suggestion?: Suggestion | undefined;
+    suggestion?: AddressSuggestion | undefined;
     token: string;
     url?: string;
     disabled?: boolean;
@@ -37,11 +42,11 @@ export function useSuggestions(
   const inputFocused = ref(false);
   const suggestionsVisible = ref(true);
   const activeIndex = ref(-1);
-  const suggestionsList: Ref<Suggestion[]> = ref([]);
+  const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
-  const fetchSuggestions = async (count?: number): Promise<Suggestion[]> => {
+  const fetchSuggestions = async (count?: number): Promise<AddressSuggestion[]> => {
     try {
-      const request: SuggestionDto = {
+      const params: AddressSuggestionsParams = {
         token: props.token,
         query: queryProxy.value,
         url: props.url,
@@ -51,11 +56,11 @@ export function useSuggestions(
         count,
       };
 
-      return getSuggestions(request);
+      return getSuggestions(params);
     } catch (error) {
       emit('handleError', error);
 
-      return new Promise<Suggestion[]>((resolve) => {
+      return new Promise<AddressSuggestion[]>((resolve) => {
         resolve([]);
       });
     }

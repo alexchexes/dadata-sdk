@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import VueDadata from './VueDadata.vue';
-import type { HighlightOptions, Suggestion } from './types';
+import type { HighlightOptions, AddressSuggestion } from './types';
 
 const token = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 
 const query = ref('');
-const suggestion = ref<Suggestion | undefined>(undefined);
+const suggestion = ref<AddressSuggestion | undefined>(undefined);
 const highlightOptions: HighlightOptions = {
   highlightTag: 'span',
 };

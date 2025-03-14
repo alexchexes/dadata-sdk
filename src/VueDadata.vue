@@ -8,7 +8,7 @@ import type {
   LocationOptions,
   VueDadataClasses,
   HighlightOptions,
-  Suggestion,
+  AddressSuggestion,
 } from './types';
 import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
@@ -25,7 +25,7 @@ const props = defineProps({
     required: true,
   },
   suggestion: {
-    type: Object as PropType<Suggestion | undefined>,
+    type: Object as PropType<AddressSuggestion | undefined>,
     default: () => undefined,
   },
   placeholder: {
