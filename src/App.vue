@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import VueDadata from './VueDadata.vue';
+import type { VueDadataProps } from './VueDadata.vue';
 import type { AddressSuggestion } from './types';
 
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -19,9 +20,8 @@ const reset = () => {
   suggestion.value = undefined;
 };
 
-type DadataProps = InstanceType<typeof VueDadata>['$props'];
 type PartialDadataProps = Pick<
-  DadataProps,
+  VueDadataProps,
   'selectOnBlur' | 'selectOnEnter' | 'disabled' | 'count' | 'highlightOptions' | 'placeholder'
 >;
 

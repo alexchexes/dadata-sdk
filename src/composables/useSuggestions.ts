@@ -2,32 +2,11 @@ import { computed, ref, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { KeyEvent } from '../types';
-import type {
-  BoundsType,
-  LocationOptions,
-  AddressSuggestion,
-  AddressSuggestionsParams,
-} from '../types';
+import type { AddressSuggestion, AddressSuggestionsParams } from '../types';
+import type { VueDadataEmits, VueDadataProps } from '../VueDadata.vue';
 import { getSuggestions } from '../api';
 
-export function useSuggestions(
-  props: {
-    modelValue: string;
-    suggestion?: AddressSuggestion | undefined;
-    token: string;
-    url?: string;
-    disabled?: boolean;
-    debounceWait?: number;
-    toBound?: BoundsType;
-    fromBound?: BoundsType;
-    locationOptions?: LocationOptions;
-    selectOnBlur: boolean;
-    selectOnEnter: boolean;
-    count: number;
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  emit: (event: 'update:modelValue' | 'update:suggestion' | 'handleError', ...args: any[]) => void,
-) {
+export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
   const queryProxy = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value),

@@ -98,8 +98,14 @@ const props = defineProps({
     default: 10,
   },
 });
+export type VueDadataProps = typeof props;
 
-const emit = defineEmits(['update:modelValue', 'update:suggestion', 'handleError']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string];
+  'update:suggestion': [suggestion: AddressSuggestion | undefined];
+  'handleError': [error: unknown];
+}>();
+export type VueDadataEmits = typeof emit;
 
 const proxyClasses: ComputedRef<VueDadataClasses> = useClasses(props.classes);
 
