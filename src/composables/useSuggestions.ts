@@ -24,35 +24,45 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
   const activeIndex = ref(-1);
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
-  const fetchSuggestions = async (count?: number): Promise<AddressSuggestion[]> => {
+  const callSuggestionsApi = async (
+    params: AddressSuggestionsParams,
+  ): Promise<AddressSuggestion[]> => {
     try {
-      const params: AddressSuggestionsParams = {
-        token: props.token,
-        query: queryProxy.value,
-        url: props.url,
-        toBound: props.toBound,
-        fromBound: props.fromBound,
-        locationOptions: props.locationOptions,
-        count: count ? count : props.count,
-      };
-
-      return getSuggestions(params);
+      return await getSuggestions(params);
     } catch (error) {
       emit('handleError', error);
-
-      return new Promise<AddressSuggestion[]>((resolve) => {
-        resolve([]);
-      });
+      return [];
     }
+  };
+
+  const fetchSuggestions = async (): Promise<AddressSuggestion[]> => {
+    const params: AddressSuggestionsParams = {
+      token: props.token,
+      query: queryProxy.value,
+      url: props.url,
+      toBound: props.toBound,
+      fromBound: props.fromBound,
+      locationOptions: props.locationOptions,
+      count: props.count,
+    };
+
+    return callSuggestionsApi(params);
   };
 
   const fetchWithDebounce = useDebounceFn(async () => {
     suggestionsList.value = await fetchSuggestions();
   }, props.debounceWait);
 
+  let dontFetchOnQueryChange = false;
   watch(queryProxy, async () => {
     visibleQuery.value = queryProxy.value;
     activeIndex.value = -1;
+
+    if (dontFetchOnQueryChange) {
+      dontFetchOnQueryChange = false;
+      return;
+    }
+
     fetchWithDebounce();
   });
 
@@ -65,14 +75,46 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     activeIndex.value = -1;
   };
 
-  const selectSuggestion = (index: number) => {
+  const selectSuggestion = async (index: number) => {
     if (props.disabled) {
       return;
     }
 
-    if (suggestionsList.value.length >= index - 1) {
-      queryProxy.value = suggestionsList.value[index].value;
-      suggestionProxy.value = suggestionsList.value[index];
+    if (index < 0 || index >= suggestionsList.value.length) {
+      // is this ever possible?
+      return;
+    }
+
+    const selectedSuggestion = suggestionsList.value[index];
+    suggestionProxy.value = selectedSuggestion;
+
+    if (!props.continueSelecting) {
+      dontFetchOnQueryChange = true;
+      hideDropdown();
+    }
+
+    if (props.addSpace) {
+      queryProxy.value = selectedSuggestion.value + ' ';
+    } else {
+      queryProxy.value = selectedSuggestion.value;
+    }
+
+    if (props.enrichOnSelect) {
+      const suggestions = await callSuggestionsApi({
+        token: props.token,
+        query: selectedSuggestion.unrestricted_value,
+        count: 1,
+      });
+
+      if (suggestions.length) {
+        suggestionProxy.value = suggestions[0];
+        emit('enriched', suggestions[0]);
+      } else {
+        suggestionProxy.value = selectedSuggestion;
+        console.warn(
+          `Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`,
+        );
+      }
     }
   };
 
@@ -108,7 +150,6 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
         }
         if (indexToSelect !== null) {
           selectSuggestion(indexToSelect);
-          hideDropdown();
         }
       }
     }
@@ -175,7 +216,6 @@ export function useSuggestions(props: VueDadataProps, emit: VueDadataEmits) {
     }
 
     selectSuggestion(index);
-    hideDropdown();
   };
 
   return {

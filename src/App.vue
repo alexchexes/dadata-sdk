@@ -22,19 +22,34 @@ const reset = () => {
 
 type PartialDadataProps = Pick<
   VueDadataProps,
-  'selectOnBlur' | 'selectOnEnter' | 'disabled' | 'count' | 'highlightOptions' | 'placeholder'
+  | 'selectOnBlur'
+  | 'selectOnEnter'
+  | 'disabled'
+  | 'count'
+  | 'highlightOptions'
+  | 'placeholder'
+  | 'enrichOnSelect'
+  | 'addSpace'
+  | 'continueSelecting'
 >;
 
 const options = ref<PartialDadataProps>({
+  highlightOptions: {
+    highlightTag: 'span',
+  },
   disabled: false,
   placeholder: 'Start typing...',
   count: 10,
   selectOnBlur: false,
   selectOnEnter: true,
-  highlightOptions: {
-    highlightTag: 'span',
-  },
+  enrichOnSelect: true,
+  addSpace: true,
+  continueSelecting: false,
 });
+
+const handleEnriched = (suggestion: AddressSuggestion) => {
+  console.info('suggestion enriched: ', suggestion);
+};
 </script>
 
 <template>
@@ -66,12 +81,30 @@ const options = ref<PartialDadataProps>({
         selectOnEnter: <input v-model="options.selectOnEnter" type="checkbox" />
       </label>
 
+      <label class="developer-meta-item">
+        enrichOnSelect: <input v-model="options.enrichOnSelect" type="checkbox" />
+      </label>
+
+      <label class="developer-meta-item">
+        addSpace: <input v-model="options.addSpace" type="checkbox" />
+      </label>
+
+      <label class="developer-meta-item">
+        continueSelecting: <input v-model="options.continueSelecting" type="checkbox" />
+      </label>
+
       <div>
         query: <b>{{ query }}</b>
       </div>
     </div>
 
-    <VueDadata v-model="query" v-model:suggestion="suggestion" :token="usedToken" v-bind:="options">
+    <VueDadata
+      v-model="query"
+      v-model:suggestion="suggestion"
+      :token="usedToken"
+      v-bind:="options"
+      @enriched="handleEnriched"
+    >
       <template #inputOverlay>
         <button v-if="query && !options.disabled" class="clear-button" @click="reset">x</button>
       </template>

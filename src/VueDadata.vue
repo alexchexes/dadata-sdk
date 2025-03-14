@@ -97,6 +97,20 @@ const props = defineProps({
     type: Number,
     default: 10,
   },
+  /** Whether to send additional request after suggestion was selected to obtain data like coordinates and city_district */
+  enrichOnSelect: {
+    type: Boolean,
+    default: true,
+  },
+  /** Whether to add space to input after suggestion was selected */
+  addSpace: {
+    type: Boolean,
+    default: true,
+  },
+  continueSelecting: {
+    type: Boolean,
+    default: false,
+  },
 });
 export type VueDadataProps = typeof props;
 
@@ -104,6 +118,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string];
   'update:suggestion': [suggestion: AddressSuggestion | undefined];
   'handleError': [error: unknown];
+  'enriched': [suggestion: AddressSuggestion];
 }>();
 export type VueDadataEmits = typeof emit;
 
