@@ -76,7 +76,7 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  /** Controls browser built-in autocompletion. If "off" doesn't work for you, try "one-time-code" or "new-password" */
+  /** Controls browser built-in autocompletion. If the default `off` doesn't work for you, try "one-time-code" or "new-password" */
   inputAutocomplete: {
     type: String,
     default: 'off',
