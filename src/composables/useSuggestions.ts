@@ -25,7 +25,7 @@ export function useSuggestions(
     try {
       return await getSuggestions(params);
     } catch (error) {
-      emit('handleError', error);
+      emit('error', error);
       return [];
     }
   };

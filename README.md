@@ -66,10 +66,10 @@ const suggestion = ref(undefined);
 
 ### Emits
 
-| event       | Event payload type | Description                                                                             |
-| ----------- | ------------------ | --------------------------------------------------------------------------------------- |
-| handleError | `unknown`          | emitted in case of any error (usually only network errors occurs)                       |
-| enriched    | `object`           | emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` |
+| event    | Event payload type | Description                                                                             |
+| -------- | ------------------ | --------------------------------------------------------------------------------------- |
+| error    | `unknown`          | emitted in case of any error (usually only network errors occurs)                       |
+| enriched | `object`           | emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` |
 
 ## Peer dependencies
 

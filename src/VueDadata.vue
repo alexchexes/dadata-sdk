@@ -113,7 +113,7 @@ const suggestionModel = defineModel('suggestion', {
 });
 
 const emit = defineEmits<{
-  'handleError': [error: unknown];
+  'error': [error: unknown];
   'enriched': [suggestion: AddressSuggestion];
 }>();
 export type VueDadataEmits = typeof emit;
