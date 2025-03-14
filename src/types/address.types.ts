@@ -1,9 +1,11 @@
 import type { ValueOf } from './helpers.types';
 import { BOUNDS } from '../const';
 
-export type CapitalMarkerType = '0' | '1' | '2' | '3' | '4';
-export type QCGeoType = '0' | '1' | '2' | '3' | '4' | '5';
 export type BoundsType = ValueOf<typeof BOUNDS>;
+
+export type CapitalMarkerType = '0' | '1' | '2' | '3' | '4';
+export type FiasLevel = '0' | '1' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '65' | '75' | '-1';
+export type QCGeoType = '0' | '1' | '2' | '3' | '4' | '5';
 
 export interface DadataAddress {
   area: string;
@@ -33,7 +35,7 @@ export interface DadataAddress {
   city_with_type: string;
   country: string;
   fias_id: string;
-  fias_level: string;
+  fias_level: FiasLevel;
   flat: string;
   flat_area: null;
   flat_price: null;
