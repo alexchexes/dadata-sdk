@@ -81,7 +81,7 @@ export function useSuggestions(
     fetchWithDebounce();
   });
 
-  const resetDropdown = () => {
+  const hideDropdown = () => {
     if (props.disabled) {
       return;
     }
@@ -133,7 +133,7 @@ export function useSuggestions(
         }
         if (indexToSelect !== null) {
           selectSuggestion(indexToSelect);
-          resetDropdown();
+          hideDropdown();
         }
       }
     }
@@ -200,7 +200,7 @@ export function useSuggestions(
     }
 
     selectSuggestion(index);
-    resetDropdown();
+    hideDropdown();
   };
 
   return {
