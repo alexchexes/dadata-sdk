@@ -6,6 +6,7 @@ import type {
 } from '../types';
 
 const DEFAULT_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
+const DEFAULT_COUNT = 10;
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
@@ -16,7 +17,7 @@ export const getSuggestions = async (
   params: AddressSuggestionsParams,
 ): Promise<AddressSuggestion[]> => {
   const url = params.url ?? DEFAULT_URL;
-  const count = params.count ?? 10;
+  const count = params.count ?? DEFAULT_COUNT;
 
   let payload: AddressSuggestionsPayload = {
     query: params.query,
