@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import VueDadata from './VueDadata.vue';
 import type { VueDadataProps } from './VueDadata.vue';
 import type { AddressSuggestion } from './types';
+import { BOUNDS } from './const';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -63,6 +64,8 @@ type EditableOptions = Mutable<
     | 'addSpace'
     | 'continueSelecting'
     | 'showClearButton'
+    | 'fromBound'
+    | 'toBound'
     | 'locationsFilter'
     | 'locationsBoost'
     | 'language'
@@ -82,6 +85,8 @@ const options = ref<EditableOptions>({
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,
+  fromBound: undefined,
+  toBound: undefined,
   locationsFilter: undefined,
   locationsBoost: undefined,
   language: 'ru',
@@ -136,6 +141,28 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       <label class="dev-item">
         showClearButton: <input v-model="options.showClearButton" type="checkbox" />
       </label>
+
+      <pre>{{ options }}</pre>
+
+      <div>
+        fromBound:
+        <select v-model="options.fromBound">
+          <option :value="undefined"></option>
+          <option v-for="boundType in BOUNDS" :key="boundType" :value="boundType">
+            {{ boundType }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        toBound:
+        <select v-model="options.toBound">
+          <option :value="undefined"></option>
+          <option v-for="boundType in BOUNDS" :key="boundType" :value="boundType">
+            {{ boundType }}
+          </option>
+        </select>
+      </div>
 
       <div class="dev-item">
         filter locations by:
