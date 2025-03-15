@@ -4,12 +4,24 @@ import VueDadata from './VueDadata.vue';
 import type { VueDadataProps } from './VueDadata.vue';
 import type { AddressSuggestion } from './types';
 
+// API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const userProvidedToken = ref<string | undefined>();
 const usedToken = computed(() => userProvidedToken.value || envToken);
 const visibleToken = computed({
   get: () => userProvidedToken.value || '',
   set: (val) => (userProvidedToken.value = val),
+});
+
+// locationsBoost
+const locationsBoostString = ref<string>('');
+const locationsBoostModel = computed({
+  get: () => locationsBoostString.value,
+  set: (str) => {
+    locationsBoostString.value = str;
+    const ids = str.split(/[^\d\wа-яё]/gi).filter(Boolean);
+    options.value.locationsBoost = ids.length ? ids : undefined;
+  },
 });
 
 const query = ref('');
@@ -20,21 +32,26 @@ const reset = () => {
   suggestion.value = undefined;
 };
 
-type PartialDadataProps = Pick<
-  VueDadataProps,
-  | 'selectOnBlur'
-  | 'selectOnEnter'
-  | 'disabled'
-  | 'count'
-  | 'highlightOptions'
-  | 'placeholder'
-  | 'enrichOnSelect'
-  | 'addSpace'
-  | 'continueSelecting'
-  | 'showClearButton'
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+type EditableOptions = Mutable<
+  Pick<
+    VueDadataProps,
+    | 'selectOnBlur'
+    | 'selectOnEnter'
+    | 'disabled'
+    | 'count'
+    | 'highlightOptions'
+    | 'placeholder'
+    | 'enrichOnSelect'
+    | 'addSpace'
+    | 'continueSelecting'
+    | 'showClearButton'
+    | 'locationOptions'
+    | 'locationsBoost'
+  >
 >;
 
-const options = ref<PartialDadataProps>({
+const options = ref<EditableOptions>({
   highlightOptions: {
     highlightTag: 'span',
   },
@@ -47,6 +64,7 @@ const options = ref<PartialDadataProps>({
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,
+  locationsBoost: undefined,
 });
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
@@ -57,27 +75,27 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
 <template>
   <main>
     <div class="developer-meta">
-      <label class="developer-meta-item">
+      <div class="developer-meta-item">
         token:
         <input v-model.trim="visibleToken" placeholder="***************************" type="text" />
-      </label>
+      </div>
 
       <label class="developer-meta-item">
         disabled: <input v-model="options.disabled" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <div class="developer-meta-item">
         placeholder: <input v-model.trim="options.placeholder" type="text" />
-      </label>
+      </div>
 
       <div class="developer-meta-item">
         count: <input v-model.number="options.count" max="20" min="1" step="1" type="range" />
         {{ options.count }}
       </div>
 
-      <div class="developer-meta-item">
+      <label class="developer-meta-item">
         selectOnBlur: <input v-model="options.selectOnBlur" type="checkbox" />
-      </div>
+      </label>
 
       <label class="developer-meta-item">
         selectOnEnter: <input v-model="options.selectOnEnter" type="checkbox" />
@@ -98,6 +116,11 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       <label class="developer-meta-item">
         showClearButton: <input v-model="options.showClearButton" type="checkbox" />
       </label>
+
+      <div class="developer-meta-item">
+        locationsBoost (kladr_id's): <input v-model="locationsBoostModel" type="text" />
+        {{ options.locationsBoost }}
+      </div>
 
       <div>
         query: <b>{{ query }}</b>
@@ -157,9 +180,14 @@ pre {
 .developer-meta-item {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  width: fit-content;
 }
 .developer-meta-item input {
   margin: 0;
+}
+label.developer-meta-item:hover {
+  color: #333;
 }
 </style>

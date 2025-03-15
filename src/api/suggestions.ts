@@ -43,8 +43,20 @@ export const getSuggestions = async (
       ...payload,
       language: params.locationOptions.language,
       locations: params.locationOptions.locations,
-      locations_boost: params.locationOptions.locationsBoost,
     };
+  }
+
+  if (params.locationsBoost) {
+    const locationsBoostArray = Array.isArray(params.locationsBoost)
+      ? params.locationsBoost.map((item) => ({ kladr_id: String(item) }))
+      : [{ kladr_id: String(params.locationsBoost) }];
+
+    if (locationsBoostArray.length) {
+      payload = {
+        ...payload,
+        locations_boost: locationsBoostArray,
+      };
+    }
   }
 
   const config = {

@@ -6,6 +6,7 @@ import { KeyEvent } from './types';
 import type {
   BoundsType,
   LocationOptions,
+  LocationsBoost,
   VueDadataClasses,
   HighlightOptions,
   AddressSuggestion,
@@ -51,6 +52,16 @@ const props = defineProps({
   },
   locationOptions: {
     type: Object as PropType<LocationOptions>,
+    default: undefined,
+  },
+  /**
+   * 'kladr_id' or array of 'kladr_id's of region or city that should be prioritized by Dadata when it prepares list of suggestions on its side. Examples:
+   * - `55` - Omsk region
+   * - `63000001` - Samara city
+   * - `[50, 77]` - Moscow and Moscow-City regions
+   */
+  locationsBoost: {
+    type: [Array, String, Number] as PropType<LocationsBoost>,
     default: undefined,
   },
   classes: {
