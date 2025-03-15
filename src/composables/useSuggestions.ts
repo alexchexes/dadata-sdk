@@ -56,7 +56,8 @@ export function useSuggestions(
   }, props.debounceWait);
 
   let dontFetchOnQueryChange = false;
-  watch(queryModel, async () => {
+
+  watch(queryModel, () => {
     visibleQuery.value = queryModel.value;
     activeIndex.value = -1;
 
@@ -65,7 +66,13 @@ export function useSuggestions(
       return;
     }
 
-    fetchWithDebounce();
+    if (queryModel.value.length) {
+      fetchWithDebounce();
+    } else {
+      suggestionModel.value = undefined;
+      suggestionsList.value = [];
+      hideDropdown();
+    }
   });
 
   const hideDropdown = () => {
