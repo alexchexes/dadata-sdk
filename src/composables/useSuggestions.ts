@@ -18,11 +18,23 @@ export function useSuggestions(
   const activeIndex = ref(-1);
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
-  const callSuggestionsApi = async (
-    params: AddressSuggestionsParams,
+  const fetchSuggestions = async (
+    paramsOverrides: Partial<AddressSuggestionsParams> = {},
   ): Promise<AddressSuggestion[]> => {
     try {
-      return await getSuggestions(params);
+      return await getSuggestions({
+        token: props.token,
+        url: props.url,
+        httpCache: props.httpCache,
+        query: queryModel.value,
+        count: props.count,
+        fromBound: props.fromBound,
+        toBound: props.toBound,
+        locationsFilter: props.locationsFilter,
+        locationsBoost: props.locationsBoost,
+        language: props.language,
+        ...paramsOverrides,
+      });
     } catch (error) {
       emit('error', error);
       return [];
@@ -35,23 +47,6 @@ export function useSuggestions(
     queryModel.value = '';
     suggestionModel.value = undefined;
     hideDropdown();
-  };
-
-  const fetchSuggestions = async (): Promise<AddressSuggestion[]> => {
-    const params: AddressSuggestionsParams = {
-      token: props.token,
-      url: props.url,
-      httpCache: props.httpCache,
-      query: queryModel.value,
-      count: props.count,
-      fromBound: props.fromBound,
-      toBound: props.toBound,
-      locationsFilter: props.locationsFilter,
-      locationsBoost: props.locationsBoost,
-      language: props.language,
-    };
-
-    return callSuggestionsApi(params);
   };
 
   const fetchWithDebounce = useDebounceFn(async () => {
@@ -118,13 +113,9 @@ export function useSuggestions(
   };
 
   const enrichSuggestion = async (selectedSuggestion: AddressSuggestion) => {
-    const suggestions = await callSuggestionsApi({
-      token: props.token,
-      url: props.url,
-      httpCache: props.httpCache,
+    const suggestions = await fetchSuggestions({
       query: selectedSuggestion.unrestricted_value,
       count: 1,
-      locationsFilter: props.locationsFilter,
     });
 
     if (
