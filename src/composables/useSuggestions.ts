@@ -64,10 +64,13 @@ export function useSuggestions(
       return;
     }
 
+    if (props.clearSuggestionOnChange) {
+      suggestionModel.value = undefined;
+    }
+
     if (queryModel.value.length) {
       fetchWithDebounce();
     } else {
-      suggestionModel.value = undefined;
       suggestionsList.value = [];
       hideDropdown();
     }

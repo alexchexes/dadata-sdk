@@ -61,6 +61,7 @@ type EditableOptions = Mutable<
     | 'highlightOptions'
     | 'placeholder'
     | 'enrichOnSelect'
+    | 'clearSuggestionOnChange'
     | 'addSpace'
     | 'continueSelecting'
     | 'showClearButton'
@@ -82,6 +83,7 @@ const options = ref<EditableOptions>({
   selectOnBlur: false,
   selectOnEnter: true,
   enrichOnSelect: true,
+  clearSuggestionOnChange: true,
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,
@@ -130,6 +132,10 @@ const nowrapQuery = ref(true);
 
       <label class="dev-item">
         enrichOnSelect: <input v-model="options.enrichOnSelect" type="checkbox" />
+      </label>
+
+      <label class="dev-item">
+        clearSuggestionOnChange: <input v-model="options.clearSuggestionOnChange" type="checkbox" />
       </label>
 
       <label class="dev-item">

@@ -118,6 +118,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  clearSuggestionOnChange: {
+    type: Boolean,
+    default: true,
+  },
   /** Whether to add space to input after suggestion was selected */
   addSpace: {
     type: Boolean,
