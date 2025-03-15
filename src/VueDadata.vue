@@ -11,7 +11,7 @@ import type {
   AddressSuggestion,
   LocationRestriction,
 } from './types';
-import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
+import { DEFAULT_CLASSES, DEFAULT_COUNT, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
 import { useHighlightOptions } from './composables/useHighlightOptions';
 import { useSuggestions } from './composables/useSuggestions';
@@ -111,7 +111,7 @@ const props = defineProps({
   },
   count: {
     type: Number,
-    default: 10,
+    default: DEFAULT_COUNT,
   },
   /** Whether to send additional request after suggestion was selected to obtain data like coordinates and city_district */
   enrichOnSelect: {

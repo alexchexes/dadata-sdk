@@ -4,9 +4,7 @@ import type {
   AddressSuggestionsPayload,
   AddressSuggestion,
 } from '../types';
-
-const DEFAULT_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
-const DEFAULT_COUNT = 10;
+import { DEFAULT_COUNT, DEFAULT_URL } from '@/const';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',

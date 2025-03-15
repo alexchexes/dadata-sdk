@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import VueDadata from './VueDadata.vue';
 import type { VueDadataProps } from './VueDadata.vue';
 import type { AddressSuggestion } from './types';
-import { BOUNDS } from './const';
+import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from './const';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -79,7 +79,7 @@ const options = ref<EditableOptions>({
   },
   disabled: false,
   placeholder: 'Start typing...',
-  count: 10,
+  count: DEFAULT_COUNT,
   selectOnBlur: false,
   selectOnEnter: true,
   enrichOnSelect: true,
@@ -118,7 +118,8 @@ const nowrapQuery = ref(true);
       </div>
 
       <div class="dev-item">
-        count: <input v-model.number="options.count" max="20" min="1" step="1" type="range" />
+        count:
+        <input v-model.number="options.count" :max="MAX_SUG_COUNT" min="1" step="1" type="range" />
         {{ options.count }}
       </div>
 
