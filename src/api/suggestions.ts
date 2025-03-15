@@ -19,30 +19,21 @@ export const getSuggestions = async (
   const url = params.url ?? DEFAULT_URL;
   const count = params.count ?? DEFAULT_COUNT;
 
-  let payload: AddressSuggestionsPayload = {
+  const payload: AddressSuggestionsPayload = {
     query: params.query,
     count,
   };
 
   if (params.toBound) {
-    payload = {
-      ...payload,
-      to_bound: { value: params.toBound },
-    };
+    payload.to_bound = { value: params.toBound };
   }
 
   if (params.fromBound) {
-    payload = {
-      ...payload,
-      from_bound: { value: params.fromBound },
-    };
+    payload.from_bound = { value: params.fromBound };
   }
 
   if (params.locationOptions) {
-    payload = {
-      ...payload,
-      locations: params.locationOptions.locations,
-    };
+    payload.locations = params.locationOptions.locations;
   }
 
   if (params.language) {
@@ -55,10 +46,7 @@ export const getSuggestions = async (
       : [{ kladr_id: String(params.locationsBoost) }];
 
     if (locationsBoostArray.length) {
-      payload = {
-        ...payload,
-        locations_boost: locationsBoostArray,
-      };
+      payload.locations_boost = locationsBoostArray;
     }
   }
 
