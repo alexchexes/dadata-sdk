@@ -5,11 +5,11 @@ import WordHighlighter from 'vue-word-highlighter';
 import { KeyEvent } from './types';
 import type {
   BoundsType,
-  LocationOptions,
   LocationsBoost,
   VueDadataClasses,
   HighlightOptions,
   AddressSuggestion,
+  LocationRestriction,
 } from './types';
 import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
@@ -50,8 +50,11 @@ const props = defineProps({
     type: String,
     default: 'vue-dadata-input',
   },
-  locationOptions: {
-    type: Object as PropType<LocationOptions>,
+  /** Restrict search by locations (API `locations` option).
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
+   */
+  locationsFilter: {
+    type: [Object, Array] as PropType<LocationRestriction | LocationRestriction[]>,
     default: undefined,
   },
   /**

@@ -24,6 +24,23 @@ const locationsBoostModel = computed({
   },
 });
 
+// locationsFilter option
+const locationsExamples = {
+  no: undefined,
+  oneRegion: { region: 'краснодарский' },
+  oneCity: { region: 'краснодарский', city: 'сочи' },
+  fewRegions: [{ region: 'Воронежская' }, { region: 'Ростовская' }],
+  fewLocations: [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
+  diffenetTypes: [{ region: 'Москва' }, { kladr_id: '50' }],
+  diffenetTypesOneObject: { region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8', city: 'Сочи' },
+  fias_id: { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
+  kladr_id: { kladr_id: '6300000100000' },
+  country_iso_code: { country_iso_code: 'KZ' },
+  region_iso_code: { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
+  countryAndRegion: { country: 'Беларусь', region: 'Брестская' },
+  allowAnyCountry: { country: '*' },
+};
+
 const query = ref('');
 const suggestion = ref<AddressSuggestion | undefined>(undefined);
 
@@ -46,7 +63,7 @@ type EditableOptions = Mutable<
     | 'addSpace'
     | 'continueSelecting'
     | 'showClearButton'
-    | 'locationOptions'
+    | 'locationsFilter'
     | 'locationsBoost'
     | 'language'
   >
@@ -65,6 +82,7 @@ const options = ref<EditableOptions>({
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,
+  locationsFilter: undefined,
   locationsBoost: undefined,
   language: 'ru',
 });
@@ -76,60 +94,73 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
 
 <template>
   <main>
-    <div class="developer-meta">
-      <div class="developer-meta-item">
+    <div class="dev">
+      <div class="dev-item">
         token:
         <input v-model.trim="visibleToken" placeholder="***************************" type="text" />
       </div>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         disabled: <input v-model="options.disabled" type="checkbox" />
       </label>
 
-      <div class="developer-meta-item">
+      <div class="dev-item">
         placeholder: <input v-model.trim="options.placeholder" type="text" />
       </div>
 
-      <div class="developer-meta-item">
+      <div class="dev-item">
         count: <input v-model.number="options.count" max="20" min="1" step="1" type="range" />
         {{ options.count }}
       </div>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         selectOnBlur: <input v-model="options.selectOnBlur" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         selectOnEnter: <input v-model="options.selectOnEnter" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         enrichOnSelect: <input v-model="options.enrichOnSelect" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         addSpace: <input v-model="options.addSpace" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         continueSelecting: <input v-model="options.continueSelecting" type="checkbox" />
       </label>
 
-      <label class="developer-meta-item">
+      <label class="dev-item">
         showClearButton: <input v-model="options.showClearButton" type="checkbox" />
       </label>
 
-      <div class="developer-meta-item">
+      <div class="dev-item">
+        filter locations by:
+        <label v-for="(locationObj, exampleName) in locationsExamples" :key="exampleName">
+          <input v-model="options.locationsFilter" :value="locationObj" type="radio" />
+          {{ exampleName }}
+        </label>
+      </div>
+      <div v-if="options.locationsFilter">{{ options.locationsFilter }}</div>
+
+      <div class="dev-item">
         locationsBoost (kladr_id's): <input v-model="locationsBoostModel" type="text" />
         {{ options.locationsBoost }}
       </div>
 
-      <div class="developer-meta-item">
-        language :
-        <select v-model="options.language">
-          <option value="ru">RU</option>
-          <option value="en">EN</option>
-        </select>
+      <div class="dev-item">
+        language:
+        <label>
+          <input v-model="options.language" :value="'ru'" type="radio" />
+          RU
+        </label>
+        <label>
+          <input v-model="options.language" :value="'en'" type="radio" />
+          EN
+        </label>
       </div>
 
       <div>
@@ -145,7 +176,7 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       @enriched="handleEnriched"
     />
 
-    <section v-if="suggestion">
+    <section v-if="suggestion" class="dev">
       Current suggestion:
       <button @click="reset">Clean</button>
 
@@ -168,36 +199,55 @@ main {
   padding: 48px 16px 200px;
 }
 
-section {
+.dev section {
   margin-top: 10px;
   border-radius: 4px;
   background-color: #fff;
   padding: 10px 20px;
 }
 
-pre {
+.dev pre {
   white-space: pre-wrap;
   font-size: 14px;
 }
 
-.developer-meta {
+.dev {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 10px;
 }
 
-.developer-meta-item {
+.dev-item {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   width: fit-content;
 }
-.developer-meta-item input {
+.dev-item input {
   margin: 0;
 }
-label.developer-meta-item:hover {
+label.dev-item:hover {
   color: #333;
+}
+
+.dev label:has(input[type='radio']) {
+  background-color: #fff;
+  box-shadow: 0px 2px 3px #0000002b;
+  border-radius: 8px;
+  padding: 0 8px 2px;
+  font-size: 14px;
+}
+.dev label:has(input[type='radio']) input[type='radio'] {
+  display: none;
+}
+.dev label:has(input[type='radio']:not(:checked)):hover {
+  cursor: pointer;
+  background-color: #f3f3f3;
+}
+.dev label:has(input[type='radio']:checked) {
+  background-color: #333;
+  color: #fff;
 }
 </style>

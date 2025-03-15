@@ -44,7 +44,7 @@ export function useSuggestions(
       url: props.url,
       toBound: props.toBound,
       fromBound: props.fromBound,
-      locationOptions: props.locationOptions,
+      locationsFilter: props.locationsFilter,
       language: props.language,
       locationsBoost: props.locationsBoost,
       count: props.count,

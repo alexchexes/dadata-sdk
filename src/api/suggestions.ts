@@ -32,8 +32,11 @@ export const getSuggestions = async (
     payload.from_bound = { value: params.fromBound };
   }
 
-  if (params.locationOptions) {
-    payload.locations = params.locationOptions.locations;
+  if (params.locationsFilter) {
+    const locationsArray = Array.isArray(params.locationsFilter)
+      ? params.locationsFilter
+      : [params.locationsFilter];
+    payload.locations = locationsArray;
   }
 
   if (params.language) {

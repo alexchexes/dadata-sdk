@@ -1,4 +1,4 @@
-import type { LocationOptions, LocationsBoost } from '../types';
+import type { LocationRestriction, LocationsBoost } from '../types';
 import type { BoundsType, DadataAddress } from './address.types';
 
 /**
@@ -11,7 +11,7 @@ export interface AddressSuggestionsParams {
   count?: number;
   toBound?: BoundsType;
   fromBound?: BoundsType;
-  locationOptions?: LocationOptions;
+  locationsFilter?: LocationRestriction | LocationRestriction[];
   locationsBoost?: LocationsBoost;
   language?: string;
 }
@@ -32,7 +32,7 @@ export interface AddressSuggestionsPayload {
   to_bound?: { value: BoundsType };
   from_bound?: { value: BoundsType };
   language?: string;
-  locations?: object[];
+  locations?: LocationRestriction[];
   locations_boost?: LocationsBoostItem | LocationsBoostItem[];
 }
 
