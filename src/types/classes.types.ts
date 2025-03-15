@@ -6,4 +6,5 @@ export interface VueDadataClasses {
   suggestionItem?: string;
   suggestionCurrentItem?: string;
   suggestionTextHighlight?: string;
+  clearButton?: string;
 }

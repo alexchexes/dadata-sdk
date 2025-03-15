@@ -31,6 +31,7 @@ type PartialDadataProps = Pick<
   | 'enrichOnSelect'
   | 'addSpace'
   | 'continueSelecting'
+  | 'showClearButton'
 >;
 
 const options = ref<PartialDadataProps>({
@@ -45,6 +46,7 @@ const options = ref<PartialDadataProps>({
   enrichOnSelect: true,
   addSpace: true,
   continueSelecting: false,
+  showClearButton: false,
 });
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
@@ -93,6 +95,10 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
         continueSelecting: <input v-model="options.continueSelecting" type="checkbox" />
       </label>
 
+      <label class="developer-meta-item">
+        showClearButton: <input v-model="options.showClearButton" type="checkbox" />
+      </label>
+
       <div>
         query: <b>{{ query }}</b>
       </div>
@@ -104,11 +110,7 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       :token="usedToken"
       v-bind:="options"
       @enriched="handleEnriched"
-    >
-      <template #inputOverlay>
-        <button v-if="query && !options.disabled" class="clear-button" @click="reset">x</button>
-      </template>
-    </VueDadata>
+    />
 
     <section v-if="suggestion">
       Current suggestion:
@@ -159,28 +161,5 @@ pre {
 }
 .developer-meta-item input {
   margin: 0;
-}
-.clear-button {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  translate: 0 -50%;
-  height: 100%;
-  margin: 0;
-  padding: 0 12px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-weight: bold;
-  color: #666;
-  border-top-right-radius: inherit;
-  border-bottom-right-radius: inherit;
-}
-.clear-button:disabled {
-  display: none;
-}
-.clear-button:hover {
-  color: red;
-  background-color: #8882;
 }
 </style>

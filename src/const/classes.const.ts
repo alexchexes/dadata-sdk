@@ -8,4 +8,5 @@ export const DEFAULT_CLASSES: VueDadataClasses = {
   suggestionItem: 'vue-dadata__suggestion',
   suggestionCurrentItem: 'vue-dadata__suggestion--current',
   suggestionTextHighlight: 'vue-dadata--highlighted-text',
+  clearButton: 'vue-dadata--clear-button',
 };

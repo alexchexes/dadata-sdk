@@ -13,7 +13,6 @@ export function useSuggestions(
   emit: VueDadataEmits,
 ) {
   const visibleQuery = ref('');
-
   const inputFocused = ref(false);
   const suggestionsVisible = ref(true);
   const activeIndex = ref(-1);
@@ -28,6 +27,14 @@ export function useSuggestions(
       emit('error', error);
       return [];
     }
+  };
+
+  const canClear = computed(() => queryModel.value !== '' && !props.disabled);
+
+  const clear = () => {
+    queryModel.value = '';
+    suggestionModel.value = undefined;
+    hideDropdown();
   };
 
   const fetchSuggestions = async (): Promise<AddressSuggestion[]> => {
@@ -222,11 +229,13 @@ export function useSuggestions(
     suggestionsVisible,
     activeIndex,
     suggestionsList,
+    canClear,
 
     onInputChange,
     onKeyPress,
     onInputFocus,
     onInputBlur,
     onSuggestionClick,
+    clear,
   };
 }

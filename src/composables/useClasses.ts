@@ -13,5 +13,6 @@ export function useClasses(classes?: VueDadataClasses): ComputedRef<VueDadataCla
     suggestionCurrentItem: classes?.suggestionCurrentItem ?? DEFAULT_CLASSES.suggestionCurrentItem,
     suggestionTextHighlight:
       classes?.suggestionTextHighlight ?? DEFAULT_CLASSES.suggestionTextHighlight,
+    clearButton: classes?.clearButton ?? DEFAULT_CLASSES.clearButton,
   }));
 }

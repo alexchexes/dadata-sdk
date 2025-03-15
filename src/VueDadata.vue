@@ -14,6 +14,7 @@ import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
 import { useHighlightOptions } from './composables/useHighlightOptions';
 import { useSuggestions } from './composables/useSuggestions';
+import IconCross from './IconCross.vue';
 
 const props = defineProps({
   token: {
@@ -103,6 +104,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showClearButton: {
+    type: Boolean,
+    default: false,
+  },
 });
 export type VueDadataProps = typeof props;
 
@@ -146,12 +151,14 @@ const {
   suggestionsVisible,
   activeIndex,
   suggestionsList,
+  canClear,
 
   onInputChange,
   onKeyPress,
   onInputFocus,
   onInputBlur,
   onSuggestionClick,
+  clear,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
 </script>
 
@@ -178,6 +185,16 @@ const {
         @keydown.up="onKeyPress($event, KeyEvent.Up)"
       />
       <slot name="inputOverlay"></slot>
+
+      <button
+        v-if="props.showClearButton && canClear"
+        :class="proxyClasses.clearButton"
+        @mousedown.prevent="clear"
+      >
+        <slot name="clearButtonIcon">
+          <IconCross />
+        </slot>
+      </button>
     </div>
 
     <div
