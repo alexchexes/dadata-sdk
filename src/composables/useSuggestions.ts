@@ -121,13 +121,16 @@ export function useSuggestions(
       token: props.token,
       query: selectedSuggestion.unrestricted_value,
       count: 1,
+      locationsFilter: props.locationsFilter,
     });
 
-    if (suggestions.length) {
+    if (
+      suggestions.length &&
+      suggestions[0].unrestricted_value === selectedSuggestion.unrestricted_value
+    ) {
       suggestionModel.value = suggestions[0];
       emit('enriched', suggestions[0]);
     } else {
-      suggestionModel.value = selectedSuggestion;
       console.warn(`Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`);
     }
   };
