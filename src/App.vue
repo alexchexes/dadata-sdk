@@ -48,6 +48,7 @@ type EditableOptions = Mutable<
     | 'showClearButton'
     | 'locationOptions'
     | 'locationsBoost'
+    | 'language'
   >
 >;
 
@@ -65,6 +66,7 @@ const options = ref<EditableOptions>({
   continueSelecting: false,
   showClearButton: false,
   locationsBoost: undefined,
+  language: 'ru',
 });
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
@@ -120,6 +122,14 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       <div class="developer-meta-item">
         locationsBoost (kladr_id's): <input v-model="locationsBoostModel" type="text" />
         {{ options.locationsBoost }}
+      </div>
+
+      <div class="developer-meta-item">
+        language :
+        <select v-model="options.language">
+          <option value="ru">RU</option>
+          <option value="en">EN</option>
+        </select>
       </div>
 
       <div>

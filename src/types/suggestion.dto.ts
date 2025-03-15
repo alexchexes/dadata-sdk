@@ -13,6 +13,7 @@ export interface AddressSuggestionsParams {
   fromBound?: BoundsType;
   locationOptions?: LocationOptions;
   locationsBoost?: LocationsBoost;
+  language?: string;
 }
 
 /**

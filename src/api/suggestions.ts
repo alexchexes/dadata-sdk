@@ -41,9 +41,12 @@ export const getSuggestions = async (
   if (params.locationOptions) {
     payload = {
       ...payload,
-      language: params.locationOptions.language,
       locations: params.locationOptions.locations,
     };
+  }
+
+  if (params.language) {
+    payload.language = params.language;
   }
 
   if (params.locationsBoost) {

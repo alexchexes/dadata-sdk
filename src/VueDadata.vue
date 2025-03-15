@@ -64,6 +64,11 @@ const props = defineProps({
     type: [Array, String, Number] as PropType<LocationsBoost>,
     default: undefined,
   },
+  /** Language for displayed suggestions. `en` or `ru`. Default `ru`. `en` mostly just transliterates pretty much everything */
+  language: {
+    type: String,
+    default: 'ru',
+  },
   classes: {
     type: Object as PropType<VueDadataClasses>,
     default: () => DEFAULT_CLASSES,

@@ -45,6 +45,7 @@ export function useSuggestions(
       toBound: props.toBound,
       fromBound: props.fromBound,
       locationOptions: props.locationOptions,
+      language: props.language,
       locationsBoost: props.locationsBoost,
       count: props.count,
     };
