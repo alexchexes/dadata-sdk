@@ -142,8 +142,6 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
         showClearButton: <input v-model="options.showClearButton" type="checkbox" />
       </label>
 
-      <pre>{{ options }}</pre>
-
       <div>
         fromBound:
         <select v-model="options.fromBound">
@@ -165,7 +163,7 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       </div>
 
       <div class="dev-item">
-        filter locations by:
+        locationsFilter:
         <label v-for="(locationObj, exampleName) in locationsExamples" :key="exampleName">
           <input v-model="options.locationsFilter" :value="locationObj" type="radio" />
           {{ exampleName }}
@@ -204,10 +202,12 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
     />
 
     <section v-if="suggestion" class="dev">
-      Current suggestion:
-      <button @click="reset">Clean</button>
+      <div>
+        Current suggestion:
+        <button @click="reset">Clean</button>
 
-      <pre>{{ suggestion }}</pre>
+        <pre>{{ suggestion }}</pre>
+      </div>
     </section>
   </main>
 </template>
