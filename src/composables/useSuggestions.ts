@@ -41,6 +41,7 @@ export function useSuggestions(
     const params: AddressSuggestionsParams = {
       token: props.token,
       url: props.url,
+      httpCache: props.httpCache,
       query: queryModel.value,
       count: props.count,
       fromBound: props.fromBound,
@@ -119,6 +120,8 @@ export function useSuggestions(
   const enrichSuggestion = async (selectedSuggestion: AddressSuggestion) => {
     const suggestions = await callSuggestionsApi({
       token: props.token,
+      url: props.url,
+      httpCache: props.httpCache,
       query: selectedSuggestion.unrestricted_value,
       count: 1,
       locationsFilter: props.locationsFilter,

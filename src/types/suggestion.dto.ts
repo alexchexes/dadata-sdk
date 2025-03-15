@@ -7,6 +7,7 @@ import type { BoundsType, DadataAddress } from './address.types';
 export interface AddressSuggestionsParams {
   token: string;
   url?: string;
+  httpCache?: boolean;
   query: string;
   count?: number;
   fromBound?: BoundsType;

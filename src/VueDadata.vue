@@ -30,6 +30,10 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  httpCache: {
+    type: Boolean,
+    default: true,
+  },
   debounceWait: {
     type: Number,
     default: 100,

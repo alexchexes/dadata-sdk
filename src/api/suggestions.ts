@@ -13,6 +13,9 @@ const DEFAULT_HEADERS = {
   Accept: 'application/json',
 };
 
+/** A simple in-memory cache that maps a key (request url, payload and headers) to a response */
+const httpCache = new Map<string, AddressSuggestion[]>();
+
 export const getSuggestions = async (
   params: AddressSuggestionsParams,
 ): Promise<AddressSuggestion[]> => {
@@ -60,9 +63,27 @@ export const getSuggestions = async (
     },
   };
 
+  // Create a cache key that includes URL, payload and headers
+  const cacheKey = JSON.stringify({
+    url,
+    payload,
+    headers: config.headers,
+  });
+
+  // Caching is always enabled unless "cache" is explicitly set to false
+  const useCache = params.httpCache !== false;
+
+  if (useCache && httpCache.has(cacheKey)) {
+    return httpCache.get(cacheKey)!;
+  }
+
   const {
     data: { suggestions },
   } = await axios.post(url, payload, config);
+
+  if (useCache) {
+    httpCache.set(cacheKey, suggestions);
+  }
 
   return suggestions;
 };
