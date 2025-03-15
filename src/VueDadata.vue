@@ -54,7 +54,8 @@ const props = defineProps({
     type: String,
     default: 'vue-dadata-input',
   },
-  /** Restrict search by locations (API `locations` option).
+  /**
+   * Restrict search by locations (API `locations` option).
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
    */
   locationsFilter: {
@@ -75,7 +76,8 @@ const props = defineProps({
     default: false,
   },
   /**
-   * 'kladr_id' or array of 'kladr_id's of region or city that should be prioritized by Dadata when it prepares list of suggestions on its side. Examples:
+   * 'kladr_id' or array of 'kladr_id's of region or city that should be prioritized by Dadata when
+   * it prepares list of suggestions on its side. Examples:
    * - `55` - Omsk region
    * - `63000001` - Samara city
    * - `[50, 77]` - Moscow and Moscow-City regions
@@ -84,7 +86,8 @@ const props = defineProps({
     type: [Array, String, Number] as PropType<LocationsBoost>,
     default: undefined,
   },
-  /** Language for displayed suggestions. `en` or `ru`. Default `ru`. `en` mostly just transliterates pretty much everything */
+  /** Language for displayed suggestions. `en` or `ru`. Default `ru`. `en` mostly just transliterates
+   * pretty much everything */
   language: {
     type: String,
     default: 'ru',
@@ -105,7 +108,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  /** Controls browser built-in autocompletion. If the default `off` doesn't work for you, try "one-time-code" or "new-password" */
+  /**
+   * Controls browser built-in autocompletion. If the default `off` doesn't work for you,
+   * try "one-time-code" or "new-password"
+   */
   inputAutocomplete: {
     type: String,
     default: 'off',
@@ -126,7 +132,10 @@ const props = defineProps({
     type: Number,
     default: DEFAULT_COUNT,
   },
-  /** Whether to send additional request after suggestion was selected to obtain data like coordinates and city_district */
+  /**
+   * Whether to send additional request after suggestion was selected to obtain data like coordinates
+   * and city_district. When `restrictValue` is used, it also adds normal `value` instead of restricted to the suggestion object.
+   */
   enrichOnSelect: {
     type: Boolean,
     default: true,
