@@ -4,6 +4,7 @@ import VueDadata from './VueDadata.vue';
 import type { VueDadataProps } from './VueDadata.vue';
 import type { AddressSuggestion } from './types';
 import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from './const';
+import { DEFAULT_URL } from './const';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -54,6 +55,7 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 type EditableOptions = Mutable<
   Pick<
     VueDadataProps,
+    | 'url'
     | 'selectOnBlur'
     | 'selectOnEnter'
     | 'disabled'
@@ -79,6 +81,7 @@ const options = ref<EditableOptions>({
     highlightTag: 'span',
   },
   disabled: false,
+  url: DEFAULT_URL,
   placeholder: 'Start typing...',
   count: DEFAULT_COUNT,
   selectOnBlur: false,
@@ -110,6 +113,8 @@ const nowrapQuery = ref(true);
         token:
         <input v-model.trim="visibleToken" placeholder="***************************" type="text" />
       </div>
+
+      <div class="dev-item">API URL: <input v-model.trim="options.url" type="text" /></div>
 
       <label class="dev-item">
         disabled: <input v-model="options.disabled" type="checkbox" />
