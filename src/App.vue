@@ -21,7 +21,7 @@ const locationsBoostModel = computed({
   set: (str) => {
     locationsBoostString.value = str;
     const ids = str.split(/[^\d\wа-яё]/gi).filter(Boolean);
-    options.value.locationsBoost = ids.length ? ids : undefined;
+    options.value.locationsBoost = ids.length ? (ids.length === 1 ? ids[0] : ids) : undefined;
   },
 });
 
@@ -95,6 +95,8 @@ const options = ref<EditableOptions>({
 const handleEnriched = (suggestion: AddressSuggestion) => {
   console.info('suggestion enriched: ', suggestion);
 };
+
+const nowrapQuery = ref(true);
 </script>
 
 <template>
@@ -188,8 +190,8 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
         </label>
       </div>
 
-      <div>
-        query: <b>{{ query }}</b>
+      <div :class="nowrapQuery && 'ellipsis-nowrap'">
+        query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
       </div>
     </div>
 
@@ -201,12 +203,15 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
       @enriched="handleEnriched"
     />
 
-    <section v-if="suggestion" class="dev">
-      <div>
+    <section class="dev">
+      <div class="selected-sug-wrapper">
         Current suggestion:
-        <button @click="reset">Clean</button>
+        <div v-if="suggestion">
+          <button @click="reset">Reset</button>
 
-        <pre>{{ suggestion }}</pre>
+          <pre>{{ suggestion }}</pre>
+        </div>
+        <span v-else>{{ typeof suggestion }}</span>
       </div>
     </section>
   </main>
@@ -276,5 +281,24 @@ label.dev-item:hover {
 .dev label:has(input[type='radio']:checked) {
   background-color: #333;
   color: #fff;
+}
+
+.dev .ellipsis-nowrap {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dev .hover:hover {
+  opacity: 0.8;
+}
+
+.dev .selected-sug-wrapper {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 12px 18px;
+  min-height: 1000px;
+  border-radius: 10px;
 }
 </style>
