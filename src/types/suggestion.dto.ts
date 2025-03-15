@@ -6,11 +6,11 @@ import type { BoundsType, DadataAddress } from './address.types';
  */
 export interface AddressSuggestionsParams {
   token: string;
-  query: string;
   url?: string;
+  query: string;
   count?: number;
-  toBound?: BoundsType;
   fromBound?: BoundsType;
+  toBound?: BoundsType;
   locationsFilter?: LocationRestriction | LocationRestriction[];
   locationsBoost?: LocationsBoost;
   language?: string;
@@ -29,11 +29,11 @@ export interface LocationsBoostItem {
 export interface AddressSuggestionsPayload {
   query: string;
   count?: number;
-  to_bound?: { value: BoundsType };
   from_bound?: { value: BoundsType };
-  language?: string;
+  to_bound?: { value: BoundsType };
   locations?: LocationRestriction[];
   locations_boost?: LocationsBoostItem | LocationsBoostItem[];
+  language?: string;
 }
 
 /**

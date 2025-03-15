@@ -40,14 +40,14 @@ export function useSuggestions(
   const fetchSuggestions = async (): Promise<AddressSuggestion[]> => {
     const params: AddressSuggestionsParams = {
       token: props.token,
-      query: queryModel.value,
       url: props.url,
-      toBound: props.toBound,
-      fromBound: props.fromBound,
-      locationsFilter: props.locationsFilter,
-      language: props.language,
-      locationsBoost: props.locationsBoost,
+      query: queryModel.value,
       count: props.count,
+      fromBound: props.fromBound,
+      toBound: props.toBound,
+      locationsFilter: props.locationsFilter,
+      locationsBoost: props.locationsBoost,
+      language: props.language,
     };
 
     return callSuggestionsApi(params);
