@@ -31,6 +31,7 @@ export function useSuggestions(
         fromBound: props.fromBound,
         toBound: props.toBound,
         locationsFilter: props.locationsFilter,
+        restrictValue: props.restrictValue,
         locationsBoost: props.locationsBoost,
         language: props.language,
         ...paramsOverrides,
@@ -119,6 +120,7 @@ export function useSuggestions(
     const suggestions = await fetchSuggestions({
       query: selectedSuggestion.unrestricted_value,
       count: 1,
+      restrictValue: false,
     });
 
     if (

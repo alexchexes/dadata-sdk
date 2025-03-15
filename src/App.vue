@@ -68,6 +68,7 @@ type EditableOptions = Mutable<
     | 'fromBound'
     | 'toBound'
     | 'locationsFilter'
+    | 'restrictValue'
     | 'locationsBoost'
     | 'language'
   >
@@ -90,6 +91,7 @@ const options = ref<EditableOptions>({
   fromBound: undefined,
   toBound: undefined,
   locationsFilter: undefined,
+  restrictValue: false,
   locationsBoost: undefined,
   language: 'ru',
 });
@@ -179,6 +181,10 @@ const nowrapQuery = ref(true);
         </label>
       </div>
       <div v-if="options.locationsFilter">{{ options.locationsFilter }}</div>
+
+      <label class="dev-item">
+        restrictValue: <input v-model="options.restrictValue" type="checkbox" />
+      </label>
 
       <div class="dev-item">
         locationsBoost (kladr_id's): <input v-model="locationsBoostModel" type="text" />

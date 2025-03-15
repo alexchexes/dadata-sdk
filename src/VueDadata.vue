@@ -61,6 +61,19 @@ const props = defineProps({
     type: [Object, Array] as PropType<LocationRestriction | LocationRestriction[]>,
     default: undefined,
   },
+
+  /**
+   * Used in combination with locationsFilter. When set to true, the displayed address (the "value" field)
+   * will have all segments removed up to and including the level specified in the restrictions.
+   * For example, if the restriction specifies a region, the region will not appear in the suggestion;
+   * if it specifies a city, both the region and the city will be omitted.
+   *
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934
+   */
+  restrictValue: {
+    type: Boolean,
+    default: false,
+  },
   /**
    * 'kladr_id' or array of 'kladr_id's of region or city that should be prioritized by Dadata when it prepares list of suggestions on its side. Examples:
    * - `55` - Omsk region

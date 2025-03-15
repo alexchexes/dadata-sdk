@@ -40,6 +40,10 @@ export const getSuggestions = async (
     payload.locations = locationsArray;
   }
 
+  if (params.restrictValue) {
+    payload.restrict_value = params.restrictValue;
+  }
+
   if (params.language) {
     payload.language = params.language;
   }

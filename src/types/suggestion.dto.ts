@@ -13,6 +13,7 @@ export interface AddressSuggestionsParams {
   fromBound?: BoundsType;
   toBound?: BoundsType;
   locationsFilter?: LocationRestriction | LocationRestriction[];
+  restrictValue?: Boolean;
   locationsBoost?: LocationsBoost;
   language?: string;
 }
@@ -34,6 +35,7 @@ export interface AddressSuggestionsPayload {
   to_bound?: { value: BoundsType };
   locations?: LocationRestriction[];
   locations_boost?: LocationsBoostItem | LocationsBoostItem[];
+  restrict_value?: Boolean;
   language?: string;
 }
 
