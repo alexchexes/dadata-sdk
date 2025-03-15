@@ -209,7 +209,7 @@ export function useSuggestions(
       return;
     }
 
-    if (props.selectOnBlur) {
+    if (props.selectOnBlur && suggestionsVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0);
