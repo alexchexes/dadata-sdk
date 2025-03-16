@@ -11,7 +11,11 @@
 
   input:focus-visible,
   textarea:focus-visible {
-    @apply ring-1 ring-slate-600 outline-none;
+    @apply ring-1 ring-gray-600 outline-none;
+  }
+
+  select:focus-visible {
+    @apply ring-1 ring-gray-600 outline-none;
   }
 }
 

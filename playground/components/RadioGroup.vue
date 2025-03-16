@@ -19,7 +19,7 @@ const model = defineModel({ type: null });
       <label
         v-for="(value, key) in options"
         :key="key"
-        class="has-[input:checked]:bg-accent rounded-lg bg-slate-50 px-1.5 py-0.5 text-sm not-has-[input:checked]:cursor-pointer not-has-[input:checked]:border not-has-[input:checked]:shadow not-has-[input:checked]:hover:bg-slate-100 has-[input:checked]:text-white"
+        class="has-[input:checked]:bg-accent rounded-lg bg-slate-50 px-1.5 py-0.5 text-sm not-has-[input:checked]:cursor-pointer not-has-[input:checked]:shadow-md not-has-[input:checked]:hover:bg-slate-100 has-[input:checked]:text-white"
       >
         <input v-model="model" class="hidden" :value="value" type="radio" />
         {{ key }}

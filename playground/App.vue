@@ -10,6 +10,7 @@ import SelectOptions from './components/SelectOptions.vue';
 import CheckBox from './components/CheckBox.vue';
 import RadioGroup from './components/RadioGroup.vue';
 import AButton from './components/AButton.vue';
+import LocationsFilter from './components/LocationsFilter.vue';
 
 const isTailwindEnabled = ref(true);
 
@@ -42,21 +43,24 @@ const locationsBoostModel = computed({
 });
 
 // locationsFilter option
-const locationsExamples = {
-  no: undefined,
-  oneRegion: { region: 'краснодарский' },
-  oneCity: { region: 'краснодарский', city: 'сочи' },
-  fewRegions: [{ region: 'Воронежская' }, { region: 'Ростовская' }],
-  fewLocations: [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
-  diffenetTypes: [{ region: 'Москва' }, { kladr_id: '50' }],
-  diffenetTypesOneObject: { region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8', city: 'Сочи' },
-  fias_id: { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
-  kladr_id: { kladr_id: '6300000100000' },
-  country_iso_code: { country_iso_code: 'KZ' },
-  region_iso_code: { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
-  countryAndRegion: { country: 'Беларусь', region: 'Брестская' },
-  allowAnyCountry: { country: '*' },
-};
+const locationsExamples = ref({
+  'Without restrictions': undefined,
+  'One region': { region: 'краснодарский' },
+  'One city': { region: 'краснодарский', city: 'сочи' },
+  'Few regions': [{ region: 'Воронежская' }, { region: 'Ростовская' }],
+  'Few locations': [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
+  'Different types': [{ region: 'Москва' }, { kladr_id: '50' }],
+  'Location defined by different types': {
+    region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8',
+    city: 'Сочи',
+  },
+  'FIAS id': { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
+  'KLADR id': { kladr_id: '6300000100000' },
+  'Country ISO code': { country_iso_code: 'KZ' },
+  'Region ISO code': { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
+  'Country and region': { country: 'Беларусь', region: 'Брестская' },
+  'Allow any country': { country: '*' },
+});
 
 const query = ref('');
 const suggestion = ref<AddressSuggestion | undefined>(undefined);
@@ -121,6 +125,7 @@ const handleEnriched = (suggestion: AddressSuggestion) => {
 };
 
 const nowrapQuery = ref(true);
+const examplesShown = ref(false);
 </script>
 
 <template>
@@ -156,26 +161,36 @@ const nowrapQuery = ref(true);
               {{ options.count }}
             </div>
 
+            <div class="dev-item">
+              <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
+              {{ options.locationsBoost }}
+            </div>
+
             <div class="flex flex-wrap gap-3">
               <SelectOptions v-model="options.fromBound" :options="BOUNDS" label="fromBound:" />
               <SelectOptions v-model="options.toBound" :options="BOUNDS" label="toBound:" />
             </div>
 
-            <RadioGroup
-              v-model="options.locationsFilter"
-              class="flex flex-col gap-1"
-              :options="locationsExamples"
-              label="locationsFilter"
-            />
+            <div>
+              <div>
+                locationsFilter examples:
+                <AButton class="text-sm" @click="examplesShown = !examplesShown">
+                  {{ examplesShown ? 'Hide' : 'Show' }}
+                </AButton>
+              </div>
+              <RadioGroup
+                v-if="examplesShown"
+                v-model="options.locationsFilter"
+                class="mt-2 flex flex-col gap-1"
+                :options="locationsExamples"
+              />
+            </div>
 
-            <div v-if="options.locationsFilter">{{ options.locationsFilter }}</div>
+            <LocationsFilter v-model="options.locationsFilter" />
+
+            <!-- <pre v-if="options.locationsFilter" class="text-xs">{{ options.locationsFilter }}</pre> -->
 
             <CheckBox v-model="options.restrictValue" label="restrictValue" />
-
-            <div class="dev-item">
-              <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
-              {{ options.locationsBoost }}
-            </div>
 
             <RadioGroup
               v-model="options.language"
