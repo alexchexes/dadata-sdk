@@ -26,6 +26,10 @@
   width: 100%;
 }
 
+.vue-dadata__input:disabled {
+  background-color: #ffffff2b;
+}
+
 /* If clear button is shown */
 .vue-dadata__input-wrapper:has(.vue-dadata--clear-button) .vue-dadata__input {
   padding-right: 1.75rem;
