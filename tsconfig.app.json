@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "playground/**/*"],
   "exclude": ["src/**/__tests__/*", "src/**/*.test.ts"],
   "compilerOptions": {
     "composite": true,
@@ -14,6 +14,6 @@
     "emitDeclarationOnly": true,
     "declarationDir": "dist/types", // Adjust the output directory as needed
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   }
 }
