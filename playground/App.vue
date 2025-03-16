@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import VueDadata from './VueDadata.vue';
-import type { VueDadataProps } from './VueDadata.vue';
-import type { AddressSuggestion } from './types';
-import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from './const';
-import { DEFAULT_URL } from './const';
+import VueDadata from '@/VueDadata.vue';
+import type { VueDadataProps } from '@/VueDadata.vue';
+import type { AddressSuggestion } from '@/types';
+import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from '@/const';
+import { DEFAULT_URL } from '@/const';
 
 const isTailwindEnabled = ref(true);
 let cachedTailwindLink: HTMLLinkElement | null = null;
