@@ -53,6 +53,7 @@
     "vue-word-highlighter": "^1.2.5"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.0.14",
     "@tsconfig/node22": "^22.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.13.10",
@@ -69,7 +70,9 @@
     "npm-run-all2": "^7.0.2",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-attributes": "^1.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "rollup-plugin-visualizer": "^5.14.0",
+    "tailwindcss": "^4.0.14",
     "typescript": "~5.8.2",
     "vite": "^6.2.1",
     "vite-plugin-dts": "^4.5.3",

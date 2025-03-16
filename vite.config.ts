@@ -1,9 +1,10 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url';
 import { resolve } from 'path';
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
-import vueDevTools from 'vite-plugin-vue-devtools'
+import vueDevTools from 'vite-plugin-vue-devtools';
+import tailwindcss from '@tailwindcss/vite'; // tailwindcss is used for dev sandbox page only
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,6 +15,7 @@ export default defineConfig({
       outDir: 'dist/types',
       insertTypesEntry: true,
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
@@ -37,4 +39,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

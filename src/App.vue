@@ -6,6 +6,34 @@ import type { AddressSuggestion } from './types';
 import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from './const';
 import { DEFAULT_URL } from './const';
 
+const isTailwindEnabled = ref(true);
+let cachedTailwindLink: HTMLLinkElement | null = null;
+
+function disableTailwind() {
+  const tailwindLink = document.getElementById('tailwind-styles');
+  if (tailwindLink && tailwindLink.parentElement) {
+    // Cache the link element before removing it
+    cachedTailwindLink = tailwindLink as HTMLLinkElement;
+    tailwindLink.parentElement.removeChild(tailwindLink);
+  }
+}
+
+function enableTailwind() {
+  // If we have the cached element and it's not already in the DOM, reinsert it
+  if (cachedTailwindLink && !document.getElementById('tailwind-styles')) {
+    document.head.appendChild(cachedTailwindLink);
+  }
+}
+
+function toggleTailwind() {
+  if (isTailwindEnabled.value) {
+    disableTailwind();
+  } else {
+    enableTailwind();
+  }
+  isTailwindEnabled.value = !isTailwindEnabled.value;
+}
+
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const userProvidedToken = ref<string | undefined>();
@@ -109,9 +137,16 @@ const nowrapQuery = ref(true);
 <template>
   <main>
     <div class="dev">
+      <button @click="toggleTailwind">Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}</button>
+
       <div class="dev-item">
         token:
-        <input v-model.trim="visibleToken" placeholder="***************************" type="text" />
+        <input
+          v-model.trim="visibleToken"
+          class="bg-reg-500"
+          placeholder="***************************"
+          type="text"
+        />
       </div>
 
       <div class="dev-item">API URL: <input v-model.trim="options.url" type="text" /></div>
