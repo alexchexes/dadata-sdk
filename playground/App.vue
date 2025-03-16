@@ -5,42 +5,29 @@ import type { VueDadataProps } from '@/VueDadata.vue';
 import type { AddressSuggestion } from '@/types';
 import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from '@/const';
 import { DEFAULT_URL } from '@/const';
+import InputText from './components/InputText.vue';
+import SelectOptions from './components/SelectOptions.vue';
+import CheckBox from './components/CheckBox.vue';
+import RadioGroup from './components/RadioGroup.vue';
+import AButton from './components/AButton.vue';
 
 const isTailwindEnabled = ref(true);
-let cachedTailwindLink: HTMLLinkElement | null = null;
-
-function disableTailwind() {
-  const tailwindLink = document.getElementById('tailwind-styles');
-  if (tailwindLink && tailwindLink.parentElement) {
-    // Cache the link element before removing it
-    cachedTailwindLink = tailwindLink as HTMLLinkElement;
-    tailwindLink.parentElement.removeChild(tailwindLink);
-  }
-}
-
-function enableTailwind() {
-  // If we have the cached element and it's not already in the DOM, reinsert it
-  if (cachedTailwindLink && !document.getElementById('tailwind-styles')) {
-    document.head.appendChild(cachedTailwindLink);
-  }
-}
 
 function toggleTailwind() {
-  if (isTailwindEnabled.value) {
-    disableTailwind();
-  } else {
-    enableTailwind();
-  }
+  const tailwindLink = document.getElementById('tailwind-styles') as HTMLLinkElement;
+  if (!tailwindLink) return;
+  // Toggle the href attribute between the two files
+  tailwindLink.href = isTailwindEnabled.value
+    ? './playground.no-tailwind.css'
+    : './playground.tailwind.css';
   isTailwindEnabled.value = !isTailwindEnabled.value;
 }
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
-const userProvidedToken = ref<string | undefined>();
-const usedToken = computed(() => userProvidedToken.value || envToken);
-const visibleToken = computed({
-  get: () => userProvidedToken.value || '',
-  set: (val) => (userProvidedToken.value = val),
+const tokenModel = computed({
+  get: () => (options.value.token === envToken ? '' : options.value.token),
+  set: (val) => (options.value.token = val.trim() ? val.trim() : envToken),
 });
 
 // locationsBoost
@@ -83,6 +70,7 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 type EditableOptions = Mutable<
   Pick<
     VueDadataProps,
+    | 'token'
     | 'url'
     | 'selectOnBlur'
     | 'selectOnEnter'
@@ -105,6 +93,7 @@ type EditableOptions = Mutable<
 >;
 
 const options = ref<EditableOptions>({
+  token: envToken,
   highlightOptions: {
     highlightTag: 'span',
   },
@@ -135,223 +124,107 @@ const nowrapQuery = ref(true);
 </script>
 
 <template>
-  <main>
-    <div class="dev">
-      <button @click="toggleTailwind">Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}</button>
+  <div>
+    <AButton class="mt-1 ml-1" @click="toggleTailwind">
+      Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
+    </AButton>
 
-      <div class="dev-item">
-        token:
-        <input
-          v-model.trim="visibleToken"
-          class="bg-reg-500"
-          placeholder="***************************"
-          type="text"
-        />
-      </div>
+    <main class="mx-auto max-w-3xl py-12">
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-wrap gap-3">
+          <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
+            <h3 class="font-semibold">API requests options</h3>
 
-      <div class="dev-item">API URL: <input v-model.trim="options.url" type="text" /></div>
+            <InputText
+              v-model.trim="tokenModel"
+              label="API token:"
+              placeholder="***************************"
+            />
 
-      <label class="dev-item">
-        disabled: <input v-model="options.disabled" type="checkbox" />
-      </label>
+            <InputText v-model.trim="options.url" label="API URL:" />
 
-      <div class="dev-item">
-        placeholder: <input v-model.trim="options.placeholder" type="text" />
-      </div>
+            <div class="flex items-center gap-2">
+              count:
+              <input
+                v-model.number="options.count"
+                class="accent-accent"
+                :max="MAX_SUG_COUNT"
+                min="1"
+                step="1"
+                type="range"
+              />
+              {{ options.count }}
+            </div>
 
-      <div class="dev-item">
-        count:
-        <input v-model.number="options.count" :max="MAX_SUG_COUNT" min="1" step="1" type="range" />
-        {{ options.count }}
-      </div>
+            <div class="flex flex-wrap gap-3">
+              <SelectOptions v-model="options.fromBound" :options="BOUNDS" label="fromBound:" />
+              <SelectOptions v-model="options.toBound" :options="BOUNDS" label="toBound:" />
+            </div>
 
-      <label class="dev-item">
-        selectOnBlur: <input v-model="options.selectOnBlur" type="checkbox" />
-      </label>
+            <RadioGroup
+              v-model="options.locationsFilter"
+              class="flex flex-col gap-1"
+              :options="locationsExamples"
+              label="locationsFilter"
+            />
 
-      <label class="dev-item">
-        selectOnEnter: <input v-model="options.selectOnEnter" type="checkbox" />
-      </label>
+            <div v-if="options.locationsFilter">{{ options.locationsFilter }}</div>
 
-      <label class="dev-item">
-        enrichOnSelect: <input v-model="options.enrichOnSelect" type="checkbox" />
-      </label>
+            <CheckBox v-model="options.restrictValue" label="restrictValue" />
 
-      <label class="dev-item">
-        clearSuggestionOnChange: <input v-model="options.clearSuggestionOnChange" type="checkbox" />
-      </label>
+            <div class="dev-item">
+              <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
+              {{ options.locationsBoost }}
+            </div>
 
-      <label class="dev-item">
-        addSpace: <input v-model="options.addSpace" type="checkbox" />
-      </label>
+            <RadioGroup
+              v-model="options.language"
+              class="flex gap-2"
+              :options="{ RU: 'ru', EN: 'en' }"
+              label="language"
+            />
+          </div>
 
-      <label class="dev-item">
-        continueSelecting: <input v-model="options.continueSelecting" type="checkbox" />
-      </label>
+          <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
+            <h3 class="font-semibold">Component behavior options</h3>
 
-      <label class="dev-item">
-        showClearButton: <input v-model="options.showClearButton" type="checkbox" />
-      </label>
-
-      <div>
-        fromBound:
-        <select v-model="options.fromBound">
-          <option :value="undefined"></option>
-          <option v-for="boundType in BOUNDS" :key="boundType" :value="boundType">
-            {{ boundType }}
-          </option>
-        </select>
-      </div>
-
-      <div>
-        toBound:
-        <select v-model="options.toBound">
-          <option :value="undefined"></option>
-          <option v-for="boundType in BOUNDS" :key="boundType" :value="boundType">
-            {{ boundType }}
-          </option>
-        </select>
-      </div>
-
-      <div class="dev-item">
-        locationsFilter:
-        <label v-for="(locationObj, exampleName) in locationsExamples" :key="exampleName">
-          <input v-model="options.locationsFilter" :value="locationObj" type="radio" />
-          {{ exampleName }}
-        </label>
-      </div>
-      <div v-if="options.locationsFilter">{{ options.locationsFilter }}</div>
-
-      <label class="dev-item">
-        restrictValue: <input v-model="options.restrictValue" type="checkbox" />
-      </label>
-
-      <div class="dev-item">
-        locationsBoost (kladr_id's): <input v-model="locationsBoostModel" type="text" />
-        {{ options.locationsBoost }}
-      </div>
-
-      <div class="dev-item">
-        language:
-        <label>
-          <input v-model="options.language" :value="'ru'" type="radio" />
-          RU
-        </label>
-        <label>
-          <input v-model="options.language" :value="'en'" type="radio" />
-          EN
-        </label>
-      </div>
-
-      <div :class="nowrapQuery && 'ellipsis-nowrap'">
-        query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
-      </div>
-    </div>
-
-    <VueDadata
-      v-model="query"
-      v-model:suggestion="suggestion"
-      :token="usedToken"
-      v-bind:="options"
-      @enriched="handleEnriched"
-    />
-
-    <section class="dev">
-      <div class="selected-sug-wrapper">
-        Current suggestion:
-        <div v-if="suggestion">
-          <button @click="reset">Reset</button>
-
-          <pre>{{ suggestion }}</pre>
+            <CheckBox v-model="options.disabled" label="disabled" />
+            <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
+            <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
+            <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
+            <CheckBox v-model="options.clearSuggestionOnChange" label="clearSuggestionOnChange" />
+            <CheckBox v-model="options.addSpace" label="addSpace" />
+            <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
+            <CheckBox v-model="options.showClearButton" label="showClearButton" />
+            <InputText v-model="options.placeholder" label="placeholder:" />
+          </div>
         </div>
-        <span v-else>{{ typeof suggestion }}</span>
+
+        <div :class="nowrapQuery && 'ellipsis-nowrap'">
+          query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
+        </div>
       </div>
-    </section>
-  </main>
+
+      <VueDadata
+        v-model="query"
+        v-model:suggestion="suggestion"
+        v-bind:="options"
+        @enriched="handleEnriched"
+      />
+
+      <section class="mt-3 min-h-[1000px]">
+        <div class="rounded-xl bg-white px-4 py-2">
+          <div class="flex justify-between">
+            <span>
+              Current suggestion:
+              <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
+            </span>
+            <AButton v-if="suggestion" @click="reset">Reset</AButton>
+          </div>
+
+          <pre v-if="suggestion" class="text-[14px]">{{ suggestion }}</pre>
+        </div>
+      </section>
+    </main>
+  </div>
 </template>
-
-<style>
-body {
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  background-color: #e9ebef;
-  font-size: 16px;
-}
-
-main {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 48px 16px 200px;
-}
-
-.dev section {
-  margin-top: 10px;
-  border-radius: 4px;
-  background-color: #fff;
-  padding: 10px 20px;
-}
-
-.dev pre {
-  white-space: pre-wrap;
-  font-size: 14px;
-}
-
-.dev {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.dev-item {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  width: fit-content;
-}
-.dev-item input {
-  margin: 0;
-}
-label.dev-item:hover {
-  color: #333;
-}
-
-.dev label:has(input[type='radio']) {
-  background-color: #fff;
-  box-shadow: 0px 2px 3px #0000002b;
-  border-radius: 8px;
-  padding: 0 8px 2px;
-  font-size: 14px;
-}
-.dev label:has(input[type='radio']) input[type='radio'] {
-  display: none;
-}
-.dev label:has(input[type='radio']:not(:checked)):hover {
-  cursor: pointer;
-  background-color: #f3f3f3;
-}
-.dev label:has(input[type='radio']:checked) {
-  background-color: #333;
-  color: #fff;
-}
-
-.dev .ellipsis-nowrap {
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dev .hover:hover {
-  opacity: 0.8;
-}
-
-.dev .selected-sug-wrapper {
-  margin-top: 20px;
-  background-color: #fff;
-  padding: 12px 18px;
-  min-height: 1000px;
-  border-radius: 10px;
-}
-</style>
