@@ -12,6 +12,7 @@
 }
 
 .vue-dadata__input {
+  background-color: #fff;
   border-radius: 6px;
   border: 1px solid #ccc;
   box-sizing: border-box;
