@@ -55,7 +55,7 @@ const props = defineProps({
     default: 'vue-dadata-input',
   },
   /**
-   * Restrict search by locations (API `locations` option).
+   * Restrict search by locations (API `locations` option). Max 10 items
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
    */
   locationsFilter: {
@@ -81,6 +81,7 @@ const props = defineProps({
    * - `55` - Omsk region
    * - `63000001` - Samara city
    * - `[50, 77]` - Moscow and Moscow-City regions
+   * Max 10 items
    */
   locationsBoost: {
     type: [Array, String, Number] as PropType<LocationsBoost>,
@@ -160,6 +161,7 @@ const props = defineProps({
 });
 export type VueDadataProps = typeof props;
 
+/** Max 300 characters */
 const queryModel = defineModel({ type: String, required: true });
 
 const suggestionModel = defineModel('suggestion', {
