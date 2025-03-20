@@ -237,7 +237,7 @@ const examplesShown = ref(false);
             <AButton v-if="suggestion" @click="reset">Reset</AButton>
           </div>
 
-          <pre v-if="suggestion" class="text-[14px]">{{ suggestion }}</pre>
+          <pre v-if="suggestion" class="text-[14px] whitespace-pre-wrap">{{ suggestion }}</pre>
         </div>
       </section>
     </main>
