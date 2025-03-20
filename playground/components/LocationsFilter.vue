@@ -67,6 +67,7 @@ watch(
     if (!newVal || !newVal.length) {
       locationsFilterModelWatchGuard = true;
       locationsFilterModel.value = undefined;
+      enabled.value = false;
       return;
     }
 
@@ -122,6 +123,19 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
   const restrType = editableLocationsFilter.value[locIdx][entryIdx].restrType;
   return findDuplicates(locIdx).includes(restrType);
 };
+
+const enabled = ref(false);
+
+function enable() {
+  if (!editableLocationsFilter.value.length) {
+    editableLocationsFilter.value.push([{ ...defaultRestrictionEntry }]);
+  }
+  enabled.value = true;
+}
+function disable() {
+  editableLocationsFilter.value = [];
+  enabled.value = false;
+}
 </script>
 
 <template>
@@ -130,10 +144,8 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
       <div>locationsFilter:</div>
 
       <!-- Add new location -->
-      <ButtonAdd
-        v-if="!editableLocationsFilter.length"
-        @click="editableLocationsFilter.push([{ ...defaultRestrictionEntry }])"
-      />
+      <ButtonAdd v-if="!enabled" @click="enable" />
+      <ButtonRemove v-else outline @click="disable" />
     </div>
 
     <!-- List of restrictions inside a location -->
@@ -141,6 +153,7 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
       <!-- Each restriction -->
       <div v-for="(oneLocation, locIdx) in editableLocationsFilter" :key="locIdx">
         <div class="flex gap-2 rounded-lg bg-white px-1 pt-2 pb-1 shadow-md">
+          <!-- Remove restriction (one location) -->
           <ButtonRemove @click="editableLocationsFilter.splice(locIdx, 1)" />
 
           <!-- List of properties of a single restriction -->
@@ -163,6 +176,7 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
                   v-model="editableLocationsFilter[locIdx][entryIdx].restrVal"
                   :placeholder="`enter ${editableLocationsFilter[locIdx][entryIdx].restrType}...`"
                 />
+                <!-- Remove restriction inside a location -->
                 <ButtonRemove
                   class="size-5"
                   outline
@@ -200,6 +214,7 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
         <div v-if="editableLocationsFilter.length" class="my-1 flex items-center gap-1 text-xs">
           <div>OR<span v-if="locIdx === editableLocationsFilter.length - 1">...</span></div>
 
+          <!-- Add a new location -->
           <ButtonAdd
             v-if="locIdx === editableLocationsFilter.length - 1"
             @click="editableLocationsFilter.push([{ ...defaultRestrictionEntry }])"
