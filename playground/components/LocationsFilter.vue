@@ -137,7 +137,7 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
     </div>
 
     <!-- List of restrictions inside a location -->
-    <div v-if="editableLocationsFilter" class="relative">
+    <div v-if="editableLocationsFilter?.length" class="relative">
       <!-- Each restriction -->
       <div v-for="(oneLocation, locIdx) in editableLocationsFilter" :key="locIdx">
         <div class="flex gap-2 rounded-lg bg-white px-1 pt-2 pb-1 shadow-md">
