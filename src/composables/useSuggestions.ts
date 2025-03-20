@@ -31,6 +31,7 @@ export function useSuggestions(
         fromBound: props.fromBound,
         toBound: props.toBound,
         locationsFilter: props.locationsFilter,
+        radiusFilter: props.radiusFilter,
         restrictValue: props.restrictValue,
         locationsBoost: props.locationsBoost,
         language: props.language,

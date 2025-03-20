@@ -1,7 +1,11 @@
 <script lang="ts" setup>
+import { twMerge } from 'tailwind-merge';
+import type { PropType } from 'vue';
+type TwMergeArgument = Parameters<typeof twMerge>[0];
+
 defineProps({
   inputClass: {
-    type: null,
+    type: [Array, String, Boolean, null, undefined] as PropType<TwMergeArgument>,
     default: undefined,
   },
   label: {
@@ -13,14 +17,14 @@ defineProps({
     default: '',
   },
 });
-const model = defineModel({ type: String });
+const model = defineModel({ type: null });
 </script>
 <template>
   <label class="inline-block">
     <div v-if="label" class="pl-1 text-sm">{{ label }}</div>
     <input
       v-model="model"
-      class="w-full rounded-lg border bg-white px-1.5 py-0.5"
+      :class="twMerge('w-full rounded-lg border bg-white px-1.5 py-0.5', inputClass)"
       :placeholder
       type="text"
     />

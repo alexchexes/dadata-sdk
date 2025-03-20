@@ -13,9 +13,16 @@ export interface AddressSuggestionsParams {
   fromBound?: BoundsType;
   toBound?: BoundsType;
   locationsFilter?: LocationRestriction | LocationRestriction[];
+  radiusFilter?: RadiusFilter;
   restrictValue?: Boolean;
   locationsBoost?: LocationsBoost;
   language?: string;
+}
+
+export interface RadiusFilter {
+  lat: string;
+  lon: string;
+  radius_meters: number;
 }
 
 /**
@@ -34,6 +41,7 @@ export interface AddressSuggestionsPayload {
   from_bound?: { value: BoundsType };
   to_bound?: { value: BoundsType };
   locations?: LocationRestriction[];
+  locations_geo?: [RadiusFilter];
   locations_boost?: LocationsBoostItem | LocationsBoostItem[];
   restrict_value?: Boolean;
   language?: string;

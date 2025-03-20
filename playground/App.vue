@@ -11,6 +11,7 @@ import CheckBox from './components/CheckBox.vue';
 import RadioGroup from './components/RadioGroup.vue';
 import AButton from './components/AButton.vue';
 import LocationsFilter from './components/LocationsFilter.vue';
+import RadiusFilter from './components/RadiusFilter.vue';
 
 const isTailwindEnabled = ref(true);
 
@@ -90,6 +91,7 @@ type EditableOptions = Mutable<
     | 'fromBound'
     | 'toBound'
     | 'locationsFilter'
+    | 'radiusFilter'
     | 'restrictValue'
     | 'locationsBoost'
     | 'language'
@@ -115,6 +117,7 @@ const options = ref<EditableOptions>({
   fromBound: undefined,
   toBound: undefined,
   locationsFilter: undefined,
+  radiusFilter: undefined,
   restrictValue: false,
   locationsBoost: undefined,
   language: 'ru',
@@ -135,8 +138,11 @@ const examplesShown = ref(false);
     </AButton>
 
     <main class="mx-auto max-w-3xl py-12">
+      <!-- Block above the input -->
       <div class="flex flex-col gap-2">
+        <!-- Options -->
         <div class="flex flex-wrap gap-3">
+          <!-- API requests options -->
           <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
             <h3 class="font-semibold">API requests options</h3>
 
@@ -178,6 +184,7 @@ const examplesShown = ref(false);
                   {{ examplesShown ? 'Hide' : 'Show' }}
                 </AButton>
               </div>
+
               <RadioGroup
                 v-if="examplesShown"
                 v-model="options.locationsFilter"
@@ -188,7 +195,7 @@ const examplesShown = ref(false);
 
             <LocationsFilter v-model="options.locationsFilter" />
 
-            <!-- <pre v-if="options.locationsFilter" class="text-xs">{{ options.locationsFilter }}</pre> -->
+            <RadiusFilter v-model="options.radiusFilter" />
 
             <CheckBox v-model="options.restrictValue" label="restrictValue" />
 
@@ -200,6 +207,7 @@ const examplesShown = ref(false);
             />
           </div>
 
+          <!-- Component behavior options -->
           <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
             <h3 class="font-semibold">Component behavior options</h3>
 
@@ -215,6 +223,7 @@ const examplesShown = ref(false);
           </div>
         </div>
 
+        <!-- Current query string -->
         <div :class="nowrapQuery && 'ellipsis-nowrap'">
           query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
         </div>

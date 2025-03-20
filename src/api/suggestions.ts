@@ -40,6 +40,10 @@ export const getSuggestions = async (
     payload.locations = locationsArray;
   }
 
+  if (params.radiusFilter) {
+    payload.locations_geo = [params.radiusFilter];
+  }
+
   if (params.restrictValue) {
     payload.restrict_value = params.restrictValue;
   }

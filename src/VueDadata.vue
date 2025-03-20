@@ -10,6 +10,7 @@ import type {
   HighlightOptions,
   AddressSuggestion,
   LocationRestriction,
+  RadiusFilter,
 } from './types';
 import { DEFAULT_CLASSES, DEFAULT_COUNT, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
@@ -62,7 +63,14 @@ const props = defineProps({
     type: [Object, Array] as PropType<LocationRestriction | LocationRestriction[]>,
     default: undefined,
   },
-
+  /**
+   * Restrict search by specified radius around specified latitude and longitude (API `locations_geo` option)
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806
+   */
+  radiusFilter: {
+    type: Object as PropType<RadiusFilter>,
+    default: undefined,
+  },
   /**
    * Used in combination with locationsFilter. When set to true, the displayed address (the "value" field)
    * will have all segments removed up to and including the level specified in the restrictions.
