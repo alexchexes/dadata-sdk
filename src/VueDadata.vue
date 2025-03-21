@@ -11,6 +11,7 @@ import type {
   AddressSuggestion,
   LocationRestriction,
   RadiusFilter,
+  DivisionType,
 } from './types';
 import { DEFAULT_CLASSES, DEFAULT_COUNT, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
 import { useClasses } from './composables/useClasses';
@@ -42,6 +43,14 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  /**
+   * Type of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`. Defaults to `ADMINISTRATIVE`.
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589
+   */
+  division: {
+    type: String as PropType<DivisionType>,
+    default: undefined,
   },
   fromBound: {
     type: String as PropType<BoundsType>,

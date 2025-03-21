@@ -1,3 +1,4 @@
+import type { DIVISION_TYPES } from '@/const';
 import type { LocationRestriction, LocationsBoost } from '../types';
 import type { BoundsType, DadataAddress } from './address.types';
 
@@ -10,6 +11,7 @@ export interface AddressSuggestionsParams {
   httpCache?: boolean;
   query: string;
   count?: number;
+  division?: DivisionType;
   fromBound?: BoundsType;
   toBound?: BoundsType;
   locationsFilter?: LocationRestriction | LocationRestriction[];
@@ -25,6 +27,8 @@ export interface RadiusFilter {
   radius_meters: number;
 }
 
+export type DivisionType = (typeof DIVISION_TYPES)[number];
+
 /**
  * API-facing type for a `locations_boost` item
  */
@@ -38,6 +42,7 @@ export interface LocationsBoostItem {
 export interface AddressSuggestionsPayload {
   query: string;
   count?: number;
+  division?: DivisionType;
   from_bound?: { value: BoundsType };
   to_bound?: { value: BoundsType };
   locations?: LocationRestriction[];

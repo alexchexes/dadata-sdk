@@ -25,6 +25,10 @@ export const getSuggestions = async (
     count,
   };
 
+  if (params.division) {
+    payload.division = params.division;
+  }
+
   if (params.toBound) {
     payload.to_bound = { value: params.toBound };
   }

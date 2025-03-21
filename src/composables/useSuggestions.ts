@@ -28,6 +28,7 @@ export function useSuggestions(
         httpCache: props.httpCache,
         query: queryModel.value,
         count: props.count,
+        division: props.division,
         fromBound: props.fromBound,
         toBound: props.toBound,
         locationsFilter: props.locationsFilter,

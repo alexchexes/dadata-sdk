@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import VueDadata from '@/VueDadata.vue';
 import type { VueDadataProps } from '@/VueDadata.vue';
 import type { AddressSuggestion } from '@/types';
-import { BOUNDS, DEFAULT_COUNT, MAX_SUG_COUNT } from '@/const';
+import { BOUNDS, DEFAULT_COUNT, DEFAULT_DIVISION, DIVISION_TYPES, MAX_SUG_COUNT } from '@/const';
 import { DEFAULT_URL } from '@/const';
 import InputText from './components/InputText.vue';
 import SelectOptions from './components/SelectOptions.vue';
@@ -81,6 +81,7 @@ type EditableOptions = Mutable<
     | 'selectOnEnter'
     | 'disabled'
     | 'count'
+    | 'division'
     | 'highlightOptions'
     | 'placeholder'
     | 'enrichOnSelect'
@@ -107,6 +108,7 @@ const options = ref<EditableOptions>({
   url: DEFAULT_URL,
   placeholder: 'Start typing...',
   count: DEFAULT_COUNT,
+  division: DEFAULT_DIVISION,
   selectOnBlur: false,
   selectOnEnter: true,
   enrichOnSelect: true,
@@ -166,6 +168,13 @@ const examplesShown = ref(false);
               />
               {{ options.count }}
             </div>
+
+            <RadioGroup
+              v-model="options.division"
+              class="flex gap-2"
+              :options="DIVISION_TYPES"
+              label="division"
+            />
 
             <div class="dev-item">
               <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
