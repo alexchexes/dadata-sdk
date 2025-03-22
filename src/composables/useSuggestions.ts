@@ -215,6 +215,8 @@ export function useSuggestions(
       return;
     }
 
+    // suggestionsVisible check makes sense since we don't use matcher, but once added, we must
+    // select match on blur in any case, not just when suggestionsVisible is true
     if (props.selectOnBlur && suggestionsVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
