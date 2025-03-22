@@ -1,16 +1,30 @@
 <script lang="ts" setup>
 import { ref, watch, type PropType } from 'vue';
-import type { LocationRestriction } from '@/types';
 import ButtonAdd from './ButtonAdd.vue';
 import ButtonRemove from './ButtonRemove.vue';
 import InputText from './InputText.vue';
 import SelectOptGroup from './SelectOptGroup.vue';
-import { LOCATION_RESTRICTION_CATEGORIES } from '@/const';
+import {
+  FIAS_ID_RESTRICTION_TYPES,
+  TYPE_FULL_RESTRICTION_TYPES,
+  ISO_CODE_RESTRICTION_TYPES,
+  KLADR_ID_RESTRICTION_TYPES,
+  NAME_RESTRICTION_TYPES,
+  type LocationRestriction,
+} from '@/index';
 
 const locationsFilterModel = defineModel({
   type: [Object, Array, undefined] as PropType<LocationRestriction | LocationRestriction[]>,
   required: false,
 });
+
+const LOCATION_RESTRICTION_CATEGORIES = {
+  byName: NAME_RESTRICTION_TYPES,
+  byKladrId: KLADR_ID_RESTRICTION_TYPES,
+  byFullType: TYPE_FULL_RESTRICTION_TYPES,
+  byFiasId: FIAS_ID_RESTRICTION_TYPES,
+  byIsoCode: ISO_CODE_RESTRICTION_TYPES,
+} as const;
 
 type LocationRestrictionEntry = {
   restrType: keyof LocationRestriction;

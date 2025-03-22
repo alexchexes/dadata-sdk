@@ -1,10 +1,7 @@
 import axios from 'axios';
-import type {
-  AddressSuggestionsParams,
-  AddressSuggestionsPayload,
-  AddressSuggestion,
-} from '../types';
-import { DEFAULT_COUNT, DEFAULT_URL } from '@/const';
+import type { SuggestAddressOptions } from '@/types';
+import type { AddressSuggestion, SuggestAddressPayload } from '@/types/api';
+import { DEFAULT_COUNT, SUGGEST_ADDRESS_URL } from '@/const/api';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
@@ -15,12 +12,12 @@ const DEFAULT_HEADERS = {
 const httpCache = new Map<string, AddressSuggestion[]>();
 
 export const getSuggestions = async (
-  params: AddressSuggestionsParams,
+  params: SuggestAddressOptions,
 ): Promise<AddressSuggestion[]> => {
-  const url = params.url ?? DEFAULT_URL;
+  const url = params.url ?? SUGGEST_ADDRESS_URL;
   const count = params.count ?? DEFAULT_COUNT;
 
-  const payload: AddressSuggestionsPayload = {
+  const payload: SuggestAddressPayload = {
     query: params.query,
     count,
   };

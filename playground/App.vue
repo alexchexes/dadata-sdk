@@ -1,17 +1,24 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import VueDadata from '@/VueDadata.vue';
-import type { VueDadataProps } from '@/VueDadata.vue';
-import type { AddressSuggestion } from '@/types';
-import { BOUNDS, DEFAULT_COUNT, DEFAULT_DIVISION, DIVISION_TYPES, MAX_SUG_COUNT } from '@/const';
-import { DEFAULT_URL } from '@/const';
-import InputText from './components/InputText.vue';
-import SelectOptions from './components/SelectOptions.vue';
-import CheckBox from './components/CheckBox.vue';
-import RadioGroup from './components/RadioGroup.vue';
 import AButton from './components/AButton.vue';
+import CheckBox from './components/CheckBox.vue';
+import InputText from './components/InputText.vue';
 import LocationsFilter from './components/LocationsFilter.vue';
+import RadioGroup from './components/RadioGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
+import SelectOptions from './components/SelectOptions.vue';
+import type { VueDadataProps } from '@/VueDadata.vue';
+import VueDadata from '@/VueDadata.vue';
+import {
+  BOUND_TYPES,
+  DEFAULT_COUNT,
+  DEFAULT_DIVISION,
+  DIVISION_TYPES,
+  LANGUAGES,
+  MAX_SUG_COUNT,
+  SUGGEST_ADDRESS_URL,
+  type AddressSuggestion,
+} from '@/index';
 
 const isTailwindEnabled = ref(true);
 
@@ -105,7 +112,7 @@ const options = ref<EditableOptions>({
     highlightTag: 'span',
   },
   disabled: false,
-  url: DEFAULT_URL,
+  url: SUGGEST_ADDRESS_URL,
   placeholder: 'Start typing...',
   count: DEFAULT_COUNT,
   division: DEFAULT_DIVISION,
@@ -182,8 +189,12 @@ const examplesShown = ref(false);
             </div>
 
             <div class="flex flex-wrap gap-3">
-              <SelectOptions v-model="options.fromBound" :options="BOUNDS" label="fromBound:" />
-              <SelectOptions v-model="options.toBound" :options="BOUNDS" label="toBound:" />
+              <SelectOptions
+                v-model="options.fromBound"
+                :options="BOUND_TYPES"
+                label="fromBound:"
+              />
+              <SelectOptions v-model="options.toBound" :options="BOUND_TYPES" label="toBound:" />
             </div>
 
             <div>
@@ -211,7 +222,7 @@ const examplesShown = ref(false);
             <RadioGroup
               v-model="options.language"
               class="flex gap-2"
-              :options="{ RU: 'ru', EN: 'en' }"
+              :options="LANGUAGES"
               label="language"
             />
           </div>

@@ -1,10 +1,11 @@
 import { computed, ref, watch } from 'vue';
-import type { Ref } from 'vue';
+import { getSuggestions } from '@/api';
+import { KeyEvent } from '@/const';
 import { useDebounceFn } from '@vueuse/core';
-import { KeyEvent } from '../types';
-import type { AddressSuggestion, AddressSuggestionsParams } from '../types';
-import type { VueDadataEmits, VueDadataProps } from '../VueDadata.vue';
-import { getSuggestions } from '../api';
+import type { AddressSuggestion } from '@/types/api';
+import type { Ref } from 'vue';
+import type { SuggestAddressOptions } from '@/types';
+import type { VueDadataEmits, VueDadataProps } from '@/VueDadata.vue';
 
 export function useSuggestions(
   queryModel: Ref<string>,
@@ -19,7 +20,7 @@ export function useSuggestions(
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
   const fetchSuggestions = async (
-    paramsOverrides: Partial<AddressSuggestionsParams> = {},
+    paramsOverrides: Partial<SuggestAddressOptions> = {},
   ): Promise<AddressSuggestion[]> => {
     try {
       return await getSuggestions({

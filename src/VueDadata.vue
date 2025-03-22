@@ -1,23 +1,22 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { PropType, ComputedRef } from 'vue';
-import WordHighlighter from 'vue-word-highlighter';
-import { KeyEvent } from './types';
+import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS, KeyEvent } from '@/const';
+import { DEFAULT_COUNT } from '@/const/api';
+import { useClasses } from '@/composables/useClasses';
+import { useHighlightOptions } from '@/composables/useHighlightOptions';
+import { useSuggestions } from '@/composables/useSuggestions';
+import IconCross from '@/IconCross.vue';
 import type {
-  BoundsType,
-  LocationsBoost,
-  VueDadataClasses,
-  HighlightOptions,
   AddressSuggestion,
+  BoundType,
+  DivisionType,
+  Language,
   LocationRestriction,
   RadiusFilter,
-  DivisionType,
-} from './types';
-import { DEFAULT_CLASSES, DEFAULT_COUNT, DEFAULT_HIGHLIGHT_OPTIONS } from './const';
-import { useClasses } from './composables/useClasses';
-import { useHighlightOptions } from './composables/useHighlightOptions';
-import { useSuggestions } from './composables/useSuggestions';
-import IconCross from './IconCross.vue';
+} from './types/api';
+import type { LocationsBoost, VueDadataClasses, HighlightOptions } from './types';
+import type { PropType, ComputedRef } from 'vue';
+import WordHighlighter from 'vue-word-highlighter';
 
 const props = defineProps({
   token: {
@@ -53,11 +52,11 @@ const props = defineProps({
     default: undefined,
   },
   fromBound: {
-    type: String as PropType<BoundsType>,
+    type: String as PropType<BoundType>,
     default: undefined,
   },
   toBound: {
-    type: String as PropType<BoundsType>,
+    type: String as PropType<BoundType>,
     default: undefined,
   },
   inputName: {
@@ -107,7 +106,7 @@ const props = defineProps({
   /** Language for displayed suggestions. `en` or `ru`. Default `ru`. `en` mostly just transliterates
    * pretty much everything */
   language: {
-    type: String,
+    type: String as PropType<Language>,
     default: 'ru',
   },
   classes: {

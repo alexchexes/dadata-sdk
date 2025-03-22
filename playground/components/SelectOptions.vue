@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   options: {
     type: Object,
     default: () => ({}),
@@ -10,6 +12,12 @@ defineProps({
   },
 });
 const model = defineModel({ type: null });
+
+const optionsObject = computed(() =>
+  Array.isArray(props.options)
+    ? Object.fromEntries(props.options.map((item) => [item, item]))
+    : props.options,
+);
 </script>
 
 <template>
@@ -17,8 +25,8 @@ const model = defineModel({ type: null });
     <div v-if="label" class="pl-1 text-sm">{{ label }}</div>
     <select v-model="model" class="rounded-lg border bg-white">
       <option :value="undefined"></option>
-      <option v-for="(option, key) in options" :key="key" :value="option">
-        {{ option }}
+      <option v-for="(value, key) in optionsObject" :key="key" :value="value">
+        {{ key }}
       </option>
     </select>
   </label>

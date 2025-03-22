@@ -11,14 +11,14 @@ const props = defineProps({
     default: '',
   },
 });
-const model = defineModel({ type: null });
-const optionsObject = computed(() => {
-  if (Array.isArray(props.options)) {
-    return Object.fromEntries(props.options.map((item) => [item, item]));
-  }
 
-  return props.options;
-});
+const model = defineModel({ type: null });
+
+const optionsObject = computed(() =>
+  Array.isArray(props.options)
+    ? Object.fromEntries(props.options.map((item) => [item, item]))
+    : props.options,
+);
 </script>
 
 <template>
