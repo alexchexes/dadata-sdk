@@ -1,6 +1,3 @@
-export const SUGGEST_ADDRESS_URL =
-  'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
-
 export const DEFAULT_COUNT = 10;
 export const MAX_SUG_COUNT = 20;
 
@@ -19,6 +16,7 @@ export const BOUND_TYPES = [
   'area',
   'city',
   'settlement',
+  'planning_structure', // not documented for suggestions (only for FIAS) but works
   'street',
   'house',
   'flat',

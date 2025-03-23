@@ -20,15 +20,29 @@ export interface LocationsBoostItem {
 
 export type Language = (typeof LANGUAGES)[number];
 
-export interface SuggestAddressPayload {
+export interface BaseSuggestAddressPayload {
   query: string;
   count?: number;
+  locations_boost?: LocationsBoostItem | LocationsBoostItem[];
+  restrict_value?: Boolean;
+}
+
+export interface SuggestAddressPayload extends BaseSuggestAddressPayload {
   division?: DivisionType;
   from_bound?: { value: BoundType };
   to_bound?: { value: BoundType };
   locations?: LocationRestriction[];
   locations_geo?: [RadiusFilter];
-  locations_boost?: LocationsBoostItem | LocationsBoostItem[];
-  restrict_value?: Boolean;
   language?: Language;
+}
+
+// FIAS
+
+export type BoundTypeFias = Exclude<BoundType, 'country'>;
+export type LocationRestrictionFias = Omit<LocationRestriction, 'country'>;
+
+export interface SuggestFiasPayload extends BaseSuggestAddressPayload {
+  from_bound?: { value: BoundTypeFias };
+  to_bound?: { value: BoundTypeFias };
+  locations?: LocationRestrictionFias[];
 }

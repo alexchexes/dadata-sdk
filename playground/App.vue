@@ -10,13 +10,15 @@ import SelectOptions from './components/SelectOptions.vue';
 import type { VueDadataProps } from '@/VueDadata.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
+  BASE_SUGGEST_URL,
   BOUND_TYPES,
   DEFAULT_COUNT,
   DEFAULT_DIVISION,
+  DEFAULT_SUGGEST_TYPE,
   DIVISION_TYPES,
   LANGUAGES,
   MAX_SUG_COUNT,
-  SUGGEST_ADDRESS_URL,
+  SUGGEST_TYPES,
   type AddressSuggestion,
 } from '@/index';
 
@@ -88,6 +90,7 @@ type EditableOptions = Mutable<
     | 'selectOnEnter'
     | 'disabled'
     | 'count'
+    | 'suggestType'
     | 'division'
     | 'highlightOptions'
     | 'placeholder'
@@ -112,9 +115,10 @@ const options = ref<EditableOptions>({
     highlightTag: 'span',
   },
   disabled: false,
-  url: SUGGEST_ADDRESS_URL,
+  url: undefined,
   placeholder: 'Start typing...',
   count: DEFAULT_COUNT,
+  suggestType: DEFAULT_SUGGEST_TYPE,
   division: DEFAULT_DIVISION,
   selectOnBlur: false,
   selectOnEnter: true,
@@ -161,7 +165,11 @@ const examplesShown = ref(false);
               placeholder="***************************"
             />
 
-            <InputText v-model.trim="options.url" label="API URL:" />
+            <InputText
+              v-model.trim="options.url"
+              :placeholder="BASE_SUGGEST_URL + DEFAULT_SUGGEST_TYPE"
+              label="API URL:"
+            />
 
             <div class="flex items-center gap-2">
               count:
@@ -175,6 +183,13 @@ const examplesShown = ref(false);
               />
               {{ options.count }}
             </div>
+
+            <RadioGroup
+              v-model="options.suggestType"
+              class="flex gap-2"
+              :options="SUGGEST_TYPES"
+              label="suggestType"
+            />
 
             <RadioGroup
               v-model="options.division"

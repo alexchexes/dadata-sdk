@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS, KeyEvent } from '@/const';
-import { DEFAULT_COUNT } from '@/const/api';
+import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 import { useClasses } from '@/composables/useClasses';
 import { useHighlightOptions } from '@/composables/useHighlightOptions';
 import { useSuggestions } from '@/composables/useSuggestions';
@@ -13,6 +13,7 @@ import type {
   Language,
   LocationRestriction,
   RadiusFilter,
+  SuggestType,
 } from './types/api';
 import type { LocationsBoost, VueDadataClasses, HighlightOptions } from './types';
 import type { PropType, ComputedRef } from 'vue';
@@ -42,6 +43,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  suggestType: {
+    type: String as PropType<SuggestType>,
+    default: DEFAULT_SUGGEST_TYPE,
   },
   /**
    * Type of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`. Defaults to `ADMINISTRATIVE`.
@@ -96,6 +101,7 @@ const props = defineProps({
    * it prepares list of suggestions on its side. Examples:
    * - `55` - Omsk region
    * - `63000001` - Samara city
+   * - `6300000100000` - Samara city (full KLADR code)
    * - `[50, 77]` - Moscow and Moscow-City regions
    * Max 10 items
    */

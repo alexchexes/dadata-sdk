@@ -4,7 +4,7 @@ import { KeyEvent } from '@/const';
 import { useDebounceFn } from '@vueuse/core';
 import type { AddressSuggestion } from '@/types/api';
 import type { Ref } from 'vue';
-import type { SuggestAddressOptions } from '@/types';
+import type { SuggestAddressOptions, SuggestFiasOptions } from '@/types';
 import type { VueDadataEmits, VueDadataProps } from '@/VueDadata.vue';
 
 export function useSuggestions(
@@ -20,25 +20,46 @@ export function useSuggestions(
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
   const fetchSuggestions = async (
-    paramsOverrides: Partial<SuggestAddressOptions> = {},
+    optionsOverrides: Partial<SuggestAddressOptions | SuggestFiasOptions> = {},
   ): Promise<AddressSuggestion[]> => {
     try {
-      return await getSuggestions({
+      const baseOptions: SuggestAddressOptions | SuggestFiasOptions = {
         token: props.token,
         url: props.url,
         httpCache: props.httpCache,
         query: queryModel.value,
         count: props.count,
-        division: props.division,
+        suggestType: props.suggestType,
         fromBound: props.fromBound,
         toBound: props.toBound,
         locationsFilter: props.locationsFilter,
-        radiusFilter: props.radiusFilter,
         restrictValue: props.restrictValue,
         locationsBoost: props.locationsBoost,
-        language: props.language,
-        ...paramsOverrides,
-      });
+      };
+
+      let finalOptions;
+
+      switch (props.suggestType) {
+        case 'address':
+          finalOptions = {
+            ...baseOptions,
+            division: props.division,
+            radiusFilter: props.radiusFilter,
+            language: props.language,
+          } as SuggestAddressOptions;
+          break;
+        case 'fias':
+          finalOptions = baseOptions as SuggestFiasOptions;
+          break;
+        default:
+          throw new Error(`Incorrect suggestType: ${props.suggestType}`);
+      }
+
+      if (Object.keys(optionsOverrides).length) {
+        finalOptions = { ...finalOptions, ...optionsOverrides };
+      }
+
+      return await getSuggestions(finalOptions);
     } catch (error) {
       emit('error', error);
       return [];
