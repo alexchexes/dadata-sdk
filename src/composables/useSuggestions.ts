@@ -224,18 +224,19 @@ export function useSuggestions(
     }
   };
 
-  const onInputFocus = () => {
+  const onInputFocus = (evt: FocusEvent) => {
     if (props.disabled) {
       return;
     }
-
+    emit('focus', evt);
     inputFocused.value = true;
   };
 
-  const onInputBlur = () => {
+  const onInputBlur = (evt: FocusEvent) => {
     if (props.disabled) {
       return;
     }
+    emit('blur', evt);
 
     // suggestionsVisible check makes sense since we don't use matcher, but once added, we must
     // select match on blur in any case, not just when suggestionsVisible is true

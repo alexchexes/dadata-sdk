@@ -193,6 +193,8 @@ const suggestionModel = defineModel('suggestion', {
 const emit = defineEmits<{
   'error': [error: unknown];
   'enriched': [suggestion: AddressSuggestion];
+  'focus': [event: FocusEvent];
+  'blur': [event: FocusEvent];
 }>();
 export type VueDadataEmits = typeof emit;
 

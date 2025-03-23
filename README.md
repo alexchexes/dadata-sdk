@@ -74,6 +74,8 @@ const suggestion = ref(undefined);
 | -------- | ------------------ | --------------------------------------------------------------------------------------- |
 | error    | `unknown`          | emitted in case of any error (usually only network errors occurs)                       |
 | enriched | `object`           | emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` |
+| focus    | `FocusEvent`       | emitted whenever input is focused                                                       |
+| blur     | `FocusEvent`       | emitted whenever input looses focus                                                     |
 
 ## Peer dependencies
 
