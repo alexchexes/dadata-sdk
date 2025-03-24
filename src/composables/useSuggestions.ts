@@ -80,6 +80,34 @@ export function useSuggestions(
 
   let dontFetchOnQueryChange = false;
 
+  watch(
+    [
+      () => props.count,
+      () => props.division,
+      () => props.fromBound,
+      () => props.toBound,
+      () => props.httpCache,
+      () => props.language,
+      () => props.locationsBoost,
+      () => props.locationsFilter,
+      () => props.radiusFilter,
+      () => props.restrictValue,
+      () => props.suggestType,
+      () => props.token,
+      () => props.url,
+    ],
+    async () => {
+      await fetchWithDebounce();
+
+      if (suggestionModel.value) {
+        const enriched = await enrichSuggestion(suggestionModel.value);
+        if (!enriched) {
+          suggestionModel.value = undefined;
+        }
+      }
+    },
+  );
+
   watch(queryModel, () => {
     visibleQuery.value = queryModel.value;
     activeIndex.value = -1;
@@ -153,8 +181,10 @@ export function useSuggestions(
     ) {
       suggestionModel.value = suggestions[0];
       emit('enriched', suggestions[0]);
+      return true;
     } else {
       console.warn(`Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`);
+      return false;
     }
   };
 
