@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { DEFAULT_CLASSES, DEFAULT_HIGHLIGHT_OPTIONS, KeyEvent } from '@/const';
+import {
+  DEFAULT_CLASSES,
+  DEFAULT_HIGHLIGHT_OPTIONS,
+  DEFAULT_SHOW_ON_FOCUS,
+  KeyEvent,
+} from '@/const';
 import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 import { useClasses } from '@/composables/useClasses';
 import { useHighlightOptions } from '@/composables/useHighlightOptions';
@@ -15,7 +20,12 @@ import type {
   RadiusFilter,
   SuggestType,
 } from './types/api';
-import type { LocationsBoost, VueDadataClasses, HighlightOptions } from './types';
+import type {
+  LocationsBoost,
+  VueDadataClasses,
+  HighlightOptions,
+  ShowOnFocusOption,
+} from './types';
 import type { PropType, ComputedRef } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 
@@ -122,6 +132,23 @@ const props = defineProps({
   highlightOptions: {
     type: Object as PropType<HighlightOptions>,
     default: () => DEFAULT_HIGHLIGHT_OPTIONS,
+  },
+  /**
+   * Controls whether the suggestions list is shown when the input field is focused.
+   *
+   * - `'no_selection'` (default): Suggestions will be shown on focus **when these conditions met**:
+   *   1. The user started typing and the suggestions list was loaded
+   *   2. The user did not select any suggestion (or selected one and then changed the input)
+   *   3. The input was unfocused (suggestions list was hidden)
+   *   4. The input is focused again
+   *
+   * - `false`: Disables the behavior described above.
+   *
+   * - `'always'`: Suggestions will always be shown when the input is focused (if not empty).
+   */
+  showOnFocus: {
+    type: [Boolean, String] as PropType<ShowOnFocusOption>,
+    default: DEFAULT_SHOW_ON_FOCUS,
   },
   selectOnBlur: {
     type: Boolean,

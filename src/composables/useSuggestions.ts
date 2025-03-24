@@ -230,6 +230,15 @@ export function useSuggestions(
     }
     emit('focus', evt);
     inputFocused.value = true;
+
+    if (props.showOnFocus !== false && suggestionsList.value.length) {
+      if (
+        props.showOnFocus === 'always' ||
+        (props.showOnFocus === 'no_selection' && !suggestionModel.value)
+      ) {
+        suggestionsVisible.value = true;
+      }
+    }
   };
 
   const onInputBlur = (evt: FocusEvent) => {
@@ -237,6 +246,7 @@ export function useSuggestions(
       return;
     }
     emit('blur', evt);
+    inputFocused.value = false;
 
     // suggestionsVisible check makes sense since we don't use matcher, but once added, we must
     // select match on blur in any case, not just when suggestionsVisible is true
@@ -249,8 +259,13 @@ export function useSuggestions(
       }
     }
 
+    // Reset visible query in case it changed because user navigated suggestions with keyboard
     visibleQuery.value = queryModel.value;
-    inputFocused.value = false;
+
+    // respect the showOnFocus option
+    if (props.showOnFocus === false) {
+      suggestionsVisible.value = false;
+    }
   };
 
   const onSuggestionClick = (index: number) => {

@@ -18,6 +18,8 @@ import {
   DIVISION_TYPES,
   LANGUAGES,
   MAX_SUG_COUNT,
+  DEFAULT_SHOW_ON_FOCUS,
+  SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
   type AddressSuggestion,
 } from '@/index';
@@ -86,6 +88,7 @@ type EditableOptions = Mutable<
     VueDadataProps,
     | 'token'
     | 'url'
+    | 'showOnFocus'
     | 'selectOnBlur'
     | 'selectOnEnter'
     | 'disabled'
@@ -120,6 +123,7 @@ const options = ref<EditableOptions>({
   count: DEFAULT_COUNT,
   suggestType: DEFAULT_SUGGEST_TYPE,
   division: DEFAULT_DIVISION,
+  showOnFocus: DEFAULT_SHOW_ON_FOCUS,
   selectOnBlur: false,
   selectOnEnter: true,
   enrichOnSelect: true,
@@ -247,6 +251,14 @@ const examplesShown = ref(false);
             <h3 class="font-semibold">Component behavior options</h3>
 
             <CheckBox v-model="options.disabled" label="disabled" />
+
+            <RadioGroup
+              v-model="options.showOnFocus"
+              class="flex gap-2"
+              :options="SHOW_ON_FOCUS_OPTIONS"
+              label="showOnFocus"
+            />
+
             <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
             <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
             <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
