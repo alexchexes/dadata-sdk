@@ -43,19 +43,27 @@
 }
 
 .vue-dadata__suggestions_container {
+  flex-direction: column;
   background-color: #fff;
   border-radius: var(--default-border-radius);
   box-shadow: 0 1px 6px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
   left: 0;
-  right: 0;
-  top: calc(100% + 0.5rem);
   list-style: none;
   margin: 0;
-  padding: 0;
   overflow: hidden;
+  padding: 0;
   position: absolute;
+  right: 0;
   text-align: left;
+  top: calc(100% + 0.5rem);
   z-index: 10;
+}
+
+/* By default suggestion item is <button>. Make sure its text not gets centered
+when user passes a class for suggestion item */
+.vue-dadata__suggestions_container > button {
+  text-align: left;
 }
 
 /** NOT IMPLEMENTED YET: */
@@ -69,13 +77,13 @@
   background: none;
   border: none;
   box-sizing: border-box;
+  color: inherit;
   cursor: pointer;
   display: block;
   font-size: 0.95rem;
   padding: 0.45rem 0.6rem;
   text-align: left;
   width: 100%;
-  color: inherit;
 }
 
 /** NOT IMPLEMENTED YET: */
