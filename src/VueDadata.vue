@@ -115,7 +115,7 @@ const props = defineProps({
   },
   classes: {
     type: Object as PropType<VueDadataClasses>,
-    default: () => DEFAULT_CLASSES,
+    default: () => ({}),
   },
   /**
    * Controls whether the suggestions list is shown when the input field is focused.
