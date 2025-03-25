@@ -7,7 +7,7 @@ import type {
   LocationRestrictionFias,
   RadiusFilter,
   SuggestType,
-} from './api';
+} from '@/types/api';
 
 /**
  * User-facing type for locationsBoost (`locations_boost` in API) prop.

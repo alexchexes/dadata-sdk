@@ -40,7 +40,7 @@ function toggleTailwind() {
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const tokenModel = computed({
   get: () => (options.value.token === envToken ? '' : options.value.token),
-  set: (val) => (options.value.token = val.trim() ? val.trim() : envToken),
+  set: (val) => (options.value.token = val?.trim() ? val.trim() : envToken),
 });
 
 // locationsBoost
@@ -96,6 +96,7 @@ type EditableOptions = Mutable<
     | 'suggestType'
     | 'division'
     | 'highlightOptions'
+    | 'classes'
     | 'placeholder'
     | 'enrichOnSelect'
     | 'clearSuggestionOnChange'
@@ -114,9 +115,8 @@ type EditableOptions = Mutable<
 
 const options = ref<EditableOptions>({
   token: envToken,
-  highlightOptions: {
-    highlightTag: 'span',
-  },
+  highlightOptions: {},
+  classes: {},
   disabled: false,
   url: undefined,
   placeholder: 'Start typing...',

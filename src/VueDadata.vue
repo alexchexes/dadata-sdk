@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
 import {
   DEFAULT_CLASSES,
   DEFAULT_HIGHLIGHT_OPTIONS,
@@ -7,8 +6,7 @@ import {
   KeyEvent,
 } from '@/const';
 import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
-import { useClasses } from '@/composables/useClasses';
-import { useHighlightOptions } from '@/composables/useHighlightOptions';
+import { useMergedWithDefaults } from './composables/useMergedWithDefaults';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
 import type {
@@ -19,14 +17,14 @@ import type {
   LocationRestriction,
   RadiusFilter,
   SuggestType,
-} from './types/api';
+} from '@/types/api';
 import type {
   LocationsBoost,
   VueDadataClasses,
   HighlightOptions,
   ShowOnFocusOption,
-} from './types';
-import type { PropType, ComputedRef } from 'vue';
+} from '@/types';
+import { type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 
 const props = defineProps({
@@ -225,26 +223,18 @@ const emit = defineEmits<{
 }>();
 export type VueDadataEmits = typeof emit;
 
-const proxyClasses: ComputedRef<VueDadataClasses> = useClasses(props.classes);
+const mergedClasses = useMergedWithDefaults<VueDadataClasses>(DEFAULT_CLASSES, props.classes);
 
-const proxyHighlightOptions: ComputedRef<HighlightOptions> = useHighlightOptions(
-  props.highlightOptions,
-);
-
-const mergedHighlightOptions = computed(() => {
-  const wrapperClass = proxyHighlightOptions.value.wrapperClass
-    ? proxyHighlightOptions.value.wrapperClass
-    : proxyClasses.value.suggestionItem;
-
-  const highlightClass = proxyHighlightOptions.value.highlightClass
-    ? proxyHighlightOptions.value.highlightClass
-    : proxyClasses.value.suggestionTextHighlight;
-
-  return {
-    ...proxyHighlightOptions.value,
-    wrapperClass,
-    highlightClass,
-  };
+const mergedHighlightOptions = useMergedWithDefaults<HighlightOptions>(DEFAULT_HIGHLIGHT_OPTIONS, {
+  ...props.highlightOptions,
+  wrapperClass:
+    props.highlightOptions.wrapperClass ||
+    mergedClasses.value.suggestionItem ||
+    DEFAULT_HIGHLIGHT_OPTIONS.wrapperClass,
+  highlightClass:
+    props.highlightOptions.highlightClass ||
+    mergedClasses.value.suggestionTextHighlight ||
+    DEFAULT_HIGHLIGHT_OPTIONS.highlightClass,
 });
 
 const {
@@ -265,11 +255,11 @@ const {
 </script>
 
 <template>
-  <div :class="proxyClasses.container">
-    <div :class="proxyClasses.inputWrapper">
+  <div :class="mergedClasses.container">
+    <div :class="mergedClasses.inputWrapper">
       <input
         :name="inputName"
-        :class="proxyClasses.input"
+        :class="mergedClasses.input"
         :autocapitalize="inputAutocapitalize"
         :autocomplete="inputAutocomplete"
         :autocorrect="inputAutocorrect"
@@ -290,7 +280,7 @@ const {
 
       <button
         v-if="props.showClearButton && canClear"
-        :class="proxyClasses.clearButton"
+        :class="mergedClasses.clearButton"
         @mousedown.prevent="clear"
       >
         <slot name="clearButtonIcon">
@@ -301,7 +291,7 @@ const {
 
     <div
       v-if="inputFocused && suggestionsVisible && suggestionsList.length && !disabled"
-      :class="proxyClasses.suggestions"
+      :class="mergedClasses.suggestions"
     >
       <slot
         name="suggestions"
@@ -313,7 +303,7 @@ const {
         <WordHighlighter
           v-for="(suggestion, index) in suggestionsList"
           :key="index"
-          :class="index === activeIndex ? proxyClasses.suggestionCurrentItem : ''"
+          :class="index === activeIndex ? mergedClasses.suggestionCurrentItem : ''"
           :query="queryModel"
           :text-to-highlight="suggestion.value"
           v-bind="mergedHighlightOptions"
