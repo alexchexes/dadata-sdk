@@ -16,7 +16,7 @@ export function useSuggestions(
   const visibleQuery = ref('');
   const inputFocused = ref(false);
   const suggestionsVisible = ref(true);
-  const activeIndex = ref(-1);
+  const navigatedIndex = ref(-1);
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
   const fetchSuggestions = async (
@@ -110,7 +110,7 @@ export function useSuggestions(
 
   watch(queryModel, () => {
     visibleQuery.value = queryModel.value;
-    activeIndex.value = -1;
+    navigatedIndex.value = -1;
 
     if (dontFetchOnQueryChange) {
       dontFetchOnQueryChange = false;
@@ -135,7 +135,7 @@ export function useSuggestions(
     }
 
     suggestionsVisible.value = false;
-    activeIndex.value = -1;
+    navigatedIndex.value = -1;
   };
 
   const selectSuggestion = async (index: number) => {
@@ -199,9 +199,11 @@ export function useSuggestions(
     suggestionsVisible.value = true;
   };
 
-  const canGoDown = computed(() => activeIndex.value < suggestionsList.value.length - 1);
-  const canGoUp = computed(() => activeIndex.value >= 0);
-  const haveActiveToSelect = computed(() => canGoUp.value && canGoDown.value);
+  const canGoDown = computed(() => navigatedIndex.value < suggestionsList.value.length - 1);
+  const canGoUp = computed(() => navigatedIndex.value >= 0);
+  const canSelectNavigatedIndex = computed(
+    () => navigatedIndex.value >= 0 && navigatedIndex.value < suggestionsList.value.length,
+  );
 
   const onKeyPress = (keyboardEvent: KeyboardEvent, keyEvent: KeyEvent) => {
     if (props.disabled) {
@@ -213,8 +215,9 @@ export function useSuggestions(
     if (keyEvent === KeyEvent.Enter) {
       if (suggestionsVisible.value && suggestionsList.value.length) {
         let indexToSelect = null;
-        if (haveActiveToSelect.value) {
-          indexToSelect = activeIndex.value;
+
+        if (canSelectNavigatedIndex.value) {
+          indexToSelect = navigatedIndex.value;
         } else if (props.selectOnEnter) {
           indexToSelect = 0;
         }
@@ -226,17 +229,17 @@ export function useSuggestions(
 
     if (keyEvent === KeyEvent.Esc) {
       suggestionsVisible.value = false;
-      activeIndex.value = -1;
+      navigatedIndex.value = -1;
       visibleQuery.value = queryModel.value;
     }
 
     if (keyEvent === KeyEvent.Up) {
       if (canGoUp.value && suggestionsVisible.value) {
-        activeIndex.value -= 1;
+        navigatedIndex.value -= 1;
 
-        if (activeIndex.value > -1) {
-          visibleQuery.value = suggestionsList.value[activeIndex.value].value;
-        } else if (activeIndex.value === -1) {
+        if (navigatedIndex.value > -1) {
+          visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
+        } else if (navigatedIndex.value === -1) {
           visibleQuery.value = queryModel.value;
         }
       }
@@ -245,8 +248,8 @@ export function useSuggestions(
     if (keyEvent === KeyEvent.Down) {
       if (suggestionsVisible.value) {
         if (canGoDown.value) {
-          activeIndex.value += 1;
-          visibleQuery.value = suggestionsList.value[activeIndex.value].value;
+          navigatedIndex.value += 1;
+          visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
         }
       } else if (suggestionsList.value.length) {
         suggestionsVisible.value = true;
@@ -310,7 +313,7 @@ export function useSuggestions(
     visibleQuery,
     inputFocused,
     suggestionsVisible,
-    activeIndex,
+    navigatedIndex,
     suggestionsList,
     canClear,
 

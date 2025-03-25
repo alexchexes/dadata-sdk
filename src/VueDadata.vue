@@ -224,7 +224,7 @@ const {
   visibleQuery,
   inputFocused,
   suggestionsVisible,
-  activeIndex,
+  navigatedIndex,
   suggestionsList,
   canClear,
 
@@ -278,7 +278,7 @@ const {
     >
       <slot
         name="suggestions"
-        :active-index="activeIndex"
+        :active-index="navigatedIndex"
         :query="queryModel"
         :suggestion="suggestionModel"
         :suggestions-list="suggestionsList"
@@ -286,7 +286,7 @@ const {
         <WordHighlighter
           v-for="(suggestion, index) in suggestionsList"
           :key="index"
-          :class="index === activeIndex ? mergedClasses.navigatedSuggestionItem : ''"
+          :class="index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : ''"
           :query="queryModel"
           :text-to-highlight="suggestion.value"
           v-bind="highlightOptions"
