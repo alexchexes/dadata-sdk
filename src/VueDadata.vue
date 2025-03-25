@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import {
-  DEFAULT_CLASSES,
-  DEFAULT_HIGHLIGHT_OPTIONS,
-  DEFAULT_SHOW_ON_FOCUS,
-  KeyEvent,
-} from '@/const';
+import { DEFAULT_CLASSES, DEFAULT_SHOW_ON_FOCUS, KeyEvent } from '@/const';
 import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 import { useMergedWithDefaults } from './composables/useMergedWithDefaults';
 import { useSuggestions } from '@/composables/useSuggestions';
@@ -18,13 +13,8 @@ import type {
   RadiusFilter,
   SuggestType,
 } from '@/types/api';
-import type {
-  LocationsBoost,
-  VueDadataClasses,
-  HighlightOptions,
-  ShowOnFocusOption,
-} from '@/types';
-import { type PropType } from 'vue';
+import type { LocationsBoost, VueDadataClasses, ShowOnFocusOption } from '@/types';
+import { computed, type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 
 const props = defineProps({
@@ -127,10 +117,6 @@ const props = defineProps({
     type: Object as PropType<VueDadataClasses>,
     default: () => DEFAULT_CLASSES,
   },
-  highlightOptions: {
-    type: Object as PropType<HighlightOptions>,
-    default: () => DEFAULT_HIGHLIGHT_OPTIONS,
-  },
   /**
    * Controls whether the suggestions list is shown when the input field is focused.
    *
@@ -225,17 +211,14 @@ export type VueDadataEmits = typeof emit;
 
 const mergedClasses = useMergedWithDefaults<VueDadataClasses>(DEFAULT_CLASSES, props.classes);
 
-const mergedHighlightOptions = useMergedWithDefaults<HighlightOptions>(DEFAULT_HIGHLIGHT_OPTIONS, {
-  ...props.highlightOptions,
-  wrapperClass:
-    props.highlightOptions.wrapperClass ||
-    mergedClasses.value.suggestionItem ||
-    DEFAULT_HIGHLIGHT_OPTIONS.wrapperClass,
-  highlightClass:
-    props.highlightOptions.highlightClass ||
-    mergedClasses.value.suggestionTextHighlight ||
-    DEFAULT_HIGHLIGHT_OPTIONS.highlightClass,
-});
+const highlightOptions = computed(() => ({
+  caseSensitive: false,
+  splitBySpace: true,
+  wrapperTag: 'button',
+  wrapperClass: mergedClasses.value.suggestionItem,
+  highlightTag: 'mark',
+  highlightClass: mergedClasses.value.suggestionTextHighlight,
+}));
 
 const {
   visibleQuery,
@@ -306,7 +289,7 @@ const {
           :class="index === activeIndex ? mergedClasses.suggestionCurrentItem : ''"
           :query="queryModel"
           :text-to-highlight="suggestion.value"
-          v-bind="mergedHighlightOptions"
+          v-bind="highlightOptions"
           @mousedown.prevent="onSuggestionClick(index)"
         />
       </slot>

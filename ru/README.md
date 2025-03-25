@@ -52,25 +52,22 @@ import VueDadata from 'vue-dadata'  Vue.use(VueDadata)
 
 ### Свойства (пропсы)
 
-| Свойство             | Обязательно | Тип                                            | Описание                                                                                                            |
-| -------------------- | ----------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| token                | Да          | string                                         | Авторизационный токен DaData.ru                                                                                     |
-| placeholder          | Нет         | string                                         | Подсказка в input                                                                                                   |
-| query                | Нет         | string                                         | Поле ввода начального состояния                                                                                     |
-| autoload             | Нет         | boolean                                        | Если `true` , то запрос на подсказки будет инициирован в фоновом режиме в созданном хуке                            |
-| onChange             | Нет         | function(suggestion: DadataSuggestion) -> void | Функция вызывается при выборе всплывающей подсказки                                                                 |
-| selectOnBlur         | Нет         | string                                         |                                                                                                                     |
-| selectOnEnter        | Нет         | boolean                                        | Если `true`, выбирает первую подсказку по нажатию Enter                                                             |
-| defaultClass         | Нет         | string                                         | Компонент класса по умолчанию, значение по умолчанию - `vue-dadata`                                                 |
-| classes              | Нет         | string                                         | Дополнительные классы                                                                                               |
-| inputName            | Нет         | string                                         | Input name атрибут                                                                                                  |
-| fromBound            | Нет         | string                                         | Тип привязки Dadata ОТ                                                                                              |
-| toBound              | Нет         | string                                         | Dadata привязанного типа к                                                                                          |
-| highlightClassName   | Нет         | string                                         | Имя класса CSS, примененное к выделенному тексту                                                                    |
-| unhighlightClassName | Нет         | string                                         | Имя класса CSS, примененное к невыделенному тексту                                                                  |
-| highlightTag         | Нет         | string                                         | Тип тега для обертывания вокруг выделенных совпадений; по умолчанию для `mark` но также может быть компонентом      |
-| locationsFilter      | Нет         | object                                         | [Ограничение сектора поиска адреса](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)            |
-| autoSelectOnEnter    | Нет         | boolean                                        | Если `true`, то при нажатии клавиши `ENTER` будет выбираться первая подсказка, если не одна из подсказок не активна |
+| Свойство          | Обязательно | Тип                                            | Описание                                                                                                            |
+| ----------------- | ----------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| token             | Да          | string                                         | Авторизационный токен DaData.ru                                                                                     |
+| placeholder       | Нет         | string                                         | Подсказка в input                                                                                                   |
+| query             | Нет         | string                                         | Поле ввода начального состояния                                                                                     |
+| autoload          | Нет         | boolean                                        | Если `true` , то запрос на подсказки будет инициирован в фоновом режиме в созданном хуке                            |
+| onChange          | Нет         | function(suggestion: DadataSuggestion) -> void | Функция вызывается при выборе всплывающей подсказки                                                                 |
+| selectOnBlur      | Нет         | string                                         |                                                                                                                     |
+| selectOnEnter     | Нет         | boolean                                        | Если `true`, выбирает первую подсказку по нажатию Enter                                                             |
+| defaultClass      | Нет         | string                                         | Компонент класса по умолчанию, значение по умолчанию - `vue-dadata`                                                 |
+| classes           | Нет         | string                                         | Дополнительные классы                                                                                               |
+| inputName         | Нет         | string                                         | Input name атрибут                                                                                                  |
+| fromBound         | Нет         | string                                         | Тип привязки Dadata ОТ                                                                                              |
+| toBound           | Нет         | string                                         | Dadata привязанного типа к                                                                                          |
+| locationsFilter   | Нет         | object                                         | [Ограничение сектора поиска адреса](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)            |
+| autoSelectOnEnter | Нет         | boolean                                        | Если `true`, то при нажатии клавиши `ENTER` будет выбираться первая подсказка, если не одна из подсказок не активна |
 
 ## Зависимости
 

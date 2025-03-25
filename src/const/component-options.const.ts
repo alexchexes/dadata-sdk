@@ -1,17 +1,5 @@
-import type { HighlightOptions } from '@/types';
-
 export const SHOW_ON_FOCUS_OPTIONS = ['no_selection', 'always', false] as const;
 export const DEFAULT_SHOW_ON_FOCUS = 'no_selection';
-
-export const DEFAULT_HIGHLIGHT_OPTIONS: Required<HighlightOptions> = {
-  caseSensitive: false,
-  splitBySpace: true,
-  highlightTag: 'mark',
-  highlightClass: '',
-  highlightStyle: '',
-  wrapperTag: 'button',
-  wrapperClass: '',
-} as const;
 
 // the source of truth - this constant defines the type
 export const DEFAULT_CLASSES = {

@@ -95,7 +95,6 @@ type EditableOptions = Mutable<
     | 'count'
     | 'suggestType'
     | 'division'
-    | 'highlightOptions'
     | 'classes'
     | 'placeholder'
     | 'enrichOnSelect'
@@ -115,7 +114,6 @@ type EditableOptions = Mutable<
 
 const options = ref<EditableOptions>({
   token: envToken,
-  highlightOptions: {},
   classes: {},
   disabled: false,
   url: undefined,
