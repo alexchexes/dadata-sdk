@@ -3,7 +3,7 @@
  * Original source: https://github.com/vitalybaev/react-dadata/blob/main/packages/react-dadata/src/react-dadata.css
  * License: MIT
  */
-.vue-dadata__container {
+.vue-dadata {
   position: relative;
   --default-border-radius: 0.5rem;
 }
@@ -31,7 +31,7 @@
 }
 
 /* If clear button is shown */
-.vue-dadata__input-wrapper:has(.vue-dadata--clear-button) .vue-dadata__input {
+.vue-dadata__input-wrapper:has(.vue-dadata__clear-button) .vue-dadata__input {
   padding-right: 1.75rem;
 }
 
@@ -42,7 +42,7 @@
     0 0 0 3px rgba(0, 124, 214, 0.3);
 }
 
-.vue-dadata__suggestions_container {
+.vue-dadata__dropdown {
   flex-direction: column;
   background-color: #fff;
   border-radius: var(--default-border-radius);
@@ -62,7 +62,7 @@
 
 /* By default suggestion item is <button>. Make sure its text not gets centered
 when user passes a class for suggestion item */
-.vue-dadata__suggestions_container > button {
+.vue-dadata__dropdown > button {
   text-align: left;
 }
 
@@ -112,7 +112,7 @@ when user passes a class for suggestion item */
   background-color: rgba(32, 154, 241, 0.067);
 }
 
-.vue-dadata__suggestion--current {
+.vue-dadata__suggestion--navigated {
   background-color: rgba(0, 124, 214, 0.15);
 }
 
@@ -120,11 +120,11 @@ when user passes a class for suggestion item */
   background: none;
 }
 
-.vue-dadata--highlighted-text {
+.vue-dadata__highlighted-text {
   color: #0094ff;
 }
 
-.vue-dadata--clear-button {
+.vue-dadata__clear-button {
   align-items: center;
   background: none;
   border: none;
@@ -142,6 +142,6 @@ when user passes a class for suggestion item */
   top: 50%;
   translate: 0 -50%;
 }
-.vue-dadata--clear-button:hover {
+.vue-dadata__clear-button:hover {
   opacity: 1;
 }

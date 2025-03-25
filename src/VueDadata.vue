@@ -217,7 +217,7 @@ const highlightOptions = computed(() => ({
   wrapperTag: 'button',
   wrapperClass: mergedClasses.value.suggestionItem,
   highlightTag: 'mark',
-  highlightClass: mergedClasses.value.suggestionTextHighlight,
+  highlightClass: mergedClasses.value.highlightedText,
 }));
 
 const {
@@ -274,7 +274,7 @@ const {
 
     <div
       v-if="inputFocused && suggestionsVisible && suggestionsList.length && !disabled"
-      :class="mergedClasses.suggestions"
+      :class="mergedClasses.dropdown"
     >
       <slot
         name="suggestions"
@@ -286,7 +286,7 @@ const {
         <WordHighlighter
           v-for="(suggestion, index) in suggestionsList"
           :key="index"
-          :class="index === activeIndex ? mergedClasses.suggestionCurrentItem : ''"
+          :class="index === activeIndex ? mergedClasses.navigatedSuggestionItem : ''"
           :query="queryModel"
           :text-to-highlight="suggestion.value"
           v-bind="highlightOptions"
