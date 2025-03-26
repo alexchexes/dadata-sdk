@@ -183,7 +183,7 @@ export function useSuggestions(
       emit('enriched', suggestions[0]);
       return true;
     } else {
-      console.warn(`Vue-Dadata: Can't enrich suggestion: ${selectedSuggestion.unrestricted_value}`);
+      emit('enrichFail', selectedSuggestion.unrestricted_value);
       return false;
     }
   };

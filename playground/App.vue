@@ -143,6 +143,9 @@ const options = ref<EditableOptions>({
 const handleEnriched = (suggestion: AddressSuggestion) => {
   console.info('suggestion enriched: ', suggestion);
 };
+const handleEnrichFail = (unrestricted_value: string) => {
+  console.warn(`Vue-Dadata: Can't enrich suggestion: ${unrestricted_value}`);
+};
 
 const nowrapQuery = ref(true);
 const examplesShown = ref(false);
@@ -281,6 +284,7 @@ const examplesShown = ref(false);
         v-model:suggestion="suggestion"
         v-bind:="options"
         @enriched="handleEnriched"
+        @enrichFail="handleEnrichFail"
       />
 
       <section class="mt-3 min-h-[1000px]">

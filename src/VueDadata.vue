@@ -211,6 +211,7 @@ const suggestionModel = defineModel('suggestion', {
 const emit = defineEmits<{
   'error': [error: unknown];
   'enriched': [suggestion: AddressSuggestion];
+  'enrichFail': [unrestricted_value: string];
   'focus': [event: FocusEvent];
   'blur': [event: FocusEvent];
 }>();
