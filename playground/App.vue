@@ -109,6 +109,7 @@ type EditableOptions = Mutable<
     | 'restrictValue'
     | 'locationsBoost'
     | 'language'
+    | 'inputAttributes'
   >
 >;
 
@@ -136,6 +137,7 @@ const options = ref<EditableOptions>({
   restrictValue: false,
   locationsBoost: undefined,
   language: 'ru',
+  inputAttributes: {},
 });
 
 const handleEnriched = (suggestion: AddressSuggestion) => {

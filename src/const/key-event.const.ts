@@ -1,8 +1,8 @@
-export const KeyEvent = {
-  Enter: 'enter',
-  Esc: 'esc',
-  Up: 'up',
-  Down: 'down',
+export const HandledKeys = {
+  Enter: 'Enter',
+  Esc: 'Escape',
+  Up: 'ArrowUp',
+  Down: 'ArrowDown',
 } as const;
 
-export type KeyEvent = (typeof KeyEvent)[keyof typeof KeyEvent];
+export type HandledKeys = (typeof HandledKeys)[keyof typeof HandledKeys];

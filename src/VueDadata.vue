@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { DEFAULT_CLASSES, DEFAULT_SHOW_ON_FOCUS, KeyEvent } from '@/const';
+import { DEFAULT_CLASSES, DEFAULT_SHOW_ON_FOCUS } from '@/const';
 import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 import { useMergedWithDefaults } from './composables/useMergedWithDefaults';
 import { useSuggestions } from '@/composables/useSuggestions';
@@ -14,7 +14,7 @@ import type {
   SuggestType,
 } from '@/types/api';
 import type { LocationsBoost, VueDadataClasses, ShowOnFocusOption } from '@/types';
-import { computed, type PropType } from 'vue';
+import { computed, type InputHTMLAttributes, type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 
 const props = defineProps({
@@ -142,26 +142,6 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  /**
-   * Controls browser built-in autocompletion. If the default `off` doesn't work for you,
-   * try "one-time-code" or "new-password"
-   */
-  inputAutocomplete: {
-    type: String,
-    default: 'off',
-  },
-  inputAutocapitalize: {
-    type: String,
-    default: 'off',
-  },
-  inputAutocorrect: {
-    type: String,
-    default: 'off',
-  },
-  inputSpellcheck: {
-    type: Boolean,
-    default: false,
-  },
   count: {
     type: Number,
     default: DEFAULT_COUNT,
@@ -190,6 +170,33 @@ const props = defineProps({
   showClearButton: {
     type: Boolean,
     default: false,
+  },
+  /**
+   * Additional attributes to apply to the internal `<input>` element.
+   *
+   * This can be used to control browser-specific behaviors such as
+   * `autocomplete`, `autocapitalize`, `inputmode`, `enterkeyhint`, etc.
+   *
+   * Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed
+   * internally and cannot be overridden.
+   *
+   * * The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,
+   * not through `inputAttributes`.
+   * * To listen for `onFocus` or `onBlur`, bind `@focus`/`@blur` to the `VueDadata` component itself.
+   *
+   * **Example usage:**
+   * ```vue
+   * <VueDadata :input-attributes="{ autocomplete: 'one-time-code', inputmode: 'numeric' }" />
+   * ```
+   */
+  inputAttributes: {
+    type: Object as PropType<
+      Omit<
+        InputHTMLAttributes,
+        'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
+      >
+    >,
+    default: () => ({}),
   },
 });
 export type VueDadataProps = typeof props;
@@ -235,30 +242,39 @@ const {
   onSuggestionClick,
   clear,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
+
+const inputAttrs = computed(
+  () =>
+    ({
+      type: 'text',
+      class: mergedClasses.value.input,
+
+      name: props.inputName,
+      placeholder: props.placeholder,
+
+      autocapitalize: 'off',
+      autocomplete: 'off',
+      autocorrect: 'off',
+      spellcheck: false,
+
+      ...props.inputAttributes,
+
+      disabled: props.disabled,
+      value: visibleQuery.value,
+
+      onBlur: onInputBlur,
+      onFocus: onInputFocus,
+      onInput: onInputChange,
+      onKeydown: onKeyPress,
+    }) satisfies InputHTMLAttributes,
+);
 </script>
 
 <template>
   <div :class="mergedClasses.container">
     <div :class="mergedClasses.inputWrapper">
-      <input
-        :name="inputName"
-        :class="mergedClasses.input"
-        :autocapitalize="inputAutocapitalize"
-        :autocomplete="inputAutocomplete"
-        :autocorrect="inputAutocorrect"
-        :disabled="disabled"
-        :placeholder="placeholder"
-        :spellcheck="inputSpellcheck"
-        :value="visibleQuery"
-        type="text"
-        @blur="onInputBlur"
-        @focus="onInputFocus"
-        @input="onInputChange"
-        @keydown.down="onKeyPress($event, KeyEvent.Down)"
-        @keydown.enter="onKeyPress($event, KeyEvent.Enter)"
-        @keydown.esc="onKeyPress($event, KeyEvent.Esc)"
-        @keydown.up="onKeyPress($event, KeyEvent.Up)"
-      />
+      <input v-bind="inputAttrs" />
+
       <slot name="inputOverlay"></slot>
 
       <button

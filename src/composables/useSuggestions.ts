@@ -1,6 +1,6 @@
 import { computed, ref, watch } from 'vue';
 import { getSuggestions } from '@/api';
-import { KeyEvent } from '@/const';
+import { HandledKeys } from '@/const';
 import { useDebounceFn } from '@vueuse/core';
 import type { AddressSuggestion } from '@/types/api';
 import type { Ref } from 'vue';
@@ -205,14 +205,20 @@ export function useSuggestions(
     () => navigatedIndex.value >= 0 && navigatedIndex.value < suggestionsList.value.length,
   );
 
-  const onKeyPress = (keyboardEvent: KeyboardEvent, keyEvent: KeyEvent) => {
+  const onKeyPress = (event: KeyboardEvent) => {
     if (props.disabled) {
       return;
     }
 
-    keyboardEvent.preventDefault();
+    if (!Object.values(HandledKeys).includes(event.key as HandledKeys)) {
+      return;
+    }
 
-    if (keyEvent === KeyEvent.Enter) {
+    const key = event.key as HandledKeys;
+
+    event.preventDefault();
+
+    if (key === HandledKeys.Enter) {
       if (suggestionsVisible.value && suggestionsList.value.length) {
         let indexToSelect = null;
 
@@ -227,13 +233,13 @@ export function useSuggestions(
       }
     }
 
-    if (keyEvent === KeyEvent.Esc) {
+    if (key === HandledKeys.Esc) {
       suggestionsVisible.value = false;
       navigatedIndex.value = -1;
       visibleQuery.value = queryModel.value;
     }
 
-    if (keyEvent === KeyEvent.Up) {
+    if (key === HandledKeys.Up) {
       if (canGoUp.value && suggestionsVisible.value) {
         navigatedIndex.value -= 1;
 
@@ -245,7 +251,7 @@ export function useSuggestions(
       }
     }
 
-    if (keyEvent === KeyEvent.Down) {
+    if (key === HandledKeys.Down) {
       if (suggestionsVisible.value) {
         if (canGoDown.value) {
           navigatedIndex.value += 1;
