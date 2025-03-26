@@ -31,6 +31,7 @@ export default [
       'prefer-const': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       'vue/attribute-hyphenation': 'off',
+      'vue/v-on-event-hyphenation': 'off',
     },
   },
 ];
