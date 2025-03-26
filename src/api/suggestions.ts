@@ -48,19 +48,6 @@ const buildBasePayload = (options: SuggestAddressOptions | SuggestFiasOptions) =
     }
   }
 
-  if (options.restrictValue) {
-    payload.restrict_value = options.restrictValue;
-  }
-  if (options.locationsBoost) {
-    const locationsBoostArray = Array.isArray(options.locationsBoost)
-      ? options.locationsBoost.map((item) => ({ kladr_id: String(item) }))
-      : [{ kladr_id: String(options.locationsBoost) }];
-
-    if (locationsBoostArray.length) {
-      payload.locations_boost = locationsBoostArray;
-    }
-  }
-
   return payload;
 };
 
