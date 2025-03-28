@@ -1,30 +1,55 @@
 <script lang="ts" setup>
-import { ref, watch, type PropType } from 'vue';
+import { computed, ref, watch, type PropType } from 'vue';
 import ButtonAdd from './ButtonAdd.vue';
 import ButtonRemove from './ButtonRemove.vue';
 import InputText from './InputText.vue';
 import SelectOptGroup from './SelectOptGroup.vue';
+import type { VueDadataProps } from '@/VueDadata.vue';
 import {
-  FIAS_ID_RESTRICTION_TYPES,
-  TYPE_FULL_RESTRICTION_TYPES,
   ISO_CODE_RESTRICTION_TYPES,
   KLADR_ID_RESTRICTION_TYPES,
+  FIAS_ID_RESTRICTION_TYPES,
   NAME_RESTRICTION_TYPES,
+  TYPE_FULL_RESTRICTION_TYPES,
   type LocationRestriction,
+  type SuggestType,
 } from '@/index';
 
+const props = defineProps({
+  suggestType: { type: String as PropType<SuggestType>, required: true },
+});
+
 const locationsFilterModel = defineModel({
-  type: [Object, Array, undefined] as PropType<LocationRestriction | LocationRestriction[]>,
+  type: [Object, Array, String, Number] as PropType<VueDadataProps['locationsFilter']>,
   required: false,
 });
 
-const LOCATION_RESTRICTION_CATEGORIES = {
-  byName: NAME_RESTRICTION_TYPES,
-  byKladrId: KLADR_ID_RESTRICTION_TYPES,
-  byFullType: TYPE_FULL_RESTRICTION_TYPES,
-  byFiasId: FIAS_ID_RESTRICTION_TYPES,
-  byIsoCode: ISO_CODE_RESTRICTION_TYPES,
-} as const;
+const LOCATION_RESTRICTION_CATEGORIES = computed(() => {
+  let options;
+
+  options = {
+    byKladrId: KLADR_ID_RESTRICTION_TYPES,
+  };
+
+  if (props.suggestType === 'address') {
+    options = {
+      byName: NAME_RESTRICTION_TYPES,
+      ...options,
+      byFullType: TYPE_FULL_RESTRICTION_TYPES,
+      byFiasId: FIAS_ID_RESTRICTION_TYPES,
+      byIsoCode: ISO_CODE_RESTRICTION_TYPES,
+    };
+  } else if (props.suggestType === 'fias') {
+    options = {
+      byName: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
+      ...options,
+      byFiasId: FIAS_ID_RESTRICTION_TYPES,
+      byFullType: TYPE_FULL_RESTRICTION_TYPES,
+    };
+  }
+
+  return options;
+});
 
 type LocationRestrictionEntry = {
   restrType: keyof LocationRestriction;
@@ -33,13 +58,21 @@ type LocationRestrictionEntry = {
 
 const editableLocationsFilter = ref<LocationRestrictionEntry[][]>([]);
 
-const defaultRestrictionEntry: LocationRestrictionEntry = {
-  restrType: 'country',
+const enabled = ref(false);
+
+const defaultRestrictionEntry = computed<LocationRestrictionEntry>(() => ({
+  restrType: props.suggestType === 'address' ? 'country' : 'kladr_id',
   restrVal: '',
-};
+}));
 
 let locationsFilterModelWatchGuard = false;
 let editableLocationsFilterWatchGuard = false;
+
+const normalizeLocationItem = (
+  item: string | number | LocationRestriction,
+): LocationRestriction => {
+  return typeof item === 'object' ? item : { kladr_id: String(item) };
+};
 
 // Watch the source model (locationsFilterModel) and update the editable ref
 watch(
@@ -55,19 +88,29 @@ watch(
       editableLocationsFilter.value = [];
       return;
     }
+
     // Ensure newVal is always an array of objects
-    const locFilter = Array.isArray(newVal) ? newVal : [newVal];
+    const locFilter = Array.isArray(newVal)
+      ? newVal.map(normalizeLocationItem)
+      : [normalizeLocationItem(newVal)];
+
     // Transform each object into an array of { restrType, restrVal } entries
     const transformed = locFilter.map((item) =>
       Object.entries(item).map(
         ([restrType, restrVal]) => ({ restrType, restrVal }) as LocationRestrictionEntry,
       ),
     );
+
     editableLocationsFilterWatchGuard = true;
     editableLocationsFilter.value = transformed;
+
+    if (editableLocationsFilter.value.length) {
+      enabled.value = true;
+    }
   },
   { immediate: true, deep: true },
 );
+editableLocationsFilterWatchGuard = false;
 
 // Watch the editable ref and update the source model accordingly
 watch(
@@ -108,17 +151,17 @@ const addRestrictionToLocation = (locIdx: number) => {
   const location = editableLocationsFilter.value[locIdx];
   let newEntry;
   if (!location.length) {
-    newEntry = { ...defaultRestrictionEntry };
+    newEntry = { ...defaultRestrictionEntry.value };
   } else {
     const alreadyUsedTypes = location.map((entry) => entry.restrType);
 
-    const availableKey = Object.values(LOCATION_RESTRICTION_CATEGORIES)
+    const availableKey = Object.values(LOCATION_RESTRICTION_CATEGORIES.value)
       .flat()
       .find((key) => !alreadyUsedTypes.includes(key));
 
     newEntry = availableKey
       ? { restrType: availableKey, restrVal: '' }
-      : { ...defaultRestrictionEntry };
+      : { ...defaultRestrictionEntry.value };
   }
   editableLocationsFilter.value[locIdx].push(newEntry);
 };
@@ -138,11 +181,12 @@ const isDuplicatingType = (locIdx: number, entryIdx: number): boolean => {
   return findDuplicates(locIdx).includes(restrType);
 };
 
-const enabled = ref(false);
+const addNewLocation = () =>
+  editableLocationsFilter.value.push([{ ...defaultRestrictionEntry.value }]);
 
 function enable() {
   if (!editableLocationsFilter.value.length) {
-    editableLocationsFilter.value.push([{ ...defaultRestrictionEntry }]);
+    editableLocationsFilter.value.push([{ ...defaultRestrictionEntry.value }]);
   }
   enabled.value = true;
 }
@@ -157,7 +201,7 @@ function disable() {
     <div class="flex items-center gap-2">
       <div>locationsFilter:</div>
 
-      <!-- Add new location -->
+      <!-- Enable Locations Filter -->
       <ButtonAdd v-if="!enabled" @click="enable" />
       <ButtonRemove v-else outline @click="disable" />
     </div>
@@ -229,10 +273,7 @@ function disable() {
           <div>OR<span v-if="locIdx === editableLocationsFilter.length - 1">...</span></div>
 
           <!-- Add a new location -->
-          <ButtonAdd
-            v-if="locIdx === editableLocationsFilter.length - 1"
-            @click="editableLocationsFilter.push([{ ...defaultRestrictionEntry }])"
-          />
+          <ButtonAdd v-if="locIdx === editableLocationsFilter.length - 1" @click="addNewLocation" />
         </div>
       </div>
     </div>

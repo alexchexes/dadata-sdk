@@ -8,12 +8,20 @@ import type {
   AddressSuggestion,
   BoundType,
   DivisionType,
+  KladrIdFilter,
   Language,
   LocationRestriction,
   RadiusFilter,
   SuggestType,
 } from '@/types/api';
-import type { LocationsBoost, VueDadataClasses, ShowOnFocusOption } from '@/types';
+import type {
+  VueDadataClasses,
+  ShowOnFocusOption,
+  OneOrMany,
+  SuggestBankOptions,
+  SuggestPartyOptions,
+  SuggestFioOptions,
+} from '@/types';
 import { computed, type InputHTMLAttributes, type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 
@@ -68,10 +76,18 @@ const props = defineProps({
   },
   /**
    * Restrict search by locations (API `locations` option). Max 10 items
-   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
+   *
+   * - 'address' - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
+   * - 'fias' - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}
+   *
+   * For 'party' and 'bank' the only supported filter is `kladr_id`
+   * - 'party' - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
+   * - 'bank' - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}
    */
   locationsFilter: {
-    type: [Object, Array] as PropType<LocationRestriction | LocationRestriction[]>,
+    type: [Object, Array, String, Number] as PropType<
+      OneOrMany<LocationRestriction | string | number>
+    >,
     default: undefined,
   },
   /**
@@ -104,11 +120,13 @@ const props = defineProps({
    * Max 10 items
    */
   locationsBoost: {
-    type: [Array, String, Number] as PropType<LocationsBoost>,
+    type: [Object, Array, String, Number] as PropType<OneOrMany<KladrIdFilter | string | number>>,
     default: undefined,
   },
-  /** Language for displayed suggestions. `en` or `ru`. Default `ru`. `en` mostly just transliterates
-   * pretty much everything */
+  /**
+   * Display language for address suggestions.
+   * `en` or `ru`. Default `ru`. `en` mostly just transliterates pretty much everything
+   */
   language: {
     type: String as PropType<Language>,
     default: 'ru',
@@ -197,6 +215,63 @@ const props = defineProps({
       >
     >,
     default: () => ({}),
+  },
+
+  //=== The below props for bank/party/fio/email suggestion type ===
+
+  /**
+   * Type of organization (for `party` suggestions)
+   * - `LEGAL` or `INDIVIDUAL`
+   */
+  partyType: {
+    type: [Array, String] as PropType<SuggestPartyOptions['partyType']>,
+    default: undefined,
+  },
+  /**
+   * Type of bank (for `bank` suggestions)
+   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}
+   */
+  bankType: {
+    type: [Array, String] as PropType<SuggestBankOptions['bankType']>,
+    default: undefined,
+  },
+  /**
+   * Status of organization or bank (for `party` and `bank` suggestions)
+   * - `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED'`
+   * - *party*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
+   * - *bank*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
+   */
+  entityStatus: {
+    type: [Array, String] as PropType<
+      SuggestPartyOptions['entityStatus'] | SuggestBankOptions['entityStatus']
+    >,
+    default: undefined,
+  },
+  /**
+   * OKVED code filter (for `party` suggestions). Max 10 items
+   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}
+   */
+  okved: {
+    type: [Array, String] as PropType<SuggestPartyOptions['okved']>,
+    default: undefined,
+  },
+  /**
+   * Filter by FIO parts (for `fio` suggestions). Examples:
+   * - Names only: `['NAME']` or `NAME`
+   * - Names and patronymics: `['NAME', 'PATRONYMIC']`
+   * - Names and surnames: `['NAME', 'SURNAME']`
+   */
+  fioParts: {
+    type: [Array, String] as PropType<SuggestFioOptions['fioParts']>,
+    default: undefined,
+  },
+  /**
+   * Filter by gender (for `fio` suggestions).
+   * - `UNKNOWN` / `MALE` / `FEMALE`
+   */
+  fioGender: {
+    type: [Array, String] as PropType<SuggestFioOptions['fioGender']>,
+    default: undefined,
   },
 });
 export type VueDadataProps = typeof props;

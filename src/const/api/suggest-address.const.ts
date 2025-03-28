@@ -1,6 +1,3 @@
-export const DEFAULT_COUNT = 10;
-export const MAX_SUG_COUNT = 20;
-
 export const DEFAULT_GEO_RADIUS = 100;
 export const MAX_GEO_RADIUS = 100000;
 

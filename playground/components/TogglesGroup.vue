@@ -12,15 +12,24 @@ const props = defineProps({
   },
 });
 
-const model = defineModel({ type: null });
+const model = defineModel({ type: Array });
 
-const optionsObject = computed(() =>
-  Array.isArray(props.options)
+const optionsObject = computed(() => {
+  const options = Array.isArray(props.options)
     ? Object.fromEntries(
-        props.options.map((item) => [typeof item === 'undefined' ? 'any' : item, item]),
+        props.options.map((item) => [typeof item === 'undefined' ? '-empty-' : item, item]),
       )
-    : props.options,
-);
+    : props.options;
+
+  // if selected value not in options, add it
+  model.value?.forEach((item) => {
+    if (typeof item !== 'undefined' && !((item as any) in options)) {
+      options[String(item)] = item;
+    }
+  });
+
+  return options;
+});
 </script>
 
 <template>
@@ -32,7 +41,7 @@ const optionsObject = computed(() =>
         :key="key"
         class="has-[input:checked]:bg-accent rounded-lg bg-slate-50 px-1.5 py-0.5 text-sm not-has-[input:checked]:cursor-pointer not-has-[input:checked]:shadow-md not-has-[input:checked]:hover:bg-slate-100 has-[input:checked]:text-white"
       >
-        <input v-model="model" class="hidden" :value="value" type="radio" />
+        <input v-model="model" class="hidden" :value="value" type="checkbox" />
         {{ key }}
       </label>
     </div>

@@ -1,11 +1,12 @@
 import { computed, ref, watch } from 'vue';
-import { getSuggestions } from '@/api';
+import { makeSuggestRequest } from '@/api';
 import { HandledKeys } from '@/const';
 import { useDebounceFn } from '@vueuse/core';
 import type { AddressSuggestion } from '@/types/api';
 import type { Ref } from 'vue';
-import type { SuggestAddressOptions, SuggestFiasOptions } from '@/types';
+import type { SuggestOptions, MergedSuggestOptions } from '@/types';
 import type { VueDadataEmits, VueDadataProps } from '@/VueDadata.vue';
+import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 
 export function useSuggestions(
   queryModel: Ref<string>,
@@ -19,47 +20,39 @@ export function useSuggestions(
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
+  /**
+   * Calls the API
+   */
   const fetchSuggestions = async (
-    optionsOverrides: Partial<SuggestAddressOptions | SuggestFiasOptions> = {},
+    optionsOverrides: Partial<SuggestOptions> = {},
   ): Promise<AddressSuggestion[]> => {
     try {
-      const baseOptions: SuggestAddressOptions | SuggestFiasOptions = {
+      const finalOptions: MergedSuggestOptions = {
         token: props.token,
         url: props.url,
         httpCache: props.httpCache,
         query: queryModel.value,
-        count: props.count,
-        suggestType: props.suggestType,
+        count: props.count ?? DEFAULT_COUNT,
+        suggestType: props.suggestType ?? DEFAULT_SUGGEST_TYPE,
         fromBound: props.fromBound,
         toBound: props.toBound,
         locationsFilter: props.locationsFilter,
         restrictValue: props.restrictValue,
         locationsBoost: props.locationsBoost,
+        division: props.division,
+        radiusFilter: props.radiusFilter,
+        language: props.language,
+
+        partyType: props.partyType,
+        bankType: props.bankType,
+        entityStatus: props.entityStatus,
+        okved: props.okved,
+        fioParts: props.fioParts,
+        fioGender: props.fioGender,
+        ...optionsOverrides,
       };
 
-      let finalOptions;
-
-      switch (props.suggestType) {
-        case 'address':
-          finalOptions = {
-            ...baseOptions,
-            division: props.division,
-            radiusFilter: props.radiusFilter,
-            language: props.language,
-          } as SuggestAddressOptions;
-          break;
-        case 'fias':
-          finalOptions = baseOptions as SuggestFiasOptions;
-          break;
-        default:
-          throw new Error(`Incorrect suggestType: ${props.suggestType}`);
-      }
-
-      if (Object.keys(optionsOverrides).length) {
-        finalOptions = { ...finalOptions, ...optionsOverrides };
-      }
-
-      return await getSuggestions(finalOptions);
+      return await makeSuggestRequest(finalOptions as SuggestOptions);
     } catch (error) {
       emit('error', error);
       return [];
@@ -82,21 +75,32 @@ export function useSuggestions(
 
   watch(
     [
-      () => props.count,
-      () => props.division,
-      () => props.fromBound,
-      () => props.toBound,
-      () => props.httpCache,
-      () => props.language,
-      () => props.locationsBoost,
-      () => props.locationsFilter,
-      () => props.radiusFilter,
-      () => props.restrictValue,
-      () => props.suggestType,
       () => props.token,
       () => props.url,
+      () => props.httpCache,
+      () => props.count,
+      () => props.suggestType,
+      () => props.fromBound,
+      () => props.toBound,
+      () => props.locationsFilter,
+      () => props.restrictValue,
+      () => props.locationsBoost,
+      () => props.division,
+      () => props.radiusFilter,
+      () => props.language,
+
+      () => props.partyType,
+      () => props.bankType,
+      () => props.entityStatus,
+      () => props.okved,
+      () => props.fioParts,
+      () => props.fioGender,
     ],
     async () => {
+      if (!queryModel.value.length) {
+        return;
+      }
+
       await fetchWithDebounce();
 
       if (suggestionModel.value) {

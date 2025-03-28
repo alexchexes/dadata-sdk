@@ -67,6 +67,5 @@ const isRadiusValid = computed(() => {
         label="radius"
       />
     </div>
-    radius: {{ radius }}, {{ typeof radius }}
   </div>
 </template>

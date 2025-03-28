@@ -5,6 +5,7 @@ import CheckBox from './components/CheckBox.vue';
 import InputText from './components/InputText.vue';
 import LocationsFilter from './components/LocationsFilter.vue';
 import RadioGroup from './components/RadioGroup.vue';
+import TogglesGroup from './components/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/SelectOptions.vue';
 import type { VueDadataProps } from '@/VueDadata.vue';
@@ -21,10 +22,17 @@ import {
   DEFAULT_SHOW_ON_FOCUS,
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
+  PARTY_TYPES,
+  PARTY_STATUSES,
+  BANK_TYPES,
+  BANK_STATUSES,
+  FIO_PARTS,
+  FIO_GENDERS,
   type AddressSuggestion,
 } from '@/index';
 
 const isTailwindEnabled = ref(true);
+const isPropsShown = ref(false);
 
 function toggleTailwind() {
   const tailwindLink = document.getElementById('tailwind-styles') as HTMLLinkElement;
@@ -55,23 +63,35 @@ const locationsBoostModel = computed({
 });
 
 // locationsFilter option
-const locationsExamples = ref({
-  'Without restrictions': undefined,
-  'One region': { region: 'краснодарский' },
-  'One city': { region: 'краснодарский', city: 'сочи' },
-  'Few regions': [{ region: 'Воронежская' }, { region: 'Ростовская' }],
-  'Few locations': [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
-  'Different types': [{ region: 'Москва' }, { kladr_id: '50' }],
-  'Location defined by different types': {
-    region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8',
-    city: 'Сочи',
-  },
-  'FIAS id': { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
-  'KLADR id': { kladr_id: '6300000100000' },
-  'Country ISO code': { country_iso_code: 'KZ' },
-  'Region ISO code': { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
-  'Country and region': { country: 'Беларусь', region: 'Брестская' },
-  'Allow any country': { country: '*' },
+const locationsExamples = computed(() => {
+  let examples;
+
+  examples = {
+    'Without restrictions': undefined,
+    'One region': { region: 'краснодарский' },
+    'One city': { region: 'краснодарский', city: 'сочи' },
+    'Few regions': [{ region: 'Воронежская' }, { region: 'Ростовская' }],
+    'Few locations': [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
+    'Different types': [{ region: 'Москва' }, { kladr_id: '50' }],
+    'Location defined by different types': {
+      region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8',
+      city: 'Сочи',
+    },
+    'FIAS id': { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
+    'KLADR id': { kladr_id: '6300000100000' },
+  };
+
+  if (options.value.suggestType === 'address') {
+    examples = {
+      ...examples,
+      'Country ISO code': { country_iso_code: 'KZ' },
+      'Region ISO code': { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
+      'Country and region': { country: 'Беларусь', region: 'Брестская' },
+      'Allow any country': { country: '*' },
+    };
+  }
+
+  return examples;
 });
 
 const query = ref('');
@@ -110,6 +130,12 @@ type EditableOptions = Mutable<
     | 'locationsBoost'
     | 'language'
     | 'inputAttributes'
+    | 'partyType'
+    | 'bankType'
+    | 'entityStatus'
+    | 'okved'
+    | 'fioParts'
+    | 'fioGender'
   >
 >;
 
@@ -138,11 +164,19 @@ const options = ref<EditableOptions>({
   locationsBoost: undefined,
   language: 'ru',
   inputAttributes: {},
+
+  partyType: undefined,
+  bankType: [],
+  entityStatus: [],
+  okved: undefined,
+  fioParts: [],
+  fioGender: undefined,
 });
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
   console.info('suggestion enriched: ', suggestion);
 };
+
 const handleEnrichFail = (unrestricted_value: string) => {
   console.warn(`Vue-Dadata: Can't enrich suggestion: ${unrestricted_value}`);
 };
@@ -152,14 +186,14 @@ const examplesShown = ref(false);
 </script>
 
 <template>
-  <div>
+  <div class="px-2">
     <AButton class="mt-1 ml-1" @click="toggleTailwind">
       Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
     </AButton>
 
     <main class="mx-auto max-w-3xl py-12">
       <!-- Block above the input -->
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 pb-2">
         <!-- Options -->
         <div class="flex flex-wrap gap-3">
           <!-- API requests options -->
@@ -198,55 +232,127 @@ const examplesShown = ref(false);
               label="suggestType"
             />
 
-            <RadioGroup
-              v-model="options.division"
-              class="flex gap-2"
-              :options="DIVISION_TYPES"
-              label="division"
-            />
-
-            <div class="dev-item">
-              <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
-              {{ options.locationsBoost }}
-            </div>
-
-            <div class="flex flex-wrap gap-3">
-              <SelectOptions
-                v-model="options.fromBound"
-                :options="BOUND_TYPES"
-                label="fromBound:"
-              />
-              <SelectOptions v-model="options.toBound" :options="BOUND_TYPES" label="toBound:" />
-            </div>
-
-            <div>
-              <div>
-                locationsFilter examples:
-                <AButton class="text-sm" @click="examplesShown = !examplesShown">
-                  {{ examplesShown ? 'Hide' : 'Show' }}
-                </AButton>
+            <template v-if="options.suggestType !== 'fio' && options.suggestType !== 'email'">
+              <div class="dev-item">
+                <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
+                {{ options.locationsBoost }}
               </div>
 
-              <RadioGroup
-                v-if="examplesShown"
+              <LocationsFilter
                 v-model="options.locationsFilter"
-                class="mt-2 flex flex-col gap-1"
-                :options="locationsExamples"
+                :suggestType="options.suggestType"
               />
-            </div>
+            </template>
 
-            <LocationsFilter v-model="options.locationsFilter" />
+            <!-- 'address' and 'fias' -->
+            <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
+              <!-- example locations filters -->
+              <div>
+                <div>
+                  locationsFilter examples:
+                  <AButton class="text-sm" @click="examplesShown = !examplesShown">
+                    {{ examplesShown ? 'Hide' : 'Show' }}
+                  </AButton>
+                </div>
 
-            <RadiusFilter v-model="options.radiusFilter" />
+                <RadioGroup
+                  v-if="examplesShown"
+                  v-model="options.locationsFilter"
+                  class="mt-2 flex flex-col gap-1"
+                  :options="locationsExamples"
+                />
+              </div>
 
-            <CheckBox v-model="options.restrictValue" label="restrictValue" />
+              <div class="flex flex-wrap gap-3">
+                <SelectOptions
+                  v-model="options.fromBound"
+                  :options="
+                    options.suggestType === 'address'
+                      ? BOUND_TYPES
+                      : BOUND_TYPES.filter((el) => el !== 'country')
+                  "
+                  label="fromBound:"
+                />
+                <SelectOptions
+                  v-model="options.toBound"
+                  :options="
+                    options.suggestType === 'address'
+                      ? BOUND_TYPES
+                      : BOUND_TYPES.filter((el) => el !== 'country')
+                  "
+                  label="toBound:"
+                />
+              </div>
+            </template>
 
-            <RadioGroup
-              v-model="options.language"
-              class="flex gap-2"
-              :options="LANGUAGES"
-              label="language"
+            <template v-if="options.suggestType === 'address'">
+              <RadiusFilter v-model="options.radiusFilter" />
+
+              <RadioGroup
+                v-model="options.division"
+                class="flex gap-2"
+                :options="DIVISION_TYPES"
+                label="division"
+              />
+
+              <RadioGroup
+                v-model="options.language"
+                class="flex gap-2"
+                :options="LANGUAGES"
+                label="language:"
+              />
+            </template>
+
+            <CheckBox
+              v-if="
+                options.locationsFilter &&
+                (options.suggestType === 'address' || options.suggestType === 'fias')
+              "
+              v-model="options.restrictValue"
+              label="restrictValue"
             />
+
+            <template v-if="['bank', 'party'].includes(options.suggestType)">
+              <TogglesGroup
+                v-model="options.entityStatus as string[]"
+                class="flex gap-2"
+                :options="options.suggestType === 'party' ? PARTY_STATUSES : BANK_STATUSES"
+                label="entityStatus:"
+              />
+
+              <RadioGroup
+                v-if="options.suggestType === 'party'"
+                v-model="options.partyType"
+                class="flex gap-2"
+                :options="[undefined, ...PARTY_TYPES]"
+                label="partyType:"
+              />
+
+              <TogglesGroup
+                v-if="options.suggestType === 'bank'"
+                v-model="options.bankType as string[]"
+                class="flex gap-2"
+                :options="BANK_TYPES"
+                label="bankType: "
+              />
+            </template>
+
+            <!-- 'fio' -->
+            <template v-if="options.suggestType === 'fio'">
+              <TogglesGroup
+                v-model="options.fioParts as string[]"
+                class="flex gap-2"
+                :options="FIO_PARTS"
+                label="fioParts:"
+              />
+
+              <RadioGroup
+                v-model="options.fioGender"
+                class="flex gap-2"
+                :options="FIO_GENDERS"
+                label="fioGender:"
+              />
+            </template>
           </div>
 
           <!-- Component behavior options -->
@@ -273,6 +379,12 @@ const examplesShown = ref(false);
           </div>
         </div>
 
+        <CheckBox v-model="isPropsShown" label="Show props" />
+
+        <div v-if="isPropsShown">
+          <pre class="rounded-xl bg-white px-4 py-2 text-[14px]">{{ options }}</pre>
+        </div>
+
         <!-- Current query string -->
         <div :class="nowrapQuery && 'ellipsis-nowrap'">
           query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
@@ -297,7 +409,9 @@ const examplesShown = ref(false);
             <AButton v-if="suggestion" @click="reset">Reset</AButton>
           </div>
 
-          <pre v-if="suggestion" class="text-[14px] whitespace-pre-wrap">{{ suggestion }}</pre>
+          <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{
+            suggestion
+          }}</pre>
         </div>
       </section>
     </main>
