@@ -192,7 +192,7 @@ export function useSuggestions(
     }
   };
 
-  const onInputChange = (evt: Event) => {
+  const handleInputChange = (evt: Event) => {
     if (props.disabled) {
       return;
     }
@@ -209,7 +209,7 @@ export function useSuggestions(
     () => navigatedIndex.value >= 0 && navigatedIndex.value < suggestionsList.value.length,
   );
 
-  const onKeyPress = (event: KeyboardEvent) => {
+  const handleKeyPress = (event: KeyboardEvent) => {
     if (props.disabled) {
       return;
     }
@@ -267,7 +267,7 @@ export function useSuggestions(
     }
   };
 
-  const onInputFocus = (evt: FocusEvent) => {
+  const handleInputFocus = (evt: FocusEvent) => {
     if (props.disabled) {
       return;
     }
@@ -284,7 +284,7 @@ export function useSuggestions(
     }
   };
 
-  const onInputBlur = (evt: FocusEvent) => {
+  const handleInputBlur = (evt: FocusEvent) => {
     if (props.disabled) {
       return;
     }
@@ -311,7 +311,7 @@ export function useSuggestions(
     }
   };
 
-  const onSuggestionClick = (index: number) => {
+  const handleSuggestionClick = (index: number) => {
     if (props.disabled) {
       return;
     }
@@ -327,11 +327,11 @@ export function useSuggestions(
     suggestionsList,
     canClear,
 
-    onInputChange,
-    onKeyPress,
-    onInputFocus,
-    onInputBlur,
-    onSuggestionClick,
+    handleInputChange,
+    handleKeyPress,
+    handleInputFocus,
+    handleInputBlur,
+    handleSuggestionClick,
     clear,
   };
 }

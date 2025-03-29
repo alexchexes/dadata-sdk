@@ -319,11 +319,11 @@ const {
   suggestionsList,
   canClear,
 
-  onInputChange,
-  onKeyPress,
-  onInputFocus,
-  onInputBlur,
-  onSuggestionClick,
+  handleInputChange,
+  handleKeyPress,
+  handleInputFocus,
+  handleInputBlur,
+  handleSuggestionClick,
   clear,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
 
@@ -346,10 +346,10 @@ const inputAttrs = computed(
       disabled: props.disabled,
       value: visibleQuery.value,
 
-      onBlur: onInputBlur,
-      onFocus: onInputFocus,
-      onInput: onInputChange,
-      onKeydown: onKeyPress,
+      onBlur: handleInputBlur,
+      onFocus: handleInputFocus,
+      onInput: handleInputChange,
+      onKeydown: handleKeyPress,
     }) satisfies InputHTMLAttributes,
 );
 </script>
@@ -390,7 +390,7 @@ const inputAttrs = computed(
           :query="queryModel"
           :text-to-highlight="suggestion.value"
           v-bind="highlightOptions"
-          @mousedown.prevent="onSuggestionClick(index)"
+          @mousedown.prevent="handleSuggestionClick(index)"
         />
       </slot>
     </div>
