@@ -20,6 +20,29 @@ export function useSuggestions(
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
 
+  const requestOptionsProps = computed(() => ({
+    token: props.token,
+    url: props.url,
+    httpCache: props.httpCache,
+    count: props.count ?? DEFAULT_COUNT,
+    suggestType: props.suggestType ?? DEFAULT_SUGGEST_TYPE,
+    fromBound: props.fromBound,
+    toBound: props.toBound,
+    locationsFilter: props.locationsFilter,
+    restrictValue: props.restrictValue,
+    locationsBoost: props.locationsBoost,
+    division: props.division,
+    radiusFilter: props.radiusFilter,
+    language: props.language,
+
+    partyType: props.partyType,
+    bankType: props.bankType,
+    entityStatus: props.entityStatus,
+    okved: props.okved,
+    fioParts: props.fioParts,
+    fioGender: props.fioGender,
+  }));
+
   /**
    * Calls the API
    */
@@ -28,27 +51,8 @@ export function useSuggestions(
   ): Promise<AddressSuggestion[]> => {
     try {
       const finalOptions: MergedSuggestOptions = {
-        token: props.token,
-        url: props.url,
-        httpCache: props.httpCache,
         query: queryModel.value,
-        count: props.count ?? DEFAULT_COUNT,
-        suggestType: props.suggestType ?? DEFAULT_SUGGEST_TYPE,
-        fromBound: props.fromBound,
-        toBound: props.toBound,
-        locationsFilter: props.locationsFilter,
-        restrictValue: props.restrictValue,
-        locationsBoost: props.locationsBoost,
-        division: props.division,
-        radiusFilter: props.radiusFilter,
-        language: props.language,
-
-        partyType: props.partyType,
-        bankType: props.bankType,
-        entityStatus: props.entityStatus,
-        okved: props.okved,
-        fioParts: props.fioParts,
-        fioGender: props.fioGender,
+        ...requestOptionsProps.value,
         ...optionsOverrides,
       };
 
@@ -73,44 +77,20 @@ export function useSuggestions(
 
   let dontFetchOnQueryChange = false;
 
-  watch(
-    [
-      () => props.token,
-      () => props.url,
-      () => props.httpCache,
-      () => props.count,
-      () => props.suggestType,
-      () => props.fromBound,
-      () => props.toBound,
-      () => props.locationsFilter,
-      () => props.restrictValue,
-      () => props.locationsBoost,
-      () => props.division,
-      () => props.radiusFilter,
-      () => props.language,
+  watch(requestOptionsProps, async () => {
+    if (!queryModel.value.length) {
+      return;
+    }
 
-      () => props.partyType,
-      () => props.bankType,
-      () => props.entityStatus,
-      () => props.okved,
-      () => props.fioParts,
-      () => props.fioGender,
-    ],
-    async () => {
-      if (!queryModel.value.length) {
-        return;
+    await fetchWithDebounce();
+
+    if (suggestionModel.value) {
+      const enriched = await enrichSuggestion(suggestionModel.value);
+      if (!enriched) {
+        suggestionModel.value = undefined;
       }
-
-      await fetchWithDebounce();
-
-      if (suggestionModel.value) {
-        const enriched = await enrichSuggestion(suggestionModel.value);
-        if (!enriched) {
-          suggestionModel.value = undefined;
-        }
-      }
-    },
-  );
+    }
+  });
 
   watch(queryModel, () => {
     visibleQuery.value = queryModel.value;
