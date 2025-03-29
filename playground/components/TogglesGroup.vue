@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ignorableWatch } from '@vueuse/core';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   options: {
     type: [Array, Object],
-    default: () => ({}),
+    default: () => [],
   },
   label: {
     type: String,
@@ -12,7 +13,32 @@ const props = defineProps({
   },
 });
 
-const model = defineModel({ type: Array });
+const model = defineModel({ type: undefined, required: true });
+const internalModel = ref<string[]>([]);
+
+const { ignoreUpdates: ignoreModelUpdates } = ignorableWatch(model, (newVal) => {
+  ignoreInternalUpdates(() => {
+    if (!newVal) {
+      internalModel.value = [];
+    } else if (!Array.isArray(newVal)) {
+      internalModel.value = [newVal as string];
+    } else {
+      internalModel.value = newVal;
+    }
+  });
+});
+
+const { ignoreUpdates: ignoreInternalUpdates } = ignorableWatch(internalModel, (newVal) => {
+  ignoreModelUpdates(() => {
+    if (!newVal.length) {
+      model.value = undefined;
+    } else if (newVal.length === 1) {
+      model.value = newVal[0];
+    } else {
+      model.value = newVal;
+    }
+  });
+});
 
 const optionsObject = computed(() => {
   const options = Array.isArray(props.options)
@@ -22,7 +48,7 @@ const optionsObject = computed(() => {
     : props.options;
 
   // if selected value not in options, add it
-  model.value?.forEach((item) => {
+  internalModel.value?.forEach((item) => {
     if (typeof item !== 'undefined' && !((item as any) in options)) {
       options[String(item)] = item;
     }
@@ -41,7 +67,7 @@ const optionsObject = computed(() => {
         :key="key"
         class="has-[input:checked]:bg-accent rounded-lg bg-slate-50 px-1.5 py-0.5 text-sm not-has-[input:checked]:cursor-pointer not-has-[input:checked]:shadow-md not-has-[input:checked]:hover:bg-slate-100 has-[input:checked]:text-white"
       >
-        <input v-model="model" class="hidden" :value="value" type="checkbox" />
+        <input v-model="internalModel" class="hidden" :value="value" type="checkbox" />
         {{ key }}
       </label>
     </div>

@@ -4,8 +4,8 @@ export const MAX_GEO_RADIUS = 100000;
 export const DIVISION_TYPES = ['ADMINISTRATIVE', 'MUNICIPAL'] as const;
 export const DEFAULT_DIVISION = 'ADMINISTRATIVE';
 
-export const LANGUAGES = ['ru', 'en'] as const;
-export const DEFAULT_LANGUAGE = 'ru';
+export const LANGUAGES = ['RU', 'EN'] as const;
+export const DEFAULT_LANGUAGE = 'RU';
 
 export const BOUND_TYPES = [
   'country',

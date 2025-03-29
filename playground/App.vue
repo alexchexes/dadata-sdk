@@ -8,18 +8,16 @@ import RadioGroup from './components/RadioGroup.vue';
 import TogglesGroup from './components/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/SelectOptions.vue';
+import LiveSnippet from './components/LiveSnippet.vue';
 import type { VueDadataProps } from '@/VueDadata.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
   BASE_SUGGEST_URL,
   BOUND_TYPES,
-  DEFAULT_COUNT,
-  DEFAULT_DIVISION,
   DEFAULT_SUGGEST_TYPE,
   DIVISION_TYPES,
   LANGUAGES,
   MAX_SUG_COUNT,
-  DEFAULT_SHOW_ON_FOCUS,
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
   PARTY_TYPES,
@@ -29,10 +27,15 @@ import {
   FIO_PARTS,
   FIO_GENDERS,
   type AddressSuggestion,
+  DEFAULT_OPTIONS,
 } from '@/index';
 
 const isTailwindEnabled = ref(true);
-const isPropsShown = ref(false);
+const showLiveSnippet = ref(true); // @todo temp
+const showAllOptions = ref(false);
+
+const isTokenProvided = computed(() => options.value.token !== envToken);
+const TOKEN_PLACEHOLDER = '***************************';
 
 function toggleTailwind() {
   const tailwindLink = document.getElementById('tailwind-styles') as HTMLLinkElement;
@@ -47,7 +50,7 @@ function toggleTailwind() {
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const tokenModel = computed({
-  get: () => (options.value.token === envToken ? '' : options.value.token),
+  get: () => (isTokenProvided.value ? options.value.token : ''),
   set: (val) => (options.value.token = val?.trim() ? val.trim() : envToken),
 });
 
@@ -103,75 +106,14 @@ const reset = () => {
 };
 
 type Mutable<T> = { -readonly [P in keyof T]: T[P] };
-type EditableOptions = Mutable<
-  Pick<
-    VueDadataProps,
-    | 'token'
-    | 'url'
-    | 'showOnFocus'
-    | 'selectOnBlur'
-    | 'selectOnEnter'
-    | 'disabled'
-    | 'count'
-    | 'suggestType'
-    | 'division'
-    | 'classes'
-    | 'placeholder'
-    | 'enrichOnSelect'
-    | 'clearSuggestionOnChange'
-    | 'addSpace'
-    | 'continueSelecting'
-    | 'showClearButton'
-    | 'fromBound'
-    | 'toBound'
-    | 'locationsFilter'
-    | 'radiusFilter'
-    | 'restrictValue'
-    | 'locationsBoost'
-    | 'language'
-    | 'inputAttributes'
-    | 'partyType'
-    | 'bankType'
-    | 'entityStatus'
-    | 'okved'
-    | 'fioParts'
-    | 'fioGender'
-  >
->;
 
-const options = ref<EditableOptions>({
+const defaultOptions = ref<VueDadataProps>({
+  ...DEFAULT_OPTIONS,
   token: envToken,
-  classes: {},
-  disabled: false,
-  url: undefined,
   placeholder: 'Start typing...',
-  count: DEFAULT_COUNT,
-  suggestType: DEFAULT_SUGGEST_TYPE,
-  division: DEFAULT_DIVISION,
-  showOnFocus: DEFAULT_SHOW_ON_FOCUS,
-  selectOnBlur: false,
-  selectOnEnter: true,
-  enrichOnSelect: true,
-  clearSuggestionOnChange: true,
-  addSpace: true,
-  continueSelecting: false,
-  showClearButton: false,
-  fromBound: undefined,
-  toBound: undefined,
-  locationsFilter: undefined,
-  radiusFilter: undefined,
-  restrictValue: false,
-  locationsBoost: undefined,
-  language: 'ru',
-  inputAttributes: {},
-
-  partyType: undefined,
-  bankType: [],
-  entityStatus: [],
-  okved: undefined,
-  fioParts: [],
-  fioGender: undefined,
 });
+
+const options = ref<Mutable<VueDadataProps>>(JSON.parse(JSON.stringify(defaultOptions.value)));
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
   console.info('suggestion enriched: ', suggestion);
@@ -187,6 +129,11 @@ const examplesShown = ref(false);
 
 <template>
   <div class="px-2">
+    <!-- <div class="flex">
+      <pre>defaultOptions: {{ defaultOptions }}</pre>
+      <pre>options: {{ options }}</pre>
+    </div> -->
+
     <AButton class="mt-1 ml-1" @click="toggleTailwind">
       Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
     </AButton>
@@ -202,8 +149,8 @@ const examplesShown = ref(false);
 
             <InputText
               v-model.trim="tokenModel"
+              :placeholder="TOKEN_PLACEHOLDER"
               label="API token:"
-              placeholder="***************************"
             />
 
             <InputText
@@ -238,16 +185,8 @@ const examplesShown = ref(false);
                 {{ options.locationsBoost }}
               </div>
 
-              <LocationsFilter
-                v-model="options.locationsFilter"
-                :suggestType="options.suggestType"
-              />
-            </template>
-
-            <!-- 'address' and 'fias' -->
-            <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
               <!-- example locations filters -->
-              <div>
+              <div v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
                 <div>
                   locationsFilter examples:
                   <AButton class="text-sm" @click="examplesShown = !examplesShown">
@@ -263,6 +202,14 @@ const examplesShown = ref(false);
                 />
               </div>
 
+              <LocationsFilter
+                v-model="options.locationsFilter"
+                :suggestType="options.suggestType"
+              />
+            </template>
+
+            <!-- 'address' and 'fias' -->
+            <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
               <div class="flex flex-wrap gap-3">
                 <SelectOptions
                   v-model="options.fromBound"
@@ -314,7 +261,7 @@ const examplesShown = ref(false);
 
             <template v-if="['bank', 'party'].includes(options.suggestType)">
               <TogglesGroup
-                v-model="options.entityStatus as string[]"
+                v-model="options.entityStatus"
                 class="flex gap-2"
                 :options="options.suggestType === 'party' ? PARTY_STATUSES : BANK_STATUSES"
                 label="entityStatus:"
@@ -330,7 +277,7 @@ const examplesShown = ref(false);
 
               <TogglesGroup
                 v-if="options.suggestType === 'bank'"
-                v-model="options.bankType as string[]"
+                v-model="options.bankType"
                 class="flex gap-2"
                 :options="BANK_TYPES"
                 label="bankType: "
@@ -340,7 +287,7 @@ const examplesShown = ref(false);
             <!-- 'fio' -->
             <template v-if="options.suggestType === 'fio'">
               <TogglesGroup
-                v-model="options.fioParts as string[]"
+                v-model="options.fioParts"
                 class="flex gap-2"
                 :options="FIO_PARTS"
                 label="fioParts:"
@@ -349,7 +296,7 @@ const examplesShown = ref(false);
               <RadioGroup
                 v-model="options.fioGender"
                 class="flex gap-2"
-                :options="FIO_GENDERS"
+                :options="[undefined, ...FIO_GENDERS]"
                 label="fioGender:"
               />
             </template>
@@ -379,11 +326,18 @@ const examplesShown = ref(false);
           </div>
         </div>
 
-        <CheckBox v-model="isPropsShown" label="Show props" />
+        <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
 
-        <div v-if="isPropsShown">
-          <pre class="rounded-xl bg-white px-4 py-2 text-[14px]">{{ options }}</pre>
+        <div v-if="showLiveSnippet">
+          <LiveSnippet :defaultOptions="DEFAULT_OPTIONS" :options :showToken="isTokenProvided" />
         </div>
+
+        <CheckBox v-model="showAllOptions" label="Show all current options" />
+
+        <pre
+          v-if="showAllOptions"
+          class="rounded-xl bg-white px-4 py-2 text-[14px]"
+        ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
 
         <!-- Current query string -->
         <div :class="nowrapQuery && 'ellipsis-nowrap'">

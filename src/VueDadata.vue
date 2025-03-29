@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { DEFAULT_CLASSES, DEFAULT_SHOW_ON_FOCUS } from '@/const';
+import {
+  DEFAULT_CLASSES,
+  DEFAULT_DEBOUNCE,
+  DEFAULT_INPUT_NAME,
+  DEFAULT_SHOW_ON_FOCUS,
+} from '@/const';
 import { DEFAULT_COUNT, DEFAULT_SUGGEST_TYPE } from '@/const/api';
 import { useMergedWithDefaults } from './composables/useMergedWithDefaults';
 import { useSuggestions } from '@/composables/useSuggestions';
@@ -44,7 +49,7 @@ const props = defineProps({
   },
   debounceWait: {
     type: Number,
-    default: 100,
+    default: DEFAULT_DEBOUNCE,
   },
   disabled: {
     type: Boolean,
@@ -72,7 +77,7 @@ const props = defineProps({
   },
   inputName: {
     type: String,
-    default: 'vue-dadata-input',
+    default: DEFAULT_INPUT_NAME,
   },
   /**
    * Restrict search by locations (API `locations` option). Max 10 items
@@ -133,7 +138,7 @@ const props = defineProps({
   },
   classes: {
     type: Object as PropType<VueDadataClasses>,
-    default: () => ({}),
+    default: undefined,
   },
   /**
    * Controls whether the suggestions list is shown when the input field is focused.
@@ -214,7 +219,7 @@ const props = defineProps({
         'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
       >
     >,
-    default: () => ({}),
+    default: undefined,
   },
 
   //=== The below props for bank/party/fio/email suggestion type ===
@@ -292,7 +297,7 @@ const emit = defineEmits<{
 }>();
 export type VueDadataEmits = typeof emit;
 
-const mergedClasses = useMergedWithDefaults<VueDadataClasses>(DEFAULT_CLASSES, props.classes);
+const mergedClasses = useMergedWithDefaults<VueDadataClasses>(DEFAULT_CLASSES, props.classes || {});
 
 const highlightOptions = computed(() => ({
   caseSensitive: false,
@@ -333,7 +338,7 @@ const inputAttrs = computed(
       autocorrect: 'off',
       spellcheck: false,
 
-      ...props.inputAttributes,
+      ...(props.inputAttributes || {}),
 
       disabled: props.disabled,
       value: visibleQuery.value,
