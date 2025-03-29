@@ -54,7 +54,7 @@ export const DEFAULT_OPTIONS = {
   selectOnEnter: true,
   count: DEFAULT_COUNT,
   enrichOnSelect: true,
-  clearSuggestionOnChange: true,
+  clearOnChange: true,
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,

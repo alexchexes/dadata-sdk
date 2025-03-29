@@ -177,7 +177,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  clearSuggestionOnChange: {
+  /**
+   * If `true`, v-model:suggestion object is cleared when input changed after suggestion was selected. Default `true`
+   */
+  clearOnChange: {
     type: Boolean,
     default: true,
   },

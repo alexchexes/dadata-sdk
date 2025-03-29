@@ -121,7 +121,7 @@ export function useSuggestions(
       return;
     }
 
-    if (props.clearSuggestionOnChange) {
+    if (props.clearOnChange) {
       suggestionModel.value = undefined;
     }
 

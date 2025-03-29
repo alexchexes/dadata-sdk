@@ -318,7 +318,7 @@ const examplesShown = ref(false);
             <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
             <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
             <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
-            <CheckBox v-model="options.clearSuggestionOnChange" label="clearSuggestionOnChange" />
+            <CheckBox v-model="options.clearOnChange" label="clearOnChange" />
             <CheckBox v-model="options.addSpace" label="addSpace" />
             <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
             <CheckBox v-model="options.showClearButton" label="showClearButton" />
