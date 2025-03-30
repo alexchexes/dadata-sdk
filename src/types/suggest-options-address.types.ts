@@ -13,10 +13,11 @@ export type LocationsFilterItem = string | number | LocationRestriction | KladrI
 
 /**
  * Normal (not FIAS) address suggestions options
+ * - {@link https://dadata.ru/api/suggest/address/}
+ * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}
  */
 export interface SuggestAddressOptions extends BaseSuggestOptions {
   suggestType: 'address';
-  /** A single kladr_id or an array of kladr_id's. */
   locationsBoost?: OneOrMany<KladrIdFilter | string | number>;
   fromBound?: BoundType;
   toBound?: BoundType;

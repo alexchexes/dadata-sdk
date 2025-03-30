@@ -13,6 +13,8 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    * Ограничение по типу организации. API принимает одно из двух значений в виде строки:
    * - `LEGAL` - юрлицо
    * - `INDIVIDUAL` - ИП
+   *
+   * {@link https://dadata.ru/api/suggest/party/}
    */
   type?: PartyType;
 

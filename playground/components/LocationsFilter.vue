@@ -4,7 +4,6 @@ import ButtonAdd from './ButtonAdd.vue';
 import ButtonRemove from './ButtonRemove.vue';
 import InputText from './InputText.vue';
 import SelectOptGroup from './SelectOptGroup.vue';
-import type { VueDadataProps } from '@/VueDadata.vue';
 import {
   ISO_CODE_RESTRICTION_TYPES,
   KLADR_ID_RESTRICTION_TYPES,
@@ -13,6 +12,7 @@ import {
   TYPE_FULL_RESTRICTION_TYPES,
   type LocationRestriction,
   type SuggestType,
+  type VueDadataOptions,
 } from '@/index';
 
 const props = defineProps({
@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const locationsFilterModel = defineModel({
-  type: [Object, Array, String, Number] as PropType<VueDadataProps['locationsFilter']>,
+  type: [Object, Array, String, Number] as PropType<VueDadataOptions['locationsFilter']>,
   required: false,
 });
 

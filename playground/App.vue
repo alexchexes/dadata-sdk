@@ -9,12 +9,10 @@ import TogglesGroup from './components/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/SelectOptions.vue';
 import LiveSnippet from './components/LiveSnippet.vue';
-import type { VueDadataProps } from '@/VueDadata.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
   BASE_SUGGEST_URL,
   BOUND_TYPES,
-  DEFAULT_SUGGEST_TYPE,
   DIVISION_TYPES,
   LANGUAGES,
   MAX_SUG_COUNT,
@@ -28,6 +26,7 @@ import {
   FIO_GENDERS,
   type AddressSuggestion,
   DEFAULT_OPTIONS,
+  type VueDadataOptions,
 } from '@/index';
 
 const isTailwindEnabled = ref(true);
@@ -105,22 +104,24 @@ const reset = () => {
   suggestion.value = undefined;
 };
 
-type Mutable<T> = { -readonly [P in keyof T]: T[P] };
-
-const defaultOptions = ref<VueDadataProps>({
+const defaultOptions = ref<VueDadataOptions>({
   ...DEFAULT_OPTIONS,
   token: envToken,
   placeholder: 'Start typing...',
 });
 
-const options = ref<Mutable<VueDadataProps>>(JSON.parse(JSON.stringify(defaultOptions.value)));
+const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
 
 const handleEnriched = (suggestion: AddressSuggestion) => {
-  console.info('suggestion enriched: ', suggestion);
+  console.info('Suggestion enriched:', suggestion);
 };
 
 const handleEnrichFail = (unrestricted_value: string) => {
-  console.warn(`Vue-Dadata: Can't enrich suggestion: ${unrestricted_value}`);
+  console.warn('Failed to enrich suggestion:', unrestricted_value);
+};
+
+const handleError = (error: any) => {
+  console.error('VueDadata error:', error);
 };
 
 const nowrapQuery = ref(true);
@@ -155,7 +156,7 @@ const examplesShown = ref(false);
 
             <InputText
               v-model.trim="options.url"
-              :placeholder="BASE_SUGGEST_URL + DEFAULT_SUGGEST_TYPE"
+              :placeholder="BASE_SUGGEST_URL + options.suggestType"
               label="API URL:"
             />
 
@@ -204,7 +205,7 @@ const examplesShown = ref(false);
 
               <LocationsFilter
                 v-model="options.locationsFilter"
-                :suggestType="options.suggestType"
+                :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
               />
             </template>
 
@@ -259,7 +260,7 @@ const examplesShown = ref(false);
               label="restrictValue"
             />
 
-            <template v-if="['bank', 'party'].includes(options.suggestType)">
+            <template v-if="options.suggestType === 'bank' || options.suggestType === 'party'">
               <TogglesGroup
                 v-model="options.entityStatus"
                 class="flex gap-2"
@@ -351,6 +352,7 @@ const examplesShown = ref(false);
         v-bind:="options"
         @enriched="handleEnriched"
         @enrichFail="handleEnrichFail"
+        @error="handleError"
       />
 
       <section class="mt-3 min-h-[1000px]">

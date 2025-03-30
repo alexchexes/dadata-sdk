@@ -4,3 +4,4 @@ export * from './const';
 export * from './const/api';
 export * from './types';
 export * from './types/api';
+export * from './utils';

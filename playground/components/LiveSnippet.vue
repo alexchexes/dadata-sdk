@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import type { VueDadataProps } from '@/VueDadata.vue';
 import { computed, ref, type PropType } from 'vue';
 import { codeToHtml } from 'shiki';
 import { watchThrottled } from '@vueuse/core';
+import type { VueDadataOptions } from '@/types';
 
 const props = defineProps({
   options: {
-    type: Object as PropType<VueDadataProps>,
+    type: Object as PropType<VueDadataOptions>,
     required: true,
   },
   defaultOptions: {
-    type: Object as PropType<Partial<VueDadataProps>>,
+    type: Object as PropType<Partial<VueDadataOptions>>,
     required: true,
   },
   showToken: {
@@ -22,7 +22,7 @@ const props = defineProps({
 const nonDefaultOptions = computed(() =>
   Object.fromEntries(
     Object.entries(props.options).filter(([key, val]) => {
-      const def = props.defaultOptions[key as keyof VueDadataProps];
+      const def = props.defaultOptions[key as keyof VueDadataOptions];
       if (val === def) {
         return false;
       }

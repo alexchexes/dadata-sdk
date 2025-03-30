@@ -8,40 +8,40 @@ import type { SuggestPartyOptions } from './suggest-options-party.types';
 
 /** Options common for all suggest types */
 export interface BaseSuggestOptions {
+  /** Dadata API token (key) for suggestions (not standartization) */
+  token: string;
+
+  /** Type of Dadata suggestions (determines which Dadata API endpoint to use) */
+  suggestType: SuggestType;
+
   /** Текст запроса */
   query: string;
 
   /** Количество результатов (максимум — 20) */
   count?: number;
 
-  /** Dadata API token (key) for suggestions (not standartization) */
-  token: string;
-
   /** Custom URL of an API in case you proxy requests.  */
   url?: string;
 
   /** `false` disables http requests caching. Default `true` */
   httpCache?: boolean;
-
-  /** Type of Dadata suggestions (determines which Dadata API endpoint to use) */
-  suggestType: SuggestType;
 }
 
 export type SuggestOptions =
   | SuggestAddressOptions
   | SuggestFiasOptions
-  | SuggestFioOptions
-  | SuggestBankOptions
   | SuggestPartyOptions
+  | SuggestBankOptions
+  | SuggestFioOptions
   | SuggestEmailOptions;
 
 export type MergedSuggestOptions = MergeAll<
   [
     SuggestAddressOptions,
     SuggestFiasOptions,
-    SuggestFioOptions,
-    SuggestBankOptions,
     SuggestPartyOptions,
+    SuggestBankOptions,
+    SuggestFioOptions,
     SuggestEmailOptions,
   ]
 >;
