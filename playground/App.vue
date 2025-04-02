@@ -32,6 +32,7 @@ import {
   PARTY_KZ_TYPES,
 } from '@/index';
 import type { DadataSuggestion } from '@/types/api';
+import { ignorableWatch } from '@vueuse/core';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -53,6 +54,40 @@ const defaultOptions = ref<VueDadataOptions>({
 });
 
 const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
+
+const filtersInput = ref('');
+const filtersValid = ref(true);
+
+const { ignoreUpdates: ignoreFiltersInputWatch } = ignorableWatch(filtersInput, (str: string) => {
+  ignoreOptionsFiltersWatch(() => {
+    let filters = undefined;
+    let valid = true;
+    if (str.trim()) {
+      try {
+        const parsed = JSON.parse(str.trim());
+        if (Array.isArray(parsed) || typeof parsed === 'object') {
+          filters = parsed;
+        } else {
+          valid = false;
+        }
+      } catch {
+        valid = false;
+      }
+    }
+    options.value.filters = filters;
+    filtersValid.value = valid;
+  });
+});
+
+const { ignoreUpdates: ignoreOptionsFiltersWatch } = ignorableWatch(
+  () => options.value.filters,
+  (filters) => {
+    ignoreFiltersInputWatch(() => {
+      filtersInput.value = filters ? JSON.stringify(filters) : '';
+      filtersValid.value = true;
+    });
+  },
+);
 
 const isTokenProvided = computed(() => options.value.token !== envToken);
 const TOKEN_PLACEHOLDER = '***************************';
@@ -394,6 +429,25 @@ const handleError = (error: any) => {
                 label="fioGender:"
               />
             </template>
+
+            <InputText
+              v-if="
+                [
+                  `fms_unit`,
+                  `fns_unit`,
+                  `metro`,
+                  `mktu`,
+                  `okpd2`,
+                  `okved2`,
+                  `postal_unit`,
+                  `region_court`,
+                ].includes(options.suggestType as string)
+              "
+              v-model="filtersInput"
+              :inputClass="!filtersValid && 'border-red-500! ring-red-500! text-red-500'"
+              label="filters (json)"
+              placeholder="JSON string..."
+            />
           </div>
 
           <!-- Component behavior options -->
