@@ -16,6 +16,10 @@ defineProps({
     type: String,
     default: '',
   },
+  type: {
+    type: String,
+    default: 'text',
+  },
 });
 const model = defineModel({ type: null });
 </script>
@@ -26,7 +30,7 @@ const model = defineModel({ type: null });
       v-model="model"
       :class="twMerge('w-full rounded-lg border bg-white px-1.5 py-0.5', inputClass)"
       :placeholder
-      type="text"
+      :type
     />
   </label>
 </template>

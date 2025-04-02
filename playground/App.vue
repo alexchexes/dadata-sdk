@@ -557,6 +557,24 @@ const removeCustomHeaders = () => {
               label="showOnFocus"
             />
 
+            <div class="flex items-center gap-2">
+              minChars:
+
+              <ButtonRemove
+                outline
+                @click="options.minChars = Math.max(1, (options.minChars || 1) - 1)"
+              />
+
+              <input
+                v-model.number="options.minChars"
+                class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+                min="1"
+                step="1"
+                type="number"
+              />
+              <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
+            </div>
+
             <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
             <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
             <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />

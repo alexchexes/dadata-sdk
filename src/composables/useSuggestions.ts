@@ -34,8 +34,8 @@ export function useSuggestions(
     () => mergeDefined(DEFAULT_OPTIONS, toValue(userOptions)) as InternalVueDadataOptions,
   );
 
-  /** Create a computed to watch options affecting API requests. */
-  const userRequestOptions = computed(() => {
+  /** Reactive changes to these options will trigger re-fetching of suggestions */
+  const optionsToWatch = computed(() => {
     const o = toValue(userOptions);
     return {
       token: o.token,
@@ -58,6 +58,7 @@ export function useSuggestions(
       fioGender: o.fioGender,
       filters: o.filters,
       payload: o.payload,
+      minChars: o.minChars,
     };
   });
   const visibleQuery = ref('');
@@ -168,7 +169,7 @@ export function useSuggestions(
       suggestionModel.value = undefined;
     }
 
-    if (queryModel.value.length) {
+    if (queryModel.value.length >= options.minChars) {
       fetchWithDebounce();
     } else {
       suggestionsList.value = [];
@@ -176,10 +177,10 @@ export function useSuggestions(
     }
   });
 
-  watch(userRequestOptions, async () => {
+  watch(optionsToWatch, async () => {
     suggestionModel.value = undefined;
 
-    if (!queryModel.value.length) {
+    if (queryModel.value.length < options.minChars) {
       return;
     }
 

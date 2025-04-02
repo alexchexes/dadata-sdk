@@ -333,6 +333,11 @@ export interface VueDadataOptions {
     'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
   >;
   /**
+   * Minimum length of text in the input after which suggestions are triggered.
+   * Default `1`
+   */
+  minChars?: number;
+  /**
    * Forces the suggestions list to always remain visible.
    * Useful during development (e.g., when styling elements).
    * Default: `false`
@@ -363,5 +368,6 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'token'
   | 'httpCache'
   | 'restrictValue'
+  | 'minChars'
   | 'forceShow'
 >;
