@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, type Ref } from 'vue';
 import AButton from './components/AButton.vue';
 import CheckBox from './components/CheckBox.vue';
 import InputText from './components/InputText.vue';
@@ -36,6 +36,7 @@ import { ignorableWatch } from '@vueuse/core';
 import ButtonAdd from './components/ButtonAdd.vue';
 import InputJson from './components/InputJson.vue';
 import ButtonRemove from './components/ButtonRemove.vue';
+import { useSyncUrlParams } from './composables/useSyncUrlParams.ts';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -57,6 +58,30 @@ const defaultOptions = ref<VueDadataOptions>({
 });
 
 const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
+
+const getDiff = (defaults: Record<string, any>, current: Record<string, any>) =>
+  Object.fromEntries(
+    Object.entries(current).filter(([key, val]) => {
+      const def = (defaults as Partial<VueDadataOptions>)[key as keyof VueDadataOptions];
+      if (val === def) {
+        return false;
+      }
+      if (typeof def === 'undefined' && typeof val === 'string' && !val) {
+        return false;
+      }
+      return true;
+    }),
+  );
+
+const nonDefaultOptions = computed<Partial<VueDadataOptions>>(() =>
+  getDiff(DEFAULT_OPTIONS, options.value),
+);
+const nonDefaultPlaygroundOptions = computed<Partial<VueDadataOptions>>(() => ({
+  ...getDiff(defaultOptions.value, options.value),
+  token: undefined,
+}));
+
+useSyncUrlParams(options as Ref<VueDadataOptions>, nonDefaultPlaygroundOptions);
 
 const filtersInput = ref('');
 const filtersValid = ref(true);
@@ -240,11 +265,6 @@ const removeCustomHeaders = () => {
 
 <template>
   <div class="px-2">
-    <!-- <div class="flex">
-      <pre>defaultOptions: {{ defaultOptions }}</pre>
-      <pre>options: {{ options }}</pre>
-    </div> -->
-
     <AButton class="mt-1 ml-1" @click="toggleTailwind">
       Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
     </AButton>
@@ -552,7 +572,7 @@ const removeCustomHeaders = () => {
         <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
 
         <div v-if="showLiveSnippet">
-          <LiveSnippet :defaultOptions="DEFAULT_OPTIONS" :options :showToken="isTokenProvided" />
+          <LiveSnippet :nonDefaultOptions :options :showToken="isTokenProvided" />
         </div>
 
         <CheckBox v-model="showAllOptions" label="Show all current options" />

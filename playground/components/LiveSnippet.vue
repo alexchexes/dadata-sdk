@@ -9,7 +9,7 @@ const props = defineProps({
     type: Object as PropType<VueDadataOptions>,
     required: true,
   },
-  defaultOptions: {
+  nonDefaultOptions: {
     type: Object as PropType<Partial<VueDadataOptions>>,
     required: true,
   },
@@ -19,23 +19,8 @@ const props = defineProps({
   },
 });
 
-const nonDefaultOptions = computed(() =>
-  Object.fromEntries(
-    Object.entries(props.options).filter(([key, val]) => {
-      const def = props.defaultOptions[key as keyof VueDadataOptions];
-      if (val === def) {
-        return false;
-      }
-      if (typeof def === 'undefined' && typeof val === 'string' && !val) {
-        return false;
-      }
-      return true;
-    }),
-  ),
-);
-
 const displayedOptions = computed(() =>
-  Object.fromEntries(Object.entries(nonDefaultOptions.value).filter(([key]) => key !== 'token')),
+  Object.fromEntries(Object.entries(props.nonDefaultOptions).filter(([key]) => key !== 'token')),
 );
 
 const sanitize = (str: string) => str.replace(/"/g, `'`);
