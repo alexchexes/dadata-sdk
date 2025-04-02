@@ -5,9 +5,13 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
  */
 export interface SuggestRegionCourtPayload extends BaseSuggestPayload {
   /**
-   * Фильтрация работает по полю region_code (первые 2 цифры КЛАДР-кода региона)
+   * Фильтрация мировых судов
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    region_code?: string;
-  }[];
+  filters?: SuggestRegionCourtFilter[];
 }
+
+export type SuggestRegionCourtFilter = {
+  /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда */
+  region_code?: string;
+};

@@ -8,20 +8,20 @@ export interface PostalUnitSuggestion {
   data: {
     /** Почтовый индекс */
     postal_code: string;
-    /** true, если отделение закрыто, иначе false */
+    /** `true`, если отделение закрыто, иначе `false` */
     is_closed: boolean;
     /** Тип отделения (например, ГОПС) */
     type_code: string;
-    /** Адрес одной строкой */
+    /** Адрес отделения одной строкой */
     address_str: string;
-    /** КЛАДР-код населённого пункта */
+    /** КЛАДР-код населённого пункта, в котором находится отделение */
     address_kladr_id: string;
     /** Код проверки адреса (@todo уточнить, что это в данном случае) */
     address_qc: string;
     /** Широта */
-    geo_lat: number;
+    geo_lat: number | null;
     /** Долгота */
-    geo_lon: number;
+    geo_lon: number | null;
     /** Режим работы в понедельник */
     schedule_mon: string | null;
     /** Режим работы во вторник */

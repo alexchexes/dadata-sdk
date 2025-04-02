@@ -12,13 +12,17 @@ export interface SuggestPartyByPayload extends BaseSuggestPayload {
    * а массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.
    *
    * ❌ Неправильно:
-   * [{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]
+   * `[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`
    *
    * ✅ Правильно:
-   * [{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]
+   * `[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`
    */
-  filters?: {
-    status?: PartyByStatus;
-    type?: PartyByType;
-  }[];
+  filters?: SuggestPartyByFilter[];
 }
+
+export type SuggestPartyByFilter = {
+  /** Статус организации */
+  status?: PartyByStatus;
+  /** Тип организации */
+  type?: PartyByType;
+};

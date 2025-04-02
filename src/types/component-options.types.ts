@@ -15,6 +15,16 @@ import type {
   PartyStatus,
   PartyType,
   RadiusFilter,
+  SuggestFmsUnitFilter,
+  SuggestFnsUnitFilter,
+  SuggestMetroFilter,
+  SuggestMktuFilter,
+  SuggestOkpd2Filter,
+  SuggestOkved2Filter,
+  SuggestPartyByFilter,
+  SuggestPartyKzFilter,
+  SuggestPostalUnitFilter,
+  SuggestRegionCourtFilter,
   SuggestType,
 } from './api';
 import type { OneOrMany } from './helpers.types';
@@ -26,6 +36,10 @@ export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
 export type VueDadataClasses = Partial<{ -readonly [K in keyof typeof DEFAULT_CLASSES]: string }>;
 
 export interface VueDadataOptions {
+  // ***************************
+  // API Request Options
+  // ***************************
+
   /**
    * Your DaData API token.
    */
@@ -177,6 +191,28 @@ export interface VueDadataOptions {
    * - `UNKNOWN` / `MALE` / `FEMALE`
    */
   fioGender?: FioGenders;
+  /**
+   * Filters for APIs that don't have dedicated options props,
+   * like `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `region_court`.
+   *
+   * To set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`.
+   */
+  filters?: OneOrMany<
+    | SuggestFmsUnitFilter
+    | SuggestFnsUnitFilter
+    | SuggestMetroFilter
+    | SuggestMktuFilter
+    | SuggestOkpd2Filter
+    | SuggestOkved2Filter
+    | SuggestPartyByFilter
+    | SuggestPartyKzFilter
+    | SuggestPostalUnitFilter
+    | SuggestRegionCourtFilter
+  >;
+
+  // ***************************
+  // Component Behavior Options
+  // ***************************
 
   /**
    * If `false`, HTTP requests will not be cached.

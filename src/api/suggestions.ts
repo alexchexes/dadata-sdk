@@ -8,6 +8,7 @@ import type {
   SuggestFiasOptions,
   SuggestFioOptions,
   SuggestOptions,
+  SuggestOptionsWithFilters,
   SuggestPartyOptions,
 } from '@/types';
 import type {
@@ -21,6 +22,7 @@ import type {
   SuggestPartyKzPayload,
   SuggestPartyPayload,
   SuggestPayload,
+  SuggestPayloadWithFilters,
 } from '@/types/api';
 import type { DadataSuggestion } from '@/types/api';
 import type { SuggestPartyByOptions } from '@/types/suggest-options-party_by.types';
@@ -90,6 +92,17 @@ const buildBasePayload = (options: SuggestOptions) => ({
   query: options.query,
   count: options.count ?? DEFAULT_COUNT,
 });
+
+/** Payload params common for all APIs that support `filters` option */
+const buildBasePayloadWithFilters = (options: SuggestOptionsWithFilters) => {
+  const payload = buildBasePayload(options) as SuggestPayloadWithFilters;
+  if (options.filters) {
+    const filtersArr = toArray(options.filters);
+    payload.filters = filtersArr;
+  }
+
+  return payload;
+};
 
 /**
  * Payload params common for 'address', 'fias', 'party' and 'bank' APIs
@@ -235,7 +248,7 @@ const buildPartyPayload = (options: SuggestPartyOptions) => {
 };
 
 const buildPartyByPayload = (options: SuggestPartyByOptions) => {
-  const payload = buildBasePayload(options) as SuggestPartyByPayload;
+  const payload = buildBasePayloadWithFilters(options) as SuggestPartyByPayload;
 
   const types = toArray(options.entityType).filter((v) => v);
   const statuses = toArray(options.entityStatus).filter((v) => v);
@@ -256,7 +269,7 @@ const buildPartyByPayload = (options: SuggestPartyByOptions) => {
 };
 
 const buildPartyKzPayload = (options: SuggestPartyKzOptions) => {
-  const payload = buildBasePayload(options) as SuggestPartyKzPayload;
+  const payload = buildBasePayloadWithFilters(options) as SuggestPartyKzPayload;
 
   if (options.entityType) {
     const typesArray = toArray(options.entityType)
@@ -312,6 +325,9 @@ const buildPayload = (options: SuggestOptions): SuggestPayload => {
     case 'party_kz':
       return buildPartyKzPayload(options);
     default:
+      if ((options as SuggestOptionsWithFilters).filters) {
+        return buildBasePayloadWithFilters(options as SuggestOptionsWithFilters);
+      }
       return buildBasePayload(options);
   }
 };

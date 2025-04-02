@@ -5,17 +5,13 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
  */
 export interface SuggestMktuPayload extends BaseSuggestPayload {
   /**
-   * Фильтрация записей МКТУ по одному или нескольким классам.
-   *
-   * Все поля внутри одного фильтра интерпретируются как `AND`,
-   * между фильтрами действует логика `OR`.
-   *
-   * Пример:
-   * - Поиск в классе "03":
-   *   `[{ class: "03" }]`
+   * Фильтрация записей МКТУ
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    /** Класс МКТУ, например "25" */
-    class?: string;
-  }[];
+  filters?: SuggestMktuFilter[];
 }
+
+export type SuggestMktuFilter = {
+  /** Класс МКТУ, например `"25"` или `"03"` */
+  class?: string;
+};

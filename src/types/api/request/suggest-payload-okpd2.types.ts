@@ -6,13 +6,12 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
 export interface SuggestOkpd2Payload extends BaseSuggestPayload {
   /**
    * Фильтрация по разделу классификатора ОКПД 2.
-   *
-   * Пример:
-   * - Поиск внутри раздела "S":
-   *   `[{ razdel: "S" }]`
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    /** Код раздела классификатора (например, "S") */
-    razdel?: string;
-  }[];
+  filters?: SuggestOkpd2Filter[];
 }
+
+export type SuggestOkpd2Filter = {
+  /** Код раздела классификатора ОКПД 2 (например `'S'`) */
+  razdel?: string;
+};

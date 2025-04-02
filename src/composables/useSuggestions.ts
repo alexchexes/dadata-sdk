@@ -107,6 +107,7 @@ export function useSuggestions(
         okved: options.okved,
         fioParts: options.fioParts,
         fioGender: options.fioGender,
+        filters: options.filters,
         ...optionsOverrides,
       };
 
@@ -223,8 +224,8 @@ export function useSuggestions(
 
     if (
       options.enrichOnSelect &&
-      options.suggestType === 'address' &&
-      options.count !== 1 // with count=1 it's already "enriched"
+      (options.suggestType === 'address' || options.suggestType === 'fias') &&
+      (options.count !== 1 || options.restrictValue) // with count=1 it's already "enriched", until restrictValue is true
     ) {
       enrichSuggestion(selectedSuggestion);
     }

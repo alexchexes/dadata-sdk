@@ -55,6 +55,17 @@ export type SuggestPayload =
   | SuggestPostalUnitPayload
   | SuggestRegionCourtPayload;
 
+export type SuggestPayloadWithFilters =
+  | SuggestFmsUnitPayload
+  | SuggestFnsUnitPayload
+  | SuggestMetroPayload
+  | SuggestMktuPayload
+  | SuggestOkpd2Payload
+  | SuggestOkved2Payload
+  | SuggestPartyByPayload
+  | SuggestPartyKzPayload
+  | SuggestPostalUnitPayload;
+
 /**
  * No special options for 'email'
  * @see https://dadata.ru/api/suggest/email/

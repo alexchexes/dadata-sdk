@@ -6,11 +6,21 @@ import type { FmsUnitType } from '../api-common.types';
  */
 export interface SuggestFmsUnitPayload extends BaseSuggestPayload {
   /**
-   * Фильтрация работает по полям `region_code` (первые 2 цифры КЛАДР-кода региона)
-   * и `type` (вид подразделения):
+   * Фильтрация подразделений ФМС
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    region_code?: string;
-    type?: FmsUnitType;
-  }[];
+  filters?: SuggestFmsUnitFilter[];
 }
+
+export type SuggestFmsUnitFilter = {
+  /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС */
+  region_code?: string;
+  /**
+   * Вид подразделения:
+   * - `0` — подразделение ФМС
+   * - `1` — ГУВД или МВД региона
+   * - `2` — УВД или ОВД района или города
+   * - `3` — отделение полиции
+   */
+  type?: FmsUnitType;
+};

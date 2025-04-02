@@ -5,9 +5,13 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
  */
 export interface SuggestFnsUnitPayload extends BaseSuggestPayload {
   /**
-   * Фильтрация работает по полю region_code (первые 2 цифры КЛАДР-кода региона)
+   * Фильтрация налоговых инспекций
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    region_code?: string;
-  }[];
+  filters?: SuggestFnsUnitFilter[];
 }
+
+export type SuggestFnsUnitFilter = {
+  /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции */
+  region_code?: string;
+};

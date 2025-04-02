@@ -5,17 +5,18 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
  */
 export interface SuggestPostalUnitPayload extends BaseSuggestPayload {
   /**
-   * Фильтрация работает по полям `is_closed`, `type_code` и `address_kladr_id`.
-   *
-   * Фильтрация по `address_kladr_id` позволяет выбрать отделения из указанного города:
-   * - `[{address_kladr_id: '6300000100000'}]`
-   *
-   * Фильтрация по `is_closed` позволяет отсеять закрытые отделения
-   * - `[{is_closed: false}]`
+   * Фильтрация почтовых отделений
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: {
-    is_closed?: boolean;
-    type_code?: string;
-    address_kladr_id?: string;
-  }[];
+  filters?: SuggestPostalUnitFilter[];
 }
+
+export type SuggestPostalUnitFilter = {
+  /** Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые
+   */
+  is_closed?: boolean;
+  /** Фильтрация по типу отделения (например, `ГОПС`) */
+  type_code?: string;
+  /** Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города) */
+  address_kladr_id?: string;
+};

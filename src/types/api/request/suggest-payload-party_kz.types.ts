@@ -6,7 +6,10 @@ import type { PartyKzType } from '../api-common.types';
  */
 export interface SuggestPartyKzPayload extends BaseSuggestPayload {
   /** Фильтрация работает по полю `type` (тип организации) */
-  filters?: {
-    type: PartyKzType;
-  }[];
+  filters?: SuggestPartyKzFilter[];
 }
+
+export type SuggestPartyKzFilter = {
+  /** Тип организации */
+  type?: PartyKzType;
+};

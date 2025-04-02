@@ -1,5 +1,5 @@
 import type { SuggestType } from './api';
-import type { MergeAll } from './helpers.types';
+import type { MergeAll, OneOrMany } from './helpers.types';
 import type { SuggestAddressOptions } from './suggest-options-address.types';
 import type { SuggestBankOptions } from './suggest-options-bank.types';
 import type { SuggestFiasOptions } from './suggest-options-fias.types';
@@ -52,6 +52,17 @@ export type SuggestOptions =
   | SuggestOkpd2Options
   | SuggestOktmoOptions;
 
+export type SuggestOptionsWithFilters =
+  | SuggestFmsUnitOptions
+  | SuggestOkpd2Options
+  | SuggestOkved2Options
+  | SuggestFnsUnitOptions
+  | SuggestMetroOptions
+  | SuggestMktuOptions
+  | SuggestPostalUnitOptions
+  | SuggestPartyByOptions
+  | SuggestPartyKzOptions;
+
 export type MergedSuggestOptions = MergeAll<
   [
     SuggestAddressOptions,
@@ -79,21 +90,30 @@ export type MergedSuggestOptions = MergeAll<
   ]
 >;
 
-/** Types with no additional options. Created via generic helper to reduce boilerplate */
+/** Types with no additional options */
 interface BaseOptionsWithType<T extends SuggestType> extends BaseSuggestOptions {
   suggestType: T;
 }
+/** Types with only one additional option - `filter` */
+interface BaseOptionsWithFiltersWithType<T extends SuggestType> extends BaseOptionsWithType<T> {
+  /** Common `filters` object for types that do no have other additional options */
+  filters?: OneOrMany<Record<string, any>>;
+}
+
 export type SuggestEmailOptions = BaseOptionsWithType<'email'>;
 export type SuggestCountryOptions = BaseOptionsWithType<'country'>;
-export type SuggestPostalUnitOptions = BaseOptionsWithType<'postal_unit'>;
-export type SuggestFmsUnitOptions = BaseOptionsWithType<'fms_unit'>;
 export type SuggestCarBrandOptions = BaseOptionsWithType<'car_brand'>;
-export type SuggestFnsUnitOptions = BaseOptionsWithType<'fns_unit'>;
 export type SuggestFtsUnitOptions = BaseOptionsWithType<'fts_unit'>;
 export type SuggestRegionCourtOptions = BaseOptionsWithType<'region_court'>;
-export type SuggestMetroOptions = BaseOptionsWithType<'metro'>;
-export type SuggestMktuOptions = BaseOptionsWithType<'mktu'>;
 export type SuggestCurrencyOptions = BaseOptionsWithType<'currency'>;
-export type SuggestOkved2Options = BaseOptionsWithType<'okved2'>;
-export type SuggestOkpd2Options = BaseOptionsWithType<'okpd2'>;
 export type SuggestOktmoOptions = BaseOptionsWithType<'oktmo'>;
+
+// Options with `filter` option:
+
+export type SuggestFmsUnitOptions = BaseOptionsWithFiltersWithType<'fms_unit'>;
+export type SuggestOkpd2Options = BaseOptionsWithFiltersWithType<'okpd2'>;
+export type SuggestOkved2Options = BaseOptionsWithFiltersWithType<'okved2'>;
+export type SuggestFnsUnitOptions = BaseOptionsWithFiltersWithType<'fns_unit'>;
+export type SuggestMetroOptions = BaseOptionsWithFiltersWithType<'metro'>;
+export type SuggestMktuOptions = BaseOptionsWithFiltersWithType<'mktu'>;
+export type SuggestPostalUnitOptions = BaseOptionsWithFiltersWithType<'postal_unit'>;
