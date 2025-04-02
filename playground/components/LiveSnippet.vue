@@ -38,11 +38,13 @@ const displayedOptions = computed(() =>
   Object.fromEntries(Object.entries(nonDefaultOptions.value).filter(([key]) => key !== 'token')),
 );
 
+const sanitize = (str: string) => str.replace(/"/g, `'`);
+
 const code = computed(() => {
   const attrs = ['v-model="query"', 'v-model:suggestion="suggestion"'];
 
   if (props.showToken) {
-    attrs.push(`token="${props.options.token.replace(/"/g, `'`)}"`);
+    attrs.push(`token="${sanitize(props.options.token)}"`);
   } else {
     attrs.push(':token="token"');
   }
@@ -52,18 +54,18 @@ const code = computed(() => {
     let value = val;
 
     if (value === true) {
-      attrs.push(key); // vue boolean props casting
+      attrs.push(key); // we leverage vue boolean props casting
       return;
     } else if (typeof value !== 'string') {
-      value = JSON.stringify(value);
+      value = JSON.stringify(value).replace(/'/g, `\\'`);
       key = `:${key}`;
     }
 
-    attrs.push(`${key}="${value.replace(/"/g, `'`)}"`);
+    attrs.push(`${key}="${sanitize(value)}"`);
   });
-  const indent = '\n  ';
+  const separator = '\n  ';
 
-  return `<VueDadata${indent}${attrs.join(indent)}\n/>`;
+  return `<VueDadata${separator}${attrs.join(separator)}\n/>`;
 });
 
 const highlighted = ref('');

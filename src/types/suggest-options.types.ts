@@ -1,3 +1,4 @@
+import type { RawAxiosRequestHeaders } from 'axios';
 import type { OptionalSuggestPayload, SuggestType } from './api';
 import type { MergeAll, OneOrMany } from './helpers.types';
 import type { SuggestAddressOptions } from './suggest-options-address.types';
@@ -16,10 +17,10 @@ export interface BaseSuggestOptions {
   /** Type of Dadata suggestions (determines which Dadata API endpoint to use) */
   suggestType: SuggestType;
 
-  /** Текст запроса */
+  /** Query text */
   query: string;
 
-  /** Количество результатов (максимум — 20) */
+  /** Max results to fetch from Dadata (max - 20) */
   count?: number;
 
   /** Custom URL of an API in case you proxy requests.  */
@@ -28,12 +29,11 @@ export interface BaseSuggestOptions {
   /** `false` disables http requests caching. Default `true` */
   httpCache?: boolean;
 
-  /**
-   * Optional parameters for the API request.
-   * Any fields specified here will be added to the final request payload
-   * or override existing values if already set by other options.
-   */
+  /** Custom payload for the API request */
   payload?: OptionalSuggestPayload;
+
+  /** Custom headers for the API request */
+  headers?: RawAxiosRequestHeaders;
 }
 
 export type SuggestOptions =

@@ -9,6 +9,12 @@
     border-color: var(--color-slate-300);
   }
 
+  /* fix tailwind bug */
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-slate-400);
+  }
+
   input:focus-visible,
   textarea:focus-visible {
     @apply ring-1 ring-gray-600 outline-none;

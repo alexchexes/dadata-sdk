@@ -30,6 +30,7 @@ import type {
 } from './api';
 import type { OneOrMany } from './helpers.types';
 import type { InputHTMLAttributes } from 'vue';
+import type { RawAxiosRequestHeaders } from 'axios';
 
 export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
 
@@ -211,11 +212,15 @@ export interface VueDadataOptions {
     | SuggestRegionCourtFilter
   >;
   /**
-   * Optional parameters to include in each DaData API request.
-   * Any fields specified here will be added to the final request payload,
-   * or will override existing values if already set by other options.
+   * Custom payload for the API request.
+   * Any fields specified here will be added to the final request payload, or override existing values if already set.
    */
   payload?: OptionalSuggestPayload;
+  /**
+   * Custom headers for the API request.
+   * Any headers specified here will be added to the final request headers, or override existing values if already set.
+   */
+  headers?: RawAxiosRequestHeaders;
 
   // ***************************
   // Component Behavior Options

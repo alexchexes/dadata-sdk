@@ -111,6 +111,7 @@ export function useSuggestions(
         fioGender: options.fioGender,
         filters: options.filters,
         payload: options.payload,
+        headers: options.headers,
         ...optionsOverrides,
       };
 

@@ -62,6 +62,7 @@ const filtersInput = ref('');
 const filtersValid = ref(true);
 
 const showCustomPayload = ref(false);
+const showCustomHeaders = ref(false);
 
 const { ignoreUpdates: ignoreFiltersInputWatch } = ignorableWatch(filtersInput, (str: string) => {
   ignoreOptionsFiltersWatch(() => {
@@ -222,6 +223,15 @@ const handleEnrichFail = (unrestricted_value: string) => {
 
 const handleError = (error: any) => {
   console.error('VueDadata error:', error);
+};
+
+const removeCustomPayload = () => {
+  showCustomPayload.value = false;
+  options.value.payload = undefined;
+};
+const removeCustomHeaders = () => {
+  showCustomHeaders.value = false;
+  options.value.headers = undefined;
 };
 </script>
 
@@ -468,23 +478,39 @@ const handleError = (error: any) => {
                 ].includes(options.suggestType as string)
               "
               v-model="options.filters"
+              allowArray
               label="filters (json)"
               placeholder="'filters' API request parameter"
             />
 
+            <!-- Custom payload -->
             <div class="flex gap-2">
               <span
                 >{{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
               </span>
               <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
-              <ButtonRemove v-else outline @click="showCustomPayload = false" />
+              <ButtonRemove v-else outline @click="removeCustomPayload()" />
             </div>
-
             <InputJson
               v-if="showCustomPayload"
               v-model="options.payload"
               :rows="4"
-              placeholder="Optional parameters to include in each DaData API request. Any fields specified here will be added to the final request payload, or will override existing values if already set by other options.."
+              placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
+            />
+
+            <!-- Custom headers -->
+            <div class="flex gap-2">
+              <span
+                >{{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
+              </span>
+              <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
+              <ButtonRemove v-else outline @click="removeCustomHeaders()" />
+            </div>
+            <InputJson
+              v-if="showCustomHeaders"
+              v-model="options.headers"
+              :rows="4"
+              placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
             />
           </div>
 

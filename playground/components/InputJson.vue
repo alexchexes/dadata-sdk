@@ -11,6 +11,7 @@ const props = defineProps<{
   inputClass?: TwMergeArgument;
   placeholder?: string;
   rows?: number;
+  allowArray?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -46,20 +47,24 @@ watch(input, (str) => {
     isValid.value = true;
     return;
   }
+  modelGuard = true;
   try {
     const parsed = JSON.parse(str.trim());
     // optionally check if parsed is object/array
-    if (Array.isArray(parsed) || typeof parsed === 'object') {
-      modelGuard = true;
-      emit('update:modelValue', parsed);
+    if (parsed && typeof parsed === 'object') {
+      if (Array.isArray(parsed)) {
+        if (!props.allowArray || !parsed.every((el) => el && typeof el === 'object')) {
+          throw new Error();
+        }
+      }
       isValid.value = true;
+      emit('update:modelValue', parsed);
     } else {
-      emit('update:modelValue', undefined);
-      isValid.value = false;
+      throw new Error();
     }
   } catch {
     isValid.value = false;
-    // we do NOT emit anything if invalid
+    emit('update:modelValue', undefined);
   }
 });
 </script>
