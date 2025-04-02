@@ -206,6 +206,9 @@ const resetApiOptions = () => {
     // @ts-ignore @ts-fuckyourself
     options.value[key] = defaultOptions.value[key];
   });
+  showCustomHeaders.value = false;
+  showCustomPayload.value = false;
+  locationsBoostString.value = '';
 };
 
 const resetSuggestions = () => {
