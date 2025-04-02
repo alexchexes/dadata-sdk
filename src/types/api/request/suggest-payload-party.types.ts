@@ -1,8 +1,5 @@
-import type { PARTY_STATUSES, PARTY_TYPES } from '@/const/api';
+import type { PartyStatus, PartyType } from '../api-common.types';
 import type { BaseSuggestPayload, KladrIdFilter } from './suggest-payload.types';
-
-export type PartyType = (typeof PARTY_TYPES)[number];
-export type PartyStatus = (typeof PARTY_STATUSES)[number];
 
 /**
  * @see https://dadata.ru/api/suggest/party/

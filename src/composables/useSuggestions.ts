@@ -2,7 +2,6 @@ import { computed, ref, toValue, watch } from 'vue';
 import { makeSuggestRequest } from '@/api';
 import { DEFAULT_OPTIONS, HandledKeys } from '@/const';
 import { reactiveComputed, useDebounceFn } from '@vueuse/core';
-import type { AddressSuggestion } from '@/types/api';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 import type {
   SuggestOptions,
@@ -12,94 +11,144 @@ import type {
 } from '@/types';
 import type { VueDadataEmits } from '@/VueDadata.vue';
 import { mergeDefined } from '@/utils';
+import { CanceledError } from 'axios';
+import type { DadataSuggestion } from '@/types/api';
 
 export function useSuggestions(
   queryModel: Ref<string>,
-  suggestionModel: Ref<AddressSuggestion | undefined>,
+  suggestionModel: Ref<DadataSuggestion | undefined>,
   userOptions: MaybeRefOrGetter<VueDadataOptions>,
   emit: VueDadataEmits,
 ) {
+  // ===============================
+  // 📦 Reactive State & Computed
+  // ===============================
+
+  /**
+   * @todo We need to refactor this, as now re-compute this object each time when query changes,
+   * because userOptions contains modelValue prop. This is not right.
+   * (and we can't re-use list of those options in both `fetchSuggestions` and `watch(userRequestOptions)`,
+   * or watcher will be triggered each time)
+   */
   const options = reactiveComputed(
     () => mergeDefined(DEFAULT_OPTIONS, toValue(userOptions)) as InternalVueDadataOptions,
   );
 
+  /** Create a computed to watch options affecting API requests. */
+  const userRequestOptions = computed(() => {
+    const o = toValue(userOptions);
+    return {
+      token: o.token,
+      url: o.url,
+      httpCache: o.httpCache,
+      count: o.count,
+      suggestType: o.suggestType,
+      fromBound: o.fromBound,
+      toBound: o.toBound,
+      locationsFilter: o.locationsFilter,
+      restrictValue: o.restrictValue,
+      locationsBoost: o.locationsBoost,
+      division: o.division,
+      radiusFilter: o.radiusFilter,
+      language: o.language,
+      entityType: o.entityType,
+      entityStatus: o.entityStatus,
+      okved: o.okved,
+      fioParts: o.fioParts,
+      fioGender: o.fioGender,
+    };
+  });
   const visibleQuery = ref('');
   const inputFocused = ref(false);
-  const suggestionsVisible = ref(true);
+  const areSuggestionsVisible = ref(true);
   const navigatedIndex = ref(-1);
-  const suggestionsList: Ref<AddressSuggestion[]> = ref([]);
+  const suggestionsList: Ref<DadataSuggestion[]> = ref([]);
 
-  const requestOptions = computed(() => ({
-    token: options.token,
-    url: options.url,
-    httpCache: options.httpCache,
-    count: options.count,
-    suggestType: options.suggestType,
-    fromBound: options.fromBound,
-    toBound: options.toBound,
-    locationsFilter: options.locationsFilter,
-    restrictValue: options.restrictValue,
-    locationsBoost: options.locationsBoost,
-    division: options.division,
-    radiusFilter: options.radiusFilter,
-    language: options.language,
+  const canGoDown = computed(() => navigatedIndex.value < suggestionsList.value.length - 1);
+  const canGoUp = computed(() => navigatedIndex.value >= 0);
+  const canSelectNavigatedIndex = computed(
+    () => navigatedIndex.value >= 0 && navigatedIndex.value < suggestionsList.value.length,
+  );
+  const canClear = computed(() => queryModel.value !== '' && !options.disabled);
 
-    partyType: options.partyType,
-    bankType: options.bankType,
-    entityStatus: options.entityStatus,
-    okved: options.okved,
-    fioParts: options.fioParts,
-    fioGender: options.fioGender,
-  }));
+  // ===  Watch guards ===
+  let dontFetchOnQueryChange = false;
+
+  // ===============================
+  // 🔍 Suggestion Fetching
+  // ===============================
 
   /**
-   * Calls the API
+   * Calls the API and returns fetched suggestions.
+   * If request was cancelled (because of new request started faster than API responded), returns null.
+   * In case of error also returns null and emits `error` event
    */
   const fetchSuggestions = async (
     optionsOverrides: Partial<SuggestOptions> = {},
-  ): Promise<AddressSuggestion[]> => {
+  ): Promise<DadataSuggestion[] | null> => {
     try {
       const finalOptions: MergedSuggestOptions = {
         query: queryModel.value,
-        ...requestOptions.value,
+        token: options.token,
+        url: options.url,
+        httpCache: options.httpCache,
+        count: options.count,
+        suggestType: options.suggestType,
+        fromBound: options.fromBound,
+        toBound: options.toBound,
+        locationsFilter: options.locationsFilter,
+        restrictValue: options.restrictValue,
+        locationsBoost: options.locationsBoost,
+        division: options.division,
+        radiusFilter: options.radiusFilter,
+        language: options.language,
+        entityType: options.entityType,
+        entityStatus: options.entityStatus,
+        okved: options.okved,
+        fioParts: options.fioParts,
+        fioGender: options.fioGender,
         ...optionsOverrides,
       };
 
       return await makeSuggestRequest(finalOptions as SuggestOptions);
     } catch (error) {
-      emit('error', error);
-      return [];
+      if (!(error instanceof CanceledError)) {
+        emit('error', error);
+      }
+      return null;
     }
-  };
-
-  const canClear = computed(() => queryModel.value !== '' && !options.disabled);
-
-  const clear = () => {
-    queryModel.value = '';
-    suggestionModel.value = undefined;
-    hideDropdown();
   };
 
   const fetchWithDebounce = useDebounceFn(async () => {
-    suggestionsList.value = await fetchSuggestions();
+    const fetched = await fetchSuggestions();
+    if (fetched) {
+      suggestionsList.value = fetched;
+    }
   }, options.debounceWait);
 
-  let dontFetchOnQueryChange = false;
+  const enrichSuggestion = async (selectedSuggestion: DadataSuggestion) => {
+    const suggestions = await fetchSuggestions({
+      query: selectedSuggestion.unrestricted_value,
+      count: 1,
+      restrictValue: false,
+    });
 
-  watch(requestOptions, async () => {
-    if (!queryModel.value.length) {
-      return;
+    if (
+      suggestions?.length &&
+      suggestions[0].unrestricted_value === selectedSuggestion.unrestricted_value
+    ) {
+      suggestionModel.value = suggestions[0];
+      emit('enriched', suggestions[0]);
+      return true;
+    } else {
+      emit('enrichFail', selectedSuggestion.unrestricted_value);
+      return false;
     }
+  };
 
-    await fetchWithDebounce();
-
-    if (suggestionModel.value) {
-      const enriched = await enrichSuggestion(suggestionModel.value);
-      if (!enriched) {
-        suggestionModel.value = undefined;
-      }
-    }
-  });
+  // ===============================
+  // 👁 Watchers
+  // ===============================
 
   watch(queryModel, () => {
     visibleQuery.value = queryModel.value;
@@ -122,15 +171,31 @@ export function useSuggestions(
     }
   });
 
+  watch(userRequestOptions, async () => {
+    suggestionModel.value = undefined;
+
+    if (!queryModel.value.length) {
+      return;
+    }
+
+    await fetchWithDebounce();
+  });
+
+  // ===============================
+  // 🛠 Internal Utilities
+  // ===============================
+
+  /** @internal */
   const hideDropdown = () => {
     if (options.disabled) {
       return;
     }
 
-    suggestionsVisible.value = false;
+    areSuggestionsVisible.value = false;
     navigatedIndex.value = -1;
   };
 
+  /** @internal */
   const selectSuggestion = async (index: number) => {
     if (options.disabled) {
       return;
@@ -156,30 +221,18 @@ export function useSuggestions(
       queryModel.value = selectedSuggestion.value;
     }
 
-    if (options.enrichOnSelect) {
+    if (
+      options.enrichOnSelect &&
+      options.suggestType === 'address' &&
+      options.count !== 1 // with count=1 it's already "enriched"
+    ) {
       enrichSuggestion(selectedSuggestion);
     }
   };
 
-  const enrichSuggestion = async (selectedSuggestion: AddressSuggestion) => {
-    const suggestions = await fetchSuggestions({
-      query: selectedSuggestion.unrestricted_value,
-      count: 1,
-      restrictValue: false,
-    });
-
-    if (
-      suggestions.length &&
-      suggestions[0].unrestricted_value === selectedSuggestion.unrestricted_value
-    ) {
-      suggestionModel.value = suggestions[0];
-      emit('enriched', suggestions[0]);
-      return true;
-    } else {
-      emit('enrichFail', selectedSuggestion.unrestricted_value);
-      return false;
-    }
-  };
+  // ===============================
+  // 🧠 Input Event Handlers
+  // ===============================
 
   const handleInputChange = (evt: Event) => {
     if (options.disabled) {
@@ -189,14 +242,8 @@ export function useSuggestions(
     const target = evt.target as HTMLInputElement;
     queryModel.value = target.value;
 
-    suggestionsVisible.value = true;
+    areSuggestionsVisible.value = true;
   };
-
-  const canGoDown = computed(() => navigatedIndex.value < suggestionsList.value.length - 1);
-  const canGoUp = computed(() => navigatedIndex.value >= 0);
-  const canSelectNavigatedIndex = computed(
-    () => navigatedIndex.value >= 0 && navigatedIndex.value < suggestionsList.value.length,
-  );
 
   const handleKeyPress = (event: KeyboardEvent) => {
     if (options.disabled) {
@@ -212,7 +259,7 @@ export function useSuggestions(
     event.preventDefault();
 
     if (key === HandledKeys.Enter) {
-      if (suggestionsVisible.value && suggestionsList.value.length) {
+      if (areSuggestionsVisible.value && suggestionsList.value.length) {
         let indexToSelect = null;
 
         if (canSelectNavigatedIndex.value) {
@@ -227,13 +274,13 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Esc) {
-      suggestionsVisible.value = false;
+      areSuggestionsVisible.value = false;
       navigatedIndex.value = -1;
       visibleQuery.value = queryModel.value;
     }
 
     if (key === HandledKeys.Up) {
-      if (canGoUp.value && suggestionsVisible.value) {
+      if (canGoUp.value && areSuggestionsVisible.value) {
         navigatedIndex.value -= 1;
 
         if (navigatedIndex.value > -1) {
@@ -245,13 +292,13 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Down) {
-      if (suggestionsVisible.value) {
+      if (areSuggestionsVisible.value) {
         if (canGoDown.value) {
           navigatedIndex.value += 1;
           visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
         }
       } else if (suggestionsList.value.length) {
-        suggestionsVisible.value = true;
+        areSuggestionsVisible.value = true;
       }
     }
   };
@@ -268,7 +315,7 @@ export function useSuggestions(
         options.showOnFocus === 'always' ||
         (options.showOnFocus === 'no_selection' && !suggestionModel.value)
       ) {
-        suggestionsVisible.value = true;
+        areSuggestionsVisible.value = true;
       }
     }
   };
@@ -280,9 +327,9 @@ export function useSuggestions(
     emit('blur', evt);
     inputFocused.value = false;
 
-    // suggestionsVisible check makes sense since we don't use matcher, but once added, we must
-    // select match on blur in any case, not just when suggestionsVisible is true
-    if (options.selectOnBlur && suggestionsVisible.value) {
+    // areSuggestionsVisible check makes sense since we don't use matcher, but once added, we must
+    // select match on blur in any case, not just when areSuggestionsVisible is true
+    if (options.selectOnBlur && areSuggestionsVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0);
@@ -296,7 +343,7 @@ export function useSuggestions(
 
     // respect the showOnFocus option
     if (options.showOnFocus === false) {
-      suggestionsVisible.value = false;
+      areSuggestionsVisible.value = false;
     }
   };
 
@@ -308,10 +355,20 @@ export function useSuggestions(
     selectSuggestion(index);
   };
 
+  // ===============================
+  //  📤 Public API
+  // ===============================
+
+  const clear = () => {
+    queryModel.value = '';
+    suggestionModel.value = undefined;
+    hideDropdown();
+  };
+
   return {
     visibleQuery,
     inputFocused,
-    suggestionsVisible,
+    areSuggestionsVisible,
     navigatedIndex,
     suggestionsList,
     canClear,

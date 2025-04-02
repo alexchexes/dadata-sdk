@@ -1,7 +1,10 @@
-import type { KladrIdFilter, PartyStatus, PartyType, RegionCode } from './api';
+import type { KladrIdFilter, PartyStatus, PartyType } from './api';
 import type { OneOrMany } from './helpers.types';
 import type { BaseSuggestOptions } from './suggest-options.types';
 
+/**
+ *
+ */
 export interface SuggestPartyOptions extends BaseSuggestOptions {
   suggestType: 'party';
 
@@ -10,10 +13,17 @@ export interface SuggestPartyOptions extends BaseSuggestOptions {
    * - `LEGAL` - юрлицо
    * - `INDIVIDUAL` - ИП
    */
-  partyType?: PartyType;
+  entityType?: PartyType | [PartyType];
 
   /**
-   * Ограничение по статусу организации. Например:
+   * Ограничение по статусу организации.
+   * - `ACTIVE`        действующая
+   * - `LIQUIDATING`   ликвидируется
+   * - `LIQUIDATED`    ликвидирована
+   * - `REORGANIZING`  в процессе присоединения к другому юрлицу, с последующей ликвидацией
+   * - `BANKRUPT`      банкрот (с февраля 2021)
+   *
+   * Например:
    * - действующие: `ACTIVE`
    * - ликвидируемые и ликвидированные: `['LIQUIDATING', 'LIQUIDATED']`
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
@@ -32,7 +42,7 @@ export interface SuggestPartyOptions extends BaseSuggestOptions {
    * - `[50, 77]` - Москва и Московская область
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
    */
-  locationsFilter?: OneOrMany<KladrIdFilter | RegionCode>;
+  locationsFilter?: OneOrMany<KladrIdFilter | string | number>;
 
   /**
    * Приоритет города при ранжировании (один или несколько КЛАДР-кодов). Например:

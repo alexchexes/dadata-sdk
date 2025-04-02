@@ -9,6 +9,7 @@ import TogglesGroup from './components/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/SelectOptions.vue';
 import LiveSnippet from './components/LiveSnippet.vue';
+import ButtonReset from './components/ButtonReset.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
   BASE_SUGGEST_URL,
@@ -19,19 +20,39 @@ import {
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
   PARTY_TYPES,
+  PARTY_BY_TYPES,
   PARTY_STATUSES,
   BANK_TYPES,
   BANK_STATUSES,
   FIO_PARTS,
   FIO_GENDERS,
-  type AddressSuggestion,
   DEFAULT_OPTIONS,
   type VueDadataOptions,
+  PARTY_BY_STATUSES,
+  PARTY_KZ_TYPES,
 } from '@/index';
+import type { DadataSuggestion } from '@/types/api';
+
+// API Token
+const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 
 const isTailwindEnabled = ref(true);
 const showLiveSnippet = ref(true); // @todo temp
 const showAllOptions = ref(false);
+
+const query = ref('');
+const suggestion = ref<DadataSuggestion | undefined>(undefined);
+
+const nowrapQuery = ref(true);
+const examplesShown = ref(false);
+
+const defaultOptions = ref<VueDadataOptions>({
+  ...DEFAULT_OPTIONS,
+  token: envToken,
+  placeholder: 'Start typing...',
+});
+
+const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
 
 const isTokenProvided = computed(() => options.value.token !== envToken);
 const TOKEN_PLACEHOLDER = '***************************';
@@ -46,8 +67,6 @@ function toggleTailwind() {
   isTailwindEnabled.value = !isTailwindEnabled.value;
 }
 
-// API Token
-const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const tokenModel = computed({
   get: () => (isTokenProvided.value ? options.value.token : ''),
   set: (val) => (options.value.token = val?.trim() ? val.trim() : envToken),
@@ -96,23 +115,64 @@ const locationsExamples = computed(() => {
   return examples;
 });
 
-const query = ref('');
-const suggestion = ref<AddressSuggestion | undefined>(undefined);
+const apiOptionsKeys: (keyof VueDadataOptions)[] = [
+  'token',
+  'url',
+  'httpCache',
+  'count',
+  'suggestType',
+  'fromBound',
+  'toBound',
+  'locationsFilter',
+  'restrictValue',
+  'locationsBoost',
+  'division',
+  'radiusFilter',
+  'language',
+  'entityType',
+  'entityStatus',
+  'okved',
+  'fioParts',
+  'fioGender',
+];
 
-const reset = () => {
+const allApiOptionsDefault = computed(
+  () => !apiOptionsKeys.find((key) => options.value[key] !== defaultOptions.value[key]),
+);
+
+const allComponentOptionsDefault = computed(
+  () =>
+    !Object.keys(options.value)
+      .filter((key) => !apiOptionsKeys.includes(key as keyof VueDadataOptions))
+      .find(
+        (key) =>
+          options.value[key as keyof VueDadataOptions] !==
+          defaultOptions.value[key as keyof VueDadataOptions],
+      ),
+);
+
+const resetComponentOptions = () => {
+  Object.keys(options.value).forEach((key) => {
+    if (!apiOptionsKeys.includes(key as keyof VueDadataOptions)) {
+      // @ts-ignore @ts-fuckyourself
+      options.value[key] = defaultOptions.value[key];
+    }
+  });
+};
+
+const resetApiOptions = () => {
+  apiOptionsKeys.forEach((key) => {
+    // @ts-ignore @ts-fuckyourself
+    options.value[key] = defaultOptions.value[key];
+  });
+};
+
+const resetSuggestions = () => {
   query.value = '';
   suggestion.value = undefined;
 };
 
-const defaultOptions = ref<VueDadataOptions>({
-  ...DEFAULT_OPTIONS,
-  token: envToken,
-  placeholder: 'Start typing...',
-});
-
-const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
-
-const handleEnriched = (suggestion: AddressSuggestion) => {
+const handleEnriched = (suggestion: DadataSuggestion) => {
   console.info('Suggestion enriched:', suggestion);
 };
 
@@ -123,9 +183,6 @@ const handleEnrichFail = (unrestricted_value: string) => {
 const handleError = (error: any) => {
   console.error('VueDadata error:', error);
 };
-
-const nowrapQuery = ref(true);
-const examplesShown = ref(false);
 </script>
 
 <template>
@@ -146,7 +203,14 @@ const examplesShown = ref(false);
         <div class="flex flex-wrap gap-3">
           <!-- API requests options -->
           <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
-            <h3 class="font-semibold">API requests options</h3>
+            <div class="flex gap-2">
+              <h3 class="font-semibold">API requests options</h3>
+              <ButtonReset
+                v-if="!allApiOptionsDefault"
+                title="Reset API requests options"
+                @click="resetApiOptions"
+              />
+            </div>
 
             <InputText
               v-model.trim="tokenModel"
@@ -173,14 +237,23 @@ const examplesShown = ref(false);
               {{ options.count }}
             </div>
 
-            <RadioGroup
-              v-model="options.suggestType"
-              class="flex gap-2"
-              :options="SUGGEST_TYPES"
-              label="suggestType"
-            />
+            <div class="flex flex-wrap gap-1">
+              suggestType:
+              <RadioGroup
+                v-model="options.suggestType"
+                class="flex gap-2"
+                :options="SUGGEST_TYPES"
+              />
+            </div>
 
-            <template v-if="options.suggestType !== 'fio' && options.suggestType !== 'email'">
+            <template
+              v-if="
+                options.suggestType === 'address' ||
+                options.suggestType === 'fias' ||
+                options.suggestType === 'party' ||
+                options.suggestType === 'bank'
+              "
+            >
               <div class="dev-item">
                 <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
                 {{ options.locationsBoost }}
@@ -260,30 +333,50 @@ const examplesShown = ref(false);
               label="restrictValue"
             />
 
-            <template v-if="options.suggestType === 'bank' || options.suggestType === 'party'">
-              <TogglesGroup
-                v-model="options.entityStatus"
-                class="flex gap-2"
-                :options="options.suggestType === 'party' ? PARTY_STATUSES : BANK_STATUSES"
-                label="entityStatus:"
-              />
+            <RadioGroup
+              v-if="options.suggestType === 'party'"
+              v-model="options.entityType"
+              class="flex gap-2"
+              :options="[undefined, ...PARTY_TYPES]"
+              label="entityType:"
+            />
+            <TogglesGroup
+              v-else-if="options.suggestType === 'party_by'"
+              v-model="options.entityType"
+              class="flex gap-2"
+              :options="[/* undefined, */ ...PARTY_BY_TYPES]"
+              label="entityType:"
+            />
+            <TogglesGroup
+              v-else-if="options.suggestType === 'party_kz'"
+              v-model="options.entityType"
+              class="flex gap-2"
+              :options="[/* undefined, */ ...PARTY_KZ_TYPES]"
+              label="entityType:"
+            />
+            <TogglesGroup
+              v-else-if="options.suggestType === 'bank'"
+              v-model="options.entityType"
+              class="flex gap-2"
+              :options="BANK_TYPES"
+              label="entityType: "
+            />
 
-              <RadioGroup
-                v-if="options.suggestType === 'party'"
-                v-model="options.partyType"
-                class="flex gap-2"
-                :options="[undefined, ...PARTY_TYPES]"
-                label="partyType:"
-              />
-
-              <TogglesGroup
-                v-if="options.suggestType === 'bank'"
-                v-model="options.bankType"
-                class="flex gap-2"
-                :options="BANK_TYPES"
-                label="bankType: "
-              />
-            </template>
+            <TogglesGroup
+              v-if="
+                options.suggestType === 'party' ||
+                options.suggestType === 'party_by' ||
+                options.suggestType === 'bank'
+              "
+              v-model="options.entityStatus"
+              class="flex gap-2"
+              :options="
+                { party: PARTY_STATUSES, party_by: PARTY_BY_STATUSES, bank: BANK_STATUSES }[
+                  options.suggestType
+                ]
+              "
+              label="entityStatus:"
+            />
 
             <!-- 'fio' -->
             <template v-if="options.suggestType === 'fio'">
@@ -305,7 +398,14 @@ const examplesShown = ref(false);
 
           <!-- Component behavior options -->
           <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
-            <h3 class="font-semibold">Component behavior options</h3>
+            <div class="flex gap-2">
+              <h3 class="font-semibold">Component behavior options</h3>
+              <ButtonReset
+                v-if="!allComponentOptionsDefault"
+                title="Reset Component behavior options"
+                @click="resetComponentOptions"
+              />
+            </div>
 
             <CheckBox v-model="options.disabled" label="disabled" />
 
@@ -323,6 +423,7 @@ const examplesShown = ref(false);
             <CheckBox v-model="options.addSpace" label="addSpace" />
             <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
             <CheckBox v-model="options.showClearButton" label="showClearButton" />
+            <CheckBox v-model="options.forceShow" label="forceShow" />
             <InputText v-model="options.placeholder" label="placeholder:" />
           </div>
         </div>
@@ -362,7 +463,7 @@ const examplesShown = ref(false);
               Current suggestion:
               <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
             </span>
-            <AButton v-if="suggestion" @click="reset">Reset</AButton>
+            <AButton v-if="suggestion" @click="resetSuggestions">Reset</AButton>
           </div>
 
           <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{

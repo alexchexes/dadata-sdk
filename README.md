@@ -73,7 +73,7 @@ const suggestion = ref(undefined);
 | event      | Event payload type                                                             | Description                                                                                       |
 | ---------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | error      | `unknown`                                                                      | emitted in case of any error (usually only network errors occurs)                                 |
-| enriched   | `AddressSuggestion`                                                            | emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true`           |
+| enriched   | `DadataSuggestion`                                                             | emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true`           |
 | enrichFail | `string` (`unrestricted_value` of the suggestion that's failed to be enriched) | emitted if attemp to enrich selected suggestion failed (in case `enrichOnSelect` props is `true`) |
 | focus      | `FocusEvent`                                                                   | emitted whenever input is focused                                                                 |
 | blur       | `FocusEvent`                                                                   | emitted whenever input looses focus                                                               |

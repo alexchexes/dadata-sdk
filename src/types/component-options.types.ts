@@ -9,6 +9,9 @@ import type {
   KladrIdFilter,
   Language,
   LocationRestriction,
+  PartyByStatus,
+  PartyByType,
+  PartyKzType,
   PartyStatus,
   PartyType,
   RadiusFilter,
@@ -136,23 +139,25 @@ export interface VueDadataOptions {
    */
   language?: Language;
   /**
-   * Organization type (for `party` suggestions).
-   * - `LEGAL` or `INDIVIDUAL`
-   * {@link https://dadata.ru/api/suggest/party/}
-   */
-  partyType?: PartyType;
-  /**
-   * Bank type (for `bank` suggestions)
+   * Organization type (for `party` and `bank` suggestions).
+   * `LEGAL` or `INDIVIDUAL`
+   * - {@link https://dadata.ru/api/suggest/party/}
+   *
+   * for BY and KZ see:
+   * - {@link https://dadata.ru/api/suggest/party_by/}
+   * - {@link https://dadata.ru/api/suggest/party_kz/}
+   *
+   * for 'bank' see:
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}
    */
-  bankType?: OneOrMany<BankType>;
+  entityType?: PartyType | OneOrMany<PartyByType> | OneOrMany<PartyKzType> | OneOrMany<BankType>;
   /**
    * Organization or bank status  (for `party` and `bank` suggestions)
-   * - `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED'`
+   * - `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`
    * - *party*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
    * - *bank*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
    */
-  entityStatus?: OneOrMany<PartyStatus> | OneOrMany<BankStatus>;
+  entityStatus?: OneOrMany<PartyStatus> | OneOrMany<PartyByStatus> | OneOrMany<BankStatus>;
   /**
    * OKVED code filter (for `party` suggestions). Max: `10` items
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}
@@ -279,6 +284,12 @@ export interface VueDadataOptions {
     InputHTMLAttributes,
     'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
   >;
+  /**
+   * Forces the suggestions list to always remain visible.
+   * Useful during development (e.g., when styling elements).
+   * Default: `false`
+   */
+  forceShow?: boolean;
 }
 
 type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
@@ -304,4 +315,5 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'token'
   | 'httpCache'
   | 'restrictValue'
+  | 'forceShow'
 >;

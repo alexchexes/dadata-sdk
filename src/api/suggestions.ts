@@ -5,24 +5,26 @@ import type {
   OneOrMany,
   SuggestAddressOptions,
   SuggestBankOptions,
-  SuggestEmailOptions,
   SuggestFiasOptions,
   SuggestFioOptions,
   SuggestOptions,
   SuggestPartyOptions,
 } from '@/types';
 import type {
-  AddressSuggestion,
   KladrIdFilter,
   LocationRestriction,
   SuggestAddressPayload,
   SuggestBankPayload,
-  SuggestEmailPayload,
   SuggestFiasPayload,
   SuggestFioPayload,
+  SuggestPartyByPayload,
+  SuggestPartyKzPayload,
   SuggestPartyPayload,
   SuggestPayload,
 } from '@/types/api';
+import type { DadataSuggestion } from '@/types/api';
+import type { SuggestPartyByOptions } from '@/types/suggest-options-party_by.types';
+import type { SuggestPartyKzOptions } from '@/types/suggest-options-party_kz.types';
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
@@ -194,8 +196,8 @@ const buildBaseOrganizationPayload = (options: SuggestBankOptions | SuggestParty
 const buildBankPayload = (options: SuggestBankOptions) => {
   const payload = buildBaseOrganizationPayload(options) as SuggestBankPayload;
 
-  if (options.bankType) {
-    const typeArray = toArray(options.bankType);
+  if (options.entityType) {
+    const typeArray = toArray(options.entityType);
     if (typeArray.length) {
       payload.type = typeArray;
     }
@@ -210,14 +212,60 @@ const buildBankPayload = (options: SuggestBankOptions) => {
 const buildPartyPayload = (options: SuggestPartyOptions) => {
   const payload = buildBaseOrganizationPayload(options) as SuggestPartyPayload;
 
-  if (options.partyType) {
-    payload.type = options.partyType;
+  if (options.entityType) {
+    // The 'party' API accepts only a single value, but we allow passing it as an array
+    // for consistency with other APIs that accept the 'type' option.
+    if (Array.isArray(options.entityType) && options.entityType[0]) {
+      payload.type = options.entityType[0];
+    } else {
+      // @ts-expect-error — We allow passing an incorrect value (array) to the API because
+      // we can't decide for the user which element to pick, nor can we omit the option entirely.
+      payload.type = options.entityType;
+    }
   }
 
   if (options.okved) {
     const okvedArray = toArray(options.okved);
     if (okvedArray.length) {
       payload.okved = okvedArray;
+    }
+  }
+
+  return payload;
+};
+
+const buildPartyByPayload = (options: SuggestPartyByOptions) => {
+  const payload = buildBasePayload(options) as SuggestPartyByPayload;
+
+  const types = toArray(options.entityType).filter((v) => v);
+  const statuses = toArray(options.entityStatus).filter((v) => v);
+
+  if (types.length && statuses.length) {
+    // Generate a cartesian product, since the API doesn't accept:
+    // [{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]
+    // It requires:
+    // [{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]
+    payload.filters = types.flatMap((type) => statuses.map((status) => ({ type, status })));
+  } else if (types.length) {
+    payload.filters = types.map((type) => ({ type }));
+  } else if (statuses.length) {
+    payload.filters = statuses.map((status) => ({ status }));
+  }
+
+  return payload;
+};
+
+const buildPartyKzPayload = (options: SuggestPartyKzOptions) => {
+  const payload = buildBasePayload(options) as SuggestPartyKzPayload;
+
+  if (options.entityType) {
+    const typesArray = toArray(options.entityType)
+      .filter((v) => v)
+      .map((type) => ({ type }));
+    if (!payload.filters) {
+      payload.filters = typesArray;
+    } else {
+      payload.filters = { ...payload.filters, ...typesArray };
     }
   }
 
@@ -245,12 +293,6 @@ const buildFioPayload = (options: SuggestFioOptions) => {
 };
 
 /**
- * Payload params for 'email' API
- */
-const buildEmailPayload = (options: SuggestEmailOptions) =>
-  buildBasePayload(options) as SuggestEmailPayload;
-
-/**
  * Converts options to payload params, based on the suggestType
  */
 const buildPayload = (options: SuggestOptions): SuggestPayload => {
@@ -261,22 +303,23 @@ const buildPayload = (options: SuggestOptions): SuggestPayload => {
       return buildFiasPayload(options);
     case 'fio':
       return buildFioPayload(options);
-    case 'email':
-      return buildEmailPayload(options);
     case 'bank':
       return buildBankPayload(options);
     case 'party':
       return buildPartyPayload(options);
+    case 'party_by':
+      return buildPartyByPayload(options);
+    case 'party_kz':
+      return buildPartyKzPayload(options);
     default:
-      // @ts-expect-error: `options` is `never` here, but we're guarding for runtime
-      throw new Error(`Incorrect suggestType: '${options.suggestType}'`);
+      return buildBasePayload(options);
   }
 };
 
 /**
  * Builds a payload and makes a (cached) request to appropriate 'suggest' API endpoint
  */
-export const makeSuggestRequest = async (options: SuggestOptions): Promise<AddressSuggestion[]> => {
+export const makeSuggestRequest = async (options: SuggestOptions): Promise<DadataSuggestion[]> => {
   const payload = buildPayload(options);
 
   const url = options.url ? options.url : BASE_SUGGEST_URL + options.suggestType;
@@ -290,7 +333,7 @@ export const makeSuggestRequest = async (options: SuggestOptions): Promise<Addre
   const data = await makeCachedRequest(url, payload, headers, useCache);
 
   if (data && typeof data === 'object' && 'suggestions' in data) {
-    return data.suggestions as AddressSuggestion[];
+    return data.suggestions as DadataSuggestion[];
   } else {
     throw new Error(
       `Failed to get 'suggestions' from API response. Received: ${JSON.stringify(data)}`,

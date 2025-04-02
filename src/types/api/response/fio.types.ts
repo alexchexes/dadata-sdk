@@ -1,32 +1,7 @@
 import type { FioGenders } from '../api-common.types';
 
-/** Fields of 'data' object (suggestions[i].data) in 'Suggest' API {@link https://dadata.ru/api/suggest/name/} */
-export interface FioData {
-  /** Фамилия */
-  surname: null | string;
-  /** Имя */
-  name: null | string;
-  /** Отчество */
-  patronymic: null | string;
-  /**
-   * Пол:
-   * - `MALE` - мужской
-   * - `FEMALE` - женский
-   * - `UNKNOWN` - не удалось однозначно определить
-   */
-  gender: FioGenders;
-  /**
-   * Код проверки:
-   * - `0` – все части ФИО известны
-   * - `1` – в ФИО есть неизвестная часть
-   */
-  qc: '0' | '1';
-  /** Не используется */
-  source: null | string;
-}
-
-/** Object returned from FIO 'Standartization' API {@link https://dadata.ru/api/clean/name/} */
-export interface FioStandardized {
+/** @see https://dadata.ru/api/clean/name/ */
+export interface FioClean {
   /** Исходное ФИО одной строкой */
   source: string;
   /** Стандартизованное ФИО одной строкой */
@@ -61,4 +36,38 @@ export interface FioStandardized {
    * | 2 | Нет | Исходное значение пустое или заведомо «мусорное» |
    */
   qc: 0 | 1;
+}
+
+export interface FioSuggestionData {
+  /** Фамилия */
+  surname: null | string;
+  /** Имя */
+  name: null | string;
+  /** Отчество */
+  patronymic: null | string;
+  /**
+   * Пол:
+   * - `MALE` - мужской
+   * - `FEMALE` - женский
+   * - `UNKNOWN` - не удалось однозначно определить
+   */
+  gender: FioGenders;
+  /**
+   * Код проверки:
+   * - `0` – все части ФИО известны
+   * - `1` – в ФИО есть неизвестная часть
+   */
+  qc: '0' | '1';
+  /** Не используется */
+  source: null;
+}
+
+/** @see https://dadata.ru/api/suggest/name */
+export interface FioSuggestion {
+  /** ФИО одной строкой */
+  value: string;
+  /** = value (ФИО одной строкой) */
+  unrestricted_value: string;
+  /** Подробности о ФИО */
+  data: FioSuggestionData;
 }

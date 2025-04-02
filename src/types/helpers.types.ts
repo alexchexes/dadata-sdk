@@ -29,7 +29,16 @@ export type Or<A extends boolean, B extends boolean> = A extends true
     ? true
     : false;
 
-/** Merges exactly two types A and B so that conflicting property types become a union. */
+/**
+ * Recursive: merges an array/tuple of types.
+ */
+export type MergeAll<T extends readonly unknown[]> = T extends [infer Only] // If there's exactly 1 type, return it as-is
+  ? Only
+  : T extends [infer First, infer Second, ...infer Rest] // If there's 2+, merge first two, then recurse
+    ? MergeAll<[Merge<First, Second>, ...Rest]>
+    : {}; // If empty, fallback to {}
+
+/** Helper for 'MergeAll'. Merges exactly two types A and B so that conflicting property types become a union. */
 type Merge<A, B> = {
   [K in keyof A | keyof B]: K extends keyof A & keyof B
     ? A[K] | B[K]
@@ -40,9 +49,42 @@ type Merge<A, B> = {
         : never;
 };
 
-/** Recursive: merges an array/tuple of types. */
-export type MergeAll<T extends readonly unknown[]> = T extends [infer Only] // If there's exactly 1 type, return it as-is
-  ? Only
-  : T extends [infer First, infer Second, ...infer Rest] // If there's 2+, merge first two, then recurse
-    ? MergeAll<[Merge<First, Second>, ...Rest]>
-    : {}; // If empty, fallback to {}
+/**
+ * Overrides the types of properties in T with those in R, while ensuring that all keys in R exist in T.
+ */
+export type Override<
+  TBase,
+  TOverride extends { [K in keyof TOverride]: K extends keyof TBase ? unknown : never },
+> = {
+  [K in keyof TBase as K extends keyof TOverride ? never : K]: TBase[K]; // keep everything except overrides
+} & {
+  [K in keyof TOverride]: K extends keyof TBase
+    ? K extends OptionalKeys<TBase> // preserve optionality
+      ? TOverride[K] | undefined
+      : TOverride[K]
+    : never;
+};
+/** Helper for 'Override' */
+type OptionalKeys<TBase> = {
+  [K in keyof TBase]-?: {} extends Pick<TBase, K> ? K : never;
+}[keyof TBase];
+
+/**
+ * Allows pick and override keys at once, ensuring that no non-existent fields are used
+ */
+export type PickAndOverride<
+  TBase,
+  KPick extends keyof TBase,
+  TOverride extends { [K in keyof TOverride]: K extends keyof TBase ? unknown : never },
+> = Omit<
+  // Pick from TBase all keys in K plus all keys in R
+  Pick<TBase, KPick | OverridableKeys<TBase, TOverride>>,
+  // Then remove the keys we’re about to override
+  keyof TOverride
+> &
+  TOverride;
+
+/** Helper for `PickAndOverride` */
+type OverridableKeys<TBase, TOverride> = {
+  [K in keyof TOverride]: K extends keyof TBase ? K : never;
+}[keyof TOverride];

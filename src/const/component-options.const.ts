@@ -47,4 +47,5 @@ export const DEFAULT_OPTIONS = {
   count: DEFAULT_COUNT,
   httpCache: true,
   restrictValue: false,
+  forceShow: false,
 } as const satisfies Omit<InternalVueDadataOptions, 'token'>;

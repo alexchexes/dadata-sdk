@@ -3,11 +3,11 @@ import { DEFAULT_CLASSES } from '@/const';
 
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
-import type { AddressSuggestion } from '@/types/api';
 import type { VueDadataClasses, VueDadataOptions } from '@/types';
 import { computed, type InputHTMLAttributes, type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 import { mergeDefined } from './utils';
+import type { DadataSuggestion } from './types/api';
 
 const props = defineProps<VueDadataOptions>();
 
@@ -15,14 +15,14 @@ const props = defineProps<VueDadataOptions>();
 const queryModel = defineModel({ type: String, required: true });
 
 const suggestionModel = defineModel('suggestion', {
-  type: Object as PropType<AddressSuggestion | undefined>,
+  type: Object as PropType<DadataSuggestion | undefined>,
 });
 
 const emit = defineEmits<{
   /** emitted in case of any error (usually only network errors occurs) */
   'error': [error: unknown];
   /** emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` */
-  'enriched': [suggestion: AddressSuggestion];
+  'enriched': [suggestion: DadataSuggestion];
   /** emitted if attemp to enrich selected suggestion failed (in case `enrichOnSelect` props is `true`) */
   'enrichFail': [unrestricted_value: string];
   /** emitted whenever input is focused */
@@ -48,7 +48,7 @@ const highlightOptions = computed(() => ({
 const {
   visibleQuery,
   inputFocused,
-  suggestionsVisible,
+  areSuggestionsVisible,
   navigatedIndex,
   suggestionsList,
   canClear,
@@ -107,7 +107,9 @@ const inputAttrs = computed(
     </div>
 
     <div
-      v-if="inputFocused && suggestionsVisible && suggestionsList.length && !disabled"
+      v-if="
+        (inputFocused && areSuggestionsVisible && suggestionsList.length && !disabled) || forceShow
+      "
       :class="mergedClasses.dropdown"
     >
       <slot
