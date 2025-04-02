@@ -14,6 +14,7 @@ import type { SuggestMetroPayload } from './suggest-payload-metro.types';
 import type { SuggestMktuPayload } from './suggest-payload-mktu.types';
 import type { SuggestOkved2Payload } from './suggest-payload-okved2.types';
 import type { SuggestOkpd2Payload } from './suggest-payload-okpd2.types';
+import type { DistributivePartial } from '@/types/helpers.types';
 
 export type BoundType = (typeof BOUND_TYPES)[number];
 
@@ -54,6 +55,8 @@ export type SuggestPayload =
   | SuggestPartyPayload
   | SuggestPostalUnitPayload
   | SuggestRegionCourtPayload;
+
+export type OptionalSuggestPayload = DistributivePartial<SuggestPayload>;
 
 export type SuggestPayloadWithFilters =
   | SuggestFmsUnitPayload

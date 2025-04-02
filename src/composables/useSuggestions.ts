@@ -56,6 +56,8 @@ export function useSuggestions(
       okved: o.okved,
       fioParts: o.fioParts,
       fioGender: o.fioGender,
+      filters: o.filters,
+      payload: o.payload,
     };
   });
   const visibleQuery = ref('');
@@ -108,6 +110,7 @@ export function useSuggestions(
         fioParts: options.fioParts,
         fioGender: options.fioGender,
         filters: options.filters,
+        payload: options.payload,
         ...optionsOverrides,
       };
 

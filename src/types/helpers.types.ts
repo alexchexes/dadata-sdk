@@ -88,3 +88,8 @@ export type PickAndOverride<
 type OverridableKeys<TBase, TOverride> = {
   [K in keyof TOverride]: K extends keyof TBase ? K : never;
 }[keyof TOverride];
+
+/**
+ * Makes all properties of a union optional
+ */
+export type DistributivePartial<T> = T extends any ? Partial<T> : never;

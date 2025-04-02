@@ -338,6 +338,9 @@ const buildPayload = (options: SuggestOptions): SuggestPayload => {
 export const makeSuggestRequest = async (options: SuggestOptions): Promise<DadataSuggestion[]> => {
   const payload = buildPayload(options);
 
+  // Override with options.payload (if provided)
+  const finalPayload = { ...payload, ...(options.payload ?? {}) };
+
   const url = options.url ? options.url : BASE_SUGGEST_URL + options.suggestType;
 
   const headers = {
@@ -346,7 +349,7 @@ export const makeSuggestRequest = async (options: SuggestOptions): Promise<Dadat
   };
 
   const useCache = options.httpCache !== false;
-  const data = await makeCachedRequest(url, payload, headers, useCache);
+  const data = await makeCachedRequest(url, finalPayload, headers, useCache);
 
   if (data && typeof data === 'object' && 'suggestions' in data) {
     return data.suggestions as DadataSuggestion[];

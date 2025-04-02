@@ -9,6 +9,7 @@ import type {
   KladrIdFilter,
   Language,
   LocationRestriction,
+  OptionalSuggestPayload,
   PartyByStatus,
   PartyByType,
   PartyKzType,
@@ -209,6 +210,12 @@ export interface VueDadataOptions {
     | SuggestPostalUnitFilter
     | SuggestRegionCourtFilter
   >;
+  /**
+   * Optional parameters to include in each DaData API request.
+   * Any fields specified here will be added to the final request payload,
+   * or will override existing values if already set by other options.
+   */
+  payload?: OptionalSuggestPayload;
 
   // ***************************
   // Component Behavior Options

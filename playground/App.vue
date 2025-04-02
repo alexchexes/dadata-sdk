@@ -33,6 +33,9 @@ import {
 } from '@/index';
 import type { DadataSuggestion } from '@/types/api';
 import { ignorableWatch } from '@vueuse/core';
+import ButtonAdd from './components/ButtonAdd.vue';
+import InputJson from './components/InputJson.vue';
+import ButtonRemove from './components/ButtonRemove.vue';
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -57,6 +60,8 @@ const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.v
 
 const filtersInput = ref('');
 const filtersValid = ref(true);
+
+const showCustomPayload = ref(false);
 
 const { ignoreUpdates: ignoreFiltersInputWatch } = ignorableWatch(filtersInput, (str: string) => {
   ignoreOptionsFiltersWatch(() => {
@@ -430,7 +435,7 @@ const handleError = (error: any) => {
               />
             </template>
 
-            <InputText
+            <!-- <InputText
               v-if="
                 [
                   `fms_unit`,
@@ -447,6 +452,39 @@ const handleError = (error: any) => {
               :inputClass="!filtersValid && 'border-red-500! ring-red-500! text-red-500'"
               label="filters (json)"
               placeholder="JSON string..."
+            /> -->
+
+            <InputJson
+              v-if="
+                [
+                  `fms_unit`,
+                  `fns_unit`,
+                  `metro`,
+                  `mktu`,
+                  `okpd2`,
+                  `okved2`,
+                  `postal_unit`,
+                  `region_court`,
+                ].includes(options.suggestType as string)
+              "
+              v-model="options.filters"
+              label="filters (json)"
+              placeholder="'filters' API request parameter"
+            />
+
+            <div class="flex gap-2">
+              <span
+                >{{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
+              </span>
+              <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
+              <ButtonRemove v-else outline @click="showCustomPayload = false" />
+            </div>
+
+            <InputJson
+              v-if="showCustomPayload"
+              v-model="options.payload"
+              :rows="4"
+              placeholder="Optional parameters to include in each DaData API request. Any fields specified here will be added to the final request payload, or will override existing values if already set by other options.."
             />
           </div>
 

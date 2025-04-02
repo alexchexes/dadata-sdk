@@ -1,4 +1,4 @@
-import type { SuggestType } from './api';
+import type { OptionalSuggestPayload, SuggestType } from './api';
 import type { MergeAll, OneOrMany } from './helpers.types';
 import type { SuggestAddressOptions } from './suggest-options-address.types';
 import type { SuggestBankOptions } from './suggest-options-bank.types';
@@ -27,6 +27,13 @@ export interface BaseSuggestOptions {
 
   /** `false` disables http requests caching. Default `true` */
   httpCache?: boolean;
+
+  /**
+   * Optional parameters for the API request.
+   * Any fields specified here will be added to the final request payload
+   * or override existing values if already set by other options.
+   */
+  payload?: OptionalSuggestPayload;
 }
 
 export type SuggestOptions =
