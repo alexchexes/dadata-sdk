@@ -64,7 +64,7 @@ export function useSuggestions(
   const visibleQuery = ref('');
   const inputFocused = ref(false);
   const _dropdownVisible = ref(true);
-  const _noSuggestionsHintVisible = ref(false);
+  const _shouldShowNoSuggestionsHint = ref(false);
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<DadataSuggestion[]> = ref([]);
   const minCharsReached = computed(() => queryModel.value.length >= options.minChars);
@@ -75,7 +75,7 @@ export function useSuggestions(
         _dropdownVisible.value &&
         suggestionsList.value.length &&
         !options.disabled) ||
-      (options.noSuggestionsHint && _noSuggestionsHintVisible.value && minCharsReached.value) ||
+      (options.noSuggestionsHint && _shouldShowNoSuggestionsHint.value && minCharsReached.value) ||
       options.forceShow,
   );
 
@@ -146,9 +146,9 @@ export function useSuggestions(
         suggestionsList.value = suggestions;
 
         if (suggestions.length) {
-          _noSuggestionsHintVisible.value = false;
+          _shouldShowNoSuggestionsHint.value = false;
         } else {
-          _noSuggestionsHintVisible.value = true;
+          _shouldShowNoSuggestionsHint.value = true;
         }
       }
     },
@@ -252,6 +252,7 @@ export function useSuggestions(
     //    Ideally, 'continueSelecting' should keep the dropdown open only until that level is selected.
     //    However, right now it's 'dumb' — the dropdown stays open forever, and developerse even
     //    have no way to disable it manually. This means the entire logic needs to be rethought and refactored.
+    // POTENTIALLY: rename this prop with its current behavior to `hideOnSelect` and provide a method to re-fetch
     if (!options.continueSelecting) {
       dontFetchOnQueryChange = true;
       hideDropdown();
@@ -389,6 +390,10 @@ export function useSuggestions(
     }
   };
 
+  /**
+   * @param {number} index - Selected suggestion index
+   *                         (obtained from `v-for="(suggestion, index) in suggestionsList"`)
+   */
   const handleSuggestionClick = (index: number) => {
     if (options.disabled) {
       return;
@@ -414,7 +419,7 @@ export function useSuggestions(
     navigatedIndex,
     suggestionsList,
     canClear,
-    options,
+    options, // reactive computed
 
     handleInputChange,
     handleKeyPress,
