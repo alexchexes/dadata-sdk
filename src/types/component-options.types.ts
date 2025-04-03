@@ -38,11 +38,11 @@ export type VueDadataClasses = Partial<{ -readonly [K in keyof typeof DEFAULT_CL
 
 export interface VueDadataOptions {
   // ***************************
-  // API Request Options
+  // General options
   // ***************************
 
   /**
-   * Your DaData API token.
+   * Your DaData API key (token).
    */
   token: string;
   /**
@@ -58,11 +58,6 @@ export interface VueDadataOptions {
    */
   suggestType?: SuggestType;
   /**
-   * Maximum number of suggestion items to fetch from the DaData API.
-   * Max: `20`, Default: `10`
-   */
-  count?: number;
-  /**
    * Custom API URL.
    * Useful when proxying requests to the DaData API.
    *
@@ -72,6 +67,31 @@ export interface VueDadataOptions {
    * Default: The final URL is built from the base DaData suggest API (`.../api/4_1/rs/suggest/`) + `suggestType`.
    */
   url?: string;
+  /**
+   * If `false`, HTTP requests will not be cached.
+   * Default `true`
+   */
+  httpCache?: boolean;
+  /**
+   * Custom payload for the API request.
+   * Any fields specified here will be added to the final request payload, or override existing values if already set.
+   */
+  payload?: OptionalSuggestPayload;
+  /**
+   * Custom headers for the API request.
+   * Any headers specified here will be added to the final request headers, or override existing values if already set.
+   */
+  headers?: Record<string, string>;
+
+  // ***************************
+  // API requests options
+  // ***************************
+
+  /**
+   * Maximum number of suggestion items to fetch from the DaData API.
+   * Max: `20`, Default: `10`
+   */
+  count?: number;
   /**
    * `kladr_id` or an array of `kladr_id`s for the region/city to be prioritized in suggestions.
    * Corresponds to the `locations_boost` API parameter.
@@ -88,6 +108,18 @@ export interface VueDadataOptions {
    * Max: `10` items
    */
   locationsBoost?: OneOrMany<KladrIdFilter | string | number>;
+  /**
+   * Restricts the search to specific locations (API `locations` parameter).
+   * Max: `10` items
+   *
+   * - For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
+   * - For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}
+   *
+   * For `party` and `bank`, the only supported filter is `kladr_id`.
+   * - For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
+   * - For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}
+   */
+  locationsFilter?: OneOrMany<LocationRestriction | string | number>;
   /**
    * Limits the type of address object from which DaData begins searching:
    * - `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`
@@ -107,18 +139,6 @@ export interface VueDadataOptions {
    */
   toBound?: BoundType;
   /**
-   * Restricts the search to specific locations (API `locations` parameter).
-   * Max: `10` items
-   *
-   * - For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
-   * - For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}
-   *
-   * For `party` and `bank`, the only supported filter is `kladr_id`.
-   * - For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
-   * - For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}
-   */
-  locationsFilter?: OneOrMany<LocationRestriction | string | number>;
-  /**
    * Used with `locationsFilter`. If `true`, the displayed suggestion (i.e., `value` field)
    * will exclude address parts up to the restricted level.
    *
@@ -127,6 +147,7 @@ export interface VueDadataOptions {
    *
    * Corresponds to the `restrict_value` API parameter.
    *
+   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}
    * - {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}
@@ -154,7 +175,7 @@ export interface VueDadataOptions {
    */
   language?: Language;
   /**
-   * Organization type (for `party` and `bank` suggestions).
+   * Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).
    * `LEGAL` or `INDIVIDUAL`
    * - {@link https://dadata.ru/api/suggest/party/}
    *
@@ -167,7 +188,7 @@ export interface VueDadataOptions {
    */
   entityType?: PartyType | OneOrMany<PartyByType> | OneOrMany<PartyKzType> | OneOrMany<BankType>;
   /**
-   * Organization or bank status  (for `party` and `bank` suggestions)
+   * Organization or bank status  (for `party`, `party_by` and `bank` suggestions)
    * - `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`
    * - *party*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
    * - *bank*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
@@ -210,33 +231,23 @@ export interface VueDadataOptions {
     | SuggestPostalUnitFilter
     | SuggestRegionCourtFilter
   >;
-  /**
-   * Custom payload for the API request.
-   * Any fields specified here will be added to the final request payload, or override existing values if already set.
-   */
-  payload?: OptionalSuggestPayload;
-  /**
-   * Custom headers for the API request.
-   * Any headers specified here will be added to the final request headers, or override existing values if already set.
-   */
-  headers?: Record<string, string>;
 
   // ***************************
-  // Component Behavior Options
+  // Component features options
   // ***************************
 
-  /**
-   * If `false`, HTTP requests will not be cached.
-   * Default `true`
-   */
-  httpCache?: boolean;
   /**
    * Delay (in ms) after the user changes the query before triggering a request.
    * Default `100`
    */
   debounce?: number;
   /**
-   * Disables the input and all interactions.
+   * Minimum length of text in the input after which suggestions are triggered.
+   * Default `1`
+   */
+  minChars?: number;
+  /**
+   * Disables the input, suggestions, and all interactions.
    * Default `false`
    */
   disabled?: boolean;
@@ -254,6 +265,28 @@ export interface VueDadataOptions {
    * Defaults: @see DEFAULT_CLASSES
    */
   classes?: VueDadataClasses;
+  /**
+   * Additional attributes to pass to the internal `<input>` element.
+   *
+   * Useful for controlling browser behavior (`autocomplete`, `autocapitalize`, `inputmode`,
+   * `enterkeyhint`, etc.)
+   *
+   * Note:
+   * - Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed
+   *   internally and cannot be overridden.
+   * - The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,
+   *   not through `inputAttributes`.
+   * - To listen for `onFocus`/`onBlur`, use `@focus`/`@blur` on the `VueDadata` component.
+   *
+   * **Example:**
+   * ```vue
+   * <VueDadata :input-attributes="{ autocomplete: 'one-time-code', inputmode: 'numeric' }" />
+   * ```
+   */
+  inputAttributes?: Omit<
+    InputHTMLAttributes,
+    'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
+  >;
   /**
    * Controls when to show the suggestions list on input focus.
    *
@@ -309,33 +342,6 @@ export interface VueDadataOptions {
    * Default: `false`
    */
   showClearButton?: boolean;
-  /**
-   * Additional attributes to pass to the internal `<input>` element.
-   *
-   * Useful for controlling browser behavior (`autocomplete`, `autocapitalize`, `inputmode`,
-   * `enterkeyhint`, etc.)
-   *
-   * Note:
-   * - Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed
-   *   internally and cannot be overridden.
-   * - The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,
-   *   not through `inputAttributes`.
-   * - To listen for `onFocus`/`onBlur`, use `@focus`/`@blur` on the `VueDadata` component.
-   *
-   * **Example:**
-   * ```vue
-   * <VueDadata :input-attributes="{ autocomplete: 'one-time-code', inputmode: 'numeric' }" />
-   * ```
-   */
-  inputAttributes?: Omit<
-    InputHTMLAttributes,
-    'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
-  >;
-  /**
-   * Minimum length of text in the input after which suggestions are triggered.
-   * Default `1`
-   */
-  minChars?: number;
   /**
    * Text to show above the suggestions list
    */
