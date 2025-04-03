@@ -4,7 +4,7 @@ import { DEFAULT_CLASSES, DEFAULT_BOOL_TRUE_OPTIONS } from '@/const';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
 import type { VueDadataClasses, VueDadataOptions } from '@/types';
-import { computed, type InputHTMLAttributes, type PropType } from 'vue';
+import { computed, watchEffect, type InputHTMLAttributes, type PropType } from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 import { mergeDefined } from './utils';
 import type { DadataSuggestion } from './types/api';
@@ -19,6 +19,10 @@ const queryModel = defineModel({ type: String, required: true });
 
 const suggestionModel = defineModel('suggestion', {
   type: Object as PropType<DadataSuggestion | undefined>,
+});
+
+const suggestionsListModel = defineModel('suggestionsList', {
+  type: Array as PropType<DadataSuggestion[] | undefined>,
 });
 
 const emit = defineEmits<{
@@ -50,6 +54,10 @@ const {
   handleSuggestionClick,
   clear,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
+
+watchEffect(() => {
+  suggestionsListModel.value = suggestionsList.value;
+});
 
 const mergedClasses = computed<VueDadataClasses>(() =>
   mergeDefined(DEFAULT_CLASSES, options.classes || {}),

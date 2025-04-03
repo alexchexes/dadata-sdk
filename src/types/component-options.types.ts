@@ -356,6 +356,12 @@ export interface VueDadataOptions {
    * Default: `false`
    */
   forceShow?: boolean;
+  /**
+   * Forces the suggestions list to always remain hidden.
+   * Useful when creating custom UI using `v-model:suggestionsList`
+   * Default: `false`
+   */
+  forceHide?: boolean;
 }
 
 type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
@@ -383,4 +389,5 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'restrictValue'
   | 'minChars'
   | 'forceShow'
+  | 'forceHide'
 >;

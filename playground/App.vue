@@ -47,6 +47,7 @@ const showAllOptions = ref(false);
 
 const query = ref('');
 const suggestion = ref<DadataSuggestion | undefined>(undefined);
+const suggestionsList = ref<DadataSuggestion[] | undefined>(undefined);
 
 const nowrapQuery = ref(true);
 const examplesShown = ref(false);
@@ -582,6 +583,7 @@ const removeCustomHeaders = () => {
             <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
             <CheckBox v-model="options.showClearButton" label="showClearButton" />
             <CheckBox v-model="options.forceShow" label="forceShow" />
+            <CheckBox v-model="options.forceHide" label="forceHide" />
             <InputText v-model="options.placeholder" label="placeholder:" />
             <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
             <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
@@ -610,13 +612,13 @@ const removeCustomHeaders = () => {
       <VueDadata
         v-model="query"
         v-model:suggestion="suggestion"
+        v-model:suggestionsList="suggestionsList"
         :token="options.token"
         v-bind="nonDefaultOptions"
         @enriched="handleEnriched"
         @enrichFail="handleEnrichFail"
         @error="handleError"
-      >
-      </VueDadata>
+      />
 
       <section class="mt-3 min-h-[1000px]">
         <div class="rounded-xl bg-white px-4 py-2">

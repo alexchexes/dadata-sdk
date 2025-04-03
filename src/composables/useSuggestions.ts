@@ -63,22 +63,21 @@ export function useSuggestions(
   });
   const visibleQuery = ref('');
   const inputFocused = ref(false);
-  const _dropdownVisible = ref(true);
+  const _dropdownVisible = ref(false);
   const _shouldShowNoSuggestionsHint = ref(false);
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<DadataSuggestion[]> = ref([]);
+
+  const isDropdownVisible = computed(() => {
+    if (options.forceHide || options.disabled) return false;
+    if (options.forceShow) return true;
+    if (options.noSuggestionsHint && _shouldShowNoSuggestionsHint.value && minCharsReached.value) {
+      return true;
+    }
+    return inputFocused.value && _dropdownVisible.value && suggestionsList.value.length;
+  });
+
   const minCharsReached = computed(() => queryModel.value.length >= options.minChars);
-
-  const isDropdownVisible = computed(
-    () =>
-      (inputFocused.value &&
-        _dropdownVisible.value &&
-        suggestionsList.value.length &&
-        !options.disabled) ||
-      (options.noSuggestionsHint && _shouldShowNoSuggestionsHint.value && minCharsReached.value) ||
-      options.forceShow,
-  );
-
   const canGoDown = computed(() => navigatedIndex.value < suggestionsList.value.length - 1);
   const canGoUp = computed(() => navigatedIndex.value >= 0);
   const canSelectNavigatedIndex = computed(
@@ -86,7 +85,7 @@ export function useSuggestions(
   );
   const canClear = computed(() => queryModel.value !== '' && !options.disabled);
 
-  // ===  Watch guards ===
+  // ===  Watchers guards ===
   let dontFetchOnQueryChange = false;
   let dontClearOnQueryChange = false;
 
@@ -285,7 +284,9 @@ export function useSuggestions(
     const target = evt.target as HTMLInputElement;
     queryModel.value = target.value;
 
-    _dropdownVisible.value = true;
+    if (!options.forceHide) {
+      _dropdownVisible.value = true;
+    }
   };
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -340,7 +341,7 @@ export function useSuggestions(
           navigatedIndex.value += 1;
           visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
         }
-      } else if (suggestionsList.value.length) {
+      } else if (suggestionsList.value.length && !options.forceHide) {
         _dropdownVisible.value = true;
       }
     }
@@ -353,7 +354,7 @@ export function useSuggestions(
     emit('focus', evt);
     inputFocused.value = true;
 
-    if (options.showOnFocus !== false && suggestionsList.value.length) {
+    if (suggestionsList.value.length && options.showOnFocus !== false && !options.forceHide) {
       if (
         options.showOnFocus === 'always' ||
         (options.showOnFocus === 'no_selection' && !suggestionModel.value)

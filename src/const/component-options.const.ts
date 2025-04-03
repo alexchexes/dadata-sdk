@@ -61,6 +61,7 @@ export const DEFAULT_OPTIONS = {
   minChars: 1,
   suggestionsHint: 'Выберите вариант или продолжите ввод',
   forceShow: false,
+  forceHide: false,
 } as const satisfies Omit<InternalVueDadataOptions, 'token'>;
 
 export const NO_SUGGESTIONS_HINTS = {
