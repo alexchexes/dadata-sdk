@@ -30,7 +30,6 @@ import type {
 } from './api';
 import type { OneOrMany } from './helpers.types';
 import type { InputHTMLAttributes } from 'vue';
-import type { RawAxiosRequestHeaders } from 'axios';
 
 export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
 
@@ -220,7 +219,7 @@ export interface VueDadataOptions {
    * Custom headers for the API request.
    * Any headers specified here will be added to the final request headers, or override existing values if already set.
    */
-  headers?: RawAxiosRequestHeaders;
+  headers?: Record<string, string>;
 
   // ***************************
   // Component Behavior Options
@@ -340,7 +339,11 @@ export interface VueDadataOptions {
   /**
    * Text to show above the suggestions list
    */
-  suggestionsHint?: string;
+  suggestionsHint?: string | false;
+  /**
+   * Text to show in place of suggestions when there's no suggestions
+   */
+  noSuggestionsHint?: string | false;
   /**
    * Forces the suggestions list to always remain visible.
    * Useful during development (e.g., when styling elements).

@@ -63,9 +63,21 @@ export function useSuggestions(
   });
   const visibleQuery = ref('');
   const inputFocused = ref(false);
-  const areSuggestionsVisible = ref(true);
+  const _dropdownVisible = ref(true);
+  const _noSuggestionsHintVisible = ref(false);
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<DadataSuggestion[]> = ref([]);
+  const minCharsReached = computed(() => queryModel.value.length >= options.minChars);
+
+  const isDropdownVisible = computed(
+    () =>
+      (inputFocused.value &&
+        _dropdownVisible.value &&
+        suggestionsList.value.length &&
+        !options.disabled) ||
+      (options.noSuggestionsHint && _noSuggestionsHintVisible.value && minCharsReached.value) ||
+      options.forceShow,
+  );
 
   const canGoDown = computed(() => navigatedIndex.value < suggestionsList.value.length - 1);
   const canGoUp = computed(() => navigatedIndex.value >= 0);
@@ -76,6 +88,7 @@ export function useSuggestions(
 
   // ===  Watch guards ===
   let dontFetchOnQueryChange = false;
+  let dontClearOnQueryChange = false;
 
   // ===============================
   // 🔍 Suggestion Fetching
@@ -125,11 +138,18 @@ export function useSuggestions(
     }
   };
 
-  const fetchWithDebounce = useDebounceFn(
+  const debouncedFetchAndUpdateList = useDebounceFn(
     async () => {
-      const fetched = await fetchSuggestions();
-      if (fetched) {
-        suggestionsList.value = fetched;
+      const suggestions = await fetchSuggestions(); // null means error
+
+      if (suggestions) {
+        suggestionsList.value = suggestions;
+
+        if (suggestions.length) {
+          _noSuggestionsHintVisible.value = false;
+        } else {
+          _noSuggestionsHintVisible.value = true;
+        }
       }
     },
     () => options.debounce,
@@ -163,17 +183,19 @@ export function useSuggestions(
     visibleQuery.value = queryModel.value;
     navigatedIndex.value = -1;
 
+    if (dontClearOnQueryChange) {
+      dontClearOnQueryChange = false;
+    } else if (options.clearOnChange) {
+      suggestionModel.value = undefined;
+    }
+
     if (dontFetchOnQueryChange) {
       dontFetchOnQueryChange = false;
       return;
     }
 
-    if (options.clearOnChange) {
-      suggestionModel.value = undefined;
-    }
-
-    if (queryModel.value.length >= options.minChars) {
-      fetchWithDebounce();
+    if (minCharsReached.value) {
+      debouncedFetchAndUpdateList();
     } else {
       suggestionsList.value = [];
       hideDropdown();
@@ -187,7 +209,7 @@ export function useSuggestions(
       return;
     }
 
-    await fetchWithDebounce();
+    await debouncedFetchAndUpdateList();
   });
 
   // ===============================
@@ -200,7 +222,7 @@ export function useSuggestions(
       return;
     }
 
-    areSuggestionsVisible.value = false;
+    _dropdownVisible.value = false;
     navigatedIndex.value = -1;
   };
 
@@ -219,6 +241,17 @@ export function useSuggestions(
 
     suggestionModel.value = selectedSuggestion;
 
+    dontClearOnQueryChange = true;
+
+    // The 'continueSelecting' option needs further refinement. Currently, it:
+    // 1) Conflicts with 'enrichOnSelect'. Each request cancels the previous one, but when
+    //    'continueSelecting' is enabled, two consecutive requests are made: one to enrich,
+    //    and then another triggered by the updated queryModel. This second request cancels the first.
+    //    (We can't use 'dontFetchOnQueryChange' in this case, since we still need to update the suggestions list.)
+    // 2) The intended use case is to allow the user to select an address down to a specific level (e.g., house).
+    //    Ideally, 'continueSelecting' should keep the dropdown open only until that level is selected.
+    //    However, right now it's 'dumb' — the dropdown stays open forever, and developerse even
+    //    have no way to disable it manually. This means the entire logic needs to be rethought and refactored.
     if (!options.continueSelecting) {
       dontFetchOnQueryChange = true;
       hideDropdown();
@@ -251,7 +284,7 @@ export function useSuggestions(
     const target = evt.target as HTMLInputElement;
     queryModel.value = target.value;
 
-    areSuggestionsVisible.value = true;
+    _dropdownVisible.value = true;
   };
 
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -268,7 +301,7 @@ export function useSuggestions(
     event.preventDefault();
 
     if (key === HandledKeys.Enter) {
-      if (areSuggestionsVisible.value && suggestionsList.value.length) {
+      if (_dropdownVisible.value && suggestionsList.value.length) {
         let indexToSelect = null;
 
         if (canSelectNavigatedIndex.value) {
@@ -283,13 +316,13 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Esc) {
-      areSuggestionsVisible.value = false;
+      _dropdownVisible.value = false;
       navigatedIndex.value = -1;
       visibleQuery.value = queryModel.value;
     }
 
     if (key === HandledKeys.Up) {
-      if (canGoUp.value && areSuggestionsVisible.value) {
+      if (canGoUp.value && _dropdownVisible.value) {
         navigatedIndex.value -= 1;
 
         if (navigatedIndex.value > -1) {
@@ -301,13 +334,13 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Down) {
-      if (areSuggestionsVisible.value) {
+      if (_dropdownVisible.value) {
         if (canGoDown.value) {
           navigatedIndex.value += 1;
           visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
         }
       } else if (suggestionsList.value.length) {
-        areSuggestionsVisible.value = true;
+        _dropdownVisible.value = true;
       }
     }
   };
@@ -324,7 +357,7 @@ export function useSuggestions(
         options.showOnFocus === 'always' ||
         (options.showOnFocus === 'no_selection' && !suggestionModel.value)
       ) {
-        areSuggestionsVisible.value = true;
+        _dropdownVisible.value = true;
       }
     }
   };
@@ -336,9 +369,9 @@ export function useSuggestions(
     emit('blur', evt);
     inputFocused.value = false;
 
-    // areSuggestionsVisible check makes sense since we don't use matcher, but once added, we must
-    // select match on blur in any case, not just when areSuggestionsVisible is true
-    if (options.selectOnBlur && areSuggestionsVisible.value) {
+    // isDropdownVisible check makes sense since we don't use matcher, but once added, we must
+    // select match on blur in any case, not just when isDropdownVisible is true
+    if (options.selectOnBlur && _dropdownVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0);
@@ -352,7 +385,7 @@ export function useSuggestions(
 
     // respect the showOnFocus option
     if (options.showOnFocus === false) {
-      areSuggestionsVisible.value = false;
+      _dropdownVisible.value = false;
     }
   };
 
@@ -377,10 +410,11 @@ export function useSuggestions(
   return {
     visibleQuery,
     inputFocused,
-    areSuggestionsVisible,
+    isDropdownVisible,
     navigatedIndex,
     suggestionsList,
     canClear,
+    options,
 
     handleInputChange,
     handleKeyPress,

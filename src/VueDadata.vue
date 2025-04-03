@@ -32,8 +32,24 @@ const emit = defineEmits<{
 }>();
 export type VueDadataEmits = typeof emit;
 
+const {
+  visibleQuery,
+  isDropdownVisible,
+  navigatedIndex,
+  suggestionsList,
+  canClear,
+  options,
+
+  handleInputChange,
+  handleKeyPress,
+  handleInputFocus,
+  handleInputBlur,
+  handleSuggestionClick,
+  clear,
+} = useSuggestions(queryModel, suggestionModel, props, emit);
+
 const mergedClasses = computed<VueDadataClasses>(() =>
-  mergeDefined(DEFAULT_CLASSES, props.classes || {}),
+  mergeDefined(DEFAULT_CLASSES, options.classes || {}),
 );
 
 const highlightOptions = computed(() => ({
@@ -45,30 +61,14 @@ const highlightOptions = computed(() => ({
   highlightClass: mergedClasses.value.highlightedText,
 }));
 
-const {
-  visibleQuery,
-  inputFocused,
-  areSuggestionsVisible,
-  navigatedIndex,
-  suggestionsList,
-  canClear,
-
-  handleInputChange,
-  handleKeyPress,
-  handleInputFocus,
-  handleInputBlur,
-  handleSuggestionClick,
-  clear,
-} = useSuggestions(queryModel, suggestionModel, props, emit);
-
 const inputAttrs = computed(
   () =>
     ({
       type: 'text',
       class: mergedClasses.value.input,
 
-      name: props.inputName,
-      placeholder: props.placeholder,
+      name: options.inputName,
+      placeholder: options.placeholder,
 
       autocapitalize: 'off',
       autocomplete: 'off',
@@ -77,7 +77,7 @@ const inputAttrs = computed(
 
       ...(props.inputAttributes || {}),
 
-      disabled: props.disabled,
+      disabled: options.disabled,
       value: visibleQuery.value,
 
       onBlur: handleInputBlur,
@@ -96,7 +96,7 @@ const inputAttrs = computed(
       <slot name="inputOverlay"></slot>
 
       <button
-        v-if="props.showClearButton && canClear"
+        v-if="options.showClearButton && canClear"
         :class="mergedClasses.clearButton"
         @mousedown.prevent="clear"
       >
@@ -106,12 +106,7 @@ const inputAttrs = computed(
       </button>
     </div>
 
-    <div
-      v-if="
-        (inputFocused && areSuggestionsVisible && suggestionsList.length && !disabled) || forceShow
-      "
-      :class="mergedClasses.dropdown"
-    >
+    <div v-if="isDropdownVisible" :class="mergedClasses.dropdown">
       <slot
         name="suggestions"
         :activeIndex="navigatedIndex"
@@ -120,8 +115,20 @@ const inputAttrs = computed(
         :suggestionsList="suggestionsList"
       >
         <slot name="hint">
-          <div v-if="suggestionsHint" :class="mergedClasses.hint" @mousedown.prevent>
-            {{ suggestionsHint }}
+          <div
+            v-if="
+              (suggestionsList.length && options.suggestionsHint) ||
+              (!suggestionsList.length && options.noSuggestionsHint)
+            "
+            :class="mergedClasses.hint"
+            @mousedown.prevent
+          >
+            <template v-if="suggestionsList.length && options.suggestionsHint">
+              {{ options.suggestionsHint }}
+            </template>
+            <template v-else-if="!suggestionsList.length && options.noSuggestionsHint">
+              {{ options.noSuggestionsHint }}
+            </template>
           </div>
         </slot>
 

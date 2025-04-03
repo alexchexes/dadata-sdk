@@ -12,24 +12,24 @@ import LiveSnippet from './components/LiveSnippet.vue';
 import ButtonReset from './components/ButtonReset.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
+  BANK_STATUSES,
+  BANK_TYPES,
   BASE_SUGGEST_URL,
   BOUND_TYPES,
+  DEFAULT_OPTIONS,
   DIVISION_TYPES,
+  FIO_GENDERS,
+  FIO_PARTS,
   LANGUAGES,
   MAX_SUG_COUNT,
+  PARTY_BY_STATUSES,
+  PARTY_BY_TYPES,
+  PARTY_KZ_TYPES,
+  PARTY_STATUSES,
+  PARTY_TYPES,
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
-  PARTY_TYPES,
-  PARTY_BY_TYPES,
-  PARTY_STATUSES,
-  BANK_TYPES,
-  BANK_STATUSES,
-  FIO_PARTS,
-  FIO_GENDERS,
-  DEFAULT_OPTIONS,
   type VueDadataOptions,
-  PARTY_BY_STATUSES,
-  PARTY_KZ_TYPES,
 } from '@/index';
 import type { DadataSuggestion } from '@/types/api';
 import { ignorableWatch } from '@vueuse/core';
@@ -51,11 +51,11 @@ const suggestion = ref<DadataSuggestion | undefined>(undefined);
 const nowrapQuery = ref(true);
 const examplesShown = ref(false);
 
-const defaultOptions = ref<VueDadataOptions>({
+const defaultOptions = computed<VueDadataOptions>(() => ({
   ...DEFAULT_OPTIONS,
   token: envToken,
   placeholder: 'Start typing...',
-});
+}));
 
 const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
 
@@ -468,25 +468,6 @@ const removeCustomHeaders = () => {
               />
             </template>
 
-            <!-- <InputText
-              v-if="
-                [
-                  `fms_unit`,
-                  `fns_unit`,
-                  `metro`,
-                  `mktu`,
-                  `okpd2`,
-                  `okved2`,
-                  `postal_unit`,
-                  `region_court`,
-                ].includes(options.suggestType as string)
-              "
-              v-model="filtersInput"
-              :inputClass="!filtersValid && 'border-red-500! ring-red-500! text-red-500'"
-              label="filters (json)"
-              placeholder="JSON string..."
-            /> -->
-
             <InputJson
               v-if="
                 [
@@ -603,6 +584,7 @@ const removeCustomHeaders = () => {
             <CheckBox v-model="options.forceShow" label="forceShow" />
             <InputText v-model="options.placeholder" label="placeholder:" />
             <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
+            <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
           </div>
         </div>
 
@@ -628,11 +610,13 @@ const removeCustomHeaders = () => {
       <VueDadata
         v-model="query"
         v-model:suggestion="suggestion"
-        v-bind:="options"
+        :token="options.token"
+        v-bind="nonDefaultOptions"
         @enriched="handleEnriched"
         @enrichFail="handleEnrichFail"
         @error="handleError"
-      />
+      >
+      </VueDadata>
 
       <section class="mt-3 min-h-[1000px]">
         <div class="rounded-xl bg-white px-4 py-2">

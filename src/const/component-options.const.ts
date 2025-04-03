@@ -1,5 +1,6 @@
 import type { InternalVueDadataOptions } from '@/types';
 import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from './api';
+import type { SuggestType } from '@/types/api';
 export const SHOW_ON_FOCUS_OPTIONS = ['no_selection', 'always', false] as const;
 
 export const DEFAULT_CLASSES = {
@@ -31,6 +32,8 @@ export const DEFAULT_CLASSES = {
   clearButton: 'vue-dadata__clear-button',
 } as const;
 
+export const DEFAULT_TYPE = 'address';
+
 export const DEFAULT_OPTIONS = {
   inputName: 'vue-dadata-input',
   placeholder: '',
@@ -44,12 +47,22 @@ export const DEFAULT_OPTIONS = {
   continueSelecting: false,
   showClearButton: false,
   debounce: 100,
-  suggestType: 'address',
+  suggestType: DEFAULT_TYPE,
   language: DEFAULT_LANGUAGE,
   division: DEFAULT_DIVISION,
   count: DEFAULT_COUNT,
   httpCache: true,
   restrictValue: false,
   minChars: 1,
+  suggestionsHint: 'Выберите вариант или продолжите ввод',
   forceShow: false,
 } as const satisfies Omit<InternalVueDadataOptions, 'token'>;
+
+export const NO_SUGGESTIONS_HINTS = {
+  address: 'Неизвестный адрес',
+  fias: 'Неизвестный адрес',
+  party: 'Неизвестная организация',
+  party_by: 'Неизвестная организация',
+  party_kz: 'Неизвестная организация',
+  bank: 'Неизвестный банк',
+} as const satisfies Partial<Record<SuggestType, string | false>>;
