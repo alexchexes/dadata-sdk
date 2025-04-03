@@ -235,7 +235,7 @@ export interface VueDadataOptions {
    * Delay (in ms) after the user changes the query before triggering a request.
    * Default `100`
    */
-  debounceWait?: number;
+  debounce?: number;
   /**
    * Disables the input and all interactions.
    * Default `false`
@@ -360,7 +360,7 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'addSpace'
   | 'continueSelecting'
   | 'showClearButton'
-  | 'debounceWait'
+  | 'debounce'
   | 'suggestType'
   | 'language'
   | 'division'

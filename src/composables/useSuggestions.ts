@@ -125,12 +125,15 @@ export function useSuggestions(
     }
   };
 
-  const fetchWithDebounce = useDebounceFn(async () => {
-    const fetched = await fetchSuggestions();
-    if (fetched) {
-      suggestionsList.value = fetched;
-    }
-  }, options.debounceWait);
+  const fetchWithDebounce = useDebounceFn(
+    async () => {
+      const fetched = await fetchSuggestions();
+      if (fetched) {
+        suggestionsList.value = fetched;
+      }
+    },
+    () => options.debounce,
+  );
 
   const enrichSuggestion = async (selectedSuggestion: DadataSuggestion) => {
     const suggestions = await fetchSuggestions({

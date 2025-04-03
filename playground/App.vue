@@ -575,6 +575,24 @@ const removeCustomHeaders = () => {
               <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
             </div>
 
+            <div class="flex items-center gap-2">
+              debounce:
+
+              <ButtonRemove
+                outline
+                @click="options.debounce = Math.max(0, (options.debounce || 0) - 50)"
+              />
+
+              <input
+                v-model.number="options.debounce"
+                class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+                min="0"
+                step="1"
+                type="number"
+              />
+              <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
+            </div>
+
             <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
             <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
             <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />

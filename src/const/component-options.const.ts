@@ -40,7 +40,7 @@ export const DEFAULT_OPTIONS = {
   addSpace: true,
   continueSelecting: false,
   showClearButton: false,
-  debounceWait: 100,
+  debounce: 100,
   suggestType: 'address',
   language: DEFAULT_LANGUAGE,
   division: DEFAULT_DIVISION,
