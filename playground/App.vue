@@ -602,6 +602,7 @@ const removeCustomHeaders = () => {
             <CheckBox v-model="options.showClearButton" label="showClearButton" />
             <CheckBox v-model="options.forceShow" label="forceShow" />
             <InputText v-model="options.placeholder" label="placeholder:" />
+            <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
           </div>
         </div>
 

@@ -338,6 +338,10 @@ export interface VueDadataOptions {
    */
   minChars?: number;
   /**
+   * Text to show above the suggestions list
+   */
+  suggestionsHint?: string;
+  /**
    * Forces the suggestions list to always remain visible.
    * Useful during development (e.g., when styling elements).
    * Default: `false`

@@ -114,17 +114,23 @@ const inputAttrs = computed(
     >
       <slot
         name="suggestions"
-        :active-index="navigatedIndex"
+        :activeIndex="navigatedIndex"
         :query="queryModel"
         :suggestion="suggestionModel"
-        :suggestions-list="suggestionsList"
+        :suggestionsList="suggestionsList"
       >
+        <slot name="hint">
+          <div v-if="suggestionsHint" :class="mergedClasses.hint" @mousedown.prevent>
+            {{ suggestionsHint }}
+          </div>
+        </slot>
+
         <WordHighlighter
           v-for="(suggestion, index) in suggestionsList"
           :key="index"
           :class="index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : ''"
           :query="queryModel"
-          :text-to-highlight="suggestion.value"
+          :textToHighlight="suggestion.value"
           v-bind="highlightOptions"
           @mousedown.prevent="handleSuggestionClick(index)"
         />

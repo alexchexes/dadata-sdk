@@ -15,6 +15,9 @@ export const DEFAULT_CLASSES = {
   /** Dropdown list of suggestions */
   dropdown: 'vue-dadata__dropdown',
 
+  /** Hint inside the dropdown */
+  hint: 'vue-dadata__dropdown-hint',
+
   /** Individual suggestion item */
   suggestionItem: 'vue-dadata__suggestion',
 
