@@ -58,13 +58,12 @@ const mergedClasses = computed<VueDadataClasses>(() =>
 const highlightOptions = computed(() => ({
   caseSensitive: false,
   splitBySpace: true,
-  wrapperTag: 'button',
   wrapperClass: mergedClasses.value.suggestionItem,
   highlightTag: 'mark',
   highlightClass: mergedClasses.value.highlightedText,
 }));
 
-const inputAttrs = computed(
+const optionalInputProps = computed(
   () =>
     ({
       type: 'text',
@@ -77,9 +76,13 @@ const inputAttrs = computed(
       autocomplete: 'off',
       autocorrect: 'off',
       spellcheck: false,
-
       ...(props.inputAttributes || {}),
+    }) satisfies InputHTMLAttributes,
+);
 
+const coreInputProps = computed(
+  () =>
+    ({
       disabled: options.disabled,
       value: visibleQuery.value,
 
@@ -89,61 +92,100 @@ const inputAttrs = computed(
       onKeydown: handleKeyPress,
     }) satisfies InputHTMLAttributes,
 );
+
+const allInputProps = computed<InputHTMLAttributes>(
+  () =>
+    ({
+      ...optionalInputProps.value,
+      ...coreInputProps.value,
+    }) satisfies InputHTMLAttributes,
+);
+
+const suggestionsHintShown = computed(
+  () => suggestionsList.value.length && options.suggestionsHint,
+);
+const noSuggestionsHintShown = computed(
+  () => !suggestionsList.value.length && options.noSuggestionsHint,
+);
+
+const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHintShown.value);
 </script>
 
 <template>
   <div :class="mergedClasses.container">
-    <div :class="mergedClasses.inputWrapper">
-      <input v-bind="inputAttrs" />
-
-      <slot name="inputOverlay"></slot>
-
-      <button
-        v-if="options.showClearButton && canClear"
-        :class="mergedClasses.clearButton"
-        @mousedown.prevent="clear"
-      >
-        <slot name="clearButtonIcon">
-          <IconCross />
+    <!-- Slot for the whole input wrapper. User can pass his custom input here -->
+    <slot name="inputWrapper" :allInputProps :coreInputProps>
+      <!-- Input wrapper -->
+      <div :class="mergedClasses.inputWrapper">
+        <!-- Slot for the input only, preserve the wrapper. User can pass his custom input here as well -->
+        <slot name="input" :allInputProps :coreInputProps>
+          <input v-bind="allInputProps" />
         </slot>
-      </button>
-    </div>
 
+        <!-- Slot for loaders, custom clear buttons, etc -->
+        <slot name="inputOverlay"></slot>
+
+        <!-- Build-in clear button -->
+        <button
+          v-if="options.showClearButton && canClear"
+          :class="mergedClasses.clearButton"
+          @mousedown.prevent="clear"
+        >
+          <!-- Slot for the clear button icon only -->
+          <slot name="clearButtonIcon">
+            <IconCross />
+          </slot>
+        </button>
+      </div>
+    </slot>
+
+    <!-- The dropdown -->
     <div v-if="isDropdownVisible" :class="mergedClasses.dropdown">
-      <slot
-        name="suggestions"
-        :activeIndex="navigatedIndex"
-        :query="queryModel"
-        :suggestion="suggestionModel"
-        :suggestionsList="suggestionsList"
-      >
-        <slot name="hint">
-          <div
-            v-if="
-              (suggestionsList.length && options.suggestionsHint) ||
-              (!suggestionsList.length && options.noSuggestionsHint)
-            "
-            :class="mergedClasses.hint"
-            @mousedown.prevent
-          >
-            <template v-if="suggestionsList.length && options.suggestionsHint">
-              {{ options.suggestionsHint }}
-            </template>
-            <template v-else-if="!suggestionsList.length && options.noSuggestionsHint">
-              {{ options.noSuggestionsHint }}
-            </template>
-          </div>
-        </slot>
+      <!-- Hint/slot -->
+      <slot name="hint">
+        <div v-if="hintShown" :class="mergedClasses.hint" @mousedown.prevent>
+          <template v-if="suggestionsHintShown"> {{ options.suggestionsHint }} </template>
+          <template v-else-if="noSuggestionsHintShown"> {{ options.noSuggestionsHint }} </template>
+        </div>
+      </slot>
 
-        <WordHighlighter
-          v-for="(suggestion, index) in suggestionsList"
-          :key="index"
-          :class="index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : ''"
-          :query="queryModel"
-          :textToHighlight="suggestion.value"
-          v-bind="highlightOptions"
-          @mousedown.prevent="handleSuggestionClick(index)"
-        />
+      <!-- All suggestions items / slot -->
+      <slot name="suggestions" :handleSuggestionClick :navigatedIndex :suggestionsList>
+        <!-- Suggestion item -->
+        <template v-for="(suggestion, index) in suggestionsList" :key="index">
+          <!-- Slot for the whole element -->
+          <slot
+            name="suggestionItem"
+            :handleSuggestionClick
+            :index
+            :isNavigated="index === navigatedIndex"
+            :suggestion
+          >
+            <!-- If 'suggestionItemContent' slot is passed in -->
+            <template v-if="$slots.suggestionItemContent">
+              <button @mousedown.prevent="handleSuggestionClick(index)">
+                <!-- Slot only for contents (no need to handle clicks) -->
+                <slot
+                  name="suggestionItemContent"
+                  :isNavigated="index === navigatedIndex"
+                  :suggestion
+                />
+              </button>
+            </template>
+
+            <!-- If no slot passed, render element by vue-word-highlighter -->
+            <template v-else>
+              <WordHighlighter
+                :class="index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : ''"
+                :query="queryModel"
+                :textToHighlight="suggestion.value"
+                wrapperTag="button"
+                v-bind="highlightOptions"
+                @mousedown.prevent="handleSuggestionClick(index)"
+              />
+            </template>
+          </slot>
+        </template>
       </slot>
     </div>
   </div>
