@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { DEFAULT_CLASSES } from '@/const';
+import { DEFAULT_CLASSES, DEFAULT_BOOL_TRUE_OPTIONS } from '@/const';
 
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
@@ -9,7 +9,10 @@ import WordHighlighter from 'vue-word-highlighter';
 import { mergeDefined } from './utils';
 import type { DadataSuggestion } from './types/api';
 
-const props = defineProps<VueDadataOptions>();
+const props = withDefaults(defineProps<VueDadataOptions>(), {
+  // we have to do this because if we don't, Vue will set every boolean to `false`
+  ...DEFAULT_BOOL_TRUE_OPTIONS,
+});
 
 /** Max 300 characters */
 const queryModel = defineModel({ type: String, required: true });

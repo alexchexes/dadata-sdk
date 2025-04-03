@@ -34,16 +34,22 @@ export const DEFAULT_CLASSES = {
 
 export const DEFAULT_TYPE = 'address';
 
+// define boolean true props separately so we can use it with `withDefaults`
+export const DEFAULT_BOOL_TRUE_OPTIONS = {
+  clearOnChange: true,
+  selectOnEnter: true,
+  enrichOnSelect: true,
+  addSpace: true,
+  httpCache: true,
+} as const satisfies Partial<InternalVueDadataOptions>;
+
 export const DEFAULT_OPTIONS = {
+  ...DEFAULT_BOOL_TRUE_OPTIONS,
   inputName: 'vue-dadata-input',
   placeholder: '',
   disabled: false,
   selectOnBlur: false,
-  selectOnEnter: true,
-  enrichOnSelect: true,
   showOnFocus: 'no_selection',
-  clearOnChange: true,
-  addSpace: true,
   continueSelecting: false,
   showClearButton: false,
   debounce: 100,
@@ -51,7 +57,6 @@ export const DEFAULT_OPTIONS = {
   language: DEFAULT_LANGUAGE,
   division: DEFAULT_DIVISION,
   count: DEFAULT_COUNT,
-  httpCache: true,
   restrictValue: false,
   minChars: 1,
   suggestionsHint: 'Выберите вариант или продолжите ввод',
