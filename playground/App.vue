@@ -584,6 +584,7 @@ const removeCustomHeaders = () => {
             <CheckBox v-model="options.showClearButton" label="showClearButton" />
             <CheckBox v-model="options.forceShow" label="forceShow" />
             <CheckBox v-model="options.forceHide" label="forceHide" />
+            <CheckBox checked disabled label="focusOnMounted" />
             <InputText v-model="options.placeholder" label="placeholder:" />
             <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
             <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
@@ -613,6 +614,7 @@ const removeCustomHeaders = () => {
         v-model="query"
         v-model:suggestion="suggestion"
         v-model:suggestionsList="suggestionsList"
+        :focusOnMounted="true"
         :token="options.token"
         v-bind="nonDefaultOptions"
         @enriched="handleEnriched"

@@ -4,7 +4,14 @@ import { DEFAULT_CLASSES, DEFAULT_BOOL_TRUE_OPTIONS } from '@/const';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
 import type { VueDadataClasses, VueDadataOptions } from '@/types';
-import { computed, watchEffect, type InputHTMLAttributes, type PropType } from 'vue';
+import {
+  computed,
+  onMounted,
+  useTemplateRef,
+  watchEffect,
+  type InputHTMLAttributes,
+  type PropType,
+} from 'vue';
 import WordHighlighter from 'vue-word-highlighter';
 import { mergeDefined } from './utils';
 import type { DadataSuggestion } from './types/api';
@@ -57,6 +64,14 @@ const {
 
 watchEffect(() => {
   suggestionsListModel.value = suggestionsList.value;
+});
+
+const inputRef = useTemplateRef('inputRef');
+
+onMounted(() => {
+  if (options.focusOnMounted) {
+    inputRef.value?.focus();
+  }
 });
 
 const mergedClasses = computed<VueDadataClasses>(() =>
@@ -127,7 +142,7 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
       <div :class="mergedClasses.inputWrapper">
         <!-- Slot for the input only, preserve the wrapper. User can pass his custom input here as well -->
         <slot name="input" :allInputProps :coreInputProps>
-          <input v-bind="allInputProps" />
+          <input ref="inputRef" v-bind="allInputProps" />
         </slot>
 
         <!-- Slot for loaders, custom clear buttons, etc -->

@@ -351,6 +351,10 @@ export interface VueDadataOptions {
    */
   noSuggestionsHint?: string | false;
   /**
+   * If `true`, input will be focused immediately when the component is mounted
+   */
+  focusOnMounted?: boolean;
+  /**
    * Forces the suggestions list to always remain visible.
    * Useful during development (e.g., when styling elements).
    * Default: `false`
