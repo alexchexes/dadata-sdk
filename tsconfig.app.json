@@ -1,18 +1,16 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "playground/**/*"],
-  "exclude": ["src/**/__tests__/*", "src/**/*.test.ts"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["playground", "src/**/__tests__/*", "src/**/*.test.ts"],
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
     "paths": {
       "@/*": ["./src/*"]
     },
-    // Add the following options for declaration generation
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist/types", // Adjust the output directory as needed
+    "declarationDir": "dist/types",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   }

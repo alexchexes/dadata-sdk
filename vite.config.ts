@@ -4,9 +4,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import vueDevTools from 'vite-plugin-vue-devtools';
-import tailwindcss from '@tailwindcss/vite'; // tailwindcss is used for dev sandbox page only
+import tailwindcss from '@tailwindcss/vite'; // used for playground only
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
@@ -14,6 +13,7 @@ export default defineConfig({
     dts({
       outDir: 'dist/types',
       insertTypesEntry: true,
+      tsconfigPath: './tsconfig.app.json',
     }),
     tailwindcss(),
   ],
@@ -30,8 +30,8 @@ export default defineConfig({
       fileName: 'vue-dadata',
     },
     rollupOptions: {
-      // externalize deps that shouldn't be bundled into library
-      external: ['vue'], // Exclude Vue from the bundle
+      // externalize deps that shouldn't be bundled into the library
+      external: ['vue'],
       output: {
         globals: {
           vue: 'Vue',

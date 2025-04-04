@@ -1,15 +1,10 @@
 {
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.vitest.json" },
+    { "path": "./tsconfig.playground.json" }
   ],
-  "exclude": ["dist", "node_modules"] // Ensure dist is excluded to prevent TypeScript from processing declaration files during other builds
+  "exclude": ["dist", "node_modules"]
 }
