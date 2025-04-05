@@ -164,7 +164,12 @@ Overrides the built-in clear (×) button icon
 
 ### hint
 
-Overrides hint section above the suggestions inside the dropdown list. If you use it, it overrides both `suggestionsHint` and `noSuggestionsHint` hints. Note that currently component logic is made in a way that dropdown (where hint resides) is only shown when `noSuggestionsHint` is provided via props. So if you use this props to style hint when there's no suggestions, you apparently need to pass anything to `noSuggestionsHint` prop
+Overrides hint section above the suggestions inside the dropdown list.
+
+If you use this slot, it will overrides both `suggestionsHint` and `noSuggestionsHint` hints, even if you pass them as props.
+
+Also note that component logic is currently shows the dropdown (where hints reside) without suggestions only when `noSuggestionsHint` is provided via props.
+So if you use this slot to style hint when there's no suggestions, you apparently need to pass something to `noSuggestionsHint` prop to make it work. This will be refactored later.
 
 ```vue
 <template #hint>

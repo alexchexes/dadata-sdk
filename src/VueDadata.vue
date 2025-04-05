@@ -198,9 +198,9 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
         </button>
       </div>
     </slot>
-    {{ options.suggestionsHint }}
+
     <!-- The dropdown -->
-    <div v-if="isDropdownVisible || $slots.hint" :class="mergedClasses.dropdown">
+    <div v-if="isDropdownVisible" :class="mergedClasses.dropdown">
       <!-- Hint/slot -->
       <slot name="hint">
         <div v-if="hintShown" :class="mergedClasses.hint" @mousedown.prevent>
