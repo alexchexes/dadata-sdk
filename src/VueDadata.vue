@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { DEFAULT_CLASSES, DEFAULT_BOOL_TRUE_OPTIONS } from '@/const';
+import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from '@/const';
 
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
@@ -13,11 +13,19 @@ import {
   type PropType,
 } from 'vue';
 import { matchWords, mergeDefined } from './utils';
-import type { DadataSuggestion } from './types/api';
+import type {
+  BankSuggestion,
+  DadataSuggestion,
+  PartyBySuggestion,
+  PartyKzSuggestion,
+  PartySuggestion,
+} from './types/api';
+import { highlightHtml } from './utils';
 
 const props = withDefaults(defineProps<VueDadataOptions>(), {
-  // we have to do this because if we don't, Vue will set every boolean to `false`
-  ...DEFAULT_BOOL_TRUE_OPTIONS,
+  // although we merge defaults in the composable, we also need to set them here
+  // or Vue will set everything that allows boolean value to `false` (instead of `undefined`)
+  ...DEFAULT_OPTIONS,
 });
 
 /** Max 300 characters */
@@ -123,6 +131,44 @@ const noSuggestionsHintShown = computed(
 );
 
 const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHintShown.value);
+
+const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
+  let subtitle = '';
+
+  // // @todo For `address` we need to show history_values
+  // // only if query part doesn't match `value` but matches one of `history_values`.
+  // // If we show in all cases when history_values is present, we have odd notes like
+  // // like "бывш. Ленинград" for "г Санкт-Петербург"
+  // if (options.suggestType === 'address') {
+  //   const addrSuggestion = suggestion as BaseAddressSuggestion;
+  //   if (addrSuggestion.data.history_values?.length) {
+  //     subtitle = 'бывш. ' + addrSuggestion.data.history_values?.join(', ');
+  //   }
+  // }
+
+  // @todo For `party` we need to show additional info based on what was is matches to the query.
+  // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
+  if (options.suggestType === 'party') {
+    const partySuggestion = suggestion as PartySuggestion;
+    subtitle = `${partySuggestion.data.inn} ${partySuggestion.data.address.value}`;
+  }
+
+  // @todo For `party` we need to show additional info based on what was is matches to the query.
+  // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
+  else if (options.suggestType === 'bank') {
+    const bankSuggestion = suggestion as BankSuggestion;
+    subtitle = `${bankSuggestion.data.bic} ${bankSuggestion.data.address.value}`;
+  }
+
+  if (!subtitle) {
+    return '';
+  }
+
+  return highlightHtml(subtitle, queryModel.value, {
+    tagName: 'mark',
+    className: mergedClasses.value.highlightedText,
+  });
+};
 </script>
 
 <template>
@@ -152,9 +198,9 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
         </button>
       </div>
     </slot>
-
+    {{ options.suggestionsHint }}
     <!-- The dropdown -->
-    <div v-if="isDropdownVisible" :class="mergedClasses.dropdown">
+    <div v-if="isDropdownVisible || $slots.hint" :class="mergedClasses.dropdown">
       <!-- Hint/slot -->
       <slot name="hint">
         <div v-if="hintShown" :class="mergedClasses.hint" @mousedown.prevent>
@@ -167,7 +213,7 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
       <slot name="suggestions" :handleSuggestionClick :navigatedIndex :suggestionsList>
         <!-- Suggestion item -->
         <template v-for="(suggestion, index) in suggestionsList" :key="index">
-          <!-- Slot for the whole suggestionItem element -->
+          <!-- Slot for the whole suggestionItem element (you need to attach click handler by yourself) -->
           <slot
             name="suggestionItem"
             :handleSuggestionClick
@@ -188,16 +234,49 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
                 :isNavigated="index === navigatedIndex"
                 :suggestion
               >
-                <template
-                  v-for="(chunk, key) in matchWords(suggestion.value, queryModel)"
-                  :key="key"
+                <!-- Slot for only title (value) of the suggestion -->
+                <slot
+                  name="suggestionItemTitle"
+                  :isNavigated="index === navigatedIndex"
+                  :suggestion
                 >
-                  <mark v-if="chunk.match" :class="mergedClasses.highlightedText">{{
-                    chunk.text
-                  }}</mark>
+                  <!-- Suggestion title (value) -->
+                  <span
+                    :class="[
+                      mergedClasses.suggestionTitle,
+                      ((suggestion as PartySuggestion | BankSuggestion).data.state?.status ===
+                        'LIQUIDATED' ||
+                        (suggestion as PartyBySuggestion | PartyKzSuggestion).data.status ===
+                          'LIQUIDATED') &&
+                        mergedClasses.strikethroughText,
+                    ]"
+                  >
+                    <!-- title highlight chunks -->
+                    <template
+                      v-for="(chunk, key) in matchWords(suggestion.value, queryModel)"
+                      :key="key"
+                    >
+                      <mark v-if="chunk.match" :class="mergedClasses.highlightedText">{{
+                        chunk.text
+                      }}</mark>
 
-                  <template v-else>{{ chunk.text }}</template>
-                </template>
+                      <template v-else>{{ chunk.text }}</template>
+                    </template>
+                  </span>
+                </slot>
+
+                <!-- Slot for only subtitle of the suggestion (for certain suggestions types) -->
+                <slot
+                  name="suggestionItemSubtitle"
+                  :isNavigated="index === navigatedIndex"
+                  :suggestion
+                >
+                  <!-- Suggestion subtitle -->
+                  <div
+                    :class="mergedClasses.suggestionSubtitle"
+                    v-html="prepareSubtitleHtml(suggestion)"
+                  />
+                </slot>
               </slot>
             </button>
           </slot>

@@ -1062,7 +1062,7 @@ export interface BankSuggestionAddressData
   > {}
 
 /** Common for AddressSuggestion and FiasSuggestion */
-export interface BaseAddressSuggestion<T> {
+export interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalData> {
   /**
    * Адрес одной строкой (как показывается в списке подсказок),
    * сокращённый по правилам, описанным здесь:

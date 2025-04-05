@@ -351,7 +351,8 @@ export interface VueDadataOptions {
    */
   noSuggestionsHint?: string | false;
   /**
-   * If `true`, input will be focused immediately when the component is mounted
+   * If `true`, input will be focused immediately when the component is mounted.
+   * Default `false`
    */
   focusOnMounted?: boolean;
   /**
@@ -374,15 +375,11 @@ export type InternalVueDadataOptions = MakeRequired<
   VueDadataOptions,
   | 'inputName'
   | 'placeholder'
-  | 'disabled'
-  | 'selectOnBlur'
   | 'selectOnEnter'
   | 'enrichOnSelect'
   | 'showOnFocus'
   | 'clearOnChange'
   | 'addSpace'
-  | 'continueSelecting'
-  | 'showClearButton'
   | 'debounce'
   | 'suggestType'
   | 'language'
@@ -390,8 +387,5 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'count'
   | 'token'
   | 'httpCache'
-  | 'restrictValue'
   | 'minChars'
-  | 'forceShow'
-  | 'forceHide'
 >;

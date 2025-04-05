@@ -1,4 +1,4 @@
-import type { InternalVueDadataOptions } from '@/types';
+import type { InternalVueDadataOptions, OnlyPrimitives } from '@/types';
 import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from './api';
 import type { SuggestType } from '@/types/api';
 export const SHOW_ON_FOCUS_OPTIONS = ['no_selection', 'always', false] as const;
@@ -22,8 +22,17 @@ export const DEFAULT_CLASSES = {
   /** Individual suggestion item */
   suggestionItem: 'vue-dadata__suggestion',
 
+  /** Suggestion title (main text, `value`) */
+  suggestionTitle: 'vue-dadata__suggestion-title',
+
+  /** Suggestion subtitle (shown in certain cases like when address historical data available or for organization/banks) */
+  suggestionSubtitle: 'vue-dadata__suggestion-subtitle',
+
   /** Currently navigated (with keyboard) suggestion item */
   navigatedSuggestionItem: 'vue-dadata__suggestion--navigated',
+
+  /** Strike-through text (liquidated organizations, banks, etc.) */
+  strikethroughText: 'vue-dadata__strikethrough-text',
 
   /** Matching text inside suggestion item */
   highlightedText: 'vue-dadata__highlighted-text',
@@ -34,35 +43,24 @@ export const DEFAULT_CLASSES = {
 
 export const DEFAULT_TYPE = 'address';
 
-// define boolean true props separately so we can use it with `withDefaults`
-export const DEFAULT_BOOL_TRUE_OPTIONS = {
+/** We spread this in `withDefaults` so no array or objects are allowed */
+export const DEFAULT_OPTIONS = {
   clearOnChange: true,
   selectOnEnter: true,
   enrichOnSelect: true,
   addSpace: true,
   httpCache: true,
-} as const satisfies Partial<InternalVueDadataOptions>;
-
-export const DEFAULT_OPTIONS = {
-  ...DEFAULT_BOOL_TRUE_OPTIONS,
+  suggestionsHint: 'Выберите вариант или продолжите ввод',
   inputName: 'vue-dadata-input',
   placeholder: '',
-  disabled: false,
-  selectOnBlur: false,
   showOnFocus: 'no_selection',
-  continueSelecting: false,
-  showClearButton: false,
   debounce: 100,
   suggestType: DEFAULT_TYPE,
   language: DEFAULT_LANGUAGE,
   division: DEFAULT_DIVISION,
   count: DEFAULT_COUNT,
-  restrictValue: false,
   minChars: 1,
-  suggestionsHint: 'Выберите вариант или продолжите ввод',
-  forceShow: false,
-  forceHide: false,
-} as const satisfies Omit<InternalVueDadataOptions, 'token'>;
+} as const satisfies Omit<InternalVueDadataOptions, 'token'> satisfies OnlyPrimitives;
 
 export const NO_SUGGESTIONS_HINTS = {
   address: 'Неизвестный адрес',

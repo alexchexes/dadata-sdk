@@ -93,3 +93,8 @@ type OverridableKeys<TBase, TOverride> = {
  * Makes all properties of a union optional
  */
 export type DistributivePartial<T> = T extends any ? Partial<T> : never;
+
+/** Checks that all properties are primitives */
+export type OnlyPrimitives = {
+  [key: string]: string | number | boolean | null | undefined | symbol | bigint;
+};

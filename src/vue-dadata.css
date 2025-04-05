@@ -85,17 +85,20 @@ when user passes a class for suggestion item */
   width: 100%;
 }
 
+.vue-dadata__suggestion-title {
+  position: relative;
+}
+
 /** NOT IMPLEMENTED YET: */
 
-/* .vue-dadata__suggestion--line-through {
-  text-decoration: line-through;
-} */
-
-/* .vue-dadata__suggestion-subtitle {
-  color: #777777;
-  font-size: 14px;
-  margin-top: 4px;
-} */
+.vue-dadata__suggestion-subtitle {
+  color: #646973;
+  font-size: 0.88rem;
+  margin-top: 0.25rem;
+}
+.vue-dadata__suggestion-subtitle:empty {
+  display: none;
+}
 
 /* .vue-dadata__suggestion-subtitle-item {
   display: inline-block;
@@ -120,7 +123,16 @@ when user passes a class for suggestion item */
 }
 
 .vue-dadata__highlighted-text {
-  color: #0094ff;
+  /* color: #0094ff; */
+  color: #0083ef;
+}
+
+/**
+ * Official Dadata jQuery plugin uses ::after with 'border' instead of 'line-through',
+ * but it doesn't work well when organization name spans multiple lines. Try search for inn '4825008784'
+ */
+.vue-dadata__strikethrough-text {
+  text-decoration: line-through;
 }
 
 .vue-dadata__clear-button {
