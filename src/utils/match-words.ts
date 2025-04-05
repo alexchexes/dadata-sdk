@@ -64,7 +64,7 @@ function normalize(str: string) {
  */
 function tokenizeQuery(query: string): string[] {
   const WORD_DELIMITERS = '\\s"\'~\\*\\.,:\\|\\[\\]\\(\\)\\{\\}<>№';
-  const WORD_PARTS_DELIMITERS = '\\-\\+\\\\\\?!@#$%^&';
+  const WORD_PARTS_DELIMITERS = '\\/\\-\\+\\\\\\?!@#$%^&';
   const SPLIT_REGEX = new RegExp(`[${WORD_DELIMITERS + WORD_PARTS_DELIMITERS}]+`, 'g');
 
   // First, convert ё→е and lowercase
