@@ -48,8 +48,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^13.0.0",
-    "axios": "^1.8.4",
-    "vue-word-highlighter": "^1.2.5"
+    "axios": "^1.8.4"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.1",

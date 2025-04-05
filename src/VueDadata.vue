@@ -12,8 +12,7 @@ import {
   type InputHTMLAttributes,
   type PropType,
 } from 'vue';
-import WordHighlighter from 'vue-word-highlighter';
-import { mergeDefined } from './utils';
+import { matchWords, mergeDefined } from './utils';
 import type { DadataSuggestion } from './types/api';
 
 const props = withDefaults(defineProps<VueDadataOptions>(), {
@@ -77,14 +76,6 @@ onMounted(() => {
 const mergedClasses = computed<VueDadataClasses>(() =>
   mergeDefined(DEFAULT_CLASSES, options.classes || {}),
 );
-
-const highlightOptions = computed(() => ({
-  caseSensitive: false,
-  splitBySpace: true,
-  wrapperClass: mergedClasses.value.suggestionItem,
-  highlightTag: 'mark',
-  highlightClass: mergedClasses.value.highlightedText,
-}));
 
 const optionalInputProps = computed(
   () =>
@@ -176,7 +167,7 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
       <slot name="suggestions" :handleSuggestionClick :navigatedIndex :suggestionsList>
         <!-- Suggestion item -->
         <template v-for="(suggestion, index) in suggestionsList" :key="index">
-          <!-- Slot for the whole element -->
+          <!-- Slot for the whole suggestionItem element -->
           <slot
             name="suggestionItem"
             :handleSuggestionClick
@@ -184,29 +175,31 @@ const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHint
             :isNavigated="index === navigatedIndex"
             :suggestion
           >
-            <!-- If 'suggestionItemContent' slot is passed in -->
-            <template v-if="$slots.suggestionItemContent">
-              <button @mousedown.prevent="handleSuggestionClick(index)">
-                <!-- Slot only for contents (no need to handle clicks) -->
-                <slot
-                  name="suggestionItemContent"
-                  :isNavigated="index === navigatedIndex"
-                  :suggestion
-                />
-              </button>
-            </template>
+            <button
+              :class="[
+                mergedClasses.suggestionItem,
+                index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : '',
+              ]"
+              @mousedown.prevent="handleSuggestionClick(index)"
+            >
+              <!-- Slot only for contents (no need to handle clicks) -->
+              <slot
+                name="suggestionItemContent"
+                :isNavigated="index === navigatedIndex"
+                :suggestion
+              >
+                <template
+                  v-for="(chunk, key) in matchWords(suggestion.value, queryModel)"
+                  :key="key"
+                >
+                  <mark v-if="chunk.match" :class="mergedClasses.highlightedText">{{
+                    chunk.text
+                  }}</mark>
 
-            <!-- If no slot passed, render element by vue-word-highlighter -->
-            <template v-else>
-              <WordHighlighter
-                :class="index === navigatedIndex ? mergedClasses.navigatedSuggestionItem : ''"
-                :query="queryModel"
-                :textToHighlight="suggestion.value"
-                wrapperTag="button"
-                v-bind="highlightOptions"
-                @mousedown.prevent="handleSuggestionClick(index)"
-              />
-            </template>
+                  <template v-else>{{ chunk.text }}</template>
+                </template>
+              </slot>
+            </button>
           </slot>
         </template>
       </slot>
