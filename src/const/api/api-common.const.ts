@@ -46,6 +46,7 @@ export const PARTY_KZ_STATUSES = [
 
 // Bank
 
+/** {@link https://dadata.ru/api/suggest/bank/} */
 export const BANK_TYPES = [
   'CBR', // @note нет в документации по фильтрам
   'BANK',
@@ -56,7 +57,11 @@ export const BANK_TYPES = [
   'TREASURY', // @note нет в документации по фильтрам
   'OTHER',
 ] as const;
-export const BANK_STATUSES = ['ACTIVE', 'LIQUIDATED', 'LIQUIDATING'] as const;
+export const BANK_STATUSES = [
+  'ACTIVE',
+  'LIQUIDATED', // в реальных данных не встречается
+  'LIQUIDATING',
+] as const;
 
 export const FIO_PARTS = ['NAME', 'SURNAME', 'PATRONYMIC'] as const;
 export const FIO_GENDERS = ['MALE', 'FEMALE', 'UNKNOWN'] as const;
