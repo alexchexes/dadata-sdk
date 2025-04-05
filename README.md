@@ -116,6 +116,116 @@ const suggestion = ref(undefined);
 | focus      | Whenever input is focused                                                     | `FocusEvent`                             |
 | blur       | Whenever input looses focus                                                   | `FocusEvent`                             |
 
+## Slots
+
+### inputWrapper
+
+Wraps the entire input area including the input field, clear button, and overlays. You can (and usually, should) bind at least `coreInputProps`, which adds event-handlers and sets `value` (which is not just `query`, but visible value when navigating with keyboard.
+
+```vue
+<template #inputWrapper="{ allInputProps, coreInputProps }">
+  <!-- Your custom input/wrapper/anything -->
+  <div class="...">
+    <MyInput v-bind="coreInputProps" />
+    <MyOverlay>
+  </div>
+</template>
+```
+
+### input
+
+Replaces the `<input>` element itself. Useful for injecting your own input component. You can even replace it with `<textarea>` while preserving default styling:
+
+```vue
+<template #input="{ allInputProps, coreInputProps }">
+  <textarea v-bind="allInputProps" />
+</template>
+```
+
+### inputOverlay
+
+By default, en empty slot. It is just there so you can pass any custom content inside the input wrapper. Useful for loading indicators, icons, etc.
+
+```vue
+<template #inputOverlay>
+  <!-- Custom loading spinner, icons, buttons, etc -->
+</template>
+```
+
+### clearButtonIcon
+
+Overrides the built-in clear (×) button icon
+
+```vue
+<template #clearButtonIcon>
+  <svg><!----></svg>
+</template>
+```
+
+### hint
+
+Overrides hint section above the suggestions inside the dropdown list. If you use it, it overrides both `suggestionsHint` and `noSuggestionsHint` hints. Note that currently component logic is made in a way that dropdown (where hint resides) is only shown when `noSuggestionsHint` is provided via props. So if you use this props to style hint when there's no suggestions, you apparently need to pass anything to `noSuggestionsHint` prop
+
+```vue
+<template #hint>
+  <div class="...">This is my fancy-styled hint...</div>
+</template>
+```
+
+### suggestions
+
+Overrides the entire suggestions list (everything inside the dropdown, but not the dropdown itself)
+
+```vue
+<template #suggestions="{ suggestionsList, navigatedIndex, handleSuggestionClick }">
+  <div v-for="(suggestion, index) in suggestionsList" :key="index">
+    <!-- Custom items rendering -->
+  </div>
+</template>
+```
+
+### suggestionItem
+
+Replaces whole suggestion item element. If you use this, you will need to manually handle clicks with `@mousedown.prevent="handleSuggestionClick(index)"`.
+
+```vue
+<template #suggestionItem="{ suggestion, index, isNavigated, handleSuggestionClick }">
+  <button @mousedown.prevent="handleSuggestionClick(index)">
+    {{ suggestion.value }}
+  </button>
+</template>
+```
+
+### suggestionItemContent
+
+Replaces inner content of a suggestion item. Useful when you want to completely re-style suggestion without need to handle clicks automatically
+
+```vue
+<template #suggestionItemContent="{ suggestion, isNavigated }">
+  {{ suggestion.value }}
+</template>
+```
+
+### suggestionItemTitle
+
+Overrides the main title (`value`) of a suggestion item
+
+```vue
+<template #suggestionItemTitle="{ suggestion, isNavigated }">
+  <span class="...">{{ suggestion.value }}</span>
+</template>
+```
+
+### suggestionItemSubtitle
+
+Overrides a suggestion subtitle. By default, there are only subtitles for `party` and `bank` suggestions. Using this slot you can create your own subtitle for any type.
+
+```vue
+<template #suggestionItemSubtitle="{ suggestion, isNavigated }">
+  <div class="...">{{ suggestion.data.inn }}</div>
+</template>
+```
+
 ## Peer dependencies
 
 - [vue](https://github.com/vuejs/vue)
@@ -123,7 +233,6 @@ const suggestion = ref(undefined);
 ## Dependencies
 
 - [axios](https://github.com/axios/axios)
-- [vue-debounce](https://github.com/dhershman1/vue-debounce)
-- [vue-word-highlighter](https://github.com/kawamataryo/vue-word-highlighter)
+- [@vueuse/core](https://vueuse.org/)
 
 Forked from [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)
