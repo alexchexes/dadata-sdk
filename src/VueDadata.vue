@@ -85,6 +85,13 @@ const mergedClasses = computed<VueDadataClasses>(() =>
   mergeDefined(DEFAULT_CLASSES, options.classes || {}),
 );
 
+const browserAutoProps = {
+  autocapitalize: 'off',
+  autocomplete: 'off',
+  autocorrect: 'off',
+  spellcheck: false,
+} as const;
+
 const optionalInputProps = computed(
   () =>
     ({
@@ -94,10 +101,7 @@ const optionalInputProps = computed(
       name: options.inputName,
       placeholder: options.placeholder,
 
-      autocapitalize: 'off',
-      autocomplete: 'off',
-      autocorrect: 'off',
-      spellcheck: false,
+      ...browserAutoProps,
       ...(props.inputAttributes || {}),
     }) satisfies InputHTMLAttributes,
 );
@@ -174,11 +178,11 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
 <template>
   <div :class="mergedClasses.container">
     <!-- Slot for the whole input wrapper. User can pass his custom input here -->
-    <slot name="inputWrapper" :allInputProps :coreInputProps>
+    <slot name="inputWrapper" :allInputProps :browserAutoProps :coreInputProps>
       <!-- Input wrapper -->
       <div :class="mergedClasses.inputWrapper">
         <!-- Slot for the input only, preserve the wrapper. User can pass his custom input here as well -->
-        <slot name="input" :allInputProps :coreInputProps>
+        <slot name="input" :allInputProps :browserAutoProps :coreInputProps>
           <input ref="inputRef" v-bind="allInputProps" />
         </slot>
 

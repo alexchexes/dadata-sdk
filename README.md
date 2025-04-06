@@ -120,10 +120,10 @@ const suggestion = ref(undefined);
 
 ### inputWrapper
 
-Wraps the entire input area including the input field, clear button, and overlays. You can (and usually, should) bind at least `coreInputProps`, which adds event-handlers and sets `value` (which is not just `query`, but visible value when navigating with keyboard.
+Wraps the entire input area including the input field, clear button, and overlays. You can (and usually, should) bind at least `coreInputProps`, which adds event-handlers and sets `value` (which is not just `query`, but visible value when navigating with keyboard). `browserAutoProps` holds attributes like `autocomplete='off'` and a few similar to disable browser input features.
 
 ```vue
-<template #inputWrapper="{ allInputProps, coreInputProps }">
+<template #inputWrapper="{ allInputProps, coreInputProps, browserAutoProps }">
   <!-- Your custom input/wrapper/anything -->
   <div class="...">
     <MyInput v-bind="coreInputProps" />
@@ -137,7 +137,7 @@ Wraps the entire input area including the input field, clear button, and overlay
 Replaces the `<input>` element itself. Useful for injecting your own input component. You can even replace it with `<textarea>` while preserving default styling:
 
 ```vue
-<template #input="{ allInputProps, coreInputProps }">
+<template #input="{ allInputProps, coreInputProps, browserAutoProps }">
   <textarea v-bind="allInputProps" />
 </template>
 ```
