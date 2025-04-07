@@ -24,7 +24,7 @@ const locationsFilterModel = defineModel({
   required: false,
 });
 
-const LOCATION_RESTRICTION_CATEGORIES = computed(() => {
+const restrictionsGroups = computed(() => {
   let options;
 
   options = {
@@ -49,6 +49,11 @@ const LOCATION_RESTRICTION_CATEGORIES = computed(() => {
   }
 
   return options;
+});
+
+const isOnlyOneRestrictionType = computed(() => {
+  const values = Object.values(restrictionsGroups.value);
+  return values.length === 1 && values[0].length === 1;
 });
 
 type LocationRestrictionEntry = {
@@ -155,7 +160,7 @@ const addRestrictionToLocation = (locIdx: number) => {
   } else {
     const alreadyUsedTypes = location.map((entry) => entry.restrType);
 
-    const availableKey = Object.values(LOCATION_RESTRICTION_CATEGORIES.value)
+    const availableKey = Object.values(restrictionsGroups.value)
       .flat()
       .find((key) => !alreadyUsedTypes.includes(key));
 
@@ -215,18 +220,19 @@ function disable() {
           <ButtonRemove @click="editableLocationsFilter.splice(locIdx, 1)" />
 
           <!-- List of properties of a single restriction -->
-          <div>
+          <div class="grow">
             <!-- Each property of a restriction -->
             <div v-for="(entry, entryIdx) in oneLocation" :key="entryIdx">
               <div class="flex items-center gap-2 text-xs">
                 <!-- restriction type -->
                 <SelectOptGroup
                   v-model="editableLocationsFilter[locIdx][entryIdx].restrType"
-                  :class="
+                  :class="[
+                    'w-1/2',
                     isDuplicatingType(locIdx, entryIdx) &&
-                    'border-red-500! text-red-500 open:text-inherit'
-                  "
-                  :groups="LOCATION_RESTRICTION_CATEGORIES"
+                      'border-red-500! text-red-500 open:text-inherit',
+                  ]"
+                  :groups="restrictionsGroups"
                 />
 
                 <!-- restriction value -->
@@ -249,7 +255,7 @@ function disable() {
                 />
               </div>
 
-              <div class="flex items-center gap-1">
+              <div v-if="!isOnlyOneRestrictionType" class="flex items-center gap-1">
                 <div class="my-1 text-xs text-gray-500">
                   AND<span v-if="entryIdx === oneLocation.length - 1">...</span>
                 </div>

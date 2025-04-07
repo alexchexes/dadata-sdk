@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { computed, ref, type PropType } from 'vue';
 import { ignorableWatch } from '@vueuse/core';
-import { computed, ref } from 'vue';
+import { twMerge } from 'tailwind-merge';
+import TogglableButton from './TogglableButton.vue';
+type TwMergeArgument = Parameters<typeof twMerge>[0];
 
 const props = defineProps({
   options: {
@@ -10,6 +13,10 @@ const props = defineProps({
   label: {
     type: String,
     default: '',
+  },
+  buttonClass: {
+    type: [Array, String, Boolean, null, undefined] as PropType<TwMergeArgument>,
+    default: undefined,
   },
 });
 
@@ -62,14 +69,15 @@ const optionsObject = computed(() => {
   <div>
     <div v-if="label">{{ label }}</div>
     <div class="flex flex-wrap gap-x-1.5 gap-y-2">
-      <label
+      <TogglableButton
         v-for="(value, key) in optionsObject"
         :key="key"
-        class="has-[input:checked]:bg-accent rounded-lg bg-slate-50 px-1.5 py-0.5 text-sm not-has-[input:checked]:cursor-pointer not-has-[input:checked]:shadow-md not-has-[input:checked]:hover:bg-slate-100 has-[input:checked]:text-white"
-      >
-        <input v-model="internalModel" class="hidden" :value="value" type="checkbox" />
-        {{ key }}
-      </label>
+        v-model="internalModel"
+        :class="props.buttonClass"
+        :label="key"
+        :value="value"
+        type="checkbox"
+      />
     </div>
   </div>
 </template>

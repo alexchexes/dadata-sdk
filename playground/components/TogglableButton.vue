@@ -1,0 +1,29 @@
+<script lang="ts" setup>
+import { twMerge } from 'tailwind-merge';
+
+type TwMergeArgument = Parameters<typeof twMerge>[0];
+
+const props = defineProps<{
+  class?: TwMergeArgument;
+  label?: string | number | null;
+  type: 'radio' | 'checkbox';
+  value: any;
+}>();
+
+const model = defineModel({ type: null });
+</script>
+
+<template>
+  <label
+    :class="
+      twMerge(
+        `has-[input:checked]:bg-accent rounded-lg bg-slate-200 px-2 py-1 text-sm leading-none not-has-[input:checked]:cursor-pointer not-has-[input:checked]:hover:bg-slate-300 has-[input:checked]:text-white`,
+        props.class,
+      )
+    "
+  >
+    <input v-model="model" class="hidden" :type="type" :value />
+
+    {{ label || value }}
+  </label>
+</template>

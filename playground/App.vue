@@ -9,7 +9,6 @@ import TogglesGroup from './components/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/SelectOptions.vue';
 import LiveSnippet from './components/LiveSnippet.vue';
-import ButtonReset from './components/ButtonReset.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
   BANK_STATUSES,
@@ -31,12 +30,43 @@ import {
   SUGGEST_TYPES,
   type VueDadataOptions,
 } from '@/index';
-import type { DadataSuggestion } from '@/types/api';
+import type { DadataSuggestion, SuggestType } from '@/types/api';
 import { ignorableWatch } from '@vueuse/core';
 import ButtonAdd from './components/ButtonAdd.vue';
 import InputJson from './components/InputJson.vue';
 import ButtonRemove from './components/ButtonRemove.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams.ts';
+import OptionsBlock from './components/OptionsBlock.vue';
+import IconReset from './components/IconReset.vue';
+
+const SUGGEST_TYPES_ORDER: SuggestType[] = [
+  'address',
+  'fias',
+  'party',
+  'party_by',
+  'party_kz',
+  'bank',
+  'fio',
+  'email',
+  'fms_unit',
+  'postal_unit',
+  'fns_unit',
+  'fts_unit',
+  'region_court',
+  'metro',
+  'car_brand',
+  'mktu',
+  'country',
+  'currency',
+  'okved2',
+  'okpd2',
+  'oktmo',
+];
+
+const ORDERED_SUGGEST_TYPES: SuggestType[] = [
+  ...SUGGEST_TYPES_ORDER,
+  ...SUGGEST_TYPES.filter((item) => !SUGGEST_TYPES_ORDER.includes(item)),
+];
 
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
@@ -60,23 +90,22 @@ const defaultOptions = computed<VueDadataOptions>(() => ({
 
 const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
 
+const isEqualWithUndefined = (valThatIsPossiblyUndefined: any, valToTest: any) =>
+  valToTest === valThatIsPossiblyUndefined ||
+  (typeof valThatIsPossiblyUndefined === 'undefined' &&
+    (valToTest === false || (typeof valToTest === 'string' && !valToTest)));
+
 const getDiff = (defaults: Record<string, any>, current: Record<string, any>) =>
   Object.fromEntries(
-    Object.entries(current).filter(([key, val]) => {
-      const def = (defaults as Partial<VueDadataOptions>)[key as keyof VueDadataOptions];
-      if (val === def) {
-        return false;
-      }
-      if (typeof def === 'undefined' && typeof val === 'string' && !val) {
-        return false;
-      }
-      return true;
-    }),
+    Object.entries(current).filter(
+      ([key, val]) => !isEqualWithUndefined(defaults[key as keyof VueDadataOptions], val),
+    ),
   );
 
 const nonDefaultOptions = computed<Partial<VueDadataOptions>>(() =>
   getDiff(DEFAULT_OPTIONS, options.value),
 );
+
 const nonDefaultPlaygroundOptions = computed<Partial<VueDadataOptions>>(() => ({
   ...getDiff(defaultOptions.value, options.value),
   token: undefined,
@@ -94,9 +123,11 @@ const { ignoreUpdates: ignoreFiltersInputWatch } = ignorableWatch(filtersInput, 
   ignoreOptionsFiltersWatch(() => {
     let filters = undefined;
     let valid = true;
+
     if (str.trim()) {
       try {
         const parsed = JSON.parse(str.trim());
+
         if (Array.isArray(parsed) || typeof parsed === 'object') {
           filters = parsed;
         } else {
@@ -106,6 +137,7 @@ const { ignoreUpdates: ignoreFiltersInputWatch } = ignorableWatch(filtersInput, 
         valid = false;
       }
     }
+
     options.value.filters = filters;
     filtersValid.value = valid;
   });
@@ -183,11 +215,7 @@ const locationsExamples = computed(() => {
 });
 
 const apiOptionsKeys: (keyof VueDadataOptions)[] = [
-  'token',
-  'url',
-  'httpCache',
   'count',
-  'suggestType',
   'fromBound',
   'toBound',
   'locationsFilter',
@@ -203,28 +231,83 @@ const apiOptionsKeys: (keyof VueDadataOptions)[] = [
   'fioGender',
 ];
 
-const allApiOptionsDefault = computed(
-  () => !apiOptionsKeys.find((key) => options.value[key] !== defaultOptions.value[key]),
+const behaviorOptionsKeys: (keyof VueDadataOptions)[] = [
+  'debounce',
+  'minChars',
+  'disabled',
+  'placeholder',
+  'inputName',
+  'inputAttributes',
+  'suggestionsHint',
+  'noSuggestionsHint',
+  'classes',
+  'showOnFocus',
+  'selectOnBlur',
+  'selectOnEnter',
+  'enrichOnSelect',
+  'clearOnChange',
+  'addSpace',
+  'continueSelecting',
+  'showClearButton',
+  'focusOnMounted',
+  'forceShow',
+  'forceHide',
+];
+
+const allOptionsDefault = computed(
+  () =>
+    !Object.keys(options.value).find(
+      (key) =>
+        !isEqualWithUndefined(
+          defaultOptions.value[key as keyof VueDadataOptions],
+          options.value[key as keyof VueDadataOptions],
+        ),
+    ),
 );
 
-const allComponentOptionsDefault = computed(
+const allApiOptionsDefault = computed(
+  () =>
+    !apiOptionsKeys.find(
+      (key) => !isEqualWithUndefined(defaultOptions.value[key], options.value[key]),
+    ),
+);
+
+const allBehaviorOptionsDefault = computed(
+  () =>
+    !behaviorOptionsKeys.find(
+      (key) => !isEqualWithUndefined(defaultOptions.value[key], options.value[key]),
+    ),
+);
+
+const allGeneralOptionsDefault = computed(
   () =>
     !Object.keys(options.value)
-      .filter((key) => !apiOptionsKeys.includes(key as keyof VueDadataOptions))
+      .filter(
+        (key) =>
+          !apiOptionsKeys.includes(key as keyof VueDadataOptions) &&
+          !behaviorOptionsKeys.includes(key as keyof VueDadataOptions),
+      )
       .find(
         (key) =>
-          options.value[key as keyof VueDadataOptions] !==
-          defaultOptions.value[key as keyof VueDadataOptions],
+          !isEqualWithUndefined(
+            defaultOptions.value[key as keyof VueDadataOptions],
+            options.value[key as keyof VueDadataOptions],
+          ),
       ),
 );
 
-const resetComponentOptions = () => {
-  Object.keys(options.value).forEach((key) => {
-    if (!apiOptionsKeys.includes(key as keyof VueDadataOptions)) {
-      // @ts-ignore @ts-fuckyourself
-      options.value[key] = defaultOptions.value[key];
-    }
-  });
+/** Calls the given function only if the user has not selected any text. */
+const noSelectionClick = <T,>(fn: () => T): T | void => {
+  if (document.getSelection()?.type === 'Range') {
+    return;
+  }
+  return fn();
+};
+
+const resetAllOptions = () => {
+  resetGeneralOptions();
+  resetBehaviorOptions();
+  resetApiOptions();
 };
 
 const resetApiOptions = () => {
@@ -232,12 +315,31 @@ const resetApiOptions = () => {
     // @ts-ignore @ts-fuckyourself
     options.value[key] = defaultOptions.value[key];
   });
-  showCustomHeaders.value = false;
-  showCustomPayload.value = false;
   locationsBoostString.value = '';
 };
 
-const resetSuggestions = () => {
+const resetBehaviorOptions = () => {
+  behaviorOptionsKeys.forEach((key) => {
+    // @ts-ignore @ts-fuckyourself
+    options.value[key] = defaultOptions.value[key];
+  });
+};
+
+const resetGeneralOptions = () => {
+  Object.keys(options.value).forEach((key) => {
+    if (
+      !apiOptionsKeys.includes(key as keyof VueDadataOptions) &&
+      !behaviorOptionsKeys.includes(key as keyof VueDadataOptions)
+    ) {
+      // @ts-ignore @ts-fuckyourself
+      options.value[key] = defaultOptions.value[key];
+    }
+  });
+  showCustomHeaders.value = false;
+  showCustomPayload.value = false;
+};
+
+const clearSuggestion = () => {
   query.value = '';
   suggestion.value = undefined;
 };
@@ -265,339 +367,177 @@ const removeCustomHeaders = () => {
 </script>
 
 <template>
-  <div class="px-2">
-    <AButton class="mt-1 ml-1" @click="toggleTailwind">
-      Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
-    </AButton>
+  <div>
+    <header class="flex gap-3 bg-slate-50 p-3 shadow-md">
+      <AButton @click="toggleTailwind">
+        Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
+      </AButton>
 
-    <main class="mx-auto max-w-3xl py-12">
-      <!-- Block above the input -->
-      <div class="flex flex-col gap-2 pb-2">
-        <!-- Options -->
-        <div class="flex flex-wrap gap-3">
-          <!-- API requests options -->
-          <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
-            <div class="flex gap-2">
-              <h3 class="font-semibold">API requests options</h3>
-              <ButtonReset
-                v-if="!allApiOptionsDefault"
-                title="Reset API requests options"
-                @click="resetApiOptions"
+      <AButton v-if="!allOptionsDefault" class="flex gap-2" @click="resetAllOptions">
+        Reset all <IconReset class="size-5" />
+      </AButton>
+    </header>
+
+    <div class="mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-start gap-4 p-4 lg:flex-row">
+      <!-- Component behavior options -->
+      <aside class="order-2 flex grow basis-80 lg:order-1 lg:max-w-80">
+        <OptionsBlock
+          class="w-full"
+          :canReset="!allBehaviorOptionsDefault"
+          heading="Component behavior options"
+          @resetClick="resetBehaviorOptions"
+        >
+          <CheckBox v-model="options.disabled" label="disabled" />
+
+          <RadioGroup
+            v-model="options.showOnFocus"
+            :options="SHOW_ON_FOCUS_OPTIONS"
+            label="showOnFocus"
+          />
+
+          <div class="flex items-center gap-2">
+            minChars:
+
+            <ButtonRemove
+              outline
+              @click="options.minChars = Math.max(1, (options.minChars || 1) - 1)"
+            />
+
+            <input
+              v-model.number="options.minChars"
+              class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+              min="1"
+              step="1"
+              type="number"
+            />
+            <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
+          </div>
+
+          <div class="flex items-center gap-2">
+            debounce:
+
+            <ButtonRemove
+              outline
+              @click="options.debounce = Math.max(0, (options.debounce || 0) - 50)"
+            />
+
+            <input
+              v-model.number="options.debounce"
+              class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+              min="0"
+              step="1"
+              type="number"
+            />
+            <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
+          </div>
+
+          <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
+          <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
+          <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
+          <CheckBox v-model="options.clearOnChange" label="clearOnChange" />
+          <CheckBox v-model="options.addSpace" label="addSpace" />
+          <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
+          <CheckBox v-model="options.showClearButton" label="showClearButton" />
+          <CheckBox v-model="options.forceShow" label="forceShow" />
+          <CheckBox v-model="options.forceHide" label="forceHide" />
+          <CheckBox checked disabled label="focusOnMounted" />
+          <InputText v-model="options.placeholder" label="placeholder:" />
+          <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
+          <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
+        </OptionsBlock>
+      </aside>
+
+      <!-- General options and the input -->
+      <main
+        class="order-1 mx-auto flex max-w-5xl min-w-0 flex-1 grow basis-full flex-col gap-3 lg:order-2 lg:basis-xl"
+      >
+        <!-- Block above the input -->
+        <OptionsBlock
+          class="w-full pb-3"
+          :canReset="!allGeneralOptionsDefault"
+          heading="General options"
+          @resetClick="resetGeneralOptions"
+        >
+          <div class="flex flex-col gap-4">
+            <!-- API token & URL -->
+            <div class="flex flex-wrap gap-2">
+              <InputText
+                v-model.trim="tokenModel"
+                class="grow"
+                :placeholder="TOKEN_PLACEHOLDER"
+                label="API token:"
+              />
+
+              <InputText
+                v-model.trim="options.url"
+                class="grow"
+                :placeholder="BASE_SUGGEST_URL + options.suggestType"
+                label="API URL:"
               />
             </div>
 
-            <InputText
-              v-model.trim="tokenModel"
-              :placeholder="TOKEN_PLACEHOLDER"
-              label="API token:"
-            />
-
-            <InputText
-              v-model.trim="options.url"
-              :placeholder="BASE_SUGGEST_URL + options.suggestType"
-              label="API URL:"
-            />
-
-            <div class="flex items-center gap-2">
-              count:
-              <input
-                v-model.number="options.count"
-                class="accent-accent"
-                :max="MAX_SUG_COUNT"
-                min="1"
-                step="1"
-                type="range"
-              />
-              {{ options.count }}
-            </div>
-
+            <!-- Suggestions type -->
             <div class="flex flex-wrap gap-1">
-              suggestType:
               <RadioGroup
                 v-model="options.suggestType"
-                class="flex gap-2"
-                :options="SUGGEST_TYPES"
+                :options="ORDERED_SUGGEST_TYPES"
+                buttonClass="px-3 py-1.5"
               />
             </div>
 
-            <template
-              v-if="
-                options.suggestType === 'address' ||
-                options.suggestType === 'fias' ||
-                options.suggestType === 'party' ||
-                options.suggestType === 'bank'
-              "
-            >
-              <div class="dev-item">
-                <InputText v-model="locationsBoostModel" label="locationsBoost (kladr_id's):" />
-                {{ options.locationsBoost }}
-              </div>
-
-              <!-- example locations filters -->
-              <div v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
-                <div>
-                  locationsFilter examples:
-                  <AButton class="text-sm" @click="examplesShown = !examplesShown">
-                    {{ examplesShown ? 'Hide' : 'Show' }}
-                  </AButton>
+            <!-- Custom payload & headers -->
+            <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
+              <div class="grow basis-1/3">
+                <!-- Custom payload -->
+                <div class="flex gap-2">
+                  <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
+                  <ButtonRemove v-else outline @click="removeCustomPayload()" />
+                  <span>
+                    {{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
+                  </span>
                 </div>
 
-                <RadioGroup
-                  v-if="examplesShown"
-                  v-model="options.locationsFilter"
-                  class="mt-2 flex flex-col gap-1"
-                  :options="locationsExamples"
+                <InputJson
+                  v-if="showCustomPayload"
+                  v-model="options.payload"
+                  class="w-full"
+                  :rows="4"
+                  placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
                 />
               </div>
 
-              <LocationsFilter
-                v-model="options.locationsFilter"
-                :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
-              />
-            </template>
+              <div class="grow basis-1/3">
+                <!-- Custom headers -->
+                <div class="flex gap-2">
+                  <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
+                  <ButtonRemove v-else outline @click="removeCustomHeaders()" />
+                  <span>
+                    {{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
+                  </span>
+                </div>
 
-            <!-- 'address' and 'fias' -->
-            <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
-              <div class="flex flex-wrap gap-3">
-                <SelectOptions
-                  v-model="options.fromBound"
-                  :options="
-                    options.suggestType === 'address'
-                      ? BOUND_TYPES
-                      : BOUND_TYPES.filter((el) => el !== 'country')
-                  "
-                  label="fromBound:"
-                />
-                <SelectOptions
-                  v-model="options.toBound"
-                  :options="
-                    options.suggestType === 'address'
-                      ? BOUND_TYPES
-                      : BOUND_TYPES.filter((el) => el !== 'country')
-                  "
-                  label="toBound:"
+                <InputJson
+                  v-if="showCustomHeaders"
+                  v-model="options.headers"
+                  class="w-full"
+                  :rows="4"
+                  placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
                 />
               </div>
-            </template>
 
-            <template v-if="options.suggestType === 'address'">
-              <RadiusFilter v-model="options.radiusFilter" />
-
-              <RadioGroup
-                v-model="options.division"
-                class="flex gap-2"
-                :options="DIVISION_TYPES"
-                label="division"
-              />
-
-              <RadioGroup
-                v-model="options.language"
-                class="flex gap-2"
-                :options="LANGUAGES"
-                label="language:"
-              />
-            </template>
-
-            <CheckBox
-              v-if="
-                options.locationsFilter &&
-                (options.suggestType === 'address' || options.suggestType === 'fias')
-              "
-              v-model="options.restrictValue"
-              label="restrictValue"
-            />
-
-            <RadioGroup
-              v-if="options.suggestType === 'party'"
-              v-model="options.entityType"
-              class="flex gap-2"
-              :options="[undefined, ...PARTY_TYPES]"
-              label="entityType:"
-            />
-            <TogglesGroup
-              v-else-if="options.suggestType === 'party_by'"
-              v-model="options.entityType"
-              class="flex gap-2"
-              :options="[/* undefined, */ ...PARTY_BY_TYPES]"
-              label="entityType:"
-            />
-            <TogglesGroup
-              v-else-if="options.suggestType === 'party_kz'"
-              v-model="options.entityType"
-              class="flex gap-2"
-              :options="[/* undefined, */ ...PARTY_KZ_TYPES]"
-              label="entityType:"
-            />
-            <TogglesGroup
-              v-else-if="options.suggestType === 'bank'"
-              v-model="options.entityType"
-              class="flex gap-2"
-              :options="BANK_TYPES"
-              label="entityType: "
-            />
-
-            <TogglesGroup
-              v-if="
-                options.suggestType === 'party' ||
-                options.suggestType === 'party_by' ||
-                options.suggestType === 'bank'
-              "
-              v-model="options.entityStatus"
-              class="flex gap-2"
-              :options="
-                { party: PARTY_STATUSES, party_by: PARTY_BY_STATUSES, bank: BANK_STATUSES }[
-                  options.suggestType
-                ]
-              "
-              label="entityStatus:"
-            />
-
-            <!-- 'fio' -->
-            <template v-if="options.suggestType === 'fio'">
-              <TogglesGroup
-                v-model="options.fioParts"
-                class="flex gap-2"
-                :options="FIO_PARTS"
-                label="fioParts:"
-              />
-
-              <RadioGroup
-                v-model="options.fioGender"
-                class="flex gap-2"
-                :options="[undefined, ...FIO_GENDERS]"
-                label="fioGender:"
-              />
-            </template>
-
-            <InputJson
-              v-if="
-                [
-                  `fms_unit`,
-                  `fns_unit`,
-                  `metro`,
-                  `mktu`,
-                  `okpd2`,
-                  `okved2`,
-                  `postal_unit`,
-                  `region_court`,
-                ].includes(options.suggestType as string)
-              "
-              v-model="options.filters"
-              allowArray
-              label="filters (json)"
-              placeholder="'filters' API request parameter"
-            />
-
-            <!-- Custom payload -->
-            <div class="flex gap-2">
-              <span
-                >{{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
-              </span>
-              <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
-              <ButtonRemove v-else outline @click="removeCustomPayload()" />
+              <CheckBox v-model="options.httpCache" class="gap-2" label="httpCache" />
             </div>
-            <InputJson
-              v-if="showCustomPayload"
-              v-model="options.payload"
-              :rows="4"
-              placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
-            />
-
-            <!-- Custom headers -->
-            <div class="flex gap-2">
-              <span
-                >{{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
-              </span>
-              <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
-              <ButtonRemove v-else outline @click="removeCustomHeaders()" />
-            </div>
-            <InputJson
-              v-if="showCustomHeaders"
-              v-model="options.headers"
-              :rows="4"
-              placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
-            />
           </div>
+        </OptionsBlock>
 
-          <!-- Component behavior options -->
-          <div class="flex min-w-xs grow basis-[40%] flex-col gap-2 rounded-xl border px-3 py-2">
-            <div class="flex gap-2">
-              <h3 class="font-semibold">Component behavior options</h3>
-              <ButtonReset
-                v-if="!allComponentOptionsDefault"
-                title="Reset Component behavior options"
-                @click="resetComponentOptions"
-              />
-            </div>
-
-            <CheckBox v-model="options.disabled" label="disabled" />
-
-            <RadioGroup
-              v-model="options.showOnFocus"
-              class="flex gap-2"
-              :options="SHOW_ON_FOCUS_OPTIONS"
-              label="showOnFocus"
-            />
-
-            <div class="flex items-center gap-2">
-              minChars:
-
-              <ButtonRemove
-                outline
-                @click="options.minChars = Math.max(1, (options.minChars || 1) - 1)"
-              />
-
-              <input
-                v-model.number="options.minChars"
-                class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
-                min="1"
-                step="1"
-                type="number"
-              />
-              <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
-            </div>
-
-            <div class="flex items-center gap-2">
-              debounce:
-
-              <ButtonRemove
-                outline
-                @click="options.debounce = Math.max(0, (options.debounce || 0) - 50)"
-              />
-
-              <input
-                v-model.number="options.debounce"
-                class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
-                min="0"
-                step="1"
-                type="number"
-              />
-              <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
-            </div>
-
-            <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
-            <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
-            <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
-            <CheckBox v-model="options.clearOnChange" label="clearOnChange" />
-            <CheckBox v-model="options.addSpace" label="addSpace" />
-            <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
-            <CheckBox v-model="options.showClearButton" label="showClearButton" />
-            <CheckBox v-model="options.forceShow" label="forceShow" />
-            <CheckBox v-model="options.forceHide" label="forceHide" />
-            <CheckBox checked disabled label="focusOnMounted" />
-            <InputText v-model="options.placeholder" label="placeholder:" />
-            <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
-            <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
-          </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
+          <CheckBox v-model="showAllOptions" label="Show all current options" />
         </div>
-
-        <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
 
         <div v-if="showLiveSnippet">
           <LiveSnippet :nonDefaultOptions :options :showToken="isTokenProvided" />
         </div>
-
-        <CheckBox v-model="showAllOptions" label="Show all current options" />
 
         <pre
           v-if="showAllOptions"
@@ -605,38 +545,217 @@ const removeCustomHeaders = () => {
         ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
 
         <!-- Current query string -->
-        <div :class="nowrapQuery && 'ellipsis-nowrap'">
-          query: <b @click="nowrapQuery = !nowrapQuery">{{ query }}</b>
+        <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
+          Current query:
+          <b @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))">
+            {{ query }}
+          </b>
         </div>
-      </div>
 
-      <VueDadata
-        v-model="query"
-        v-model:suggestion="suggestion"
-        v-model:suggestionsList="suggestionsList"
-        :focusOnMounted="true"
-        :token="options.token"
-        v-bind="nonDefaultOptions"
-        @enriched="handleEnriched"
-        @enrichFail="handleEnrichFail"
-        @error="handleError"
-      />
+        <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
 
-      <section class="mt-3 min-h-[1000px]">
+        <VueDadata
+          v-model="query"
+          v-model:suggestion="suggestion"
+          v-model:suggestionsList="suggestionsList"
+          :focusOnMounted="true"
+          :token="options.token"
+          v-bind="nonDefaultOptions"
+          @enriched="handleEnriched"
+          @enrichFail="handleEnrichFail"
+          @error="handleError"
+        >
+        </VueDadata>
+
         <div class="rounded-xl bg-white px-4 py-2">
           <div class="flex justify-between">
             <span>
               Current suggestion:
               <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
             </span>
-            <AButton v-if="suggestion" @click="resetSuggestions">Reset</AButton>
+            <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
           </div>
 
           <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{
             suggestion
           }}</pre>
         </div>
-      </section>
-    </main>
+      </main>
+
+      <!-- API requests options -->
+      <aside class="order-3 flex w-full grow basis-80 lg:max-w-80">
+        <OptionsBlock
+          class="w-full"
+          :canReset="!allApiOptionsDefault"
+          heading="API requests options"
+          @resetClick="resetApiOptions"
+        >
+          <div class="flex items-center gap-2">
+            count:
+            <input
+              v-model.number="options.count"
+              class="accent-accent"
+              :max="MAX_SUG_COUNT"
+              min="1"
+              step="1"
+              type="range"
+            />
+            {{ options.count }}
+          </div>
+
+          <template
+            v-if="
+              options.suggestType === 'address' ||
+              options.suggestType === 'fias' ||
+              options.suggestType === 'party' ||
+              options.suggestType === 'bank'
+            "
+          >
+            <div class="dev-item">
+              <InputText
+                v-model="locationsBoostModel"
+                label="locationsBoost:"
+                placeholder="kladr_id or ids"
+              />
+              {{ options.locationsBoost }}
+            </div>
+
+            <!-- example locations filters -->
+            <div v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
+              <div>
+                locationsFilter examples:
+                <AButton class="text-sm" @click="examplesShown = !examplesShown">
+                  {{ examplesShown ? 'Hide' : 'Show' }}
+                </AButton>
+              </div>
+
+              <RadioGroup
+                v-if="examplesShown"
+                v-model="options.locationsFilter"
+                class="mt-2 flex flex-col gap-1"
+                :options="locationsExamples"
+              />
+            </div>
+
+            <LocationsFilter
+              v-model="options.locationsFilter"
+              :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
+            />
+          </template>
+
+          <!-- 'address' and 'fias' -->
+          <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
+            <div class="flex flex-wrap gap-3">
+              <SelectOptions
+                v-model="options.fromBound"
+                :options="
+                  options.suggestType === 'address'
+                    ? BOUND_TYPES
+                    : BOUND_TYPES.filter((el) => el !== 'country')
+                "
+                label="fromBound:"
+              />
+              <SelectOptions
+                v-model="options.toBound"
+                :options="
+                  options.suggestType === 'address'
+                    ? BOUND_TYPES
+                    : BOUND_TYPES.filter((el) => el !== 'country')
+                "
+                label="toBound:"
+              />
+            </div>
+          </template>
+
+          <template v-if="options.suggestType === 'address'">
+            <RadiusFilter v-model="options.radiusFilter" />
+
+            <RadioGroup v-model="options.division" :options="DIVISION_TYPES" label="division" />
+
+            <RadioGroup v-model="options.language" :options="LANGUAGES" label="language:" />
+          </template>
+
+          <CheckBox
+            v-if="
+              options.locationsFilter &&
+              (options.suggestType === 'address' || options.suggestType === 'fias')
+            "
+            v-model="options.restrictValue"
+            label="restrictValue"
+          />
+
+          <RadioGroup
+            v-if="options.suggestType === 'party'"
+            v-model="options.entityType"
+            :options="[undefined, ...PARTY_TYPES]"
+            label="entityType:"
+          />
+          <TogglesGroup
+            v-else-if="options.suggestType === 'party_by'"
+            v-model="options.entityType"
+            :options="[/* undefined, */ ...PARTY_BY_TYPES]"
+            label="entityType:"
+          />
+          <TogglesGroup
+            v-else-if="options.suggestType === 'party_kz'"
+            v-model="options.entityType"
+            :options="[/* undefined, */ ...PARTY_KZ_TYPES]"
+            label="entityType:"
+          />
+          <TogglesGroup
+            v-else-if="options.suggestType === 'bank'"
+            v-model="options.entityType"
+            :options="BANK_TYPES"
+            label="entityType: "
+          />
+
+          <TogglesGroup
+            v-if="
+              options.suggestType === 'party' ||
+              options.suggestType === 'party_by' ||
+              options.suggestType === 'bank'
+            "
+            v-model="options.entityStatus"
+            :options="
+              { party: PARTY_STATUSES, party_by: PARTY_BY_STATUSES, bank: BANK_STATUSES }[
+                options.suggestType
+              ]
+            "
+            label="entityStatus:"
+          />
+
+          <!-- 'fio' -->
+          <template v-if="options.suggestType === 'fio'">
+            <TogglesGroup v-model="options.fioParts" :options="FIO_PARTS" label="fioParts:" />
+
+            <RadioGroup
+              v-model="options.fioGender"
+              :options="[undefined, ...FIO_GENDERS]"
+              label="fioGender:"
+            />
+          </template>
+
+          <InputJson
+            v-if="
+              [
+                `fms_unit`,
+                `fns_unit`,
+                `metro`,
+                `mktu`,
+                `okpd2`,
+                `okved2`,
+                `postal_unit`,
+                `region_court`,
+              ].includes(options.suggestType as string)
+            "
+            v-model="options.filters"
+            class="flex-col gap-1"
+            allowArray
+            label="filters (json)"
+            placeholder="'filters' API request parameter"
+          />
+        </OptionsBlock>
+      </aside>
+    </div>
   </div>
 </template>

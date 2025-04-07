@@ -51,8 +51,8 @@ const suggestion = ref(undefined);
 | ----------- | -------- | --------------------------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
 | token       | **YES**  | Dadata API key (token)                                                                  | `string`               |                                                                                                    |
 | suggestType |          | One of the [DaData Suggest API types](https://dadata.ru/api/suggest/)                   | `string`               | `'address'`                                                                                        |
-| url         |          | Custom Dadata API url                                                                   | `string`               | [https://suggestions.dadata.ru/...](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/) |
 | httpCache   |          | If `false`, HTTP requests will not be cached.                                           | `boolean`              | `true`                                                                                             |
+| url         |          | Custom Dadata API url                                                                   | `string`               | [https://suggestions.dadata.ru/...](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/) |
 | payload     |          | Custom **payload** for the API request. Fields will be added to, or override existing.  | `object`\|`object[]`   |                                                                                                    |
 | headers     |          | Custom **headers** for the API request. Headers will be added to, or override existing. | `object`               |                                                                                                    |
 
@@ -70,7 +70,7 @@ const suggestion = ref(undefined);
 | division        | [Type of territorial division](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589): `ADMINISTRATIVE` or `MUNICIPAL`.                               | `string`                                                    | `ADMINISTRATIVE` |
 | language        | Display language for address suggestions. `RU` or `EN`. The `EN` version mostly provides transliteration.                                                            | `RU`\|`EN`                                                  |                  |
 
-#### Additional API requests options for other suggestions types. _All optional_
+#### API requests options for other suggestions types. _All optional_
 
 | Prop         | Description                                                                                                 | Type / Possible values | Default |
 | ------------ | ----------------------------------------------------------------------------------------------------------- | ---------------------- | ------- |

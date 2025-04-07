@@ -70,8 +70,8 @@ watch(input, (str) => {
 </script>
 
 <template>
-  <label class="inline-block">
-    <div v-if="label" class="pl-1 text-sm">{{ label }}</div>
+  <label class="inline-flex">
+    <div v-if="label">{{ label }}</div>
     <textarea
       ref="textarea"
       v-model="input"

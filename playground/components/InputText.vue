@@ -25,7 +25,7 @@ const model = defineModel({ type: null });
 </script>
 <template>
   <label class="inline-block">
-    <div v-if="label" class="pl-1 text-sm">{{ label }}</div>
+    <div v-if="label">{{ label }}</div>
     <input
       v-model="model"
       :class="twMerge('w-full rounded-lg border bg-white px-1.5 py-0.5', inputClass)"
