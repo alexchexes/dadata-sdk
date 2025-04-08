@@ -16,7 +16,7 @@ const httpCache = new Map<string, unknown>();
  * Builds a payload and makes a (cached) request to appropriate 'suggest' API endpoint
  */
 export const makeSuggestRequest = async (options: SuggestOptions): Promise<DadataSuggestion[]> => {
-  const payload = { ...buildPayload(options), ...(options.payload ?? {}) };
+  const payload = buildPayload(options);
 
   const url = options.url ? options.url : BASE_SUGGEST_URL + options.suggestType;
 

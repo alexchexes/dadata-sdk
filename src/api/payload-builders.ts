@@ -298,7 +298,7 @@ const buildFioPayload = (options: SuggestFioOptions) => {
 /**
  * Converts options to payload params, based on the suggestType
  */
-export const buildPayload = (options: SuggestOptions): SuggestPayload => {
+const buildPayloadFromOptions = (options: SuggestOptions): SuggestPayload => {
   switch (options.suggestType) {
     case 'address':
       return buildNormalAddressPayload(options);
@@ -320,4 +320,11 @@ export const buildPayload = (options: SuggestOptions): SuggestPayload => {
       }
       return buildBasePayload(options);
   }
+};
+
+/**
+ * calls 'buildPayloadFromOptions' and merges the result with custom payload if provided
+ */
+export const buildPayload = (options: SuggestOptions): SuggestPayload => {
+  return { ...buildPayloadFromOptions(options), ...(options.payload ?? {}) };
 };
