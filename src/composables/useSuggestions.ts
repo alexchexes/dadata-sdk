@@ -62,19 +62,20 @@ export function useSuggestions(
     };
   });
   const visibleQuery = ref('');
-  const inputFocused = ref(false);
-  const _dropdownVisible = ref(false);
+  const _isDropdownVisible = ref(false);
+  const _isFocused = ref(false);
   const _shouldShowNoSuggestionsHint = ref(false);
   const navigatedIndex = ref(-1);
   const suggestionsList: Ref<DadataSuggestion[]> = ref([]);
 
+  const isFocused = computed(() => _isFocused.value);
   const isDropdownVisible = computed(() => {
     if (options.forceHide || options.disabled) return false;
     if (options.forceShow) return true;
     if (options.noSuggestionsHint && _shouldShowNoSuggestionsHint.value && minCharsReached.value) {
       return true;
     }
-    return inputFocused.value && _dropdownVisible.value && suggestionsList.value.length;
+    return Boolean(_isDropdownVisible.value && suggestionsList.value.length);
   });
 
   const minCharsReached = computed(() => queryModel.value.length >= options.minChars);
@@ -221,7 +222,7 @@ export function useSuggestions(
       return;
     }
 
-    _dropdownVisible.value = false;
+    _isDropdownVisible.value = false;
     navigatedIndex.value = -1;
   };
 
@@ -285,7 +286,7 @@ export function useSuggestions(
     queryModel.value = target.value;
 
     if (!options.forceHide) {
-      _dropdownVisible.value = true;
+      _isDropdownVisible.value = true;
     }
   };
 
@@ -303,7 +304,7 @@ export function useSuggestions(
     event.preventDefault();
 
     if (key === HandledKeys.Enter) {
-      if (_dropdownVisible.value && suggestionsList.value.length) {
+      if (_isDropdownVisible.value && suggestionsList.value.length) {
         let indexToSelect = null;
 
         if (canSelectNavigatedIndex.value) {
@@ -318,13 +319,13 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Esc) {
-      _dropdownVisible.value = false;
+      _isDropdownVisible.value = false;
       navigatedIndex.value = -1;
       visibleQuery.value = queryModel.value;
     }
 
     if (key === HandledKeys.Up) {
-      if (canGoUp.value && _dropdownVisible.value) {
+      if (canGoUp.value && _isDropdownVisible.value) {
         navigatedIndex.value -= 1;
 
         if (navigatedIndex.value > -1) {
@@ -336,44 +337,46 @@ export function useSuggestions(
     }
 
     if (key === HandledKeys.Down) {
-      if (_dropdownVisible.value) {
+      if (_isDropdownVisible.value) {
         if (canGoDown.value) {
           navigatedIndex.value += 1;
           visibleQuery.value = suggestionsList.value[navigatedIndex.value].value;
         }
       } else if (suggestionsList.value.length && !options.forceHide) {
-        _dropdownVisible.value = true;
+        _isDropdownVisible.value = true;
       }
     }
   };
 
   const handleInputFocus = (evt: FocusEvent) => {
+    _isFocused.value = true;
+
     if (options.disabled) {
       return;
     }
     emit('focus', evt);
-    inputFocused.value = true;
 
     if (suggestionsList.value.length && options.showOnFocus !== false && !options.forceHide) {
       if (
         options.showOnFocus === 'always' ||
         (options.showOnFocus === 'no_selection' && !suggestionModel.value)
       ) {
-        _dropdownVisible.value = true;
+        _isDropdownVisible.value = true;
       }
     }
   };
 
   const handleInputBlur = (evt: FocusEvent) => {
+    _isFocused.value = false;
+
     if (options.disabled) {
       return;
     }
     emit('blur', evt);
-    inputFocused.value = false;
 
     // isDropdownVisible check makes sense since we don't use matcher, but once added, we must
     // select match on blur in any case, not just when isDropdownVisible is true
-    if (options.selectOnBlur && _dropdownVisible.value) {
+    if (options.selectOnBlur && _isDropdownVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0);
@@ -385,10 +388,10 @@ export function useSuggestions(
     // Reset visible query in case it changed because user navigated suggestions with keyboard
     visibleQuery.value = queryModel.value;
 
-    // respect the showOnFocus option
-    if (options.showOnFocus === false) {
-      _dropdownVisible.value = false;
-    }
+    // // respect the showOnFocus option
+    // if (options.showOnFocus === false) {
+    _isDropdownVisible.value = false;
+    // }
   };
 
   /**
@@ -413,10 +416,14 @@ export function useSuggestions(
     hideDropdown();
   };
 
+  const show = () => {
+    _isDropdownVisible.value = true;
+  };
+
   return {
     visibleQuery,
-    inputFocused,
     isDropdownVisible,
+    isFocused,
     navigatedIndex,
     suggestionsList,
     canClear,
@@ -428,5 +435,7 @@ export function useSuggestions(
     handleInputBlur,
     handleSuggestionClick,
     clear,
+    show,
+    hide: hideDropdown,
   };
 }

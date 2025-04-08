@@ -793,6 +793,29 @@ const builtPayload = computed(() =>
           </b>
         </div>
 
+        <!-- Component Exposed API -->
+        <div>
+          <AButton :disabled="vueDadataRef?.isFocused" @mousedown.prevent="vueDadataRef?.focus()"
+            >focus</AButton
+          >
+          <AButton :disabled="!vueDadataRef?.isFocused" @mousedown.prevent="vueDadataRef?.blur()"
+            >blur</AButton
+          >
+          <AButton :disabled="!query && !suggestion" @mousedown.prevent="vueDadataRef?.clear()"
+            >clear</AButton
+          >
+          <AButton
+            :disabled="!suggestionsList?.length || vueDadataRef?.isDropdownVisible"
+            @mousedown.prevent="vueDadataRef?.show()"
+            >show</AButton
+          >
+          <AButton
+            :disabled="!suggestionsList?.length || !vueDadataRef?.isDropdownVisible"
+            @mousedown.prevent="vueDadataRef?.hide()"
+            >hide</AButton
+          >
+        </div>
+
         <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
 
         <VueDadata

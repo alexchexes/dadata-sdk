@@ -235,11 +235,16 @@ Overrides a suggestion subtitle. By default, there are only subtitles for `party
 
 If you're using `ref` to access the `<VueDadata />` instance, the following properties and methods are exposed via `defineExpose()`:
 
-| Name       | Type                                 | Description                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------------ |
-| `inputRef` | `Ref<HTMLInputElement \| undefined>` | Reference to the internal `<input>` element.           |
-| `focus()`  | `() => void`                         | Programmatically focuses the input element.            |
-| `blur()`   | `() => void`                         | Programmatically removes focus from the input element. |
+| Name                | Type                                   | Description                                                              |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| `inputRef`          | `ShallowRef<HTMLInputElement \| null>` | Reference to the internal `<input>` element.                             |
+| `isDropdownVisible` | `ComputedRef<boolean>`                 | `true` when suggestions dropdown is visible.                             |
+| `isFocused`         | `ComputedRef<boolean>`                 | `true` when `<input>` element is focused.                                |
+| `focus()`           | `() => void`                           | Focuses the `<input>` element.                                           |
+| `blur()`            | `() => void`                           | Removes focus from the `<input>` element.                                |
+| `show()`            | `() => void`                           | Shows suggestions dropdown if there are suggestions loaded               |
+| `hide()`            | `() => void`                           | Hides suggestions dropdown                                               |
+| `clear()`           | `() => void`                           | Clears query (`modelValue`), `suggestion` and `suggestionsList` v-models |
 
 ### Example
 

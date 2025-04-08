@@ -57,6 +57,7 @@ const inputRef = useTemplateRef('inputRef');
 const {
   visibleQuery,
   isDropdownVisible,
+  isFocused,
   navigatedIndex,
   suggestionsList,
   canClear,
@@ -68,6 +69,8 @@ const {
   handleInputBlur,
   handleSuggestionClick,
   clear,
+  show,
+  hide,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
 
 watchEffect(() => {
@@ -175,8 +178,13 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
 
 defineExpose({
   inputRef,
+  isDropdownVisible,
+  isFocused,
   focus: () => inputRef.value?.focus(),
   blur: () => inputRef.value?.blur(),
+  clear,
+  show,
+  hide,
 });
 </script>
 
