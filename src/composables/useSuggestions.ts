@@ -1,7 +1,10 @@
+import { CanceledError } from 'axios';
 import { computed, ref, toValue, watch } from 'vue';
-import { makeSuggestRequest } from '@/api';
 import { DEFAULT_OPTIONS, HandledKeys } from '@/const';
+import { makeSuggestRequest } from '@/api';
+import { mergeDefined } from '@/utils';
 import { reactiveComputed, useDebounceFn } from '@vueuse/core';
+import type { DadataSuggestion } from '@/types/api';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 import type {
   SuggestOptions,
@@ -10,9 +13,6 @@ import type {
   InternalVueDadataOptions,
 } from '@/types';
 import type { VueDadataEmits } from '@/VueDadata.vue';
-import { mergeDefined } from '@/utils';
-import { CanceledError } from 'axios';
-import type { DadataSuggestion } from '@/types/api';
 
 export function useSuggestions(
   queryModel: Ref<string>,

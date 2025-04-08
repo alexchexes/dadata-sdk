@@ -1,9 +1,4 @@
 <script lang="ts" setup>
-import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from '@/const';
-
-import { useSuggestions } from '@/composables/useSuggestions';
-import IconCross from '@/IconCross.vue';
-import type { VueDadataClasses, VueDadataOptions } from '@/types';
 import {
   computed,
   onMounted,
@@ -12,15 +7,19 @@ import {
   type InputHTMLAttributes,
   type PropType,
 } from 'vue';
-import { matchWords, mergeDefined } from './utils';
+import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from '@/const';
+import { highlightHtml } from '@/utils';
+import { matchWords, mergeDefined } from '@/utils';
+import { useSuggestions } from '@/composables/useSuggestions';
+import IconCross from '@/IconCross.vue';
+import type { VueDadataClasses, VueDadataOptions } from '@/types';
 import type {
   BankSuggestion,
   DadataSuggestion,
   PartyBySuggestion,
   PartyKzSuggestion,
   PartySuggestion,
-} from './types/api';
-import { highlightHtml } from './utils';
+} from '@/types/api';
 
 const props = withDefaults(defineProps<VueDadataOptions>(), {
   // although we merge defaults in the composable, we also need to set them here

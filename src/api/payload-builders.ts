@@ -1,5 +1,4 @@
 import { DEFAULT_COUNT } from '@/const/api';
-
 import type {
   LocationsFilterItem,
   OneOrMany,
@@ -9,6 +8,8 @@ import type {
   SuggestFioOptions,
   SuggestOptions,
   SuggestOptionsWithFilters,
+  SuggestPartyByOptions,
+  SuggestPartyKzOptions,
   SuggestPartyOptions,
 } from '@/types';
 import type {
@@ -24,9 +25,6 @@ import type {
   SuggestPayload,
   SuggestPayloadWithFilters,
 } from '@/types/api';
-
-import type { SuggestPartyByOptions } from '@/types/suggest-options-party_by.types';
-import type { SuggestPartyKzOptions } from '@/types/suggest-options-party_kz.types';
 
 /**
  * Normalizes value of a given type to array of values of the same type

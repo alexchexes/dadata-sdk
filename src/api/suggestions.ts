@@ -1,8 +1,8 @@
-import axios, { type RawAxiosRequestHeaders } from 'axios';
 import { BASE_SUGGEST_URL } from '@/const/api';
-import type { SuggestOptions } from '@/types';
-import type { DadataSuggestion } from '@/types/api';
 import { buildPayload } from './payload-builders';
+import axios, { type RawAxiosRequestHeaders } from 'axios';
+import type { DadataSuggestion } from '@/types/api';
+import type { SuggestOptions } from '@/types';
 
 const DEFAULT_HEADERS: RawAxiosRequestHeaders = {
   'Content-Type': 'application/json',
