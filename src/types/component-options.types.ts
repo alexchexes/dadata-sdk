@@ -379,7 +379,6 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'enrichOnSelect'
   | 'showOnFocus'
   | 'clearOnChange'
-  | 'addSpace'
   | 'debounce'
   | 'suggestType'
   | 'language'

@@ -48,7 +48,6 @@ export const DEFAULT_OPTIONS = {
   clearOnChange: true,
   selectOnEnter: true,
   enrichOnSelect: true,
-  addSpace: true,
   httpCache: true,
   suggestionsHint: 'Выберите вариант или продолжите ввод',
   inputName: 'vue-dadata-input',
