@@ -53,6 +53,8 @@ const emit = defineEmits<{
 }>();
 export type VueDadataEmits = typeof emit;
 
+const inputRef = useTemplateRef('inputRef');
+
 const {
   visibleQuery,
   isDropdownVisible,
@@ -72,8 +74,6 @@ const {
 watchEffect(() => {
   suggestionsListModel.value = suggestionsList.value;
 });
-
-const inputRef = useTemplateRef('inputRef');
 
 onMounted(() => {
   if (options.focusOnMounted) {
@@ -173,6 +173,12 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
     className: mergedClasses.value.highlightedText,
   });
 };
+
+defineExpose({
+  inputRef,
+  focus: () => inputRef.value?.focus(),
+  blur: () => inputRef.value?.blur(),
+});
 </script>
 
 <template>

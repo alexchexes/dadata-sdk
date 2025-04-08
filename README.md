@@ -231,6 +231,36 @@ Overrides a suggestion subtitle. By default, there are only subtitles for `party
 </template>
 ```
 
+## Exposed Component API
+
+If you're using `ref` to access the `<VueDadata />` instance, the following properties and methods are exposed via `defineExpose()`:
+
+| Name       | Type                                 | Description                                            |
+| ---------- | ------------------------------------ | ------------------------------------------------------ |
+| `inputRef` | `Ref<HTMLInputElement \| undefined>` | Reference to the internal `<input>` element.           |
+| `focus()`  | `() => void`                         | Programmatically focuses the input element.            |
+| `blur()`   | `() => void`                         | Programmatically removes focus from the input element. |
+
+### Example
+
+```vue
+<template>
+  <VueDadata ref="vueDadataRef" ... />
+</template>
+
+<script setup>
+import { useTemplateRef } from 'vue';
+
+const vueDadataRef = useTemplateRef('vueDadataRef');
+
+onMounted(() => {
+  setTimeout(() => {
+    vueDadataRef.value?.focus(); // Autofocus the input with slight delay
+  }, 300);
+});
+</script>
+```
+
 ## Peer dependencies
 
 - [vue](https://github.com/vuejs/vue)

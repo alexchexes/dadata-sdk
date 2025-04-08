@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, type Ref } from 'vue';
+import { computed, ref, useTemplateRef, type Ref } from 'vue';
 import AButton from './components/AButton.vue';
 import CheckBox from './components/CheckBox.vue';
 import InputText from './components/InputText.vue';
@@ -364,6 +364,8 @@ const removeCustomHeaders = () => {
   showCustomHeaders.value = false;
   options.value.headers = undefined;
 };
+
+const vueDadataRef = useTemplateRef('vueDadataRef');
 </script>
 
 <template>
@@ -556,6 +558,7 @@ const removeCustomHeaders = () => {
         <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
 
         <VueDadata
+          ref="vueDadataRef"
           v-model="query"
           v-model:suggestion="suggestion"
           v-model:suggestionsList="suggestionsList"
