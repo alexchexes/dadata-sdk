@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef, type Ref } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, type Ref } from 'vue';
 import AButton from './components/AButton.vue';
 import CheckBox from './components/CheckBox.vue';
 import InputText from './components/InputText.vue';
@@ -31,7 +31,7 @@ import {
   type VueDadataOptions,
 } from '@/index';
 import type { DadataSuggestion, SuggestType } from '@/types/api';
-import { ignorableWatch } from '@vueuse/core';
+import { ignorableWatch, useMediaQuery } from '@vueuse/core';
 import ButtonAdd from './components/ButtonAdd.vue';
 import InputJson from './components/InputJson.vue';
 import ButtonRemove from './components/ButtonRemove.vue';
@@ -366,6 +366,18 @@ const removeCustomHeaders = () => {
 };
 
 const vueDadataRef = useTemplateRef('vueDadataRef');
+
+const isXl = useMediaQuery('(width >= 80rem)');
+const isMd = useMediaQuery('(width >= 48rem)');
+
+const behaviorOptionsCollapsed = ref(false);
+const apiOptionsCollapsed = ref(false);
+const generalOptionsCollapsed = ref(false);
+
+onMounted(() => {
+  behaviorOptionsCollapsed.value = !isXl.value;
+  apiOptionsCollapsed.value = !isMd.value;
+});
 </script>
 
 <template>
@@ -380,13 +392,21 @@ const vueDadataRef = useTemplateRef('vueDadataRef');
       </AButton>
     </header>
 
-    <div class="mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-start gap-4 p-4 lg:flex-row">
+    <!-- Grid container -->
+    <div
+      class="grid grid-cols-1 grid-rows-[auto_1fr] gap-4 p-4 md:grid-cols-[20rem_1fr] xl:mx-auto xl:max-w-(--breakpoint-2xl) xl:grid-cols-[20rem_auto_20rem]"
+    >
       <!-- Component behavior options -->
-      <aside class="order-2 flex grow basis-80 lg:order-1 lg:max-w-80">
+      <aside class="md:row-start-1 xl:col-start-1 xl:row-start-1">
         <OptionsBlock
-          class="w-full"
+          class="relative w-full overflow-hidden"
+          :class="behaviorOptionsCollapsed && 'h-20'"
           :canReset="!allBehaviorOptionsDefault"
+          :collapseOnSmallScreen="true"
+          :isCollapsed="behaviorOptionsCollapsed"
           heading="Component behavior options"
+          headingClass="cursor-pointer hover:text-slate-700"
+          @headingClick="behaviorOptionsCollapsed = true"
           @resetClick="resetBehaviorOptions"
         >
           <CheckBox v-model="options.disabled" label="disabled" />
@@ -446,155 +466,26 @@ const vueDadataRef = useTemplateRef('vueDadataRef');
           <InputText v-model="options.placeholder" label="placeholder:" />
           <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
           <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
+
+          <div
+            :class="
+              behaviorOptionsCollapsed &&
+              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
+            "
+            @click="behaviorOptionsCollapsed = false"
+          />
         </OptionsBlock>
       </aside>
 
-      <!-- General options and the input -->
-      <main
-        class="order-1 mx-auto flex max-w-5xl min-w-0 flex-1 grow basis-full flex-col gap-3 lg:order-2 lg:basis-xl"
-      >
-        <!-- Block above the input -->
-        <OptionsBlock
-          class="w-full pb-3"
-          :canReset="!allGeneralOptionsDefault"
-          heading="General options"
-          @resetClick="resetGeneralOptions"
-        >
-          <div class="flex flex-col gap-4">
-            <!-- API token & URL -->
-            <div class="flex flex-wrap gap-2">
-              <InputText
-                v-model.trim="tokenModel"
-                class="grow"
-                :placeholder="TOKEN_PLACEHOLDER"
-                label="API token:"
-              />
-
-              <InputText
-                v-model.trim="options.url"
-                class="grow"
-                :placeholder="BASE_SUGGEST_URL + options.suggestType"
-                label="API URL:"
-              />
-            </div>
-
-            <!-- Suggestions type -->
-            <div class="flex flex-wrap gap-1">
-              <RadioGroup
-                v-model="options.suggestType"
-                :options="ORDERED_SUGGEST_TYPES"
-                buttonClass="px-3 py-1.5"
-              />
-            </div>
-
-            <!-- Custom payload & headers -->
-            <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
-              <div class="grow basis-1/3">
-                <!-- Custom payload -->
-                <div class="flex gap-2">
-                  <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
-                  <ButtonRemove v-else outline @click="removeCustomPayload()" />
-                  <span>
-                    {{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
-                  </span>
-                </div>
-
-                <InputJson
-                  v-if="showCustomPayload"
-                  v-model="options.payload"
-                  class="w-full"
-                  :rows="4"
-                  placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
-                />
-              </div>
-
-              <div class="grow basis-1/3">
-                <!-- Custom headers -->
-                <div class="flex gap-2">
-                  <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
-                  <ButtonRemove v-else outline @click="removeCustomHeaders()" />
-                  <span>
-                    {{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
-                  </span>
-                </div>
-
-                <InputJson
-                  v-if="showCustomHeaders"
-                  v-model="options.headers"
-                  class="w-full"
-                  :rows="4"
-                  placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
-                />
-              </div>
-
-              <CheckBox v-model="options.httpCache" class="gap-2" label="httpCache" />
-            </div>
-          </div>
-        </OptionsBlock>
-
-        <div class="flex flex-wrap items-center gap-3">
-          <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
-          <CheckBox v-model="showAllOptions" label="Show all current options" />
-        </div>
-
-        <div v-if="showLiveSnippet">
-          <LiveSnippet :nonDefaultOptions :options :showToken="isTokenProvided" />
-        </div>
-
-        <pre
-          v-if="showAllOptions"
-          class="rounded-xl bg-white px-4 py-2 text-[14px]"
-        ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
-
-        <!-- Current query string -->
-        <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
-          <span :class="!query && 'text-slate-400'"> Current query: </span>
-
-          <b @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))">
-            {{ query }}
-          </b>
-        </div>
-
-        <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
-
-        <VueDadata
-          ref="vueDadataRef"
-          v-model="query"
-          v-model:suggestion="suggestion"
-          v-model:suggestionsList="suggestionsList"
-          class="text-slate-950"
-          :focusOnMounted="true"
-          :token="options.token"
-          v-bind="nonDefaultOptions"
-          @enriched="handleEnriched"
-          @enrichFail="handleEnrichFail"
-          @error="handleError"
-        >
-        </VueDadata>
-
-        <div class="rounded-xl bg-white px-4 py-2">
-          <div class="flex justify-between">
-            <span>
-              Current suggestion:
-              <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
-            </span>
-            <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
-          </div>
-
-          <pre
-            v-if="suggestion"
-            class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap text-slate-950"
-            >{{ suggestion }}</pre
-          >
-        </div>
-      </main>
-
       <!-- API requests options -->
-      <aside class="order-3 flex w-full grow basis-80 lg:max-w-80">
+      <aside class="md:col-start-1 md:row-start-2 xl:col-start-3 xl:row-start-1">
         <OptionsBlock
-          class="w-full"
+          class="relative w-full overflow-hidden"
+          :class="apiOptionsCollapsed && 'h-20'"
           :canReset="!allApiOptionsDefault"
           heading="API requests options"
+          headingClass="cursor-pointer hover:text-slate-700"
+          @headingClick="apiOptionsCollapsed = true"
           @resetClick="resetApiOptions"
         >
           <div class="flex items-center gap-2">
@@ -761,8 +652,167 @@ const vueDadataRef = useTemplateRef('vueDadataRef');
             label="filters (json)"
             placeholder="'filters' API request parameter"
           />
+
+          <div
+            :class="
+              apiOptionsCollapsed &&
+              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
+            "
+            @click="apiOptionsCollapsed = false"
+          />
         </OptionsBlock>
       </aside>
+
+      <!-- General options and the input -->
+      <main
+        class="flex min-w-0 flex-col gap-3 md:col-start-2 md:row-span-2 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:mx-auto xl:max-w-5xl"
+      >
+        <!-- Block above the input -->
+        <OptionsBlock
+          class="relative w-full overflow-hidden pb-3"
+          :class="generalOptionsCollapsed && 'h-20'"
+          :canReset="!allGeneralOptionsDefault"
+          heading="General options"
+          headingClass="cursor-pointer hover:text-slate-700"
+          @headingClick="generalOptionsCollapsed = true"
+          @resetClick="resetGeneralOptions"
+        >
+          <div class="flex flex-col gap-4">
+            <!-- API token & URL -->
+            <div class="flex flex-wrap gap-2">
+              <InputText
+                v-model.trim="tokenModel"
+                class="grow"
+                :placeholder="TOKEN_PLACEHOLDER"
+                label="API token:"
+              />
+
+              <InputText
+                v-model.trim="options.url"
+                class="grow"
+                :placeholder="BASE_SUGGEST_URL + options.suggestType"
+                label="API URL:"
+              />
+            </div>
+
+            <!-- Suggestions type -->
+            <div class="flex flex-wrap gap-1">
+              <RadioGroup
+                v-model="options.suggestType"
+                :options="ORDERED_SUGGEST_TYPES"
+                buttonClass="px-3 py-1.5"
+              />
+            </div>
+
+            <!-- Custom payload & headers -->
+            <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
+              <div class="grow basis-1/3">
+                <!-- Custom payload -->
+                <div class="flex gap-2">
+                  <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
+                  <ButtonRemove v-else outline @click="removeCustomPayload()" />
+                  <span>
+                    {{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
+                  </span>
+                </div>
+
+                <InputJson
+                  v-if="showCustomPayload"
+                  v-model="options.payload"
+                  class="w-full"
+                  :rows="4"
+                  placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
+                />
+              </div>
+
+              <div class="grow basis-1/3">
+                <!-- Custom headers -->
+                <div class="flex gap-2">
+                  <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
+                  <ButtonRemove v-else outline @click="removeCustomHeaders()" />
+                  <span>
+                    {{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
+                  </span>
+                </div>
+
+                <InputJson
+                  v-if="showCustomHeaders"
+                  v-model="options.headers"
+                  class="w-full"
+                  :rows="4"
+                  placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
+                />
+              </div>
+
+              <CheckBox v-model="options.httpCache" class="gap-2" label="httpCache" />
+            </div>
+          </div>
+
+          <div
+            :class="
+              generalOptionsCollapsed &&
+              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
+            "
+            @click="generalOptionsCollapsed = false"
+          />
+        </OptionsBlock>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
+          <CheckBox v-model="showAllOptions" label="Show all current options" />
+        </div>
+
+        <div v-if="showLiveSnippet">
+          <LiveSnippet :nonDefaultOptions :options :showToken="isTokenProvided" />
+        </div>
+
+        <pre
+          v-if="showAllOptions"
+          class="rounded-xl bg-white px-4 py-2 text-[14px]"
+        ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
+
+        <!-- Current query string -->
+        <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
+          <span :class="!query && 'text-slate-400'"> Current query: </span>
+
+          <b @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))">
+            {{ query }}
+          </b>
+        </div>
+
+        <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
+
+        <VueDadata
+          ref="vueDadataRef"
+          v-model="query"
+          v-model:suggestion="suggestion"
+          v-model:suggestionsList="suggestionsList"
+          class="text-slate-950"
+          :focusOnMounted="true"
+          :token="options.token"
+          v-bind="nonDefaultOptions"
+          @enriched="handleEnriched"
+          @enrichFail="handleEnrichFail"
+          @error="handleError"
+        >
+        </VueDadata>
+
+        <div class="rounded-xl bg-white px-4 py-2">
+          <div class="flex justify-between">
+            <span>
+              Current suggestion:
+              <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
+            </span>
+            <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
+          </div>
+
+          <pre
+            v-if="suggestion"
+            class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap text-slate-950"
+            >{{ suggestion }}</pre
+          >
+        </div>
+      </main>
     </div>
   </div>
 </template>
