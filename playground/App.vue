@@ -28,6 +28,7 @@ import {
   PARTY_TYPES,
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
+  type SuggestOptions,
   type VueDadataOptions,
 } from '@/index';
 import type { DadataSuggestion, SuggestType } from '@/types/api';
@@ -38,6 +39,7 @@ import ButtonRemove from './components/ButtonRemove.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams.ts';
 import OptionsBlock from './components/OptionsBlock.vue';
 import IconReset from './components/IconReset.vue';
+import { buildPayload } from '@/api';
 
 const SUGGEST_TYPES_ORDER: SuggestType[] = [
   'address',
@@ -74,6 +76,7 @@ const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 const isTailwindEnabled = ref(true);
 const showLiveSnippet = ref(true); // @todo temp
 const showAllOptions = ref(false);
+const showBuiltPayload = ref(false);
 
 const query = ref('');
 const suggestion = ref<DadataSuggestion | undefined>(undefined);
@@ -378,6 +381,10 @@ onMounted(() => {
   behaviorOptionsCollapsed.value = !isXl.value;
   apiOptionsCollapsed.value = !isMd.value;
 });
+
+const builtPayload = computed(() =>
+  buildPayload({ ...options.value, query: query.value } as SuggestOptions),
+);
 </script>
 
 <template>
@@ -759,7 +766,8 @@ onMounted(() => {
 
         <div class="flex flex-wrap items-center gap-3">
           <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
-          <CheckBox v-model="showAllOptions" label="Show all current options" />
+          <CheckBox v-model="showAllOptions" label="Show all options" />
+          <CheckBox v-model="showBuiltPayload" label="Show payload" />
         </div>
 
         <div v-if="showLiveSnippet">
@@ -770,6 +778,11 @@ onMounted(() => {
           v-if="showAllOptions"
           class="rounded-xl bg-white px-4 py-2 text-[14px]"
         ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
+
+        <pre
+          v-if="showBuiltPayload"
+          class="rounded-xl bg-white px-4 py-2 text-[14px]"
+        ><b>Final payload: </b>{{ builtPayload }}</pre>
 
         <!-- Current query string -->
         <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
