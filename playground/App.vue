@@ -725,7 +725,7 @@ const builtPayload = computed(() =>
 
                 <InputJson
                   v-if="showCustomPayload"
-                  v-model="options.payload"
+                  v-model.lazy="options.payload"
                   class="w-full"
                   :rows="4"
                   placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
@@ -744,7 +744,7 @@ const builtPayload = computed(() =>
 
                 <InputJson
                   v-if="showCustomHeaders"
-                  v-model="options.headers"
+                  v-model.lazy="options.headers"
                   class="w-full"
                   :rows="4"
                   placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."

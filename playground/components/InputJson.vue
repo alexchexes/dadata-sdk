@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { twMerge } from 'tailwind-merge';
 import { useTextareaAutosize } from '@vueuse/core';
 type TwMergeArgument = Parameters<typeof twMerge>[0];
@@ -12,6 +12,7 @@ const props = defineProps<{
   placeholder?: string;
   rows?: number;
   allowArray?: boolean;
+  modelModifiers?: Record<string, true>;
 }>();
 
 const emit = defineEmits<{
@@ -67,30 +68,29 @@ watch(input, (str) => {
     emit('update:modelValue', undefined);
   }
 });
+
+const inputProps = computed(() => ({
+  class: twMerge(
+    'w-full rounded-lg border bg-white px-1.5 py-0.5',
+    props.inputClass,
+    !isValid.value && 'border-red-500! text-red-600 ring-red-500!',
+    '',
+  ),
+  placeholder: props.placeholder || 'JSON object...',
+  rows: props.rows || 1,
+  autocapitalize: 'off',
+  autocomplete: 'off',
+  autocorrect: 'off',
+  spellcheck: false,
+  type: 'text',
+}));
 </script>
 
 <template>
   <label class="inline-flex">
     <div v-if="label">{{ label }}</div>
-    <textarea
-      ref="textarea"
-      v-model="input"
-      :class="
-        twMerge(
-          'w-full rounded-lg border bg-white px-1.5 py-0.5',
-          inputClass,
-          !isValid && 'border-red-500! text-red-600 ring-red-500!',
-          '',
-        )
-      "
-      :placeholder="placeholder || 'JSON object...'"
-      :rows="rows || 1"
-      autocapitalize="off"
-      autocomplete="off"
-      autocorrect="off"
-      spellcheck="false"
-      type="text"
-    />
+    <textarea v-if="modelModifiers?.lazy" ref="textarea" v-model.lazy="input" v-bind="inputProps" />
+    <textarea v-else ref="textarea" v-model="input" v-bind="inputProps" />
   </label>
 </template>
 
