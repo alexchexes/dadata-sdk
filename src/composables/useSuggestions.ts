@@ -1,4 +1,4 @@
-import { CanceledError } from 'axios';
+import { ObsoleteResponseError } from '@/api';
 import { computed, ref, toValue, watch } from 'vue';
 import { DEFAULT_OPTIONS, HandledKeys } from '@/const';
 import { makeSuggestRequest } from '@/api';
@@ -131,7 +131,7 @@ export function useSuggestions(
 
       return await makeSuggestRequest(finalOptions as SuggestOptions);
     } catch (error) {
-      if (!(error instanceof CanceledError)) {
+      if (!(error instanceof ObsoleteResponseError)) {
         emit('error', error);
       }
       return null;
