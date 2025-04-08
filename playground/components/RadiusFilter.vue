@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref, watch, type PropType } from 'vue';
-import InputText from './InputText.vue';
-import ButtonAdd from './ButtonAdd.vue';
-import ButtonRemove from './ButtonRemove.vue';
+import InputText from './ui/InputText.vue';
+import ButtonAdd from './ui/ButtonAdd.vue';
+import ButtonRemove from './ui/ButtonRemove.vue';
 import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS, type RadiusFilter } from '@/index';
 
 const model = defineModel({ type: Object as PropType<RadiusFilter>, required: false });

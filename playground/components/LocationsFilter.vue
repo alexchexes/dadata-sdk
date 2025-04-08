@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref, watch, type PropType } from 'vue';
-import ButtonAdd from './ButtonAdd.vue';
-import ButtonRemove from './ButtonRemove.vue';
-import InputText from './InputText.vue';
-import SelectOptGroup from './SelectOptGroup.vue';
+import ButtonAdd from './ui/ButtonAdd.vue';
+import ButtonRemove from './ui/ButtonRemove.vue';
+import InputText from './ui/InputText.vue';
+import SelectOptGroup from './ui/SelectOptGroup.vue';
 import {
   ISO_CODE_RESTRICTION_TYPES,
   KLADR_ID_RESTRICTION_TYPES,

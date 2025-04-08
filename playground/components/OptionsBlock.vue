@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import ButtonReset from './ButtonReset.vue';
+import ButtonReset from './ui/ButtonReset.vue';
 
 defineProps<{
   canReset?: boolean;

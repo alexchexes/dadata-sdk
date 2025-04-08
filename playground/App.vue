@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, useTemplateRef, type Ref } from 'vue';
-import AButton from './components/AButton.vue';
-import CheckBox from './components/CheckBox.vue';
-import InputText from './components/InputText.vue';
+import AButton from './components/ui/AButton.vue';
+import CheckBox from './components/ui/CheckBox.vue';
+import InputText from './components/ui/InputText.vue';
 import LocationsFilter from './components/LocationsFilter.vue';
-import RadioGroup from './components/RadioGroup.vue';
-import TogglesGroup from './components/TogglesGroup.vue';
+import RadioGroup from './components/ui/RadioGroup.vue';
+import TogglesGroup from './components/ui/TogglesGroup.vue';
 import RadiusFilter from './components/RadiusFilter.vue';
-import SelectOptions from './components/SelectOptions.vue';
+import SelectOptions from './components/ui/SelectOptions.vue';
 import LiveSnippet from './components/LiveSnippet.vue';
 import VueDadata from '@/VueDadata.vue';
 import {
@@ -33,12 +33,12 @@ import {
 } from '@/index';
 import type { DadataSuggestion, SuggestType } from '@/types/api';
 import { ignorableWatch, useMediaQuery } from '@vueuse/core';
-import ButtonAdd from './components/ButtonAdd.vue';
-import InputJson from './components/InputJson.vue';
-import ButtonRemove from './components/ButtonRemove.vue';
+import ButtonAdd from './components/ui/ButtonAdd.vue';
+import InputJson from './components/ui/InputJson.vue';
+import ButtonRemove from './components/ui/ButtonRemove.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams.ts';
 import OptionsBlock from './components/OptionsBlock.vue';
-import IconReset from './components/IconReset.vue';
+import IconReset from './components/ui/IconReset.vue';
 import { buildPayload } from '@/api';
 
 const SUGGEST_TYPES_ORDER: SuggestType[] = [
