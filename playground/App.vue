@@ -367,7 +367,7 @@ const removeCustomHeaders = () => {
 </script>
 
 <template>
-  <div>
+  <div class="text-slate-800">
     <header class="flex gap-3 bg-slate-50 p-3 shadow-md">
       <AButton @click="toggleTailwind">
         Tailwind is {{ isTailwindEnabled ? 'ON' : 'OFF' }}
@@ -546,7 +546,8 @@ const removeCustomHeaders = () => {
 
         <!-- Current query string -->
         <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
-          Current query:
+          <span :class="!query && 'text-slate-400'"> Current query: </span>
+
           <b @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))">
             {{ query }}
           </b>
@@ -558,6 +559,7 @@ const removeCustomHeaders = () => {
           v-model="query"
           v-model:suggestion="suggestion"
           v-model:suggestionsList="suggestionsList"
+          class="text-slate-950"
           :focusOnMounted="true"
           :token="options.token"
           v-bind="nonDefaultOptions"
@@ -576,9 +578,11 @@ const removeCustomHeaders = () => {
             <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
           </div>
 
-          <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{
-            suggestion
-          }}</pre>
+          <pre
+            v-if="suggestion"
+            class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap text-slate-950"
+            >{{ suggestion }}</pre
+          >
         </div>
       </main>
 

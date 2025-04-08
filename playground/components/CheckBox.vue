@@ -15,7 +15,17 @@ const model = defineModel({ type: Boolean });
 </script>
 
 <template>
-  <label :class="twMerge('flex items-center gap-1.5', props.class, disabled && 'text-slate-400')">
+  <label
+    :class="
+      twMerge(
+        'flex items-center gap-1.5',
+        props.class,
+        disabled && 'text-slate-400',
+        !disabled && 'hover:text-slate-950',
+        !(checked || model) && 'text-slate-600',
+      )
+    "
+  >
     <span v-if="right">{{ label }}</span>
 
     <input v-if="checked" class="accent-accent" :disabled checked type="checkbox" />

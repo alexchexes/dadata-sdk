@@ -23,6 +23,10 @@
   select:focus-visible {
     @apply ring-1 ring-gray-600 outline-none;
   }
+
+  label:hover {
+    @apply text-slate-950;
+  }
 }
 
 @theme {
