@@ -830,6 +830,7 @@ const builtPayload = computed(() =>
           @enriched="handleEnriched"
           @enrichFail="handleEnrichFail"
           @error="handleError"
+          @select="(sug, type) => console.log(type, JSON.parse(JSON.stringify(sug)))"
         >
         </VueDadata>
 

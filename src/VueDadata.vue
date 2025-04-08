@@ -12,7 +12,7 @@ import { highlightHtml } from '@/utils';
 import { matchWords, mergeDefined } from '@/utils';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
-import type { VueDadataClasses, VueDadataOptions } from '@/types';
+import type { SelectType, VueDadataClasses, VueDadataOptions } from '@/types';
 import type {
   BankSuggestion,
   DadataSuggestion,
@@ -41,6 +41,8 @@ const suggestionsListModel = defineModel('suggestionsList', {
 const emit = defineEmits<{
   /** emitted in case of any error (usually only network errors occurs) */
   'error': [error: unknown];
+  /** emitted after suggestion is selected, whether by clicking on a suggestion in the dropdown, by pressing "Enter" or by auto-selecting when `selectOnBlur=true` */
+  'select': [suggestion: DadataSuggestion, selectType: SelectType];
   /** emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` */
   'enriched': [suggestion: DadataSuggestion];
   /** emitted if attemp to enrich selected suggestion failed (in case `enrichOnSelect` props is `true`) */

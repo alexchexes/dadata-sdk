@@ -388,3 +388,5 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'httpCache'
   | 'minChars'
 >;
+
+export type SelectType = 'click' | 'blur' | 'enterNavigated' | 'enterFirst';

@@ -11,6 +11,7 @@ import type {
   MergedSuggestOptions,
   VueDadataOptions,
   InternalVueDadataOptions,
+  SelectType,
 } from '@/types';
 import type { VueDadataEmits } from '@/VueDadata.vue';
 
@@ -227,7 +228,7 @@ export function useSuggestions(
   };
 
   /** @internal */
-  const selectSuggestion = async (index: number) => {
+  const selectSuggestion = async (index: number, selectType: SelectType) => {
     if (options.disabled) {
       return;
     }
@@ -240,6 +241,7 @@ export function useSuggestions(
     const selectedSuggestion = suggestionsList.value[index];
 
     suggestionModel.value = selectedSuggestion;
+    emit('select', selectedSuggestion, selectType);
 
     dontClearOnQueryChange = true;
 
@@ -305,15 +307,10 @@ export function useSuggestions(
 
     if (key === HandledKeys.Enter) {
       if (_isDropdownVisible.value && suggestionsList.value.length) {
-        let indexToSelect = null;
-
         if (canSelectNavigatedIndex.value) {
-          indexToSelect = navigatedIndex.value;
+          selectSuggestion(navigatedIndex.value, 'enterNavigated');
         } else if (options.selectOnEnter) {
-          indexToSelect = 0;
-        }
-        if (indexToSelect !== null) {
-          selectSuggestion(indexToSelect);
+          selectSuggestion(0, 'enterFirst');
         }
       }
     }
@@ -379,7 +376,7 @@ export function useSuggestions(
     if (options.selectOnBlur && _isDropdownVisible.value) {
       if (suggestionsList.value.length) {
         // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
-        selectSuggestion(0);
+        selectSuggestion(0, 'blur');
       } else {
         suggestionModel.value = undefined;
       }
@@ -403,7 +400,7 @@ export function useSuggestions(
       return;
     }
 
-    selectSuggestion(index);
+    selectSuggestion(index, 'click');
   };
 
   // ===============================

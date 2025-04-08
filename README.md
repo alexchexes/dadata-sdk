@@ -108,13 +108,14 @@ const suggestion = ref(undefined);
 
 ### Emitted events
 
-| Event      | When emitted                                                                  | Event payload type                       |
-| ---------- | ----------------------------------------------------------------------------- | ---------------------------------------- |
-| error      | In case of any error (usually only network errors occurs)                     | `unknown`                                |
-| enriched   | After selected suggestion was enriched (if `enrichOnSelect` is `true`)        | `object` (suggestion)                    |
-| enrichFail | If attemp to enrich selected suggestion fails (if `enrichOnSelect` is `true`) | `string` (suggestion.unrestricted_value) |
-| focus      | Whenever input is focused                                                     | `FocusEvent`                             |
-| blur       | Whenever input looses focus                                                   | `FocusEvent`                             |
+| Event      | When emitted                                                                                                                                         | Event payload type                                   |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| error      | In case of any error (usually only network errors occurs)                                                                                            | `unknown`                                            |
+| select     | Emitted when a suggestion is selected, either by clicking it in the dropdown, pressing "Enter", or automatically when `selectOnBlur=true` is enabled | `(suggestion: DadataSuggestion, selectType: string)` |
+| enriched   | After selected suggestion was enriched (if `enrichOnSelect=true`)                                                                                    | `DadataSuggestion`                                   |
+| enrichFail | If attemp to enrich selected suggestion fails (if `enrichOnSelect` is `true`)                                                                        | `string` (suggestion.unrestricted_value)             |
+| focus      | Whenever input is focused                                                                                                                            | `FocusEvent`                                         |
+| blur       | Whenever input looses focus                                                                                                                          | `FocusEvent`                                         |
 
 ## Slots
 
