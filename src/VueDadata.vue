@@ -154,14 +154,14 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
   // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
   if (options.suggestType === 'party') {
     const partySuggestion = suggestion as PartySuggestion;
-    subtitle = `${partySuggestion.data.inn} ${partySuggestion.data.address.value}`;
+    subtitle = `${partySuggestion.data.inn} ${partySuggestion.data.address?.value}`;
   }
 
   // @todo For `party` we need to show additional info based on what was is matches to the query.
   // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
   else if (options.suggestType === 'bank') {
     const bankSuggestion = suggestion as BankSuggestion;
-    subtitle = `${bankSuggestion.data.bic} ${bankSuggestion.data.address.value}`;
+    subtitle = `${bankSuggestion.data.bic} ${bankSuggestion.data.address?.value}`;
   }
 
   if (!subtitle) {
