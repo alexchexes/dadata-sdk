@@ -203,6 +203,21 @@ export function useSuggestions(
     }
   });
 
+  // watch suggestionModel to allow set suggestion from outside (using v-model:suggestion)
+  watch(suggestionModel, () => {
+    if (suggestionModel.value?.value) {
+      dontClearOnQueryChange = true;
+
+      // if there's no suggestions, no need to fetch them
+      // but if there is 'showOnFocus=always' option, then fetch because we need to show the list
+      if (!suggestionsList.value.length && options.showOnFocus !== 'always') {
+        dontFetchOnQueryChange = true;
+      }
+
+      queryModel.value = suggestionModel.value.value;
+    }
+  });
+
   watch(optionsToWatch, async () => {
     suggestionModel.value = undefined;
 
@@ -385,10 +400,7 @@ export function useSuggestions(
     // Reset visible query in case it changed because user navigated suggestions with keyboard
     visibleQuery.value = queryModel.value;
 
-    // // respect the showOnFocus option
-    // if (options.showOnFocus === false) {
     _isDropdownVisible.value = false;
-    // }
   };
 
   /**
@@ -406,6 +418,10 @@ export function useSuggestions(
   // ===============================
   //  📤 Public API
   // ===============================
+
+  const setSuggestion = (suggestion: DadataSuggestion) => {
+    suggestionModel.value = suggestion;
+  };
 
   const clear = () => {
     queryModel.value = '';
@@ -431,6 +447,7 @@ export function useSuggestions(
     handleInputFocus,
     handleInputBlur,
     handleSuggestionClick,
+    setSuggestion,
     clear,
     show,
     hide: hideDropdown,
