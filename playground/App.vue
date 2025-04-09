@@ -420,8 +420,6 @@ const builtPayload = computed(() =>
           @headingClick="behaviorOptionsCollapsed = true"
           @resetClick="resetBehaviorOptions"
         >
-          <CheckBox v-model="options.disabled" label="disabled" />
-
           <div class="flex items-center gap-2">
             minChars:
 
@@ -479,6 +477,7 @@ const builtPayload = computed(() =>
           <CheckBox v-model="options.forceShow" label="forceShow" />
           <CheckBox v-model="options.forceHide" label="forceHide" />
           <CheckBox checked disabled label="focusOnMounted" />
+          <CheckBox v-model="options.disabled" label="disabled" />
           <InputText v-model="options.placeholder" label="placeholder:" />
           <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
           <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
@@ -681,7 +680,7 @@ const builtPayload = computed(() =>
 
       <!-- General options and the input -->
       <main
-        class="flex min-w-0 flex-col gap-3 md:col-start-2 md:row-span-2 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:mx-auto xl:max-w-5xl"
+        class="flex w-full min-w-0 flex-col gap-3 md:col-start-2 md:row-span-2 md:row-start-1 xl:col-start-2 xl:row-start-1 xl:mx-auto xl:max-w-5xl"
       >
         <!-- Block above the input -->
         <OptionsBlock
