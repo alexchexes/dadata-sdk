@@ -2,7 +2,7 @@ import { ObsoleteResponseError } from '@/api';
 import { computed, ref, toValue, watch } from 'vue';
 import { DEFAULT_OPTIONS, HandledKeys } from '@/const';
 import { makeSuggestRequest } from '@/api';
-import { mergeDefined } from '@/utils';
+import { deepDiff, mergeDefined } from '@/utils';
 import { reactiveComputed, useDebounceFn } from '@vueuse/core';
 import type { DadataSuggestion } from '@/types/api';
 import type { MaybeRefOrGetter, Ref } from 'vue';
@@ -168,7 +168,7 @@ export function useSuggestions(
       suggestions[0].unrestricted_value === selectedSuggestion.unrestricted_value
     ) {
       suggestionModel.value = suggestions[0];
-      emit('enriched', suggestions[0]);
+      emit('enriched', suggestions[0], deepDiff(suggestionModel.value, suggestions[0]));
       return true;
     } else {
       emit('enrichFail', selectedSuggestion.unrestricted_value);

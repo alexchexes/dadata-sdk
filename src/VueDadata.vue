@@ -5,7 +5,7 @@ import { highlightHtml } from '@/utils';
 import { matchWords, mergeDefined } from '@/utils';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
-import type { SelectType, VueDadataClasses, VueDadataOptions } from '@/types';
+import type { SelectType, VueDadataClasses, VueDadataOptions, DeepPartial } from '@/types';
 import type {
   BankSuggestion,
   DadataSuggestion,
@@ -33,7 +33,7 @@ const emit = defineEmits<{
   /** emitted after suggestion is selected, whether by clicking on a suggestion in the dropdown, by pressing "Enter" or by auto-selecting when `selectOnBlur=true` */
   'select': [suggestion: DadataSuggestion, selectType: SelectType];
   /** emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` */
-  'enriched': [suggestion: DadataSuggestion];
+  'enriched': [suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> | null];
   /** emitted if attemp to enrich selected suggestion failed (in case `enrichOnSelect` props is `true`) */
   'enrichFail': [unrestricted_value: string];
   /** emitted whenever input is focused */

@@ -98,3 +98,12 @@ export type DistributivePartial<T> = T extends any ? Partial<T> : never;
 export type OnlyPrimitives = {
   [key: string]: string | number | boolean | null | undefined | symbol | bigint;
 };
+
+/** Recursively makes properties optional */
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object
+    ? T[P] extends Function
+      ? T[P] // don't recurse into functions
+      : DeepPartial<T[P]>
+    : T[P];
+};

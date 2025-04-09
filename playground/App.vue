@@ -29,6 +29,7 @@ import {
   PARTY_TYPES,
   SHOW_ON_FOCUS_OPTIONS,
   SUGGEST_TYPES,
+  type DeepPartial,
   type SuggestOptions,
   type VueDadataOptions,
 } from '@/index';
@@ -347,8 +348,11 @@ const clearSuggestion = () => {
   suggestion.value = undefined;
 };
 
-const handleEnriched = (suggestion: DadataSuggestion) => {
-  console.info('Suggestion enriched:', suggestion);
+const handleEnriched = (
+  suggestion: DadataSuggestion,
+  diff: DeepPartial<DadataSuggestion> | null,
+) => {
+  console.info(`Suggestion enriched (${suggestion.value}), diff:`, diff);
 };
 
 const handleEnrichFail = (unrestricted_value: string) => {
