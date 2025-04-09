@@ -15,6 +15,7 @@ import {
   BANK_TYPES,
   BASE_SUGGEST_URL,
   BOUND_TYPES,
+  CLEAR_ON_CHANGE_OPTIONS,
   DEFAULT_OPTIONS,
   DIVISION_TYPES,
   FIO_GENDERS,
@@ -417,12 +418,6 @@ const builtPayload = computed(() =>
         >
           <CheckBox v-model="options.disabled" label="disabled" />
 
-          <RadioGroup
-            v-model="options.showOnFocus"
-            :options="SHOW_ON_FOCUS_OPTIONS"
-            label="showOnFocus"
-          />
-
           <div class="flex items-center gap-2">
             minChars:
 
@@ -459,10 +454,21 @@ const builtPayload = computed(() =>
             <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
           </div>
 
+          <RadioGroup
+            v-model="options.showOnFocus"
+            :options="SHOW_ON_FOCUS_OPTIONS"
+            label="showOnFocus"
+          />
+
+          <RadioGroup
+            v-model="options.clearOnChange"
+            :options="CLEAR_ON_CHANGE_OPTIONS"
+            label="clearOnChange"
+          />
+
           <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
           <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
           <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
-          <CheckBox v-model="options.clearOnChange" label="clearOnChange" />
           <CheckBox v-model="options.addSpace" label="addSpace" />
           <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
           <CheckBox v-model="options.showClearButton" label="showClearButton" />

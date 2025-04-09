@@ -180,13 +180,17 @@ export function useSuggestions(
   // 👁 Watchers
   // ===============================
 
-  watch(queryModel, () => {
+  watch(queryModel, (newVal, oldVal) => {
     visibleQuery.value = queryModel.value;
     navigatedIndex.value = -1;
 
     if (dontClearOnQueryChange) {
       dontClearOnQueryChange = false;
-    } else if (options.clearOnChange) {
+    } else if (
+      options.clearOnChange === 'any' ||
+      (options.clearOnChange === 'significant' &&
+        newVal.trim().toLowerCase() !== oldVal.trim().toLowerCase())
+    ) {
       suggestionModel.value = undefined;
     }
 

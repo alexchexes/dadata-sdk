@@ -1,4 +1,4 @@
-import type { DEFAULT_CLASSES, SHOW_ON_FOCUS_OPTIONS } from '@/const';
+import type { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_CLASSES, SHOW_ON_FOCUS_OPTIONS } from '@/const';
 import type {
   BankStatus,
   BankType,
@@ -32,6 +32,7 @@ import type { OneOrMany } from './helpers.types';
 import type { InputHTMLAttributes } from 'vue';
 
 export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
+export type ClearOnChangeOption = (typeof CLEAR_ON_CHANGE_OPTIONS)[number];
 
 /** @see DEFAULT_CLASSES */
 export type VueDadataClasses = Partial<{ -readonly [K in keyof typeof DEFAULT_CLASSES]: string }>;
@@ -288,17 +289,11 @@ export interface VueDadataOptions {
     'disabled' | 'value' | 'onBlur' | 'onFocus' | 'onInput' | 'onKeydown' | 'onChange'
   >;
   /**
-   * Controls when to show the suggestions list on input focus.
+   * Controls when to show the dropdown with suggestions list on input focus.
    *
-   * - `'no_selection'` (default): Suggestions appear when these conditions met:
-   *   1. The user started typing and the suggestions list was loaded
-   *   2. The user did not select any suggestion (or selected one and then changed the input)
-   *   3. The input was unfocused (suggestions list was hidden)
-   *   4. The input is focused again
-   *
-   * - `false`: Disables this behavior.
-   *
-   * - `'always'`: Always show suggestions on focus (if input and suggestions list is not empty).
+   * - `false`: Never show dropdown on focus
+   * - `'always'`: Always show dropdown on focus (if input and suggestions list is not empty).
+   * - `'no_selection'`: Show dropdown on focus when there's no selected suggestion
    *
    * Default: `'no_selection'`
    */
@@ -322,10 +317,15 @@ export interface VueDadataOptions {
    */
   enrichOnSelect?: boolean;
   /**
-   * If `true`, clears the suggestion (`v-model:suggestion`) when input is changed after suggestion selection.
-   * Default: `true`
+   * Determines whether the suggestion (i.e., `v-model:suggestion`) is cleared when the input changes after a suggestion is selected.
+   *
+   * - `false`: The suggestion is never cleared when the input changes.
+   * - `'any'`: The suggestion is cleared whenever input value is changed.
+   * - `'significant'`: The suggestion is cleared only if the new input, after being normalized (e.g., trimmed and case-normalized), differs from the previous value.
+   *
+   * Default: `'significant'`
    */
-  clearOnChange?: boolean;
+  clearOnChange?: ClearOnChangeOption;
   /**
    * If `true`, adds a space to the input after a suggestion is selected. This way, for example,
    * user can select street and then type house number without adding a space by himself.

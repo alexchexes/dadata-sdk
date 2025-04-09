@@ -2,6 +2,7 @@ import type { InternalVueDadataOptions, OnlyPrimitives } from '@/types';
 import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from './api';
 import type { SuggestType } from '@/types/api';
 export const SHOW_ON_FOCUS_OPTIONS = ['no_selection', 'always', false] as const;
+export const CLEAR_ON_CHANGE_OPTIONS = ['significant', 'any', false] as const;
 
 export const DEFAULT_CLASSES = {
   /** Top-level container */
@@ -45,7 +46,7 @@ export const DEFAULT_TYPE = 'address';
 
 /** We spread this in `withDefaults` so no array or objects are allowed */
 export const DEFAULT_OPTIONS = {
-  clearOnChange: true,
+  clearOnChange: 'significant',
   selectOnEnter: true,
   enrichOnSelect: true,
   httpCache: true,
