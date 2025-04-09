@@ -80,7 +80,6 @@ const showBuiltPayload = ref(false);
 
 const query = ref('');
 const suggestion = ref<DadataSuggestion | undefined>(undefined);
-const suggestionsList = ref<DadataSuggestion[] | undefined>(undefined);
 
 const nowrapQuery = ref(true);
 const examplesShown = ref(false);
@@ -805,12 +804,12 @@ const builtPayload = computed(() =>
             >clear</AButton
           >
           <AButton
-            :disabled="!suggestionsList?.length || vueDadataRef?.isDropdownVisible"
+            :disabled="!vueDadataRef?.suggestionsList?.length || vueDadataRef?.isDropdownVisible"
             @mousedown.prevent="vueDadataRef?.show()"
             >show</AButton
           >
           <AButton
-            :disabled="!suggestionsList?.length || !vueDadataRef?.isDropdownVisible"
+            :disabled="!vueDadataRef?.suggestionsList?.length || !vueDadataRef?.isDropdownVisible"
             @mousedown.prevent="vueDadataRef?.hide()"
             >hide</AButton
           >
@@ -822,7 +821,6 @@ const builtPayload = computed(() =>
           ref="vueDadataRef"
           v-model="query"
           v-model:suggestion="suggestion"
-          v-model:suggestionsList="suggestionsList"
           class="text-slate-950"
           :focusOnMounted="true"
           :token="options.token"

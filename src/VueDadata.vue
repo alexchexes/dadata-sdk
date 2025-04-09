@@ -1,12 +1,5 @@
 <script lang="ts" setup>
-import {
-  computed,
-  onMounted,
-  useTemplateRef,
-  watchEffect,
-  type InputHTMLAttributes,
-  type PropType,
-} from 'vue';
+import { computed, onMounted, useTemplateRef, type InputHTMLAttributes, type PropType } from 'vue';
 import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from '@/const';
 import { highlightHtml } from '@/utils';
 import { matchWords, mergeDefined } from '@/utils';
@@ -32,10 +25,6 @@ const queryModel = defineModel({ type: String, required: true });
 
 const suggestionModel = defineModel('suggestion', {
   type: Object as PropType<DadataSuggestion | undefined>,
-});
-
-const suggestionsListModel = defineModel('suggestionsList', {
-  type: Array as PropType<DadataSuggestion[] | undefined>,
 });
 
 const emit = defineEmits<{
@@ -74,10 +63,6 @@ const {
   show,
   hide,
 } = useSuggestions(queryModel, suggestionModel, props, emit);
-
-watchEffect(() => {
-  suggestionsListModel.value = suggestionsList.value;
-});
 
 onMounted(() => {
   if (options.focusOnMounted) {
@@ -180,6 +165,7 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
 
 defineExpose({
   inputRef,
+  suggestionsList,
   isDropdownVisible,
   isFocused,
   focus: () => inputRef.value?.focus(),
