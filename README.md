@@ -8,6 +8,18 @@ It targets **Vue 3.5+**.
 
 For **Vue 2** and earlier Vue 3 versions (pre-3.5), please refer to [Ivan Monastyrev's original repository](https://github.com/ikloster03/vue-dadata).
 
+## Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [V-Models](#v-models)
+- [Component Props](#component-props)
+- [Emitted events](#emitted-events)
+- [Slots](#slots)
+- [Exposed Component API](#exposed-component-api)
+- [Peer dependencies](#peer-dependencies)
+- [Dependencies](#dependencies)
+
 ## Install
 
 ```bash
@@ -22,7 +34,7 @@ import { ref } from 'vue';
 import { VueDadata } from 'vue-dadata';
 import 'vue-dadata/dist/vue-dadata.css';
 
-const token = import.meta.env.VITE_APP_DADATA_API_KEY as string;
+const token = import.meta.env.VITE_APP_DADATA_API_KEY;
 
 const query = ref('');
 const suggestion = ref(undefined);
@@ -35,14 +47,14 @@ const suggestion = ref(undefined);
 </template>
 ```
 
-### V-Models
+## V-Models
 
 | name                 | Required | Description                                | Type     | Default |
 | -------------------- | -------- | ------------------------------------------ | -------- | ------- |
 | `v-model`            | **YES**  | v-model for query (input string)           | `string` | -       |
 | `v-model:suggestion` |          | v-model for the selected suggestion object | `object` | -       |
 
-### Component Props
+## Component Props
 
 #### General options
 
@@ -105,7 +117,7 @@ const suggestion = ref(undefined);
 | forceShow         | Forces the suggestions list to always remain visible (useful during development, e.g. when styling elements)        | `boolean`                                 | `false`                                                                                                   |
 | forceHide         | Forces the suggestions list to always remain hidden. Useful when creating custom UI using `v-model:suggestionsList` | `boolean`                                 | `false`                                                                                                   |
 
-### Emitted events
+## Emitted events
 
 | Event      | When emitted                                                                                                                                         | Event payload type                                                            |
 | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -267,13 +279,13 @@ onMounted(() => {
 </script>
 ```
 
-## Peer dependencies
-
-- [vue](https://github.com/vuejs/vue)
-
 ## Dependencies
 
 - [axios](https://github.com/axios/axios)
 - [@vueuse/core](https://vueuse.org/)
+
+### Peer dependencies
+
+- [Vue](https://github.com/vuejs/vue)
 
 Forked from [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)
