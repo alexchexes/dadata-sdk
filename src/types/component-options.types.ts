@@ -9,7 +9,6 @@ import type {
   KladrIdFilter,
   Language,
   LocationRestriction,
-  OptionalSuggestPayload,
   PartyByStatus,
   PartyByType,
   PartyKzType,
@@ -30,6 +29,7 @@ import type {
 } from './api';
 import type { OneOrMany } from './helpers.types';
 import type { InputHTMLAttributes } from 'vue';
+import type { OptionalSuggestPayload } from './suggest-options.types';
 
 export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
 export type ClearOnChangeOption = (typeof CLEAR_ON_CHANGE_OPTIONS)[number];

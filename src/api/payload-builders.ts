@@ -11,6 +11,7 @@ import type {
   SuggestPartyByOptions,
   SuggestPartyKzOptions,
   SuggestPartyOptions,
+  SuggestPayload,
 } from '@/types';
 import type {
   KladrIdFilter,
@@ -19,12 +20,29 @@ import type {
   SuggestBankPayload,
   SuggestFiasPayload,
   SuggestFioPayload,
+  SuggestFmsUnitPayload,
+  SuggestFnsUnitPayload,
+  SuggestMetroPayload,
+  SuggestMktuPayload,
+  SuggestOkpd2Payload,
+  SuggestOkved2Payload,
   SuggestPartyByPayload,
   SuggestPartyKzPayload,
   SuggestPartyPayload,
-  SuggestPayload,
-  SuggestPayloadWithFilters,
+  SuggestPostalUnitPayload,
 } from '@/types/api';
+
+/** Any of payloads that have `filters` option */
+type SuggestPayloadWithFilters =
+  | SuggestFmsUnitPayload
+  | SuggestFnsUnitPayload
+  | SuggestMetroPayload
+  | SuggestMktuPayload
+  | SuggestOkpd2Payload
+  | SuggestOkved2Payload
+  | SuggestPartyByPayload
+  | SuggestPartyKzPayload
+  | SuggestPostalUnitPayload;
 
 /**
  * Normalizes value of a given type to array of values of the same type

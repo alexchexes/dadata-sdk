@@ -1,6 +1,29 @@
 import type { RawAxiosRequestHeaders } from 'axios';
-import type { OptionalSuggestPayload, SuggestType } from './api';
-import type { MergeAll, OneOrMany } from './helpers.types';
+import type {
+  SuggestAddressPayload,
+  SuggestBankPayload,
+  SuggestCarBrandPayload,
+  SuggestCountryPayload,
+  SuggestCurrencyPayload,
+  SuggestEmailPayload,
+  SuggestFiasPayload,
+  SuggestFioPayload,
+  SuggestFmsUnitPayload,
+  SuggestFnsUnitPayload,
+  SuggestFtsUnitPayload,
+  SuggestMetroPayload,
+  SuggestMktuPayload,
+  SuggestOkpd2Payload,
+  SuggestOktmoPayload,
+  SuggestOkved2Payload,
+  SuggestPartyByPayload,
+  SuggestPartyKzPayload,
+  SuggestPartyPayload,
+  SuggestPostalUnitPayload,
+  SuggestRegionCourtPayload,
+  SuggestType,
+} from './api';
+import type { DistributivePartial, MergeAll, OneOrMany } from './helpers.types';
 import type { SuggestAddressOptions } from './suggest-options-address.types';
 import type { SuggestBankOptions } from './suggest-options-bank.types';
 import type { SuggestFiasOptions } from './suggest-options-fias.types';
@@ -124,3 +147,30 @@ export type SuggestFnsUnitOptions = BaseOptionsWithFiltersWithType<'fns_unit'>;
 export type SuggestMetroOptions = BaseOptionsWithFiltersWithType<'metro'>;
 export type SuggestMktuOptions = BaseOptionsWithFiltersWithType<'mktu'>;
 export type SuggestPostalUnitOptions = BaseOptionsWithFiltersWithType<'postal_unit'>;
+
+/** Union of all possible 'suggest' payload types */
+export type SuggestPayload =
+  | SuggestAddressPayload
+  | SuggestBankPayload
+  | SuggestCarBrandPayload
+  | SuggestCountryPayload
+  | SuggestCurrencyPayload
+  | SuggestEmailPayload
+  | SuggestFiasPayload
+  | SuggestFioPayload
+  | SuggestFmsUnitPayload
+  | SuggestFnsUnitPayload
+  | SuggestFtsUnitPayload
+  | SuggestMetroPayload
+  | SuggestMktuPayload
+  | SuggestOkpd2Payload
+  | SuggestOktmoPayload
+  | SuggestOkved2Payload
+  | SuggestPartyByPayload
+  | SuggestPartyKzPayload
+  | SuggestPartyPayload
+  | SuggestPostalUnitPayload
+  | SuggestRegionCourtPayload;
+
+/** Union of all possible 'suggest' payload types where each property of each payload type is optional */
+export type OptionalSuggestPayload = DistributivePartial<SuggestPayload>;
