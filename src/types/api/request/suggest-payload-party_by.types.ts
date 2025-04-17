@@ -20,9 +20,9 @@ export interface SuggestPartyByPayload extends BaseSuggestPayload {
   filters?: SuggestPartyByFilter[];
 }
 
-export type SuggestPartyByFilter = {
+export interface SuggestPartyByFilter {
   /** Статус организации */
   status?: PartyByStatus;
   /** Тип организации */
   type?: PartyByType;
-};
+}

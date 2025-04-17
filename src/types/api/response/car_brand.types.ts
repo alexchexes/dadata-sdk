@@ -11,12 +11,14 @@ export interface CarBrandSuggestion {
   /**
    * Подробности о марке автомобиля
    */
-  data: {
-    /** Идентификатор марки */
-    id: string;
-    /** Наименование марки (латиницей) */
-    name: string;
-    /** Наименование марки на русском языке */
-    name_ru: string;
-  };
+  data: CarBrandSuggestionData;
+}
+
+export interface CarBrandSuggestionData {
+  /** Идентификатор марки */
+  id: string;
+  /** Наименование марки (латиницей) */
+  name: string;
+  /** Наименование марки на русском языке */
+  name_ru: string;
 }

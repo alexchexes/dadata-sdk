@@ -5,10 +5,15 @@ import { highlightHtml } from '@/utils';
 import { matchWords, mergeDefined } from '@/utils';
 import { useSuggestions } from '@/composables/useSuggestions';
 import IconCross from '@/IconCross.vue';
-import type { SelectType, VueDadataClasses, VueDadataOptions, DeepPartial } from '@/types';
+import type {
+  SelectType,
+  VueDadataClasses,
+  VueDadataOptions,
+  DadataSuggestion,
+  DeepPartial,
+} from '@/types';
 import type {
   BankSuggestion,
-  DadataSuggestion,
   PartyBySuggestion,
   PartyKzSuggestion,
   PartySuggestion,

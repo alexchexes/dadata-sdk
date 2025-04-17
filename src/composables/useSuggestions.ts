@@ -4,7 +4,7 @@ import { DEFAULT_OPTIONS, HandledKeys } from '@/const';
 import { makeSuggestRequest } from '@/api';
 import { deepDiff, mergeDefined } from '@/utils';
 import { reactiveComputed, useDebounceFn } from '@vueuse/core';
-import type { DadataSuggestion } from '@/types/api';
+import type { DadataSuggestion } from '@/types';
 import type { MaybeRefOrGetter, Ref } from 'vue';
 import type {
   SuggestOptions,

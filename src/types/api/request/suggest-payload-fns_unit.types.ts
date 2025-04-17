@@ -11,7 +11,7 @@ export interface SuggestFnsUnitPayload extends BaseSuggestPayload {
   filters?: SuggestFnsUnitFilter[];
 }
 
-export type SuggestFnsUnitFilter = {
+export interface SuggestFnsUnitFilter {
   /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции */
   region_code?: string;
-};
+}

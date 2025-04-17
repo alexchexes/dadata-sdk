@@ -19,4 +19,3 @@ export * from './party_kz.types.ts';
 export * from './party.types.ts';
 export * from './postal_unit.types.ts';
 export * from './region_court.types.ts';
-export * from './suggestions.types.ts';

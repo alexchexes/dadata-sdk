@@ -33,7 +33,8 @@ import {
   type SuggestOptions,
   type VueDadataOptions,
 } from '@/index';
-import type { DadataSuggestion, SuggestType } from '@/types/api';
+import type { SuggestType } from '@/types/api';
+import type { DadataSuggestion } from '@/types';
 import { ignorableWatch, useMediaQuery } from '@vueuse/core';
 import ButtonAdd from './components/ui/ButtonAdd.vue';
 import InputJson from './components/ui/InputJson.vue';

@@ -11,7 +11,7 @@ export interface SuggestMktuPayload extends BaseSuggestPayload {
   filters?: SuggestMktuFilter[];
 }
 
-export type SuggestMktuFilter = {
+export interface SuggestMktuFilter {
   /** Класс МКТУ, например `"25"` или `"03"` */
   class?: string;
-};
+}

@@ -9,6 +9,10 @@ export type BoundTypeFias = Exclude<BoundType, 'country'>;
 
 export type LocationRestrictionFias = Omit<LocationRestriction, 'country'>;
 
+export interface BoundFias {
+  value: BoundTypeFias;
+}
+
 /**
  * {@link https://dadata.ru/api/suggest/fias/}
  * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937}
@@ -22,11 +26,11 @@ export interface SuggestFiasPayload extends BaseSuggestPayload {
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}
    */
-  from_bound?: { value: BoundTypeFias };
+  from_bound?: BoundFias;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}
    */
-  to_bound?: { value: BoundTypeFias };
+  to_bound?: BoundFias;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}
    */
@@ -34,5 +38,5 @@ export interface SuggestFiasPayload extends BaseSuggestPayload {
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}
    */
-  restrict_value?: Boolean;
+  restrict_value?: boolean;
 }

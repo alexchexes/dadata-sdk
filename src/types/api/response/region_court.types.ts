@@ -11,12 +11,14 @@ export interface RegionCourtSuggestion {
   /**
    * Подробности о судебном участке
    */
-  data: {
-    /** Код суда */
-    code: string;
-    /** Полное название суда */
-    name: string;
-    /** Код региона (первые 2 цифры КЛАДР-кода) */
-    region_code: string;
-  };
+  data: RegionCourtSuggestionData;
+}
+
+export interface RegionCourtSuggestionData {
+  /** Код суда */
+  code: string;
+  /** Полное название суда */
+  name: string;
+  /** Код региона (первые 2 цифры КЛАДР-кода) */
+  region_code: string;
 }

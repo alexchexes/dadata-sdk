@@ -1,32 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "SuggestType": {
-      "type": "string",
-      "enum": [
-        "address",
-        "country",
-        "postal_unit",
-        "fias",
-        "party",
-        "party_by",
-        "party_kz",
-        "bank",
-        "fio",
-        "fms_unit",
-        "email",
-        "car_brand",
-        "fns_unit",
-        "fts_unit",
-        "region_court",
-        "metro",
-        "mktu",
-        "currency",
-        "okved2",
-        "okpd2",
-        "oktmo"
-      ]
-    },
     "RadiusFilter": {
       "type": "object",
       "properties": {
@@ -47,85 +21,68 @@
       ],
       "additionalProperties": false
     },
-    "Language": {
-      "type": "string",
-      "enum": [
-        "RU",
-        "EN"
-      ]
-    },
-    "DivisionType": {
-      "type": "string",
-      "enum": [
-        "ADMINISTRATIVE",
-        "MUNICIPAL"
-      ]
+    "Bound": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "country",
+            "region",
+            "area",
+            "city",
+            "settlement",
+            "planning_structure",
+            "street",
+            "house",
+            "flat"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false
     },
     "SuggestAddressPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "locations_boost": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
         },
         "from_bound": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/definitions/BoundType"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "additionalProperties": false,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+          "$ref": "#/definitions/Bound",
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
         },
         "to_bound": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/definitions/BoundType"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "additionalProperties": false,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+          "$ref": "#/definitions/Bound",
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
         },
         "locations": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/LocationRestriction"
           },
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
         },
         "restrict_value": {
-          "type": "object",
-          "additionalProperties": false,
-          "description": "-  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521 } \n-  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода } \n-  {@link  https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value }",
-          "rawJsDoc": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+          "type": "boolean",
+          "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
         },
         "locations_geo": {
           "type": "array",
@@ -134,42 +91,44 @@
           },
           "minItems": 1,
           "maxItems": 1,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}"
         },
         "language": {
-          "$ref": "#/definitions/Language",
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+          "type": "string",
+          "enum": [
+            "RU",
+            "EN"
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
         },
         "division": {
-          "$ref": "#/definitions/DivisionType",
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}"
+          "type": "string",
+          "enum": [
+            "ADMINISTRATIVE",
+            "MUNICIPAL"
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "description": "{@link  https://dadata.ru/api/suggest/address/ }   {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107 }",
-      "rawJsDoc": "{@link https://dadata.ru/api/suggest/address/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}"
+      "description": "{@link https://dadata.ru/api/suggest/address/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}"
     },
     "BaseSuggestPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -185,20 +144,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "BoundType": {
-      "type": "string",
-      "enum": [
-        "country",
-        "region",
-        "area",
-        "city",
-        "settlement",
-        "planning_structure",
-        "street",
-        "house",
-        "flat"
-      ]
     },
     "LocationRestriction": {
       "type": "object",
@@ -275,94 +220,69 @@
       },
       "additionalProperties": false
     },
-    "BankType": {
-      "type": "string",
-      "enum": [
-        "CBR",
-        "BANK",
-        "BANK_BRANCH",
-        "NKO",
-        "NKO_BRANCH",
-        "RKC",
-        "TREASURY",
-        "OTHER"
-      ]
-    },
-    "BankStatus": {
-      "type": "string",
-      "enum": [
-        "ACTIVE",
-        "LIQUIDATED",
-        "LIQUIDATING"
-      ]
-    },
     "SuggestBankPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "type": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/BankType"
+            "type": "string",
+            "enum": [
+              "CBR",
+              "BANK",
+              "BANK_BRANCH",
+              "NKO",
+              "NKO_BRANCH",
+              "RKC",
+              "TREASURY",
+              "OTHER"
+            ]
           },
-          "description": "Ограничение по типу банка. API принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122 }",
-          "rawJsDoc": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
+          "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
         },
         "status": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/BankStatus"
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "LIQUIDATED",
+              "LIQUIDATING"
+            ]
           },
-          "description": "Ограничение по статусу банка. API принимает массив, например: `\"status\": [\"LIQUIDATING\"]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120 }",
-          "rawJsDoc": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
         },
         "locations": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "Ограничение по региону или городу API принимает массив вида `{ kladr_id: string }[]`   {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238 }",
-          "rawJsDoc": "Ограничение по региону или городу\nAPI принимает массив вида `{ kladr_id: string }[]`\n {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
+          "description": "Ограничение по региону или городу\nAPI принимает массив вида `{ kladr_id: string }[]`\n {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
         },
         "locations_boost": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "Приоритет города при ранжировании. API принимает массив вида `{ kladr_id: string }[]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242 }",
-          "rawJsDoc": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}"
+          "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078"
-    },
-    "BoundTypeFias": {
-      "type": "string",
-      "enum": [
-        "region",
-        "area",
-        "city",
-        "settlement",
-        "planning_structure",
-        "street",
-        "house",
-        "flat"
-      ]
+      "description": "@see https://dadata.ru/api/suggest/bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078"
     },
     "LocationRestrictionFias": {
       "type": "object",
@@ -436,226 +356,199 @@
       },
       "additionalProperties": false
     },
+    "BoundFias": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "region",
+            "area",
+            "city",
+            "settlement",
+            "planning_structure",
+            "street",
+            "house",
+            "flat"
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false
+    },
     "SuggestFiasPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "locations_boost": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}"
         },
         "from_bound": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/definitions/BoundTypeFias"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "additionalProperties": false,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+          "$ref": "#/definitions/BoundFias",
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
         },
         "to_bound": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "$ref": "#/definitions/BoundTypeFias"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "additionalProperties": false,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+          "$ref": "#/definitions/BoundFias",
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
         },
         "locations": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/LocationRestrictionFias"
           },
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974 }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}"
         },
         "restrict_value": {
-          "type": "object",
-          "additionalProperties": false,
-          "description": "{@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города }",
-          "rawJsDoc": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
+          "type": "boolean",
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "description": "{@link  https://dadata.ru/api/suggest/fias/ }   {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937 }   {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953 }",
-      "rawJsDoc": "{@link https://dadata.ru/api/suggest/fias/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953}"
-    },
-    "FioParts": {
-      "type": "string",
-      "enum": [
-        "NAME",
-        "SURNAME",
-        "PATRONYMIC"
-      ]
+      "description": "{@link https://dadata.ru/api/suggest/fias/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953}"
     },
     "SuggestFioPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "gender": {
-          "$ref": "#/definitions/FioGenders",
-          "description": "Пол (`UNKNOWN` / `MALE` / `FEMALE`)",
-          "rawJsDoc": "Пол (`UNKNOWN` / `MALE` / `FEMALE`)"
+          "type": "string",
+          "enum": [
+            "MALE",
+            "FEMALE",
+            "UNKNOWN"
+          ],
+          "description": "Пол (`UNKNOWN` / `MALE` / `FEMALE`)"
         },
         "parts": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FioParts"
+            "type": "string",
+            "enum": [
+              "NAME",
+              "SURNAME",
+              "PATRONYMIC"
+            ]
           },
-          "description": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`",
-          "rawJsDoc": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`"
+          "description": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/name/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669111"
-    },
-    "FioGenders": {
-      "type": "string",
-      "enum": [
-        "MALE",
-        "FEMALE",
-        "UNKNOWN"
-      ]
+      "description": "@see https://dadata.ru/api/suggest/name/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669111"
     },
     "SuggestFmsUnitPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestFmsUnitFilter"
           },
-          "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/fms_unit/"
+      "description": "@see https://dadata.ru/api/suggest/fms_unit/"
     },
     "SuggestFmsUnitFilter": {
       "type": "object",
       "properties": {
         "region_code": {
           "type": "string",
-          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС",
-          "rawJsDoc": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС"
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС"
         },
         "type": {
-          "$ref": "#/definitions/FmsUnitType",
-          "description": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции",
-          "rawJsDoc": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции"
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ],
+          "description": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции"
         }
       },
       "additionalProperties": false
-    },
-    "FmsUnitType": {
-      "type": "string",
-      "enum": [
-        "0",
-        "1",
-        "2",
-        "3"
-      ]
     },
     "SuggestFnsUnitPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestFnsUnitFilter"
           },
-          "description": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/fns_unit/"
+      "description": "@see https://dadata.ru/api/suggest/fns_unit/"
     },
     "SuggestFnsUnitFilter": {
       "type": "object",
       "properties": {
         "region_code": {
           "type": "string",
-          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции",
-          "rawJsDoc": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
         }
       },
       "additionalProperties": false
@@ -665,54 +558,47 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestMetroFilter"
           },
-          "description": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:   `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:   `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:\n  `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:\n  `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:\n  `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:\n  `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/metro/"
+      "description": "@see https://dadata.ru/api/suggest/metro/"
     },
     "SuggestMetroFilter": {
       "type": "object",
       "properties": {
         "city_kladr_id": {
           "type": "string",
-          "description": "КЛАДР-код города (например, \"7700000000000\" для Москвы)",
-          "rawJsDoc": "КЛАДР-код города (например, \"7700000000000\" для Москвы)"
+          "description": "КЛАДР-код города (например, \"7700000000000\" для Москвы)"
         },
         "city_fias_id": {
           "type": "string",
-          "description": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)",
-          "rawJsDoc": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)"
+          "description": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)"
         },
         "city": {
           "type": "string",
-          "description": "Название города (например, \"Москва\")",
-          "rawJsDoc": "Название города (например, \"Москва\")"
+          "description": "Название города (например, \"Москва\")"
         },
         "line_id": {
           "type": "string",
-          "description": "Номер линии метро (например, \"5\" для Кольцевой линии)",
-          "rawJsDoc": "Номер линии метро (например, \"5\" для Кольцевой линии)"
+          "description": "Номер линии метро (например, \"5\" для Кольцевой линии)"
         },
         "is_closed": {
           "type": [
@@ -723,8 +609,7 @@
             true,
             null
           ],
-          "description": "Фильтр по признаку «закрыта»\n- `true` - только закрытые\n- `null` - только открытые",
-          "rawJsDoc": "Фильтр по признаку «закрыта»\n- `true` - только закрытые\n- `null` - только открытые\n@note Документация на https://dadata.ru/api/suggest/metro/ предполагает здесь `true/false`,\nоднако фактически API использует `true/null`."
+          "description": "Фильтр по признаку «закрыта»\n- `true` - только закрытые\n- `null` - только открытые\n@note Документация на https://dadata.ru/api/suggest/metro/ предполагает здесь `true/false`,\nоднако фактически API использует `true/null`."
         }
       },
       "additionalProperties": false
@@ -734,39 +619,35 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestMktuFilter"
           },
-          "description": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/mktu/"
+      "description": "@see https://dadata.ru/api/suggest/mktu/"
     },
     "SuggestMktuFilter": {
       "type": "object",
       "properties": {
         "class": {
           "type": "string",
-          "description": "Класс МКТУ, например `\"25\"` или `\"03\"`",
-          "rawJsDoc": "Класс МКТУ, например `\"25\"` или `\"03\"`"
+          "description": "Класс МКТУ, например `\"25\"` или `\"03\"`"
         }
       },
       "additionalProperties": false
@@ -776,39 +657,35 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestOkpd2Filter"
           },
-          "description": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/okpd2/"
+      "description": "@see https://dadata.ru/api/suggest/okpd2/"
     },
     "SuggestOkpd2Filter": {
       "type": "object",
       "properties": {
         "razdel": {
           "type": "string",
-          "description": "Код раздела классификатора ОКПД 2 (например `'S'`)",
-          "rawJsDoc": "Код раздела классификатора ОКПД 2 (например `'S'`)"
+          "description": "Код раздела классификатора ОКПД 2 (например `'S'`)"
         }
       },
       "additionalProperties": false
@@ -818,39 +695,35 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestOkved2Filter"
           },
-          "description": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/okved2/"
+      "description": "@see https://dadata.ru/api/suggest/okved2/"
     },
     "SuggestOkved2Filter": {
       "type": "object",
       "properties": {
         "razdel": {
           "type": "string",
-          "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)",
-          "rawJsDoc": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)"
+          "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)"
         }
       },
       "additionalProperties": false
@@ -860,243 +733,206 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestPartyByFilter"
           },
-          "description": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем, а массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно: `[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно: `[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`",
-          "rawJsDoc": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем,\nа массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно:\n`[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно:\n`[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`"
+          "description": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем,\nа массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно:\n`[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно:\n`[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/party_by/"
+      "description": "@see https://dadata.ru/api/suggest/party_by/"
     },
     "SuggestPartyByFilter": {
       "type": "object",
       "properties": {
         "status": {
-          "$ref": "#/definitions/PartyByStatus",
-          "description": "Статус организации",
-          "rawJsDoc": "Статус организации"
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "BANKRUPT",
+            "LIQUIDATED",
+            "LIQUIDATING",
+            "REORGANIZING",
+            "SUSPENDED"
+          ],
+          "description": "Статус организации"
         },
         "type": {
-          "$ref": "#/definitions/PartyByType",
-          "description": "Тип организации",
-          "rawJsDoc": "Тип организации"
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL"
+          ],
+          "description": "Тип организации"
         }
       },
       "additionalProperties": false
-    },
-    "PartyByStatus": {
-      "type": "string",
-      "enum": [
-        "ACTIVE",
-        "BANKRUPT",
-        "LIQUIDATED",
-        "LIQUIDATING",
-        "REORGANIZING",
-        "SUSPENDED"
-      ]
-    },
-    "PartyByType": {
-      "type": "string",
-      "enum": [
-        "LEGAL",
-        "INDIVIDUAL"
-      ]
     },
     "SuggestPartyKzPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestPartyKzFilter"
           },
-          "description": "Фильтрация работает по полю `type` (тип организации)",
-          "rawJsDoc": "Фильтрация работает по полю `type` (тип организации)"
+          "description": "Фильтрация работает по полю `type` (тип организации)"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/party_kz/"
+      "description": "@see https://dadata.ru/api/suggest/party_kz/"
     },
     "SuggestPartyKzFilter": {
       "type": "object",
       "properties": {
         "type": {
-          "$ref": "#/definitions/PartyKzType",
-          "description": "Тип организации",
-          "rawJsDoc": "Тип организации"
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL",
+            "INDIVIDUAL_JOINT_VENTURE",
+            "BRANCH",
+            "FOREIGN_BRANCH"
+          ],
+          "description": "Тип организации"
         }
       },
       "additionalProperties": false
-    },
-    "PartyKzType": {
-      "type": "string",
-      "enum": [
-        "LEGAL",
-        "INDIVIDUAL",
-        "INDIVIDUAL_JOINT_VENTURE",
-        "BRANCH",
-        "FOREIGN_BRANCH"
-      ]
     },
     "SuggestPartyPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "type": {
-          "$ref": "#/definitions/PartyType",
-          "description": "Ограничение по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n {@link  https://dadata.ru/api/suggest/party/ }",
-          "rawJsDoc": "Ограничение по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL"
+          ],
+          "description": "Ограничение по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
         },
         "status": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PartyStatus"
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BANKRUPT",
+              "LIQUIDATED",
+              "LIQUIDATING",
+              "REORGANIZING"
+            ]
           },
-          "description": "Ограничение по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335 }",
-          "rawJsDoc": "Ограничение по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+          "description": "Ограничение по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
         },
         "okved": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Ограничение по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333 }",
-          "rawJsDoc": "Ограничение по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+          "description": "Ограничение по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "locations": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "Ограничение по региону (**двузначный** код). API принимает массив вида `{ kladr_id: string }[]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123 }",
-          "rawJsDoc": "Ограничение по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+          "description": "Ограничение по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
         },
         "locations_boost": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "Приоритет города при ранжировании. API принимает массив вида `{ kladr_id: string }[]`  {@link  https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852 }",
-          "rawJsDoc": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
+          "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669120"
-    },
-    "PartyType": {
-      "type": "string",
-      "enum": [
-        "LEGAL",
-        "INDIVIDUAL"
-      ]
-    },
-    "PartyStatus": {
-      "type": "string",
-      "enum": [
-        "ACTIVE",
-        "BANKRUPT",
-        "LIQUIDATED",
-        "LIQUIDATING",
-        "REORGANIZING"
-      ]
+      "description": "@see https://dadata.ru/api/suggest/party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669120"
     },
     "SuggestPostalUnitPayload": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestPostalUnitFilter"
           },
-          "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/postal_unit/"
+      "description": "@see https://dadata.ru/api/suggest/postal_unit/"
     },
     "SuggestPostalUnitFilter": {
       "type": "object",
       "properties": {
         "is_closed": {
           "type": "boolean",
-          "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые",
-          "rawJsDoc": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
+          "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
         },
         "type_code": {
           "type": "string",
-          "description": "Фильтрация по типу отделения (например, `ГОПС`)",
-          "rawJsDoc": "Фильтрация по типу отделения (например, `ГОПС`)"
+          "description": "Фильтрация по типу отделения (например, `ГОПС`)"
         },
         "address_kladr_id": {
           "type": "string",
-          "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)",
-          "rawJsDoc": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
+          "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
         }
       },
       "additionalProperties": false
@@ -1106,39 +942,35 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         },
         "filters": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/SuggestRegionCourtFilter"
           },
-          "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`",
-          "rawJsDoc": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "additionalProperties": false,
       "required": [
         "query"
       ],
-      "rawJsDoc": "@see https://dadata.ru/api/suggest/region_court/"
+      "description": "@see https://dadata.ru/api/suggest/region_court/"
     },
     "SuggestRegionCourtFilter": {
       "type": "object",
       "properties": {
         "region_code": {
           "type": "string",
-          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда",
-          "rawJsDoc": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
         }
       },
       "additionalProperties": false
@@ -1149,16 +981,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -1171,16 +1001,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -1193,16 +1021,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -1215,16 +1041,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -1237,16 +1061,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [
@@ -1259,16 +1081,14 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string",
-          "maxLength": 300,
-          "rawJsDoc": "Query string\n@maxLength 300"
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
           "minimum": 1,
-          "maximum": 20,
-          "rawJsDoc": "Maximum number of results to fetch\n@minimum 1\n@maximum 20"
+          "maximum": 20
         }
       },
       "required": [

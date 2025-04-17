@@ -9,7 +9,7 @@ export interface SuggestPartyKzPayload extends BaseSuggestPayload {
   filters?: SuggestPartyKzFilter[];
 }
 
-export type SuggestPartyKzFilter = {
+export interface SuggestPartyKzFilter {
   /** Тип организации */
   type?: PartyKzType;
-};
+}

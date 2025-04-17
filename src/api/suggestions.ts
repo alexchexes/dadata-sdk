@@ -1,7 +1,7 @@
 import { BASE_SUGGEST_URL } from '@/const/api';
 import { buildPayload } from './payload-builders';
 import axios, { CanceledError, type RawAxiosRequestHeaders } from 'axios';
-import type { DadataSuggestion } from '@/types/api';
+import type { DadataSuggestion } from '@/types';
 import type { SuggestOptions } from '@/types';
 
 const DEFAULT_HEADERS: RawAxiosRequestHeaders = {

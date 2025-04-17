@@ -13,5 +13,5 @@ export interface SuggestFiasOptions extends BaseSuggestOptions {
   fromBound?: BoundTypeFias;
   toBound?: BoundTypeFias;
   locationsFilter?: OneOrMany<LocationRestrictionFias | string | number>;
-  restrictValue?: Boolean;
+  restrictValue?: boolean;
 }

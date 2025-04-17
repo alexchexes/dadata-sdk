@@ -51,6 +51,9 @@ type Merge<A, B> = {
 
 /**
  * Overrides the types of properties in T with those in R, while ensuring that all keys in R exist in T.
+ *
+ * @deprecated Until ts-json-schema-generator fixes https://github.com/vega/ts-json-schema-generator/issues/2234.
+ * Use `type-fest`'s `OverrideProperties` instead
  */
 export type Override<
   TBase,
@@ -95,9 +98,9 @@ type OverridableKeys<TBase, TOverride> = {
 export type DistributivePartial<T> = T extends any ? Partial<T> : never;
 
 /** Checks that all properties are primitives */
-export type OnlyPrimitives = {
+export interface OnlyPrimitives {
   [key: string]: string | number | boolean | null | undefined | symbol | bigint;
-};
+}
 
 /** Recursively makes properties optional */
 export type DeepPartial<T> = {

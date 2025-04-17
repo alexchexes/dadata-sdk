@@ -19,7 +19,7 @@ export interface SuggestMetroPayload extends BaseSuggestPayload {
   filters?: SuggestMetroFilter[];
 }
 
-export type SuggestMetroFilter = {
+export interface SuggestMetroFilter {
   /** КЛАДР-код города (например, "7700000000000" для Москвы) */
   city_kladr_id?: string;
   /** ФИАС-код города (например, "0c5b2444-70a0-4932-980c-b4dc0d3f02b5" для Москвы) */
@@ -36,4 +36,4 @@ export type SuggestMetroFilter = {
    * однако фактически API использует `true/null`.
    */
   is_closed?: true | null;
-};
+}

@@ -11,7 +11,7 @@ export interface SuggestOkpd2Payload extends BaseSuggestPayload {
   filters?: SuggestOkpd2Filter[];
 }
 
-export type SuggestOkpd2Filter = {
+export interface SuggestOkpd2Filter {
   /** Код раздела классификатора ОКПД 2 (например `'S'`) */
   razdel?: string;
-};
+}

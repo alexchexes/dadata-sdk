@@ -12,7 +12,7 @@ export interface SuggestFmsUnitPayload extends BaseSuggestPayload {
   filters?: SuggestFmsUnitFilter[];
 }
 
-export type SuggestFmsUnitFilter = {
+export interface SuggestFmsUnitFilter {
   /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС */
   region_code?: string;
   /**
@@ -23,4 +23,4 @@ export type SuggestFmsUnitFilter = {
    * - `3` — отделение полиции
    */
   type?: FmsUnitType;
-};
+}

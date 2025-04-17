@@ -11,7 +11,7 @@ export interface SuggestPostalUnitPayload extends BaseSuggestPayload {
   filters?: SuggestPostalUnitFilter[];
 }
 
-export type SuggestPostalUnitFilter = {
+export interface SuggestPostalUnitFilter {
   /** Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые
    */
   is_closed?: boolean;
@@ -19,4 +19,4 @@ export type SuggestPostalUnitFilter = {
   type_code?: string;
   /** Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города) */
   address_kladr_id?: string;
-};
+}

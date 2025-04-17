@@ -2,7 +2,7 @@ import type { BOUND_TYPES } from '@/const/api';
 
 export type BoundType = (typeof BOUND_TYPES)[number];
 
-export type LocationRestriction = {
+export interface LocationRestriction {
   country_iso_code?: string;
   region_iso_code?: string;
 
@@ -31,7 +31,7 @@ export type LocationRestriction = {
   settlement_fias_id?: string;
   street_fias_id?: string;
   planning_structure_fias_id?: string;
-};
+}
 
 export interface KladrIdFilter {
   kladr_id?: string;

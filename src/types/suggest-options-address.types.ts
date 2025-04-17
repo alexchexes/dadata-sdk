@@ -22,7 +22,7 @@ export interface SuggestAddressOptions extends BaseSuggestOptions {
   fromBound?: BoundType;
   toBound?: BoundType;
   locationsFilter?: OneOrMany<LocationsFilterItem>;
-  restrictValue?: Boolean;
+  restrictValue?: boolean;
   radiusFilter?: RadiusFilter;
   language?: Language;
   division?: DivisionType;

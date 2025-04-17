@@ -1,4 +1,52 @@
-import type { Override, PickAndOverride } from '@/types/helpers.types';
+import type { OverrideProperties as Override } from 'type-fest';
+
+import type { PickAndOverride } from '@/types/helpers.types';
+
+export interface AddressMetroItem {
+  /** название станции */
+  name: null | string;
+  /** название линии */
+  line: null | string;
+  /** расстояние до станции в километрах */
+  distance: null | number;
+}
+
+export interface AddressDivisionsAdministrativeItem {
+  /** ФИАС-код */
+  fias_id: string | null;
+  /** КЛАДР-код */
+  kladr_id: string | null;
+  /** Тип (сокращенный), например "р-н" */
+  type: string | null;
+  /** Тип (полный), например "район" */
+  type_full: string | null;
+  /** Название, например "Академический" */
+  name: string | null;
+  /** Название с типом, например "р-н Академический" */
+  name_with_type: string | null;
+}
+
+export type AddressDivisionsAdministrative = {
+  [K in
+    | 'area'
+    | 'city'
+    | 'city_district'
+    | 'settlement'
+    | 'planning_structure']: null | AddressDivisionsAdministrativeItem;
+};
+
+export interface AddressDivisions {
+  /**
+   * Компоненты адреса в административном делении:
+   *
+   * - `area` — район региона;
+   * - `city` — город;
+   * - `city_district` — район города;
+   * - `settlement` — населенный пункт;
+   * - `planning_structure` — планировочная структура.
+   */
+  administrative: AddressDivisionsAdministrative;
+}
 
 /**
  * All possible fields for address objects returned by any Dadata API endpoint.
@@ -542,16 +590,7 @@ interface AllAddressFields {
    * * Только на тарифе «Максимальный»
    * * В API организаций и банков присутствует в сведениях об адресе на любом тарифе
    */
-  metro:
-    | null
-    | {
-        /** название станции */
-        name: null | string;
-        /** название линии */
-        line: null | string;
-        /** расстояние до станции в километрах */
-        distance: null | number;
-      }[];
+  metro: null | AddressMetroItem[];
   /**
    * Подъезд (заполняется только для стандартизации)
    * * (подсказки: v21.1+)
@@ -898,40 +937,14 @@ export interface AddressClean
        * | Код | Нужно проверить вручную? | Описание |
        * |-|-|-|
        * | 0 | Нет | Адрес распознан уверенно |
-       * | 1 | Да | Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область».<br> Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона и города. |
+       * | 1 | Да | Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область». Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона и города. |
        * | 2 | Нет | Адрес пустой или заведомо «мусорный» |
        * | 3 | Да | Есть альтернативные варианты. Пример: «Москва Тверская-Ямская» — в Москве четыре Тверских-Ямских улицы |
        */
       qc: 0 | 1 | 2 | 3;
 
       /** Компоненты адреса в административном/муниципальном делении. */
-      divisions: {
-        /**
-         * Компоненты адреса в административном делении:
-         *
-         * - `area` — район региона;
-         * - `city` — город;
-         * - `city_district` — район города;
-         * - `settlement` — населенный пункт;
-         * - `planning_structure` — планировочная структура.
-         */
-        administrative: {
-          [K in 'area' | 'city' | 'city_district' | 'settlement' | 'planning_structure']: null | {
-            /** ФИАС-код */
-            fias_id: string | null;
-            /** КЛАДР-код */
-            kladr_id: string | null;
-            /** Тип (сокращенный), например "р-н" */
-            type: string | null;
-            /** Тип (полный), например "район" */
-            type_full: string | null;
-            /** Название, например "Академический" */
-            name: string | null;
-            /** Название с типом, например "р-н Академический" */
-            name_with_type: string | null;
-          };
-        };
-      };
+      divisions: AddressDivisions;
 
       /**
        * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
@@ -1062,7 +1075,7 @@ export interface BankSuggestionAddressData
   > {}
 
 /** Common for AddressSuggestion and FiasSuggestion */
-export interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalData> {
+interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalData> {
   /**
    * Адрес одной строкой (как показывается в списке подсказок),
    * сокращённый по правилам, описанным здесь:
@@ -1079,9 +1092,9 @@ export interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalDa
 /**
  * Suggestion object returned from `suggest/address` API with default (`division=ADMINISTRATIVE`) division option
  */
-export type AddressAdminSuggestion = BaseAddressSuggestion<AddressAdminData>;
+export interface AddressAdminSuggestion extends BaseAddressSuggestion<AddressAdminData> {}
 
 /**
  * Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option
  */
-export type AddressMunicipalSuggestion = BaseAddressSuggestion<AddressMunicipalData>;
+export interface AddressMunicipalSuggestion extends BaseAddressSuggestion<AddressMunicipalData> {}

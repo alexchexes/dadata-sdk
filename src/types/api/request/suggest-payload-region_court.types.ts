@@ -11,7 +11,7 @@ export interface SuggestRegionCourtPayload extends BaseSuggestPayload {
   filters?: SuggestRegionCourtFilter[];
 }
 
-export type SuggestRegionCourtFilter = {
+export interface SuggestRegionCourtFilter {
   /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда */
   region_code?: string;
-};
+}

@@ -8,3 +8,4 @@ export * from './suggest-options-party_by.types.ts';
 export * from './suggest-options-party_kz.types.ts';
 export * from './suggest-options-party.types.ts';
 export * from './suggest-options.types.ts';
+export * from './dadata-suggestion.types.ts';

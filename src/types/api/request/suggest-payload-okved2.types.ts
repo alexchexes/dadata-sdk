@@ -11,7 +11,7 @@ export interface SuggestOkved2Payload extends BaseSuggestPayload {
   filters?: SuggestOkved2Filter[];
 }
 
-export type SuggestOkved2Filter = {
+export interface SuggestOkved2Filter {
   /** Код раздела классификатора ОКВЭД 2 (например, `"J"`) */
   razdel?: string;
-};
+}

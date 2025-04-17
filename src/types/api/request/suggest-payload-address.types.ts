@@ -16,6 +16,10 @@ export type Language = (typeof LANGUAGES)[number];
 
 export type DivisionType = (typeof DIVISION_TYPES)[number];
 
+export interface Bound {
+  value: BoundType;
+}
+
 /**
  * {@link https://dadata.ru/api/suggest/address/}
  * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}
@@ -28,11 +32,11 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
    */
-  from_bound?: { value: BoundType };
+  from_bound?: Bound;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
    */
-  to_bound?: { value: BoundType };
+  to_bound?: Bound;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
    */
@@ -42,7 +46,7 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}
    * - {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}
    */
-  restrict_value?: Boolean;
+  restrict_value?: boolean;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}
    */
