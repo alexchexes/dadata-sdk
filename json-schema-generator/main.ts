@@ -14,7 +14,7 @@ function generateSchemasFromDirectory() {
   const files = fs.readdirSync(absoluteTypesDir).filter((file) => file.endsWith('.types.ts'));
 
   files.forEach((file) => {
-    log(chalk.bgWhite.black(`\n Processing file: ${file} `));
+    log(chalk.bgWhite.black(`\n Generating JSON-schema from file: ${TYPES_DIR}/${file} `));
 
     const fullPath = path.join(absoluteTypesDir, file);
 
