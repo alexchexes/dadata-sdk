@@ -591,7 +591,7 @@
             "null",
             "string"
           ],
-          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется."
+          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется, либо заполняется до уровня города."
         },
         "capital_marker": {
           "type": "string",
@@ -1392,7 +1392,7 @@
             "null",
             "string"
           ],
-          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется."
+          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется, либо заполняется до уровня города."
         },
         "capital_marker": {
           "type": "string",
@@ -2196,6 +2196,13 @@
           ],
           "description": "Дом"
         },
+        "house_flat_count": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Количество квартир в доме\n\nВ подсказках по адресам - заполняется при выборе конкретной подсказки (запрос с count=1)\n* Только на тарифе «Максимальный»\n* (подсказки: v24.3+)"
+        },
         "block_type": {
           "type": [
             "null",
@@ -2252,6 +2259,27 @@
           ],
           "description": "Абонентский ящик"
         },
+        "room_type": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Тип комнаты\n* (подсказки: v22.8+)"
+        },
+        "room": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Комната\n* (подсказки: v22.8+)"
+        },
         "fias_id": {
           "type": "string",
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
@@ -2282,6 +2310,13 @@
             "string"
           ],
           "description": "КЛАДР-код адреса"
+        },
+        "geoname_id": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется, либо заполняется до уровня города."
         },
         "capital_marker": {
           "type": "string",
@@ -2491,9 +2526,11 @@
         "floor",
         "geo_lat",
         "geo_lon",
+        "geoname_id",
         "house",
         "house_cadnum",
         "house_fias_id",
+        "house_flat_count",
         "house_kladr_id",
         "house_type",
         "house_type_full",
@@ -2515,6 +2552,9 @@
         "region_type_full",
         "region_with_type",
         "result",
+        "room",
+        "room_type",
+        "room_type_full",
         "settlement",
         "settlement_fias_id",
         "settlement_kladr_id",
@@ -3501,7 +3541,7 @@
             "null",
             "string"
           ],
-          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется."
+          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется, либо заполняется до уровня города."
         },
         "capital_marker": {
           "type": "string",
@@ -4309,7 +4349,7 @@
             "null",
             "string"
           ],
-          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется."
+          "description": "Идентификатор объекта в базе GeoNames.\n\nДля российских адресов не заполняется, либо заполняется до уровня города."
         },
         "capital_marker": {
           "type": "string",

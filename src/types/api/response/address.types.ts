@@ -410,7 +410,7 @@ interface AllAddressFields {
   /**
    * Идентификатор объекта в базе GeoNames.
    *
-   * Для российских адресов не заполняется.
+   * Для российских адресов не заполняется, либо заполняется до уровня города.
    */
   geoname_id: null | string;
   /**
@@ -833,6 +833,7 @@ export interface AddressClean
     | 'house_type'
     | 'house_type_full'
     | 'house'
+    | 'house_flat_count'
     | 'block_type'
     | 'block_type_full'
     | 'block'
@@ -841,9 +842,13 @@ export interface AddressClean
     | 'flat_type_full'
     | 'flat'
     | 'postal_box'
+    | 'room_type'
+    | 'room_type_full'
+    | 'room'
     | 'fias_id'
     | 'fias_level'
     | 'kladr_id'
+    | 'geoname_id'
     | 'capital_marker'
     | 'okato'
     | 'oktmo'
