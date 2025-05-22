@@ -110,3 +110,6 @@ export type DeepPartial<T> = {
       : DeepPartial<T[P]>
     : T[P];
 };
+
+/** Make specified keys optional */
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

@@ -55,7 +55,8 @@ export interface AddressDivisions {
  * string vs 'always null', etc.). In such cases, we define the type according to the "suggest/address"
  * API here, and then re-declare it in the type definitions for other APIs. Examples: `source`, `qc_geo`.
  *
- * WE DON'T DEFINE FIELDS AS OPTIONAL HERE
+ * WE DON'T DEFINE API-SPECIFIC FIELDS AS OPTIONAL HERE, as we create separate interfaces with only needed fields for each api,
+ * BUT WE DO IT HERE IF A FIELD IS NOT PRESENT UNTIL SPECIFIC VERSION OF DADATA API (as it affects any endpoint where it is used).
  *
  * Fields and descriptions are collected from the following sources:
  *
@@ -97,12 +98,12 @@ interface AllAddressFields {
    * Двухсимвольный код страны ISO 3166
    * * (подсказки: v19.7+)
    */
-  country_iso_code: string;
+  country_iso_code?: string;
   /**
    * Федеральный округ
    * * (подсказки: v19.5+)
    */
-  federal_district: null | string;
+  federal_district?: null | string;
   /**
    * ФИАС-код региона
    *
@@ -116,7 +117,7 @@ interface AllAddressFields {
    * Код региона ISO 3166
    * * (подсказки: v19.7+)
    */
-  region_iso_code: null | string;
+  region_iso_code?: null | string;
   /** Регион с типом */
   region_with_type: null | string;
   /** Тип региона (сокращенный) */
@@ -166,32 +167,32 @@ interface AllAddressFields {
    * ФИАС-код муниципального поселения
    * * (подсказки: v22.3+)
    */
-  sub_area_fias_id: null | string;
+  sub_area_fias_id?: null | string;
   /**
    * КЛАДР-код муниципального поселения
    * * (подсказки: v22.3+)
    */
-  sub_area_kladr_id: null | string;
+  sub_area_kladr_id?: null | string;
   /**
    * Муниципальное поселение с типом
    * * (подсказки: v22.3+)
    */
-  sub_area_with_type: null | string;
+  sub_area_with_type?: null | string;
   /**
    * Тип муниципального поселения (сокращенный)
    * * (подсказки: v22.3+)
    */
-  sub_area_type: null | string;
+  sub_area_type?: null | string;
   /**
    * Тип муниципального поселения
    * * (подсказки: v22.3+)
    */
-  sub_area_type_full: null | string;
+  sub_area_type_full?: null | string;
   /**
    * Муниципальное поселение
    * * (подсказки: v22.3+)
    */
-  sub_area: null | string;
+  sub_area?: null | string;
   /**
    * ФИАС-код города
    *
@@ -283,24 +284,24 @@ interface AllAddressFields {
    * ФИАС-код участка
    * * (подсказки: v21.12+)
    */
-  stead_fias_id: null | string;
+  stead_fias_id?: null | string;
   /** КЛАДР-код земельного участка */
-  stead_kladr_id: null | string;
+  stead_kladr_id?: null | string;
   /**
    * Тип участка (сокращенный, = «уч»)
    * * (подсказки: v21.12+)
    */
-  stead_type: null | string;
+  stead_type?: null | string;
   /**
    * Тип участка, = «участок»
    * * (подсказки: v21.12+)
    */
-  stead_type_full: null | string;
+  stead_type_full?: null | string;
   /**
    * Участок
    * * (подсказки: v21.12+)
    */
-  stead: null | string;
+  stead?: null | string;
   /**
    * ФИАС-код дома
    *
@@ -330,7 +331,7 @@ interface AllAddressFields {
    * ФИАС-код квартиры / помещения
    * * (подсказки: v20.1+)
    */
-  flat_fias_id: null | string;
+  flat_fias_id?: null | string;
   /** Тип квартиры/помещения (сокращенный) */
   flat_type: null | string;
   /** Тип квартиры/помещения полностью */
@@ -341,22 +342,22 @@ interface AllAddressFields {
    * ФИАС-код комнаты
    * * (подсказки: v22.8+)
    */
-  room_fias_id: null | string;
+  room_fias_id?: null | string;
   /**
    * Тип комнаты (сокращенный)
    * * (подсказки: v22.8+)
    */
-  room_type: null | string;
+  room_type?: null | string;
   /**
    * Тип комнаты
    * * (подсказки: v22.8+)
    */
-  room_type_full: null | string;
+  room_type_full?: null | string;
   /**
    * Комната
    * * (подсказки: v22.8+)
    */
-  room: null | string;
+  room?: null | string;
   /** Абонентский ящик */
   postal_box: null | string;
   /**
@@ -509,7 +510,7 @@ interface AllAddressFields {
    * * (подсказки: v22.4+)
    * * В API организаций и банков присутствует в сведениях об адресе на любом тарифе
    */
-  stead_cadnum: null | string;
+  stead_cadnum?: null | string;
   /**
    * Кадастровый номер дома
    *
@@ -518,7 +519,7 @@ interface AllAddressFields {
    * * (подсказки: v22.4+)
    * * В API организаций и банков присутствует в сведениях об адресе на любом тарифе
    */
-  house_cadnum: null | string;
+  house_cadnum?: null | string;
   /**
    * Количество квартир в доме
    *
@@ -526,7 +527,7 @@ interface AllAddressFields {
    * * Только на тарифе «Максимальный»
    * * (подсказки: v24.3+)
    */
-  house_flat_count: null | string;
+  house_flat_count?: null | string;
   /**
    * Кадастровый номер квартиры / помещения
    *
@@ -535,7 +536,7 @@ interface AllAddressFields {
    * * (подсказки: v22.4+)
    * * В API организаций и банков присутствует в сведениях об адресе на любом тарифе
    */
-  flat_cadnum: null | string;
+  flat_cadnum?: null | string;
   /**
    * Площадь квартиры
    * * Площадь и стоимость есть у 70% квартир в России
@@ -569,7 +570,7 @@ interface AllAddressFields {
    * * Только на тарифе «Максимальный»
    * * (подсказки: v22.8+)
    */
-  room_cadnum: null | string;
+  room_cadnum?: null | string;
   /**
    * Часовой пояс города для России, часовой пояс страны — для иностранных адресов.
    * * Если у страны несколько поясов, вернёт минимальный и максимальный через слеш: UTC+5/UTC+6
@@ -595,12 +596,12 @@ interface AllAddressFields {
    * Подъезд (заполняется только для стандартизации)
    * * (подсказки: v21.1+)
    */
-  entrance: null | string;
+  entrance?: null | string;
   /**
    * Этаж (заполняется только для стандартизации)
    * * (подсказки: v21.1+)
    */
-  floor: null | string;
+  floor?: null | string;
   /**
    * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
    * Чаще всего вам нужен не он, а `fias_id`
@@ -639,12 +640,12 @@ interface AllAddressFields {
    * (только для стандартизации)
    * * Поле существует начиная с v22.3+
    */
-  divisions: null;
+  divisions?: null;
   /**
    * Зарезервировано, не возвращается ни в одном из API
    * (подсказки: v23.5+)
    */
-  custom: null;
+  custom?: null;
   /** Стандартизованный адрес одной строкой (только для стандартизации) */
   result: null;
 }
