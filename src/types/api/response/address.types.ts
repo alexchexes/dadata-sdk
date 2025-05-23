@@ -965,7 +965,7 @@ export interface AddressClean
  * @see https://dadata.ru/api/find-fias/
  * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937
  */
-export interface AddressFiasData
+export interface FiasSuggestionData
   extends PickAndOverride<
     AllAddressFields,
     | 'postal_code'

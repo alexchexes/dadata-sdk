@@ -2518,7 +2518,7 @@
       ],
       "description": "Address fields returned by the Standardization (\"clean\") API.\n\n@see https://dadata.ru/api/clean/address/"
     },
-    "AddressFiasData": {
+    "FiasSuggestionData": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -5588,7 +5588,7 @@
           "description": "Адрес одной строкой (полный, с индексом)"
         },
         "data": {
-          "$ref": "#/definitions/AddressFiasData",
+          "$ref": "#/definitions/FiasSuggestionData",
           "description": "Подробные поля адреса"
         }
       },
