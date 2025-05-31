@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "composite": false,
+    "emitDeclarationOnly": false,
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["src/types/**/*.ts", "src/const/**/*.ts", "schema-gen/**/*"]
+}

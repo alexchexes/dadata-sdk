@@ -1,11 +1,9 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.vitest.json" },
-    { "path": "./tsconfig.playground.json" },
-    { "path": "./tsconfig.schema-generator.json" }
+    { "path": "./packages/api-types" },
+    { "path": "./packages/vue-dadata" },
+    { "path": "./tsconfig.node.json" }
   ],
   "exclude": ["dist", "node_modules"]
 }

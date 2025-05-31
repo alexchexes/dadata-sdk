@@ -1,0 +1,25 @@
+{
+  "extends": "../packages/vue-dadata/tsconfig.json",
+
+  "include": [
+    "**/*.ts",
+    "**/*.vue",
+    "**/*.md",
+    "../packages/vue-dadata/src/**/*",
+    "../packages/api-types/src/**/*"
+  ],
+
+  "compilerOptions": {
+    "rootDir": "../",
+    "baseUrl": ".",
+    "paths": {
+      "@dadata-sdk/vue": ["../packages/vue-dadata/src/index.ts"],
+      "@dadata-sdk/api-types": ["../packages/api-types/src/index.ts"]
+    },
+    "types": ["vue"]
+  },
+
+  "vueCompilerOptions": {
+    "vitePressExtensions": [".md"]
+  }
+}

@@ -1,9 +1,14 @@
-import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
-import viteConfig from './vite.config'
+import { fileURLToPath } from 'node:url';
+import { mergeConfig, defineConfig, configDefaults } from 'vitest/config';
+import viteConfigFactory from './packages/vue-dadata/vite.config';
+
+const vuePkgConfig =
+  typeof viteConfigFactory === 'function'
+    ? viteConfigFactory({ command: 'serve', mode: 'test' })
+    : viteConfigFactory;
 
 export default mergeConfig(
-  viteConfig,
+  vuePkgConfig,
   defineConfig({
     test: {
       environment: 'jsdom',
@@ -11,4 +16,4 @@ export default mergeConfig(
       root: fileURLToPath(new URL('./', import.meta.url)),
     },
   }),
-)
+);

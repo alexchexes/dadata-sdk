@@ -1,0 +1,32 @@
+{
+  "name": "@dadata-sdk/api-types",
+  "version": "0.1.0",
+  "description": "Typed contract + JSON Schema for every Dadata endpoint",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema/*": "./schemas/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && pnpm run gen:schema",
+    "gen:schema": "tsx schema-gen/main.ts"
+  },
+  "dependencies": {
+    "type-fest": "^4.39.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "chalk": "^5.4.1",
+    "ts-json-schema-generator": "2.4.1-next.0",
+    "tsx": "^4.19.3"
+  }
+}
