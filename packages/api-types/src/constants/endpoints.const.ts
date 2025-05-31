@@ -1,5 +1,6 @@
 export const BASE_SUGGEST_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/';
 
+// Don't remove links, they serve for development
 export const SUGGEST_TYPES = [
   'address', // https://dadata.ru/api/suggest/address/
   'country', // https://dadata.ru/api/suggest/country/

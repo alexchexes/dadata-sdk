@@ -14,7 +14,7 @@ export default defineConfig(({ command }) => {
         dts({
           outDir: 'dist/types',
           insertTypesEntry: true,
-          tsconfigPath: './packages/vue-dadata/tsconfig.json',
+          tsconfigPath: resolve(__dirname, 'tsconfig.json'),
         }),
     ].filter(Boolean),
     build: {

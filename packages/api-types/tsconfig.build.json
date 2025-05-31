@@ -6,11 +6,14 @@
     "baseUrl": ".",
     "composite": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "ES2019",
     "paths": {
       "@/*": ["src/*"]
     }

@@ -11,13 +11,14 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./schema/*": "./schemas/*"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && pnpm run gen:schema",
+    "build": "pnpm build-only && pnpm run gen:schema",
+    "build-only": "tsc -p tsconfig.build.json",
     "gen:schema": "tsx schema-gen/main.ts"
   },
   "dependencies": {

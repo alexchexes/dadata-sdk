@@ -6,7 +6,6 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "packages/vue-dadata/vite.config.ts",
     "packages/vue-dadata/vite.config.ts"
   ],
   "compilerOptions": {
