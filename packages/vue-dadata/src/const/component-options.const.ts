@@ -50,7 +50,7 @@ export const DEFAULT_OPTIONS = {
   selectOnEnter: true,
   enrichOnSelect: true,
   httpCache: true,
-  suggestionsHint: 'ФЫВФЫВФЫВЫФВ вариант или продолжите ввод',
+  suggestionsHint: 'Выберите вариант или продолжите ввод',
   inputName: 'vue-dadata-input',
   placeholder: '',
   showOnFocus: 'no_selection',
