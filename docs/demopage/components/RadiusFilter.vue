@@ -4,7 +4,7 @@ import InputText from './ui/InputText.vue';
 import ButtonAdd from './ui/ButtonAdd.vue';
 import ButtonRemove from './ui/ButtonRemove.vue';
 import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS } from '@dadata-sdk/vue';
-import type { RadiusFilter } from '@dadata-sdk/vue';
+import type { RadiusFilter } from '@dadata-sdk/api-types';
 
 const model = defineModel({ type: Object as PropType<RadiusFilter>, required: false });
 

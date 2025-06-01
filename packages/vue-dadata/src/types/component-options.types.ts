@@ -28,6 +28,7 @@ import type {
   SuggestType,
   OneOrMany,
 } from '@dadata-sdk/api-types';
+
 import type { InputHTMLAttributes } from 'vue';
 import type { OptionalSuggestPayload } from './suggest-options.types';
 

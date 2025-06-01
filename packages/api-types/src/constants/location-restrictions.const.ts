@@ -1,11 +1,12 @@
 // Locations restrictions.
 // Split by category for our own convenience, while in the API there's no such thing as location restriction category.
-import type { LocationRestriction } from '../types';
+
+import { LocationRestriction } from '../types';
 
 type LocationRestrictionKey = (keyof LocationRestriction)[];
 
 export const ISO_CODE_RESTRICTION_TYPES = [
-  'country_iso_code', // * to allow dadata search any country
+  'country_iso_code', // "*" - to allow dadata search any country
   'region_iso_code', //
 ] as const satisfies LocationRestrictionKey;
 
@@ -24,7 +25,7 @@ export const FIAS_ID_RESTRICTION_TYPES = [
 ] as const satisfies LocationRestrictionKey;
 
 export const NAME_RESTRICTION_TYPES = [
-  'country', // * to allow dadata search any country
+  'country', // "*" - to allow dadata search any country
   'region',
   'area',
   'city',

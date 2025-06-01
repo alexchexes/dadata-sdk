@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["src/types/**/*.ts", "src/const/**/*.ts", "schema-gen/**/*"]
+  "include": ["src/**/*.ts", "schema-gen/**/*"]
 }

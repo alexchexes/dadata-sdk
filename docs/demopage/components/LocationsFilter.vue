@@ -11,7 +11,8 @@ import {
   NAME_RESTRICTION_TYPES,
   TYPE_FULL_RESTRICTION_TYPES,
 } from '@dadata-sdk/vue';
-import type { SuggestType, VueDadataOptions, LocationRestriction } from '@dadata-sdk/vue';
+import type { VueDadataOptions } from '@dadata-sdk/vue';
+import type { SuggestType, LocationRestriction } from '@dadata-sdk/api-types';
 
 const props = defineProps({
   suggestType: { type: String as PropType<SuggestType>, required: true },

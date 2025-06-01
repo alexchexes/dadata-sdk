@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import * as ts from 'typescript';
 import type { BaseType, Context } from 'ts-json-schema-generator';
 import { UnionType } from 'ts-json-schema-generator';
 import { MappedTypeNodeParser } from 'ts-json-schema-generator/dist/src/NodeParser/MappedTypeNodeParser';

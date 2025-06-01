@@ -17,6 +17,15 @@ export default defineConfig(({ command }) => {
           tsconfigPath: resolve(__dirname, 'tsconfig.json'),
         }),
     ].filter(Boolean),
+
+    resolve: {
+      alias: {
+        '@dadata-sdk/api-types': isBuild
+          ? resolve(__dirname, '../api-types/dist/cjs/index.js')
+          : resolve(__dirname, '../api-types/src/index.ts'),
+      },
+    },
+
     build: {
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),

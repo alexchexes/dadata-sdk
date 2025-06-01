@@ -13,8 +13,8 @@
     "rootDir": "../",
     "baseUrl": ".",
     "paths": {
-      "@dadata-sdk/vue": ["../packages/vue-dadata/src/index.ts"],
-      "@dadata-sdk/api-types": ["../packages/api-types/src/index.ts"]
+      "@dadata-sdk/vue": ["../packages/vue-dadata/src"],
+      "@dadata-sdk/api-types": ["../packages/api-types/src/index.d.ts"]
     },
     "types": ["vue"]
   },
