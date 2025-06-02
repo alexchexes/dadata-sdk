@@ -1,9 +1,0 @@
-{
-  "files": [],
-  "references": [
-    { "path": "./packages/api-types" },
-    { "path": "./packages/vue-dadata" },
-    { "path": "./tsconfig.node.json" }
-  ],
-  "exclude": ["dist", "node_modules"]
-}
