@@ -114,6 +114,9 @@ export interface VueDadataOptions {
    * Restricts the search to specific locations (API `locations` parameter).
    * Max: `10` items
    *
+   * For example (when `suggestType=address`), to search only in Voronezh city and in Rostov region:
+   * `:locationsFilter="[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]"`
+   *
    * - For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
    * - For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}
    *

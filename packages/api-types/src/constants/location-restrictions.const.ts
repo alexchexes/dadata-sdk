@@ -44,6 +44,7 @@ export const TYPE_FULL_RESTRICTION_TYPES = [
 ] as const satisfies LocationRestrictionKey;
 
 // Flat union of all above
+/** Available keys for objects in the `locations` filter in the `suggest/address` and `suggest/fias` APIs */
 export const RESTRICTION_TYPES = [
   ...ISO_CODE_RESTRICTION_TYPES,
   ...KLADR_ID_RESTRICTION_TYPES,
