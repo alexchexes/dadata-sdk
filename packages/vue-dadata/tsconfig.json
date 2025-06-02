@@ -3,7 +3,7 @@
 
   "compilerOptions": {
     "paths": {
-      "@dadata-sdk/api-types": ["../api-types/src/index.ts"]
+      "@dadata-sdk/api-types": ["../api-types/src/index.d.ts"]
     },
 
     "declaration": true,

@@ -15,13 +15,14 @@ export default defineConfig(({ command }) => {
           outDir: 'dist/types',
           insertTypesEntry: true,
           tsconfigPath: resolve(__dirname, 'tsconfig.json'),
+          aliasesExclude: ['@dadata-sdk/api-types'],
         }),
     ].filter(Boolean),
 
     resolve: {
       alias: {
         '@dadata-sdk/api-types': isBuild
-          ? resolve(__dirname, '../api-types/dist/cjs/index.js')
+          ? resolve(__dirname, '../api-types/dist/esm/index.js')
           : resolve(__dirname, '../api-types/src/index.ts'),
       },
     },
@@ -35,10 +36,11 @@ export default defineConfig(({ command }) => {
       },
       rollupOptions: {
         // externalize deps that shouldn't be bundled into the library
-        external: ['vue'],
+        external: ['vue', '@dadata-sdk/api-types'],
         output: {
           globals: {
             vue: 'Vue',
+            '@dadata-sdk/api-types': 'DaDataTypes',
           },
         },
       },

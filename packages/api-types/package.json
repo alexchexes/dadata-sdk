@@ -4,6 +4,7 @@
   "description": "Typed contract + JSON Schema for every Dadata endpoint",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
@@ -12,17 +13,18 @@
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
-      "import": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
       "types": "./dist/index.d.ts"
     },
     "./schema/*": "./schemas/*"
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && pnpm run build:types && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema",
-    "build:types": "tsc -p tsconfig.types.json",
-    "build:cjs": "tsc -p tsconfig.build.json",
-    "prune:stubs": "rimraf dist/cjs/types",
+    "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema",
+    "build:types": "tsc -p tsconfig.types.json && node -e \"require('fs').copyFileSync('src/index.d.ts','dist/index.d.ts')\"",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "prune:stubs": "rimraf dist/cjs/types dist/esm/types",
     "gen:schema": "tsx schema-gen/main.ts"
   },
   "dependencies": {

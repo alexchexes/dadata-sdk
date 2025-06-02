@@ -1,7 +1,7 @@
 // Locations restrictions.
 // Split by category for our own convenience, while in the API there's no such thing as location restriction category.
 
-import { LocationRestriction } from '../types';
+import type { LocationRestriction } from '../types';
 
 type LocationRestrictionKey = (keyof LocationRestriction)[];
 
