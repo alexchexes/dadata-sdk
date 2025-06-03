@@ -8,6 +8,26 @@ const typesPkg = resolve(root, '../../packages/api-types');
 
 const isProd = process.env.NODE_ENV === 'production';
 
+let viteResolveAliases = {};
+
+if (!isProd) {
+  viteResolveAliases = {
+    // in dev mode keep this before '@dadata-sdk/vue'
+    '@dadata-sdk/vue/dist/vue-dadata.css': resolve(vuePkg, 'src/vue-dadata.css'),
+  };
+}
+
+viteResolveAliases = {
+  ...viteResolveAliases,
+
+  // In dev, hot-reload from source; in build, consume the bundle
+  '@dadata-sdk/vue': isProd ? vuePkg : resolve(vuePkg, 'src/index.ts'),
+
+  '@dadata-sdk/api-types': isProd
+    ? resolve(typesPkg, 'dist/esm/index.js')
+    : resolve(typesPkg, 'src/index.ts'),
+};
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'DaData SDK',
@@ -37,14 +57,7 @@ export default defineConfig({
 
   vite: {
     resolve: {
-      alias: {
-        // In dev, hot-reload from source; in build, consume the bundle
-        '@dadata-sdk/vue': vuePkg,
-
-        '@dadata-sdk/api-types': isProd
-          ? resolve(typesPkg, 'dist/esm/index.js')
-          : resolve(typesPkg, 'src/index.ts'),
-      },
+      alias: viteResolveAliases,
     },
     optimizeDeps: {
       include: ['@dadata-sdk/vue', '@dadata-sdk/api-types', '@vueuse/core'],
