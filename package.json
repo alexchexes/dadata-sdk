@@ -8,7 +8,7 @@
     "docs"
   ],
   "scripts": {
-    "build": "pnpm -r build",
+    "build": "pnpm -r build && pnpm docs:build",
     "test": "pnpm -r test",
     "lint": "eslint \"**/*.{ts,tsx,vue}\"",
     "dev": "pnpm docs:dev",
