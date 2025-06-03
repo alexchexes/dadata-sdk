@@ -39,7 +39,7 @@ export default defineConfig({
     resolve: {
       alias: {
         // In dev, hot-reload from source; in build, consume the bundle
-        '@dadata-sdk/vue': isProd ? vuePkg : resolve(vuePkg, 'src/index.ts'),
+        '@dadata-sdk/vue': vuePkg,
 
         '@dadata-sdk/api-types': isProd
           ? resolve(typesPkg, 'dist/esm/index.js')
