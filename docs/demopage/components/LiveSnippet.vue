@@ -1,8 +1,17 @@
 <script lang="ts" setup>
 import { computed, ref, type PropType } from 'vue';
-import { codeToHtml } from 'shiki';
 import { watchThrottled } from '@vueuse/core';
 import type { VueDadataOptions } from '@dadata-sdk/vue';
+
+// == Temp: use fine-grained bundle technique until release of VitePress with
+// == this commit https://github.com/vuejs/vitepress/commit/801648a4c9d91e7f96302932ac9247d5bdd64ef7
+// import { codeToHtml } from 'shiki';
+import { createHighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
+import vueLang from '@shikijs/langs/vue'; // <-- only Vue grammar
+import materialTheme from '@shikijs/themes/material-theme-ocean'; // <-- only that theme
+
+let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | null = null;
 
 const props = defineProps({
   options: {
@@ -64,9 +73,15 @@ watchThrottled(
 );
 
 const updateHighlighted = async () => {
-  const html = await codeToHtml(code.value, {
+  if (!highlighter) {
+    highlighter = await createHighlighterCore({
+      themes: [materialTheme],
+      langs: [vueLang],
+      engine: createOnigurumaEngine(import('shiki/wasm')),
+    });
+  }
+  const html = highlighter.codeToHtml(code.value, {
     lang: 'vue',
-    // theme: "material-theme-lighter",
     theme: 'material-theme-ocean',
   });
   highlighted.value = html;
