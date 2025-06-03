@@ -805,7 +805,11 @@ const builtPayload = computed(() =>
             >clear</AButton
           >
           <AButton
-            :disabled="!vueDadataRef?.suggestionsList?.length || vueDadataRef?.isDropdownVisible"
+            :disabled="
+              !vueDadataRef?.suggestionsList?.length ||
+              vueDadataRef?.isDropdownVisible ||
+              options.forceHide
+            "
             @mousedown.prevent="vueDadataRef?.show()"
             >show</AButton
           >
