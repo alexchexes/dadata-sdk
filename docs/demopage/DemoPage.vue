@@ -10,6 +10,7 @@ import RadiusFilter from './components/RadiusFilter.vue';
 import SelectOptions from './components/ui/SelectOptions.vue';
 import LiveSnippet from './components/LiveSnippet.vue';
 import { VueDadata } from '@dadata-sdk/vue';
+import '@dadata-sdk/vue/dist/vue-dadata.css';
 import {
   BANK_STATUSES,
   BANK_TYPES,
