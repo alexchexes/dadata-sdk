@@ -23,28 +23,34 @@ const locationsFilterModel = defineModel({
   required: false,
 });
 
-const restrictionsGroups = computed(() => {
-  let options;
+enum RestrictionGroup {
+  NAME = 'By name',
+  TYPE = 'By type',
+  ISO = 'By ISO code',
+  FIAS = 'By FIAS ID',
+  KLADR = 'By KLADR ID',
+}
 
-  options = {
-    byKladrId: KLADR_ID_RESTRICTION_TYPES,
+const restrictionsGroups = computed(() => {
+  let options: Partial<Record<RestrictionGroup, (keyof LocationRestriction)[]>> = {
+    [RestrictionGroup.KLADR]: KLADR_ID_RESTRICTION_TYPES,
   };
 
   if (props.suggestType === 'address') {
-    options = {
-      byName: NAME_RESTRICTION_TYPES,
+    return (options = {
+      [RestrictionGroup.NAME]: NAME_RESTRICTION_TYPES,
       ...options,
-      byFullType: TYPE_FULL_RESTRICTION_TYPES,
-      byFiasId: FIAS_ID_RESTRICTION_TYPES,
-      byIsoCode: ISO_CODE_RESTRICTION_TYPES,
-    };
+      [RestrictionGroup.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
+      [RestrictionGroup.FIAS]: FIAS_ID_RESTRICTION_TYPES,
+      [RestrictionGroup.ISO]: ISO_CODE_RESTRICTION_TYPES,
+    });
   } else if (props.suggestType === 'fias') {
-    options = {
-      byName: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
+    return (options = {
+      [RestrictionGroup.NAME]: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
       ...options,
-      byFiasId: FIAS_ID_RESTRICTION_TYPES,
-      byFullType: TYPE_FULL_RESTRICTION_TYPES,
-    };
+      [RestrictionGroup.FIAS]: FIAS_ID_RESTRICTION_TYPES,
+      [RestrictionGroup.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
+    });
   }
 
   return options;
@@ -279,7 +285,10 @@ function disable() {
           </div>
         </div>
 
-        <div v-if="editableLocationsFilter.length" class="my-1 flex items-center gap-1 text-xs">
+        <div
+          v-if="editableLocationsFilter.length"
+          class="my-1 flex items-center justify-center gap-1 text-xs"
+        >
           <div>OR<span v-if="locIdx === editableLocationsFilter.length - 1">...</span></div>
 
           <!-- Add a new location -->
