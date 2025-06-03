@@ -71,9 +71,10 @@ watch(input, (str) => {
 
 const inputProps = computed(() => ({
   class: twMerge(
-    'w-full rounded-lg border bg-white px-1.5 py-0.5',
+    'w-full rounded-lg border bg-white dark:bg-(--vp-input-bg-color) px-1.5 py-0.5',
     props.inputClass,
-    !isValid.value && 'border-red-500! text-red-600 ring-red-500!',
+    !isValid.value &&
+      'border-red-500! text-red-600 ring-red-500! dark:text-red-400 dark:border-red-400! dark:ring-red-400!',
     '',
   ),
   placeholder: props.placeholder || 'JSON object...',

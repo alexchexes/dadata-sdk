@@ -12,7 +12,11 @@ const props = defineProps({
 });
 </script>
 <template>
-  <button :class="twMerge('text-accent cursor-pointer hover:text-red-700', props.class)">
+  <button
+    :class="
+      twMerge('text-accent cursor-pointer hover:text-red-700 dark:hover:text-red-400', props.class)
+    "
+  >
     <svg
       v-if="outline"
       class="size-[inherit]"

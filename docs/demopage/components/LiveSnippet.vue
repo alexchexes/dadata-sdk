@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, type PropType } from 'vue';
+import { computed, onUnmounted, ref, type PropType } from 'vue';
 import { watchThrottled } from '@vueuse/core';
 import type { VueDadataOptions } from '@dadata-sdk/vue';
 
@@ -87,12 +87,16 @@ const updateHighlighted = async () => {
   highlighted.value = html;
 };
 updateHighlighted();
+
+onUnmounted(() => {
+  highlighter?.dispose();
+});
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <pre
-      class="text-[15px] [&>pre]:rounded-xl [&>pre]:p-3 [&>pre>code]:[overflow-wrap:anywhere] [&>pre>code]:whitespace-pre-wrap"
+      class="text-[15px] [&>pre]:rounded-xl [&>pre]:p-3 dark:[&>pre]:bg-(--vp-c-bg-alt)! [&>pre>code]:[overflow-wrap:anywhere] [&>pre>code]:whitespace-pre-wrap"
       v-html="highlighted"
     ></pre>
   </div>

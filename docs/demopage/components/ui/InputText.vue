@@ -28,7 +28,12 @@ const model = defineModel({ type: null });
     <div v-if="label">{{ label }}</div>
     <input
       v-model="model"
-      :class="twMerge('w-full rounded-lg border bg-white px-1.5 py-0.5', inputClass)"
+      :class="
+        twMerge(
+          'w-full rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)',
+          inputClass,
+        )
+      "
       :placeholder
       :type
     />

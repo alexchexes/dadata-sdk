@@ -1,18 +1,28 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
+  :root {
+    --color-border-subtle: var(--color-slate-300);
+    @variant dark {
+      --color-border-subtle: var(--vp-input-border-color);
+      --color-accent: var(--vp-c-brand-1);
+    }
+  }
+
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-slate-300);
+    border-color: var(--color-border-subtle);
   }
 
   /* fix tailwind bug */
   input::placeholder,
   textarea::placeholder {
-    color: var(--color-slate-400);
+    color: var(--vp-c-text-3);
   }
 
   input:focus-visible,
@@ -25,7 +35,7 @@
   }
 
   label:hover {
-    @apply text-slate-950;
+    @apply text-(--vp-c-text-1);
   }
 }
 

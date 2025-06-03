@@ -38,7 +38,9 @@ import ButtonRemove from './components/ui/ButtonRemove.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams';
 import OptionsBlock from './components/OptionsBlock.vue';
 import IconReset from './components/ui/IconReset.vue';
+import IconCross from './components/ui/IconCross.vue';
 import { buildPayload } from '@dadata-sdk/vue';
+import FadeOverlay from './components/ui/FadeOverlay.vue';
 
 const SUGGEST_TYPES_ORDER: SuggestType[] = [
   'address',
@@ -338,6 +340,7 @@ const handleEnriched = (
   suggestion: DadataSuggestion,
   diff: DeepPartial<DadataSuggestion> | null,
 ) => {
+  shownError.value = null;
   console.info(`Suggestion enriched (${suggestion.value}), diff:`, diff);
 };
 
@@ -345,8 +348,27 @@ const handleEnrichFail = (unrestricted_value: string) => {
   console.warn('Failed to enrich suggestion:', unrestricted_value);
 };
 
+const shownError = ref<{ title: string; description?: string | null } | null>(null);
+const showTokenError = ref(false);
+
 const handleError = (error: any) => {
   console.error('VueDadata error:', error);
+
+  if (error && typeof error === 'object') {
+    if (error.status === 403) {
+      showTokenError.value = true;
+      shownError.value = {
+        title: 'Oops...',
+        description: `Looks like the API token used on this page has reached its daily limit. Obtain a new token from Dadata.ru and paste it into General options → "API token" above`,
+      };
+      return;
+    }
+    showTokenError.value = false;
+    shownError.value = {
+      title: 'Something went wrong...',
+      description: error,
+    };
+  }
 };
 
 const removeCustomPayload = () => {
@@ -378,12 +400,14 @@ const builtPayload = computed(() =>
 </script>
 
 <template>
-  <div class="text-slate-800">
-    <header class="flex gap-3 bg-slate-50 p-3 shadow-md">
-      <AButton v-if="!allOptionsDefault" class="flex gap-2" @click="resetAllOptions">
-        Reset all <IconReset class="size-5" />
-      </AButton>
-    </header>
+  <div class="text-(--vp-c-text-1)">
+    <AButton
+      v-if="!allOptionsDefault"
+      class="fixed top-5 left-1/2 z-50 flex -translate-x-1/2 gap-1 pr-1.5 text-sm text-(--vp-c-text-2)"
+      @click="resetAllOptions"
+    >
+      Reset all <IconReset height="20" width="20" />
+    </AButton>
 
     <!-- Grid container -->
     <div
@@ -397,7 +421,7 @@ const builtPayload = computed(() =>
           :canReset="!allBehaviorOptionsDefault"
           :collapseOnSmallScreen="true"
           :isCollapsed="behaviorOptionsCollapsed"
-          heading="Component behavior options"
+          heading="Vue component options"
           headingClass="cursor-pointer hover:text-slate-700"
           @headingClick="behaviorOptionsCollapsed = true"
           @resetClick="resetBehaviorOptions"
@@ -412,7 +436,7 @@ const builtPayload = computed(() =>
 
             <input
               v-model.number="options.minChars"
-              class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+              class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
               min="1"
               step="1"
               type="number"
@@ -430,7 +454,7 @@ const builtPayload = computed(() =>
 
             <input
               v-model.number="options.debounce"
-              class="w-20 rounded-lg border bg-white px-1.5 py-0.5"
+              class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
               min="0"
               step="1"
               type="number"
@@ -464,13 +488,7 @@ const builtPayload = computed(() =>
           <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
           <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
 
-          <div
-            :class="
-              behaviorOptionsCollapsed &&
-              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
-            "
-            @click="behaviorOptionsCollapsed = false"
-          />
+          <FadeOverlay v-if="behaviorOptionsCollapsed" @click="behaviorOptionsCollapsed = false" />
         </OptionsBlock>
       </aside>
 
@@ -650,13 +668,7 @@ const builtPayload = computed(() =>
             placeholder="'filters' API request parameter"
           />
 
-          <div
-            :class="
-              apiOptionsCollapsed &&
-              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
-            "
-            @click="apiOptionsCollapsed = false"
-          />
+          <FadeOverlay v-if="apiOptionsCollapsed" @click="apiOptionsCollapsed = false" />
         </OptionsBlock>
       </aside>
 
@@ -703,7 +715,7 @@ const builtPayload = computed(() =>
 
             <!-- Custom payload & headers -->
             <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
-              <div class="grow basis-1/3">
+              <div class="flex grow basis-1/3 flex-col gap-3">
                 <!-- Custom payload -->
                 <div class="flex gap-2">
                   <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
@@ -718,11 +730,11 @@ const builtPayload = computed(() =>
                   v-model.lazy="options.payload"
                   class="w-full"
                   :rows="4"
-                  placeholder="Custom payload for the API request. Any fields specified here will be added to the final request payload, or override existing values if already set."
+                  placeholder="Custom payload to append or overwrite fields in the API request (must be valid JSON)."
                 />
               </div>
 
-              <div class="grow basis-1/3">
+              <div class="flex grow basis-1/3 flex-col gap-3">
                 <!-- Custom headers -->
                 <div class="flex gap-2">
                   <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
@@ -737,7 +749,7 @@ const builtPayload = computed(() =>
                   v-model.lazy="options.headers"
                   class="w-full"
                   :rows="4"
-                  placeholder="Custom headers for the API request. Any headers specified here will be added to the final request headers, or override existing values if already set."
+                  placeholder="Custom headers to append or overwrite headers in the API request (must be valid JSON)."
                 />
               </div>
 
@@ -745,13 +757,7 @@ const builtPayload = computed(() =>
             </div>
           </div>
 
-          <div
-            :class="
-              generalOptionsCollapsed &&
-              'absolute bottom-0 left-0 h-full w-full cursor-pointer rounded-[inherit] bg-gradient-to-t from-slate-50 to-75% hover:contrast-125'
-            "
-            @click="generalOptionsCollapsed = false"
-          />
+          <FadeOverlay v-if="generalOptionsCollapsed" @click="generalOptionsCollapsed = false" />
         </OptionsBlock>
 
         <div class="flex flex-wrap items-center gap-3">
@@ -766,25 +772,29 @@ const builtPayload = computed(() =>
 
         <pre
           v-if="showAllOptions"
-          class="rounded-xl bg-white px-4 py-2 text-[14px]"
+          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
         ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
 
         <pre
           v-if="showBuiltPayload"
-          class="rounded-xl bg-white px-4 py-2 text-[14px]"
+          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
         ><b>Final payload: </b>{{ builtPayload }}</pre>
 
         <!-- Current query string -->
         <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
-          <span :class="!query && 'text-slate-400'"> Current query: </span>
+          <span :class="!query && 'text-(--vp-c-text-3)'"> Current query: </span>
 
-          <b @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))">
-            {{ query }}
+          <b
+            :class="!query && 'text-(--vp-c-text-3) opacity-50'"
+            @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))"
+          >
+            {{ query || '—' }}
           </b>
         </div>
 
         <!-- Component Exposed API -->
-        <div>
+        <div class="flex flex-wrap gap-1">
+          <div class="mr-1">Methods:</div>
           <AButton :disabled="vueDadataRef?.isFocused" @mousedown.prevent="vueDadataRef?.focus()"
             >focus</AButton
           >
@@ -823,20 +833,53 @@ const builtPayload = computed(() =>
         >
         </VueDadata>
 
-        <div class="rounded-xl bg-white px-4 py-2">
+        <div
+          v-if="shownError"
+          class="relative rounded-xl bg-(--vp-c-danger-soft) px-3 py-2 text-(--vp-c-danger-1)"
+        >
+          <div class="font-bold">
+            <template v-if="showTokenError"> Oops... </template>
+            <template v-else>
+              {{ shownError.title }}
+            </template>
+          </div>
+          <div>
+            <template v-if="showTokenError">
+              Looks like the API token used on this page has reached its limit. Obtain a new token
+              from
+              <a
+                class="underline hover:no-underline"
+                href="https://dadata.ru/api/#:~:text=%D0%BA%D0%BE%D0%B3%D0%B4%D0%B0%20%D0%BF%D0%BE%D1%80%D0%B0%20%D0%BF%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D1%8F%D1%82%D1%8C.-,%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F,-%D0%B8%C2%A0%D0%BF%D0%BE%D0%BF%D1%80%D0%BE%D0%B1%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%20API"
+                >Dadata.ru</a
+              >
+              and paste it into <i>General options</i> → <i>API token</i> field above
+            </template>
+            <template v-else>
+              {{ shownError.description }}
+            </template>
+          </div>
+          <button
+            class="absolute top-3 right-3 cursor-pointer hover:opacity-70"
+            @click="shownError = null"
+          >
+            <IconCross />
+          </button>
+        </div>
+
+        <div class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
           <div class="flex justify-between">
             <span>
               Current suggestion:
-              <span v-if="!suggestion" class="text-slate-500">{{ typeof suggestion }}</span>
+              <span v-if="!suggestion" class="text-(--vp-c-text-3) opacity-50">
+                — ({{ typeof suggestion }})</span
+              >
             </span>
             <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
           </div>
 
-          <pre
-            v-if="suggestion"
-            class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap text-slate-950"
-            >{{ suggestion }}</pre
-          >
+          <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{
+            suggestion
+          }}</pre>
         </div>
       </main>
     </div>

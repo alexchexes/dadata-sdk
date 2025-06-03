@@ -50,21 +50,31 @@ const isRadiusValid = computed(() => {
       <InputText
         v-model.trim="lat"
         class="min-w-20 grow basis-5"
-        :inputClass="lat && !isLatValid && 'ring-red-500! ring text-red-700'"
+        :inputClass="
+          lat &&
+          !isLatValid &&
+          'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
+        "
         label="lat"
         placeholder="50.123456"
       />
       <InputText
         v-model.trim="lon"
         class="min-w-20 grow basis-5"
-        :inputClass="lon && !isLonValid && 'ring-red-500! ring text-red-700'"
+        :inputClass="
+          lon &&
+          !isLonValid &&
+          'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
+        "
         label="lon"
         placeholder="50.123456"
       />
       <InputText
         v-model.trim="radius"
         class="min-w-20 grow basis-5"
-        :inputClass="!isRadiusValid && 'ring-red-500! ring text-red-700'"
+        :inputClass="
+          !isRadiusValid && 'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
+        "
         label="radius"
       />
     </div>

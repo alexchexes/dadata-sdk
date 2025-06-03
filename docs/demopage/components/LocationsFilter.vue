@@ -214,7 +214,9 @@ function disable() {
     <div v-if="editableLocationsFilter?.length" class="relative">
       <!-- Each restriction -->
       <div v-for="(oneLocation, locIdx) in editableLocationsFilter" :key="locIdx">
-        <div class="flex gap-2 rounded-lg bg-white px-1 pt-2 pb-1 shadow-md">
+        <div
+          class="flex gap-2 rounded-lg border border-(--vp-c-divider) bg-(--vp-c-bg) px-1 pt-2 pb-1"
+        >
           <!-- Remove restriction (one location) -->
           <ButtonRemove @click="editableLocationsFilter.splice(locIdx, 1)" />
 
@@ -229,7 +231,7 @@ function disable() {
                   :class="[
                     'w-1/2',
                     isDuplicatingType(locIdx, entryIdx) &&
-                      'border-red-500! text-red-500 open:text-inherit',
+                      'border-red-500! text-red-500 open:text-inherit dark:border-red-400! dark:text-red-400',
                   ]"
                   :groups="restrictionsGroups"
                 />
@@ -268,7 +270,10 @@ function disable() {
               </div>
             </div>
 
-            <div v-if="findDuplicates(locIdx).length" class="text-sm text-red-500">
+            <div
+              v-if="findDuplicates(locIdx).length"
+              class="text-sm text-red-500 dark:text-red-400"
+            >
               Duplicating "AND" conditions
             </div>
           </div>

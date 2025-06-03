@@ -27,7 +27,7 @@ const optionsObject = computed(() =>
 <template>
   <label>
     <div v-if="label">{{ label }}</div>
-    <select v-model="model" class="rounded-lg border bg-white">
+    <select v-model="model" class="rounded-lg border bg-white dark:bg-(--vp-input-bg-color)">
       <option v-if="addEmptyOption" :value="undefined"></option>
       <option v-for="(value, key) in optionsObject" :key="key" :value="value">
         {{ key }}

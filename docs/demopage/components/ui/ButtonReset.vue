@@ -9,7 +9,7 @@ const props = defineProps({
 });
 </script>
 <template>
-  <button :class="twMerge('hover:text-accent cursor-pointer text-slate-400', props.class)">
+  <button :class="twMerge('hover:text-accent cursor-pointer text-(--vp-c-text-3)', props.class)">
     <IconReset />
   </button>
 </template>

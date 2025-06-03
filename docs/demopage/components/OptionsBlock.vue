@@ -11,7 +11,9 @@ const emit = defineEmits(['resetClick', 'headingClick']);
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 rounded-xl bg-slate-50 px-3 py-2 shadow-lg">
+  <div
+    class="flex flex-col gap-3 rounded-xl border-1 border-(--vp-c-divider) bg-(--vp-c-bg-soft) px-3 py-2"
+  >
     <div v-if="heading || canReset" class="flex gap-2">
       <h3
         v-if="heading"

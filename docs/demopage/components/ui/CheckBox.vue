@@ -20,9 +20,9 @@ const model = defineModel({ type: Boolean });
       twMerge(
         'flex items-center gap-1.5',
         props.class,
-        disabled && 'text-slate-400',
-        !disabled && 'hover:text-slate-950',
-        !(checked || model) && 'text-slate-600',
+        disabled && 'text-(--vp-c-text-3)',
+        !disabled && 'hover:text-slate-950 dark:hover:text-white',
+        !(checked || model) && 'text-(--vp-c-text-2)',
       )
     "
   >
