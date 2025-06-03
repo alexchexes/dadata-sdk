@@ -8,7 +8,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "schemas"
+    "json-schema"
   ],
   "exports": {
     ".": {
@@ -16,7 +16,7 @@
       "import": "./dist/esm/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./schema/*": "./schemas/*"
+    "./schema/*": "./json-schema/*"
   },
   "scripts": {
     "clean": "rimraf dist",
