@@ -60,6 +60,10 @@
   z-index: 10;
 }
 
+.vue-dadata__dropdown:empty {
+  display: none;
+}
+
 /* By default suggestion item is <button>. Make sure its text not gets centered
 when user passes a class for suggestion item */
 .vue-dadata__dropdown > button {
