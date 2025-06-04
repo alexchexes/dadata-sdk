@@ -48,5 +48,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "vue-i18n": "^11.1.5"
   }
 }

@@ -24,7 +24,7 @@ defineProps({
 const model = defineModel({ type: null });
 </script>
 <template>
-  <label class="inline-block">
+  <label class="inline-flex flex-col gap-1">
     <div v-if="label">{{ label }}</div>
     <input
       v-model="model"

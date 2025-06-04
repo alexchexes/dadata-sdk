@@ -29,6 +29,7 @@ export default [
     rules: {
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'vue/no-unused-vars': 'warn',
+      'vue/no-multiple-template-root': ['warn'],
       'prefer-const': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       'vue/attribute-hyphenation': 'off',

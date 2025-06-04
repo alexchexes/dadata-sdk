@@ -31,7 +31,7 @@ const optionsObject = computed(() =>
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-1">
     <div v-if="label">{{ label }}</div>
 
     <div class="flex flex-wrap gap-x-1.5 gap-y-2">

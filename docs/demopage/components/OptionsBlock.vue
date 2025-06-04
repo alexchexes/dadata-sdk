@@ -2,6 +2,7 @@
 import ButtonReset from './ui/ButtonReset.vue';
 
 defineProps<{
+  resetLable?: string;
   canReset?: boolean;
   heading?: string;
   headingClass?: any;
@@ -24,7 +25,11 @@ const emit = defineEmits(['resetClick', 'headingClick']);
         {{ heading }}
       </h3>
 
-      <ButtonReset v-if="canReset" :title="`Reset ${heading}`" @click="emit('resetClick')" />
+      <ButtonReset
+        v-if="canReset"
+        :title="resetLable || `Reset ${heading}`"
+        @click="emit('resetClick')"
+      />
     </div>
 
     <slot></slot>

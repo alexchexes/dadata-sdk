@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef, type Ref } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, watch, type Ref } from 'vue';
 import AButton from './components/ui/AButton.vue';
 import CheckBox from './components/ui/CheckBox.vue';
 import InputText from './components/ui/InputText.vue';
@@ -41,6 +41,18 @@ import IconReset from './components/ui/IconReset.vue';
 import IconCross from './components/ui/IconCross.vue';
 import { buildPayload } from '@dadata-sdk/vue';
 import FadeOverlay from './components/ui/FadeOverlay.vue';
+
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n();
+const { lang = 'en' } = defineProps<{
+  lang?: 'en' | 'ru';
+}>();
+
+locale.value = lang;
+watch(
+  () => lang,
+  (v) => (locale.value = v),
+);
 
 const SUGGEST_TYPES_ORDER: SuggestType[] = [
   'address',
@@ -87,7 +99,9 @@ const examplesShown = ref(false);
 const defaultOptions = computed<VueDadataOptions>(() => ({
   ...DEFAULT_OPTIONS,
   token: envToken,
-  placeholder: 'Start typing...',
+  placeholder: t('Start typing...'),
+  suggestionsHint:
+    lang == 'ru' ? DEFAULT_OPTIONS.suggestionsHint : 'Select suggestion or keep typing',
 }));
 
 const options = ref<VueDadataOptions>(JSON.parse(JSON.stringify(defaultOptions.value)));
@@ -179,27 +193,27 @@ const locationsExamples = computed(() => {
   let examples;
 
   examples = {
-    'Without restrictions': undefined,
-    'One region': { region: 'краснодарский' },
-    'One city': { region: 'краснодарский', city: 'сочи' },
-    'Few regions': [{ region: 'Воронежская' }, { region: 'Ростовская' }],
-    'Few locations': [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
-    'Different types': [{ region: 'Москва' }, { kladr_id: '50' }],
-    'Location defined by different types': {
+    [t('Without restrictions')]: undefined,
+    [t('One region')]: { region: 'краснодарский' },
+    [t('One city')]: { region: 'краснодарский', city: 'сочи' },
+    [t('Few regions')]: [{ region: 'Воронежская' }, { region: 'Ростовская' }],
+    [t('Few locations')]: [{ region: 'Воронежская', city: 'Воронеж' }, { region: 'Ростовская' }],
+    [t('Different keys')]: [{ region: 'Москва' }, { kladr_id: '78' }],
+    [t('Location defined by different keys')]: {
       region_fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8',
       city: 'Сочи',
     },
-    'FIAS id': { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
-    'KLADR id': { kladr_id: '6300000100000' },
+    [t('FIAS id')]: { fias_id: 'd00e1013-16bd-4c09-b3d5-3cb09fc54bd8' },
+    [t('KLADR id')]: { kladr_id: '6300000100000' },
   };
 
   if (options.value.suggestType === 'address') {
     examples = {
       ...examples,
-      'Country ISO code': { country_iso_code: 'KZ' },
-      'Region ISO code': { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
-      'Country and region': { country: 'Беларусь', region: 'Брестская' },
-      'Allow any country': { country: '*' },
+      [t('Country ISO code')]: { country_iso_code: 'KZ' },
+      [t('Region ISO code')]: { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
+      [t('Country and region')]: { country: 'Беларусь', region: 'Брестская' },
+      [t('Allow any country')]: { country: '*' },
     };
   }
 
@@ -397,6 +411,14 @@ onMounted(() => {
 const builtPayload = computed(() =>
   buildPayload({ ...options.value, query: query.value } as SuggestOptions),
 );
+
+const boundTypesOptions = computed(() => {
+  return Object.fromEntries(
+    BOUND_TYPES.filter((el) => options.value.suggestType === 'address' || el !== 'country').map(
+      (boundType) => [t(boundType), boundType],
+    ),
+  );
+});
 </script>
 
 <template>
@@ -406,7 +428,8 @@ const builtPayload = computed(() =>
       class="fixed top-5 left-1/2 z-50 flex -translate-x-1/2 gap-1 pr-1.5 text-sm text-(--vp-c-text-2)"
       @click="resetAllOptions"
     >
-      Reset all <IconReset height="20" width="20" />
+      {{ t('Reset all') }}
+      <IconReset height="20" width="20" />
     </AButton>
 
     <!-- Grid container -->
@@ -420,73 +443,93 @@ const builtPayload = computed(() =>
           :class="behaviorOptionsCollapsed && 'h-20'"
           :canReset="!allBehaviorOptionsDefault"
           :collapseOnSmallScreen="true"
+          :heading="t('Vue component options')"
           :isCollapsed="behaviorOptionsCollapsed"
-          heading="Vue component options"
+          :resetLable="t('Reset') + ' ' + t('Vue component options')"
           headingClass="cursor-pointer hover:text-slate-700"
           @headingClick="behaviorOptionsCollapsed = true"
           @resetClick="resetBehaviorOptions"
         >
-          <div class="flex items-center gap-2">
-            minChars:
+          <div class="flex flex-wrap items-center gap-2">
+            <span title=':minChars="..."'> {{ t('minChars') }}: </span>
 
-            <ButtonRemove
-              outline
-              @click="options.minChars = Math.max(1, (options.minChars || 1) - 1)"
-            />
+            <div class="flex items-center gap-2">
+              <ButtonRemove
+                outline
+                @click="options.minChars = Math.max(1, (options.minChars || 1) - 1)"
+              />
 
-            <input
-              v-model.number="options.minChars"
-              class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
-              min="1"
-              step="1"
-              type="number"
-            />
-            <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
+              <input
+                v-model.number="options.minChars"
+                class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
+                min="1"
+                step="1"
+                type="number"
+              />
+              <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
+            </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            debounce:
+          <div class="flex flex-wrap items-center gap-2">
+            <span title=':debounce="..."'> {{ t('debounce') }}: </span>
+            <div class="flex items-center gap-2">
+              <ButtonRemove
+                outline
+                @click="options.debounce = Math.max(0, (options.debounce || 0) - 50)"
+              />
 
-            <ButtonRemove
-              outline
-              @click="options.debounce = Math.max(0, (options.debounce || 0) - 50)"
-            />
-
-            <input
-              v-model.number="options.debounce"
-              class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
-              min="0"
-              step="1"
-              type="number"
-            />
-            <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
+              <input
+                v-model.number="options.debounce"
+                class="w-20 rounded-lg border bg-white px-1.5 py-0.5 dark:bg-(--vp-input-bg-color)"
+                min="0"
+                step="1"
+                type="number"
+              />
+              <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
+            </div>
           </div>
 
           <RadioGroup
             v-model="options.showOnFocus"
-            :options="SHOW_ON_FOCUS_OPTIONS"
-            label="showOnFocus"
+            :label="t('showOnFocus')"
+            :options="
+              Object.fromEntries(SHOW_ON_FOCUS_OPTIONS.map((item) => [t(item.toString()), item]))
+            "
           />
 
           <RadioGroup
             v-model="options.clearOnChange"
-            :options="CLEAR_ON_CHANGE_OPTIONS"
-            label="clearOnChange"
+            :label="t('clearOnChange')"
+            :options="
+              Object.fromEntries(CLEAR_ON_CHANGE_OPTIONS.map((item) => [t(item.toString()), item]))
+            "
           />
 
-          <CheckBox v-model="options.selectOnBlur" label="selectOnBlur" />
-          <CheckBox v-model="options.selectOnEnter" label="selectOnEnter" />
-          <CheckBox v-model="options.enrichOnSelect" label="enrichOnSelect" />
-          <CheckBox v-model="options.addSpace" label="addSpace" />
-          <CheckBox v-model="options.continueSelecting" label="continueSelecting" />
-          <CheckBox v-model="options.showClearButton" label="showClearButton" />
-          <CheckBox v-model="options.forceShow" label="forceShow" />
-          <CheckBox v-model="options.forceHide" label="forceHide" />
-          <CheckBox checked disabled label="focusOnMounted" />
-          <CheckBox v-model="options.disabled" label="disabled" />
-          <InputText v-model="options.placeholder" label="placeholder:" />
-          <InputText v-model="options.suggestionsHint" label="suggestionsHint:" />
-          <InputText v-model="options.noSuggestionsHint" label="noSuggestionsHint:" />
+          <CheckBox v-model="options.selectOnBlur" :label="t('selectOnBlur')" />
+          <CheckBox v-model="options.selectOnEnter" :label="t('selectOnEnter')" />
+          <CheckBox v-model="options.enrichOnSelect" :label="t('enrichOnSelect')" />
+          <CheckBox v-model="options.addSpace" :label="t('addSpace')" />
+          <CheckBox v-model="options.continueSelecting" :label="t('continueSelecting')" />
+          <CheckBox v-model="options.showClearButton" :label="t('showClearButton')" />
+          <CheckBox v-model="options.forceShow" :label="t('forceShow')" />
+          <CheckBox v-model="options.forceHide" :label="t('forceHide')" />
+          <CheckBox :label="t('focusOnMounted')" checked disabled />
+          <CheckBox v-model="options.disabled" :label="t('disabled')" />
+          <InputText
+            v-model="options.placeholder"
+            :label="t('placeholder:')"
+            :placeholder="t('Not specified')"
+          />
+          <InputText
+            v-model="options.suggestionsHint"
+            :label="t('suggestionsHint:')"
+            :placeholder="t('Not specified')"
+          />
+          <InputText
+            v-model="options.noSuggestionsHint"
+            :label="t('noSuggestionsHint:')"
+            :placeholder="t('Not specified')"
+          />
 
           <FadeOverlay v-if="behaviorOptionsCollapsed" @click="behaviorOptionsCollapsed = false" />
         </OptionsBlock>
@@ -498,22 +541,27 @@ const builtPayload = computed(() =>
           class="relative w-full overflow-hidden"
           :class="apiOptionsCollapsed && 'h-20'"
           :canReset="!allApiOptionsDefault"
-          heading="API requests options"
+          :heading="t('API requests options')"
+          :resetLable="`${t('Reset')} ${t('API requests options')}`"
           headingClass="cursor-pointer hover:text-slate-700"
           @headingClick="apiOptionsCollapsed = true"
           @resetClick="resetApiOptions"
         >
-          <div class="flex items-center gap-2">
-            count:
-            <input
-              v-model.number="options.count"
-              class="accent-accent"
-              :max="MAX_SUG_COUNT"
-              min="1"
-              step="1"
-              type="range"
-            />
-            {{ options.count }}
+          <div class="flex flex-wrap items-center gap-2">
+            {{ t('count:') }}
+            <div class="flex items-center gap-2">
+              <input
+                v-model.number="options.count"
+                class="accent-accent"
+                :max="MAX_SUG_COUNT"
+                min="1"
+                step="1"
+                type="range"
+              />
+              <div class="w-5">
+                {{ options.count }}
+              </div>
+            </div>
           </div>
 
           <template
@@ -527,18 +575,17 @@ const builtPayload = computed(() =>
             <div class="dev-item">
               <InputText
                 v-model="locationsBoostModel"
-                label="locationsBoost:"
-                placeholder="kladr_id or ids"
+                :label="t('locationsBoost:')"
+                :placeholder="t(`KLADR ID or IDs, e.g. '77, 46'`)"
               />
-              {{ options.locationsBoost }}
             </div>
 
             <!-- example locations filters -->
             <div v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
               <div>
-                locationsFilter examples:
+                {{ t('locationsFilter examples:') }}
                 <AButton class="text-sm" @click="examplesShown = !examplesShown">
-                  {{ examplesShown ? 'Hide' : 'Show' }}
+                  {{ examplesShown ? t('Hide') : t('Show') }}
                 </AButton>
               </div>
 
@@ -552,6 +599,7 @@ const builtPayload = computed(() =>
 
             <LocationsFilter
               v-model="options.locationsFilter"
+              :lang="lang"
               :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
             />
           </template>
@@ -561,31 +609,31 @@ const builtPayload = computed(() =>
             <div class="flex flex-wrap gap-3">
               <SelectOptions
                 v-model="options.fromBound"
-                :options="
-                  options.suggestType === 'address'
-                    ? BOUND_TYPES
-                    : BOUND_TYPES.filter((el) => el !== 'country')
-                "
-                label="fromBound:"
+                :label="t('fromBound:')"
+                :options="boundTypesOptions"
               />
               <SelectOptions
                 v-model="options.toBound"
-                :options="
-                  options.suggestType === 'address'
-                    ? BOUND_TYPES
-                    : BOUND_TYPES.filter((el) => el !== 'country')
-                "
-                label="toBound:"
+                :label="t('toBound:')"
+                :options="boundTypesOptions"
               />
             </div>
           </template>
 
           <template v-if="options.suggestType === 'address'">
-            <RadiusFilter v-model="options.radiusFilter" />
+            <RadiusFilter v-model="options.radiusFilter" :lang="lang" />
 
-            <RadioGroup v-model="options.division" :options="DIVISION_TYPES" label="division" />
+            <RadioGroup
+              v-model="options.division"
+              :label="t('division:')"
+              :options="Object.fromEntries(DIVISION_TYPES.map((item) => [t(item), item]))"
+            />
 
-            <RadioGroup v-model="options.language" :options="LANGUAGES" label="language:" />
+            <RadioGroup
+              v-model="options.language"
+              :label="t('language:')"
+              :options="Object.fromEntries(LANGUAGES.map((item) => [t(item), item]))"
+            />
           </template>
 
           <CheckBox
@@ -594,32 +642,49 @@ const builtPayload = computed(() =>
               (options.suggestType === 'address' || options.suggestType === 'fias')
             "
             v-model="options.restrictValue"
-            label="restrictValue"
+            :label="t('restrictValue')"
           />
 
           <RadioGroup
             v-if="options.suggestType === 'party'"
             v-model="options.entityType"
-            :options="[undefined, ...PARTY_TYPES]"
-            label="entityType:"
+            :label="t('entityType.party', 'entityType:')"
+            :options="
+              Object.fromEntries(
+                [undefined, ...PARTY_TYPES].map((item) => [
+                  t(item ? `entityType.${item}` : 'entityType.any', item || 'any'),
+                  item,
+                ]),
+              )
+            "
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_by'"
             v-model="options.entityType"
-            :options="[/* undefined, */ ...PARTY_BY_TYPES]"
-            label="entityType:"
+            :label="t('entityType.party', 'entityType:')"
+            :options="
+              Object.fromEntries(
+                PARTY_BY_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
+              )
+            "
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_kz'"
             v-model="options.entityType"
-            :options="[/* undefined, */ ...PARTY_KZ_TYPES]"
-            label="entityType:"
+            :label="t('entityType.party', 'entityType:')"
+            :options="
+              Object.fromEntries(
+                PARTY_KZ_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
+              )
+            "
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'bank'"
             v-model="options.entityType"
-            :options="BANK_TYPES"
-            label="entityType: "
+            :label="t('entityType.bank', 'entityType:')"
+            :options="
+              Object.fromEntries(BANK_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
+            "
           />
 
           <TogglesGroup
@@ -629,22 +694,37 @@ const builtPayload = computed(() =>
               options.suggestType === 'bank'
             "
             v-model="options.entityStatus"
+            :label="t(`entityStatus.${options.suggestType}.label`, 'entityStatus:')"
             :options="
-              { party: PARTY_STATUSES, party_by: PARTY_BY_STATUSES, bank: BANK_STATUSES }[
-                options.suggestType
-              ]
+              Object.fromEntries(
+                {
+                  party: PARTY_STATUSES,
+                  party_by: PARTY_BY_STATUSES,
+                  bank: BANK_STATUSES,
+                }[options.suggestType].map((item) => [
+                  t(`entityStatus.${options.suggestType}.${item}`, item),
+                  item,
+                ]),
+              )
             "
-            label="entityStatus:"
           />
 
           <!-- 'fio' -->
           <template v-if="options.suggestType === 'fio'">
-            <TogglesGroup v-model="options.fioParts" :options="FIO_PARTS" label="fioParts:" />
+            <TogglesGroup
+              v-model="options.fioParts"
+              :label="t('fioParts:')"
+              :options="Object.fromEntries(FIO_PARTS.map((item) => [t(item), item]))"
+            />
 
             <RadioGroup
               v-model="options.fioGender"
-              :options="[undefined, ...FIO_GENDERS]"
-              label="fioGender:"
+              :label="t('fioGender:')"
+              :options="
+                Object.fromEntries(
+                  [undefined, ...FIO_GENDERS].map((item) => [t(item || 'gender-any', 'any'), item]),
+                )
+              "
             />
           </template>
 
@@ -663,9 +743,9 @@ const builtPayload = computed(() =>
             "
             v-model="options.filters"
             class="flex-col gap-1"
+            :label="t('filters (json)')"
+            :placeholder="t(`'filters' API request parameter`)"
             allowArray
-            label="filters (json)"
-            placeholder="'filters' API request parameter"
           />
 
           <FadeOverlay v-if="apiOptionsCollapsed" @click="apiOptionsCollapsed = false" />
@@ -681,7 +761,8 @@ const builtPayload = computed(() =>
           class="relative w-full overflow-hidden pb-3"
           :class="generalOptionsCollapsed && 'h-20'"
           :canReset="!allGeneralOptionsDefault"
-          heading="General options"
+          :heading="t('General options')"
+          :resetLable="`${t('Reset')} ${t('General options')}`"
           headingClass="cursor-pointer hover:text-slate-700"
           @headingClick="generalOptionsCollapsed = true"
           @resetClick="resetGeneralOptions"
@@ -692,8 +773,8 @@ const builtPayload = computed(() =>
               <InputText
                 v-model.trim="tokenModel"
                 class="grow"
+                :label="t('API token:')"
                 :placeholder="TOKEN_PLACEHOLDER"
-                label="API token:"
               />
 
               <InputText
@@ -708,7 +789,11 @@ const builtPayload = computed(() =>
             <div class="flex flex-wrap gap-1">
               <RadioGroup
                 v-model="options.suggestType"
-                :options="ORDERED_SUGGEST_TYPES"
+                :options="
+                  Object.fromEntries(
+                    ORDERED_SUGGEST_TYPES.map((item) => [t(`suggestTypes.${item}`, item), item]),
+                  )
+                "
                 buttonClass="px-3 py-1.5"
               />
             </div>
@@ -721,7 +806,9 @@ const builtPayload = computed(() =>
                   <ButtonAdd v-if="!showCustomPayload" @click="showCustomPayload = true" />
                   <ButtonRemove v-else outline @click="removeCustomPayload()" />
                   <span>
-                    {{ showCustomPayload ? 'Remove custom payload' : 'Add custom payload...' }}
+                    {{
+                      showCustomPayload ? t('Remove custom payload') : t('Add custom payload...')
+                    }}
                   </span>
                 </div>
 
@@ -729,8 +816,8 @@ const builtPayload = computed(() =>
                   v-if="showCustomPayload"
                   v-model.lazy="options.payload"
                   class="w-full"
+                  :placeholder="t('customPayloadPlaceholder')"
                   :rows="4"
-                  placeholder="Custom payload to append or overwrite fields in the API request (must be valid JSON)."
                 />
               </div>
 
@@ -740,7 +827,9 @@ const builtPayload = computed(() =>
                   <ButtonAdd v-if="!showCustomHeaders" @click="showCustomHeaders = true" />
                   <ButtonRemove v-else outline @click="removeCustomHeaders()" />
                   <span>
-                    {{ showCustomHeaders ? 'Remove custom headers' : 'Add custom headers...' }}
+                    {{
+                      showCustomHeaders ? t('Remove custom headers') : t('Add custom headers...')
+                    }}
                   </span>
                 </div>
 
@@ -748,12 +837,12 @@ const builtPayload = computed(() =>
                   v-if="showCustomHeaders"
                   v-model.lazy="options.headers"
                   class="w-full"
+                  :placeholder="t('customHeadersPlaceholder')"
                   :rows="4"
-                  placeholder="Custom headers to append or overwrite headers in the API request (must be valid JSON)."
                 />
               </div>
 
-              <CheckBox v-model="options.httpCache" class="gap-2" label="httpCache" />
+              <CheckBox v-model="options.httpCache" class="gap-2" :label="t('httpCache')" />
             </div>
           </div>
 
@@ -761,9 +850,9 @@ const builtPayload = computed(() =>
         </OptionsBlock>
 
         <div class="flex flex-wrap items-center gap-3">
-          <CheckBox v-model="showLiveSnippet" label="Show live snippet" />
-          <CheckBox v-model="showAllOptions" label="Show all options" />
-          <CheckBox v-model="showBuiltPayload" label="Show payload" />
+          <CheckBox v-model="showLiveSnippet" :label="t('Show live snippet')" />
+          <CheckBox v-model="showAllOptions" :label="t('Show all options')" />
+          <CheckBox v-model="showBuiltPayload" :label="t('Show payload')" />
         </div>
 
         <div v-if="showLiveSnippet">
@@ -773,17 +862,20 @@ const builtPayload = computed(() =>
         <pre
           v-if="showAllOptions"
           class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
-        ><b>Current options: </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
+        ><b>{{t('Current component options:')}} </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
 
         <pre
           v-if="showBuiltPayload"
           class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
-        ><b>Final payload: </b>{{ builtPayload }}</pre>
+        ><b>{{t('Final payload:')}} </b>{{ builtPayload }}</pre>
 
         <!-- Current query string -->
         <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
-          <span :class="!query && 'text-(--vp-c-text-3)'"> Current query: </span>
-
+          <span :class="!query && 'text-(--vp-c-text-3)'">
+            {{ t('Current query:') }}
+          </span>
+          <!-- a space -->
+          {{ ' ' }}
           <b
             :class="!query && 'text-(--vp-c-text-3) opacity-50'"
             @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))"
@@ -794,7 +886,10 @@ const builtPayload = computed(() =>
 
         <!-- Component Exposed API -->
         <div class="flex flex-wrap gap-1">
-          <div class="mr-1">Methods:</div>
+          <div class="mr-1">
+            {{ t('Methods:') }}
+          </div>
+
           <AButton :disabled="vueDadataRef?.isFocused" @mousedown.prevent="vueDadataRef?.focus()"
             >focus</AButton
           >
@@ -820,7 +915,9 @@ const builtPayload = computed(() =>
           >
         </div>
 
-        <h2 class="text-5xl leading-relaxed font-semibold">Try here:</h2>
+        <h2 class="text-5xl leading-relaxed font-semibold">
+          {{ t('Try here:') }}
+        </h2>
 
         <VueDadata
           ref="vueDadataRef"
@@ -873,7 +970,7 @@ const builtPayload = computed(() =>
         <div class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
           <div class="flex justify-between">
             <span>
-              Current suggestion:
+              {{ t('Current suggestion:') }}
               <span v-if="!suggestion" class="text-(--vp-c-text-3) opacity-50">
                 — ({{ typeof suggestion }})</span
               >

@@ -14,46 +14,73 @@ import {
 import type { VueDadataOptions } from '@dadata-sdk/vue';
 import type { SuggestType, LocationRestriction } from '@dadata-sdk/api-types';
 
-const props = defineProps({
-  suggestType: { type: String as PropType<SuggestType>, required: true },
-});
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n();
+
+const props = defineProps<{
+  lang: 'en' | 'ru';
+  suggestType: SuggestType;
+}>();
+
+locale.value = props.lang;
+watch(
+  () => props.lang,
+  (v) => (locale.value = v),
+);
 
 const locationsFilterModel = defineModel({
   type: [Object, Array, String, Number] as PropType<VueDadataOptions['locationsFilter']>,
   required: false,
 });
 
-enum RestrictionGroup {
-  NAME = 'By name',
-  TYPE = 'By type',
-  ISO = 'By ISO code',
-  FIAS = 'By FIAS ID',
-  KLADR = 'By KLADR ID',
-}
+const restrictionGroupsLabels = computed(() => {
+  return {
+    NAME: 'By name of...',
+    TYPE: 'By type',
+    ISO: 'By ISO code',
+    FIAS: 'By FIAS ID',
+    KLADR: 'By KLADR ID',
+  };
+});
 
 const restrictionsGroups = computed(() => {
-  let options: Partial<Record<RestrictionGroup, (keyof LocationRestriction)[]>> = {
-    [RestrictionGroup.KLADR]: KLADR_ID_RESTRICTION_TYPES,
+  let options: Record<string, (keyof LocationRestriction)[]> = {
+    [restrictionGroupsLabels.value.KLADR]: KLADR_ID_RESTRICTION_TYPES,
   };
 
   if (props.suggestType === 'address') {
     return (options = {
-      [RestrictionGroup.NAME]: NAME_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.NAME]: NAME_RESTRICTION_TYPES,
       ...options,
-      [RestrictionGroup.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
-      [RestrictionGroup.FIAS]: FIAS_ID_RESTRICTION_TYPES,
-      [RestrictionGroup.ISO]: ISO_CODE_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.FIAS]: FIAS_ID_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.ISO]: ISO_CODE_RESTRICTION_TYPES,
     });
   } else if (props.suggestType === 'fias') {
     return (options = {
-      [RestrictionGroup.NAME]: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
+      [restrictionGroupsLabels.value.NAME]: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
       ...options,
-      [RestrictionGroup.FIAS]: FIAS_ID_RESTRICTION_TYPES,
-      [RestrictionGroup.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.FIAS]: FIAS_ID_RESTRICTION_TYPES,
+      [restrictionGroupsLabels.value.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
     });
   }
 
   return options;
+});
+
+const restrictionGroupsLocalized = computed<{
+  [k: string]: {
+    [P in keyof LocationRestriction]: string;
+  };
+}>(() => {
+  return Object.fromEntries(
+    Object.entries(restrictionsGroups.value).map(([groupLabel, group]) => {
+      return [
+        t(groupLabel),
+        Object.fromEntries(group.map((item) => [item, t(`filtersBy.${item}`, item)])),
+      ];
+    }),
+  );
 });
 
 const isOnlyOneRestrictionType = computed(() => {
@@ -98,7 +125,6 @@ watch(
       editableLocationsFilter.value = [];
       return;
     }
-
     // Ensure newVal is always an array of objects
     const locFilter = Array.isArray(newVal)
       ? newVal.map(normalizeLocationItem)
@@ -204,12 +230,19 @@ function disable() {
   editableLocationsFilter.value = [];
   enabled.value = false;
 }
+
+const getEnterRestrictionPlaceholder = (restrKey: string) => {
+  let declened = t(`filtersBy.${restrKey}`, 2);
+  declened = declened.replace('filtersBy.', '');
+  // const declened = t(`enterRestriction.${restrKey}`, noDeclenFallback);
+  return `${t('enter')} ${declened}...`;
+};
 </script>
 
 <template>
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
-      <div>locationsFilter:</div>
+      <div>{{ t('locationsFilter:') }}</div>
 
       <!-- Enable Locations Filter -->
       <ButtonAdd v-if="!enabled" @click="enable" />
@@ -239,13 +272,17 @@ function disable() {
                     isDuplicatingType(locIdx, entryIdx) &&
                       'border-red-500! text-red-500 open:text-inherit dark:border-red-400! dark:text-red-400',
                   ]"
-                  :groups="restrictionsGroups"
+                  :groups="restrictionGroupsLocalized"
                 />
 
                 <!-- restriction value -->
                 <InputText
                   v-model="editableLocationsFilter[locIdx][entryIdx].restrVal"
-                  :placeholder="`enter ${editableLocationsFilter[locIdx][entryIdx].restrType}...`"
+                  :placeholder="
+                    getEnterRestrictionPlaceholder(
+                      editableLocationsFilter[locIdx][entryIdx].restrType,
+                    )
+                  "
                 />
                 <!-- Remove restriction inside a location -->
                 <ButtonRemove
@@ -264,7 +301,7 @@ function disable() {
 
               <div v-if="!isOnlyOneRestrictionType" class="flex items-center gap-1">
                 <div class="my-1 text-xs text-gray-500">
-                  AND<span v-if="entryIdx === oneLocation.length - 1">...</span>
+                  {{ t('AND') }}<span v-if="entryIdx === oneLocation.length - 1">...</span>
                 </div>
                 <!-- Add new restriction to existing location -->
                 <ButtonAdd
@@ -280,7 +317,7 @@ function disable() {
               v-if="findDuplicates(locIdx).length"
               class="text-sm text-red-500 dark:text-red-400"
             >
-              Duplicating "AND" conditions
+              {{ t('Duplicating "AND" conditions') }}
             </div>
           </div>
         </div>
@@ -289,7 +326,9 @@ function disable() {
           v-if="editableLocationsFilter.length"
           class="my-1 flex items-center justify-center gap-1 text-xs"
         >
-          <div>OR<span v-if="locIdx === editableLocationsFilter.length - 1">...</span></div>
+          <div>
+            {{ t('OR') }}<span v-if="locIdx === editableLocationsFilter.length - 1">...</span>
+          </div>
 
           <!-- Add a new location -->
           <ButtonAdd v-if="locIdx === editableLocationsFilter.length - 1" @click="addNewLocation" />

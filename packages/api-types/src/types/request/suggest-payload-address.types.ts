@@ -7,8 +7,15 @@ import type {
 } from './suggest-payload.types';
 
 export interface RadiusFilter {
+  /** Географическая широта, например: `'59.244634'` */
   lat: string;
+  /** Географическая долгота, например: `'39.913355'` */
   lon: string;
+  /**
+   * Радиус поиска в метрах
+   * @default 100
+   * @maximum 100000
+   */
   radius_meters: number;
 }
 

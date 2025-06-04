@@ -23,18 +23,6 @@ const props = defineProps({
 const model = defineModel({ type: undefined, required: true });
 const internalModel = ref<string[]>([]);
 
-const { ignoreUpdates: ignoreModelUpdates } = ignorableWatch(model, (newVal) => {
-  ignoreInternalUpdates(() => {
-    if (!newVal) {
-      internalModel.value = [];
-    } else if (!Array.isArray(newVal)) {
-      internalModel.value = [newVal as string];
-    } else {
-      internalModel.value = newVal;
-    }
-  });
-});
-
 const { ignoreUpdates: ignoreInternalUpdates } = ignorableWatch(internalModel, (newVal) => {
   ignoreModelUpdates(() => {
     if (!newVal.length) {
@@ -47,6 +35,23 @@ const { ignoreUpdates: ignoreInternalUpdates } = ignorableWatch(internalModel, (
   });
 });
 
+// this one with "immediate" should go after anything it uses/calls inside
+const { ignoreUpdates: ignoreModelUpdates } = ignorableWatch(
+  model,
+  (newVal) => {
+    ignoreInternalUpdates(() => {
+      if (!newVal) {
+        internalModel.value = [];
+      } else if (!Array.isArray(newVal)) {
+        internalModel.value = [newVal as string];
+      } else {
+        internalModel.value = newVal;
+      }
+    });
+  },
+  { immediate: true },
+);
+
 const optionsObject = computed(() => {
   const options = Array.isArray(props.options)
     ? Object.fromEntries(
@@ -54,9 +59,9 @@ const optionsObject = computed(() => {
       )
     : props.options;
 
-  // if selected value not in options, add it
+  // if selected value not present among available options, add it so that the label become visible
   internalModel.value?.forEach((item) => {
-    if (typeof item !== 'undefined' && !((item as any) in options)) {
+    if (typeof item !== 'undefined' && !Object.values(options).includes(item)) {
       options[String(item)] = item;
     }
   });
@@ -66,8 +71,9 @@ const optionsObject = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-1">
     <div v-if="label">{{ label }}</div>
+
     <div class="flex flex-wrap gap-x-1.5 gap-y-2">
       <TogglableButton
         v-for="(value, key) in optionsObject"

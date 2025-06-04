@@ -5,6 +5,17 @@ import ButtonAdd from './ui/ButtonAdd.vue';
 import ButtonRemove from './ui/ButtonRemove.vue';
 import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS } from '@dadata-sdk/vue';
 import type { RadiusFilter } from '@dadata-sdk/api-types';
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n();
+const props = defineProps<{
+  lang: 'en' | 'ru';
+}>();
+
+locale.value = props.lang;
+watch(
+  () => props.lang,
+  (v) => (locale.value = v),
+);
 
 const model = defineModel({ type: Object as PropType<RadiusFilter>, required: false });
 
@@ -42,7 +53,8 @@ const isRadiusValid = computed(() => {
 <template>
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
-      radiusFilter: <ButtonAdd v-if="!enabled" @click="enabled = true" />
+      {{ t('radiusFilter:') }}
+      <ButtonAdd v-if="!enabled" @click="enabled = true" />
       <ButtonRemove v-else outline @click="enabled = false" />
     </div>
 
@@ -55,7 +67,7 @@ const isRadiusValid = computed(() => {
           !isLatValid &&
           'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
         "
-        label="lat"
+        :label="t('lat')"
         placeholder="50.123456"
       />
       <InputText
@@ -66,7 +78,7 @@ const isRadiusValid = computed(() => {
           !isLonValid &&
           'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
         "
-        label="lon"
+        :label="t('lon')"
         placeholder="50.123456"
       />
       <InputText
@@ -75,7 +87,7 @@ const isRadiusValid = computed(() => {
         :inputClass="
           !isRadiusValid && 'ring-red-500! ring text-red-700 dark:text-red-400 dark:ring-red-400!'
         "
-        label="radius"
+        :label="t('radius')"
       />
     </div>
   </div>

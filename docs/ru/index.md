@@ -4,18 +4,18 @@ layout: home
 
 hero:
   name: 'DaData SDK'
-  text: 'Unofficial SDK for DaData API (dadata.ru)'
-  tagline: Full API contract in TypeScript and JSON schema, feature-rich Vue Component and demo app
+  text: 'Неофициальный SDK для DaData API (dadata.ru)'
+  tagline: Полное описание API в TypeScript типах и JSON schema. Полнофункциональный компонент для Vue + демо песочница
   actions:
     - theme: brand
-      text: Demo App
-      link: /demo
+      text: Демо
+      link: /ru/demo
     - theme: alt
       text: API Examples
-      link: /api-examples
+      link: /ru/api-examples
     - theme: alt
-      text: Russian
-      link: /ru
+      text: English
+      link: /
 
 features:
   - title: Feature A

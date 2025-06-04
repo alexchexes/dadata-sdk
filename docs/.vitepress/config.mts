@@ -31,29 +31,18 @@ viteResolveAliases = {
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'DaData SDK',
+
+  // <meta name="description" ...>
   description:
     'Unofficial DaData (dadata.ru) SDK; TypeScript types, Vue component, rich API playground and docs.',
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' },
-      { text: 'Demo', link: '/demo' },
-    ],
-
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' },
-        ],
-      },
-    ],
-
-    socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/alexchexes/dadata-sdk' }],
+    langMenuLabel: 'Change language | Выбрать язык',
   },
+
+  cleanUrls: true,
 
   vite: {
     resolve: {
@@ -61,6 +50,67 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: ['@dadata-sdk/vue', '@dadata-sdk/api-types', '@vueuse/core'],
+    },
+    ssr: {
+      noExternal: ['vue-i18n'],
+    },
+    define: {
+      __VUE_PROD_DEVTOOLS__: false,
+    },
+  },
+
+  locales: {
+    root: {
+      label: 'English',
+      lang: 'en',
+      link: '/',
+
+      themeConfig: {
+        // https://vitepress.dev/reference/default-theme-config
+        nav: [
+          { text: 'Home', link: '/' },
+          { text: 'Examples', link: '/markdown-examples' },
+          { text: 'Demo', link: '/demo' },
+        ],
+
+        sidebar: [
+          {
+            text: 'Examples',
+            items: [
+              { text: 'Markdown Examples', link: '/markdown-examples' },
+              { text: 'Runtime API Examples', link: '/api-examples' },
+            ],
+          },
+        ],
+      },
+    },
+    ru: {
+      label: 'Русский',
+      lang: 'ru', // will be added  as `lang` attribute on `html` tag
+      link: '/ru/',
+
+      // <meta name="description" ...>
+      description:
+        'Неофициальный DaData (dadata.ru) SDK; TypeScript types, Vue component, rich API playground and docs.',
+
+      themeConfig: {
+        // https://vitepress.dev/reference/default-theme-config
+        nav: [
+          { text: 'Главная', link: '/ru' },
+          { text: 'Примеры', link: '/ru/markdown-examples' },
+          { text: 'Демо', link: '/ru/demo' },
+        ],
+
+        sidebar: [
+          {
+            text: 'Examples',
+            items: [
+              { text: 'Markdown Examples', link: '/ru/markdown-examples' },
+              { text: 'Runtime API Examples', link: '/ru/api-examples' },
+            ],
+          },
+        ],
+      },
     },
   },
 });

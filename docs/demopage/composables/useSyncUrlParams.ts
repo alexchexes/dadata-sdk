@@ -19,11 +19,16 @@ export function useSyncUrlParams<T extends Record<string, any>>(
   onMounted(() => {
     for (const key of Object.keys(urlParams)) {
       let val = urlParams[key];
+
       if (/^\d+$/.test(val)) {
         val = Number(val);
       } else if (val === 'true' || val === 'false') {
         // Coerce 'true'/'false' to booleans
         val = val === 'true' ? true : val === 'false' ? false : val;
+      } else if (val === '[]') {
+        val = [];
+      } else if (val === '{}') {
+        val = {};
       } else if (/"/.test(val)) {
         try {
           val = JSON.parse(val);

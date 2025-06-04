@@ -54,9 +54,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "locations_boost": {
           "type": "array",
@@ -126,9 +127,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -230,9 +232,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "type": {
           "type": "array",
@@ -388,9 +391,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "locations_boost": {
           "type": "array",
@@ -435,9 +439,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "gender": {
           "type": "string",
@@ -477,9 +482,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -525,9 +531,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -563,9 +570,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -624,9 +632,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -662,9 +671,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -700,9 +710,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -738,9 +749,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -792,9 +804,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -837,9 +850,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "type": {
           "type": "string",
@@ -901,9 +915,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -947,9 +962,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         },
         "filters": {
           "type": "array",
@@ -986,9 +1002,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -1006,9 +1023,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -1026,9 +1044,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -1046,9 +1065,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -1066,9 +1086,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
@@ -1086,9 +1107,10 @@
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
-          "maximum": 20
+          "maximum": 20,
+          "default": 10
         }
       },
       "required": [
