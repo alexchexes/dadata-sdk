@@ -1,4 +1,4 @@
-import { DEFAULT_COUNT } from '@dadata-sdk/api-types';
+import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from '@dadata-sdk/api-types';
 import type {
   LocationsFilterItem,
   SuggestAddressOptions,
@@ -13,6 +13,7 @@ import type {
   SuggestPayload,
 } from '../types';
 import type {
+  BaseSuggestPayload,
   KladrIdFilter,
   LocationRestriction,
   OneOrMany,
@@ -96,10 +97,15 @@ const normalizeKladrIdFilter = (input: OneOrMany<LocationsFilterItem>): KladrIdF
 /**
  * Payload params common for all 'suggest/...' APIs
  */
-const buildBasePayload = (options: SuggestOptions) => ({
-  query: options.query,
-  count: options.count ?? DEFAULT_COUNT,
-});
+const buildBasePayload = (options: SuggestOptions): BaseSuggestPayload => {
+  const basePayload: BaseSuggestPayload = {
+    query: options.query,
+  };
+  if (options.count && options.count !== DEFAULT_COUNT) {
+    basePayload.count = options.count;
+  }
+  return basePayload;
+};
 
 /** Payload params common for all APIs that support `filters` option */
 const buildBasePayloadWithFilters = (options: SuggestOptionsWithFilters) => {
@@ -172,7 +178,7 @@ const buildBaseAddressPayload = (options: SuggestAddressOptions | SuggestFiasOpt
 const buildNormalAddressPayload = (options: SuggestAddressOptions) => {
   const payload = buildBaseAddressPayload(options) as SuggestAddressPayload;
 
-  if (options.division) {
+  if (options.division && options.division !== DEFAULT_DIVISION) {
     payload.division = options.division;
   }
 
@@ -180,7 +186,7 @@ const buildNormalAddressPayload = (options: SuggestAddressOptions) => {
     payload.locations_geo = [options.radiusFilter];
   }
 
-  if (options.language) {
+  if (options.language && options.language !== DEFAULT_LANGUAGE) {
     payload.language = options.language;
   }
 

@@ -47,6 +47,7 @@ export interface BaseSuggestPayload {
    * Maximum number of results to fetch
    * @minimum 1
    * @maximum 20
+   * @default 10
    */
   count?: number;
 }
