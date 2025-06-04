@@ -17,7 +17,7 @@ const model = defineModel({ type: null });
   <label
     :class="
       twMerge(
-        `has-[input:checked]:bg-accent rounded-lg bg-slate-200 px-2 py-1 text-sm leading-none not-has-[input:checked]:cursor-pointer not-has-[input:checked]:hover:bg-slate-300 has-[input:checked]:text-(--vp-c-gutter) dark:bg-[#31333e] dark:not-has-[input:checked]:hover:bg-(--vp-c-bg-alt)`,
+        `has-[input:checked]:bg-accent rounded-lg bg-[#e1e6ef] px-2 py-1 text-sm leading-none not-has-[input:checked]:cursor-pointer not-has-[input:checked]:hover:bg-slate-300 has-[input:checked]:text-(--vp-c-gutter) dark:bg-[#31333e] dark:not-has-[input:checked]:hover:bg-(--vp-c-bg-alt)`,
         props.class,
       )
     "
