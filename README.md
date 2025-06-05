@@ -67,7 +67,7 @@ const suggestion = ref(undefined);
 | payload     |          | Custom **payload** for the API request. Fields will be added to, or override existing.  | `object`\|`object[]`   |                                                                                                    |
 | headers     |          | Custom **headers** for the API request. Headers will be added to, or override existing. | `object`               |                                                                                                    |
 
-#### API requests options (`address` type). _All optional_
+#### API request options (`address` type). _All optional_
 
 | Prop            | Description                                                                                                                                                          | Type / Possible values                                      | Default          |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------- |
@@ -81,7 +81,7 @@ const suggestion = ref(undefined);
 | division        | [Type of territorial division](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589): `ADMINISTRATIVE` or `MUNICIPAL`.                               | `string`                                                    | `ADMINISTRATIVE` |
 | language        | Display language for address suggestions. `RU` or `EN`. The `EN` version mostly provides transliteration.                                                            | `RU`\|`EN`                                                  |                  |
 
-#### API requests options for other suggestions types. _All optional_
+#### API request options for other suggestions types. _All optional_
 
 | Prop         | Description                                                                                                 | Type / Possible values | Default |
 | ------------ | ----------------------------------------------------------------------------------------------------------- | ---------------------- | ------- |

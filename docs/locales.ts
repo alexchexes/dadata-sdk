@@ -94,10 +94,10 @@ export default {
       'Здесь можно дополнить или перезаписать HTTP-заголовки запроса (впишите JSON).',
 
     // --------------------------
-    // API requests options block
+    // API request options block
     // --------------------------
 
-    'API requests options': 'Параметры API запроса',
+    'API request options': 'Параметры API запроса',
     'count:': 'Макс. подсказок:',
     'locationsBoost:': 'Приоритет города/региона:',
     "KLADR ID or IDs, e.g. '77, 46'": "Коды КЛАДР, напр. '77, 46'",

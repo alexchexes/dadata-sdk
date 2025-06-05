@@ -396,16 +396,16 @@ const removeCustomHeaders = () => {
 
 const vueDadataRef = useTemplateRef('vueDadataRef');
 
-const isXl = useMediaQuery('(width >= 80rem)');
-const isMd = useMediaQuery('(width >= 48rem)');
+const isScreenXl = useMediaQuery('(width >= 80rem)');
+const isScreenMd = useMediaQuery('(width >= 48rem)');
 
 const behaviorOptionsCollapsed = ref(false);
 const apiOptionsCollapsed = ref(false);
 const generalOptionsCollapsed = ref(false);
 
 onMounted(() => {
-  behaviorOptionsCollapsed.value = !isXl.value;
-  apiOptionsCollapsed.value = !isMd.value;
+  behaviorOptionsCollapsed.value = !isScreenXl.value;
+  apiOptionsCollapsed.value = !isScreenMd.value;
 });
 
 const builtPayload = computed(() =>
@@ -439,15 +439,10 @@ const boundTypesOptions = computed(() => {
       <!-- Component behavior options -->
       <aside class="md:row-start-1 xl:col-start-1 xl:row-start-1">
         <OptionsBlock
-          class="relative w-full overflow-hidden"
-          :class="behaviorOptionsCollapsed && 'h-20'"
+          v-model="behaviorOptionsCollapsed"
           :canReset="!allBehaviorOptionsDefault"
-          :collapseOnSmallScreen="true"
           :heading="t('Vue component options')"
-          :isCollapsed="behaviorOptionsCollapsed"
           :resetLable="t('Reset') + ' ' + t('Vue component options')"
-          headingClass="cursor-pointer hover:text-slate-700"
-          @headingClick="behaviorOptionsCollapsed = true"
           @resetClick="resetBehaviorOptions"
         >
           <div class="flex flex-wrap items-center gap-2">
@@ -535,16 +530,13 @@ const boundTypesOptions = computed(() => {
         </OptionsBlock>
       </aside>
 
-      <!-- API requests options -->
+      <!-- API request options -->
       <aside class="md:col-start-1 md:row-start-2 xl:col-start-3 xl:row-start-1">
         <OptionsBlock
-          class="relative w-full overflow-hidden"
-          :class="apiOptionsCollapsed && 'h-20'"
+          v-model="apiOptionsCollapsed"
           :canReset="!allApiOptionsDefault"
-          :heading="t('API requests options')"
-          :resetLable="`${t('Reset')} ${t('API requests options')}`"
-          headingClass="cursor-pointer hover:text-slate-700"
-          @headingClick="apiOptionsCollapsed = true"
+          :heading="t('API request options')"
+          :resetLable="`${t('Reset')} ${t('API request options')}`"
           @resetClick="resetApiOptions"
         >
           <div class="flex flex-wrap items-center gap-2">
@@ -758,13 +750,11 @@ const boundTypesOptions = computed(() => {
       >
         <!-- Block above the input -->
         <OptionsBlock
-          class="relative w-full overflow-hidden pb-3"
-          :class="generalOptionsCollapsed && 'h-20'"
+          v-model="generalOptionsCollapsed"
+          class="pb-3"
           :canReset="!allGeneralOptionsDefault"
           :heading="t('General options')"
           :resetLable="`${t('Reset')} ${t('General options')}`"
-          headingClass="cursor-pointer hover:text-slate-700"
-          @headingClick="generalOptionsCollapsed = true"
           @resetClick="resetGeneralOptions"
         >
           <div class="flex flex-col gap-4">

@@ -86,7 +86,7 @@ export interface VueDadataOptions {
   headers?: Record<string, string>;
 
   // ***************************
-  // API requests options
+  // API request options
   // ***************************
 
   /**
