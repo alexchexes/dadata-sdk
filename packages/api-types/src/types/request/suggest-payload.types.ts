@@ -9,6 +9,7 @@ export interface LocationRestriction {
   region?: string;
   area?: string;
   city?: string;
+  city_district?: string;
   settlement?: string;
   street?: string;
   planning_structure?: string;
@@ -16,6 +17,7 @@ export interface LocationRestriction {
   region_type_full?: string;
   area_type_full?: string;
   city_type_full?: string;
+  city_district_type_full?: string;
   settlement_type_full?: string;
   street_type_full?: string;
   planning_structure_type_full?: string;

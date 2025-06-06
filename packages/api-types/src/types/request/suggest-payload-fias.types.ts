@@ -7,7 +7,10 @@ import type {
 
 export type BoundTypeFias = Exclude<BoundType, 'country'>;
 
-export type LocationRestrictionFias = Omit<LocationRestriction, 'country'>;
+export type LocationRestrictionFias = Omit<
+  LocationRestriction,
+  'country' | 'country_iso_code' | 'region_iso_code'
+>;
 
 export interface BoundFias {
   value: BoundTypeFias;

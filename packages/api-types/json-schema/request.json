@@ -173,6 +173,9 @@
         "city": {
           "type": "string"
         },
+        "city_district": {
+          "type": "string"
+        },
         "settlement": {
           "type": "string"
         },
@@ -189,6 +192,9 @@
           "type": "string"
         },
         "city_type_full": {
+          "type": "string"
+        },
+        "city_district_type_full": {
           "type": "string"
         },
         "settlement_type_full": {
@@ -310,6 +316,9 @@
         "city": {
           "type": "string"
         },
+        "city_district": {
+          "type": "string"
+        },
         "settlement": {
           "type": "string"
         },
@@ -326,6 +335,9 @@
           "type": "string"
         },
         "city_type_full": {
+          "type": "string"
+        },
+        "city_district_type_full": {
           "type": "string"
         },
         "settlement_type_full": {

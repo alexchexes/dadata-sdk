@@ -1,5 +1,7 @@
 // Locations restrictions.
 // Split by category for our own convenience, while in the API there's no such thing as location restriction category.
+// Addresses: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108
+// FIAS: https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974
 
 import type { LocationRestriction } from '../types';
 
@@ -29,6 +31,7 @@ export const NAME_RESTRICTION_TYPES = [
   'region',
   'area',
   'city',
+  'city_district',
   'settlement',
   'planning_structure', // not documented for suggestions (only for FIAS) but works
   'street',
@@ -38,6 +41,7 @@ export const TYPE_FULL_RESTRICTION_TYPES = [
   'region_type_full',
   'area_type_full',
   'city_type_full',
+  'city_district_type_full', // not documented for suggestions (only for FIAS) but works
   'settlement_type_full',
   'planning_structure_type_full', // not documented for suggestions (only for FIAS) but works
   'street_type_full',
