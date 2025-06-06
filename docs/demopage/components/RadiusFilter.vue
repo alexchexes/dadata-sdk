@@ -6,6 +6,7 @@ import ButtonRemove from './ui/ButtonRemove.vue';
 import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS } from '@dadata-sdk/vue';
 import type { RadiusFilter } from '@dadata-sdk/api-types';
 import { useI18n } from 'vue-i18n';
+import HelpHint from './ui/HelpHint.vue';
 const { t, locale } = useI18n();
 const props = defineProps<{
   lang: 'en' | 'ru';
@@ -54,6 +55,10 @@ const isRadiusValid = computed(() => {
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
       {{ t('radiusFilter:') }}
+      <HelpHint
+        class="size-[1.4rem]"
+        helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
+      />
       <ButtonAdd v-if="!enabled" @click="enabled = true" />
       <ButtonRemove v-else outline @click="enabled = false" />
     </div>

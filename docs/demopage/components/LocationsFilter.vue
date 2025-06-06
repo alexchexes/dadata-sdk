@@ -15,11 +15,13 @@ import type { VueDadataOptions } from '@dadata-sdk/vue';
 import type { SuggestType, LocationRestriction } from '@dadata-sdk/api-types';
 
 import { useI18n } from 'vue-i18n';
+import HelpHint from './ui/HelpHint.vue';
 const { t, locale } = useI18n();
 
 const props = defineProps<{
   lang: 'en' | 'ru';
   suggestType: SuggestType;
+  helpLink: string;
 }>();
 
 locale.value = props.lang;
@@ -242,7 +244,11 @@ const getEnterRestrictionPlaceholder = (restrKey: string) => {
 <template>
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
-      <div>{{ t('locationsFilter:') }}</div>
+      <div>
+        {{ t('locationsFilter:') }}
+
+        <HelpHint :helpLink />
+      </div>
 
       <!-- Enable Locations Filter -->
       <ButtonAdd v-if="!enabled" @click="enable" />

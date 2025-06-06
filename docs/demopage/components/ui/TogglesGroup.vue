@@ -3,6 +3,7 @@ import { computed, ref, type PropType } from 'vue';
 import { ignorableWatch } from '@vueuse/core';
 import { twMerge } from 'tailwind-merge';
 import TogglableButton from './TogglableButton.vue';
+import HelpHint from './HelpHint.vue';
 type TwMergeArgument = Parameters<typeof twMerge>[0];
 
 const props = defineProps({
@@ -17,6 +18,10 @@ const props = defineProps({
   buttonClass: {
     type: [Array, String, Boolean, null, undefined] as PropType<TwMergeArgument>,
     default: undefined,
+  },
+  helpLink: {
+    type: String,
+    default: '',
   },
 });
 
@@ -72,7 +77,10 @@ const optionsObject = computed(() => {
 
 <template>
   <div class="flex flex-col gap-1">
-    <div v-if="label">{{ label }}</div>
+    <div v-if="label">
+      {{ label }}
+      <HelpHint v-if="helpLink" :helpLink />
+    </div>
 
     <div class="flex flex-wrap gap-x-1.5 gap-y-2">
       <TogglableButton

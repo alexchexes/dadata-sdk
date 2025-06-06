@@ -17,7 +17,14 @@ export default {
     'Current query:': 'Текущий запрос:',
     'Methods:': 'Методы:',
     'Try here:': 'Попробовать:',
-    'Current suggestion:': 'Объект подсказки:',
+    'Current suggestion:': 'Выбранная подсказка:',
+    'Clear': 'Сбросить',
+    'Oops...': 'Ой...',
+    'Something went wrong...': 'Что-то пошло не так...',
+    'Looks like the API token used on this page has reached its limit. Obtain a new token from':
+      'Похоже, API токен, используемый в этом демо, достиг суточного лимита. Получите новый токен на',
+    'and paste it into': 'и вставьте его в',
+    'above': 'выше',
 
     // --------------------------
     // Vue component options block
@@ -54,6 +61,7 @@ export default {
 
     'General options': 'Основные настройки',
     'API token:': 'API токен:',
+    'API token': 'API токен',
     suggestTypes: {
       'address': 'Адреса',
       'country': 'Страны',
@@ -89,9 +97,9 @@ export default {
     'Remove custom headers': 'Убрать свои заголовки',
     'httpCache': 'HTTP кэш',
     'customPayloadPlaceholder':
-      'Здесь можно дополнить или перезаписать тело API-запроса (впишите JSON).',
+      'Здесь можно дополнить или перезаписать тело API-запроса (формат - JSON)',
     'customHeadersPlaceholder':
-      'Здесь можно дополнить или перезаписать HTTP-заголовки запроса (впишите JSON).',
+      'Здесь можно дополнить или перезаписать HTTP-заголовки запроса (формат - JSON)',
 
     // --------------------------
     // API request options block
@@ -192,7 +200,7 @@ export default {
     //
     'restrictValue': 'Сокращать адреса в подсказках',
     //
-    'filters (json)': 'Доп. фильтры',
+    'filters (json)': 'Доп. фильтры (JSON)',
     "'filters' API request parameter": "Параметр 'filters' в запросе",
     //
     'fioParts:': 'Искать только в этих частях:',
@@ -253,7 +261,7 @@ export default {
     },
   },
   en: {
-    'customPayloadPlaceholder': 'Add or override the API request payload (must be valid JSON).',
-    'customHeadersPlaceholder': 'Add or override the API request headers (must be valid JSON).',
+    customPayloadPlaceholder: 'Add or override the API request payload (must be valid JSON).',
+    customHeadersPlaceholder: 'Add or override the API request headers (must be valid JSON).',
   },
 } as const;

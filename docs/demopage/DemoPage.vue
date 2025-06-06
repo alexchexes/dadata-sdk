@@ -355,6 +355,7 @@ const handleEnriched = (
   diff: DeepPartial<DadataSuggestion> | null,
 ) => {
   shownError.value = null;
+  showTokenError.value = false;
   console.info(`Suggestion enriched (${suggestion.value}), diff:`, diff);
 };
 
@@ -371,15 +372,11 @@ const handleError = (error: any) => {
   if (error && typeof error === 'object') {
     if (error.status === 403) {
       showTokenError.value = true;
-      shownError.value = {
-        title: 'Oops...',
-        description: `Looks like the API token used on this page has reached its daily limit. Obtain a new token from Dadata.ru and paste it into General options → "API token" above`,
-      };
       return;
     }
     showTokenError.value = false;
     shownError.value = {
-      title: 'Something went wrong...',
+      title: t('Something went wrong...'),
       description: error,
     };
   }
@@ -567,6 +564,11 @@ const boundTypesOptions = computed(() => {
             <div class="dev-item">
               <InputText
                 v-model="locationsBoostModel"
+                :helpLink="
+                  options.suggestType === 'address'
+                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795'
+                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529'
+                "
                 :label="t('locationsBoost:')"
                 :placeholder="t(`KLADR ID or IDs, e.g. '77, 46'`)"
               />
@@ -591,6 +593,14 @@ const boundTypesOptions = computed(() => {
 
             <LocationsFilter
               v-model="options.locationsFilter"
+              :helpLink="
+                {
+                  'address': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108',
+                  'fias': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974',
+                  'party': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123',
+                  'bank': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238',
+                }[options.suggestType]
+              "
               :lang="lang"
               :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
             />
@@ -601,11 +611,21 @@ const boundTypesOptions = computed(() => {
             <div class="flex flex-wrap gap-3">
               <SelectOptions
                 v-model="options.fromBound"
+                :helpLink="
+                  options.suggestType === 'address'
+                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017'
+                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521'
+                "
                 :label="t('fromBound:')"
                 :options="boundTypesOptions"
               />
               <SelectOptions
                 v-model="options.toBound"
+                :helpLink="
+                  options.suggestType === 'address'
+                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017'
+                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521'
+                "
                 :label="t('toBound:')"
                 :options="boundTypesOptions"
               />
@@ -619,12 +639,14 @@ const boundTypesOptions = computed(() => {
               v-model="options.division"
               :label="t('division:')"
               :options="Object.fromEntries(DIVISION_TYPES.map((item) => [t(item), item]))"
+              helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589"
             />
 
             <RadioGroup
               v-model="options.language"
               :label="t('language:')"
               :options="Object.fromEntries(LANGUAGES.map((item) => [t(item), item]))"
+              helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726"
             />
           </template>
 
@@ -649,6 +671,7 @@ const boundTypesOptions = computed(() => {
                 ]),
               )
             "
+            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_by'"
@@ -659,6 +682,7 @@ const boundTypesOptions = computed(() => {
                 PARTY_BY_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
               )
             "
+            helpLink="https://dadata.ru/api/suggest/party_by/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_kz'"
@@ -669,6 +693,7 @@ const boundTypesOptions = computed(() => {
                 PARTY_KZ_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
               )
             "
+            helpLink="https://dadata.ru/api/suggest/party_kz/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'bank'"
@@ -677,6 +702,7 @@ const boundTypesOptions = computed(() => {
             :options="
               Object.fromEntries(BANK_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
             "
+            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122"
           />
 
           <TogglesGroup
@@ -686,6 +712,14 @@ const boundTypesOptions = computed(() => {
               options.suggestType === 'bank'
             "
             v-model="options.entityStatus"
+            :helpLink="
+              {
+                party: 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335',
+                bank: 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120',
+                party_by:
+                  'https://dadata.ru/api/suggest/party_by/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE',
+              }[options.suggestType]
+            "
             :label="t(`entityStatus.${options.suggestType}.label`, 'entityStatus:')"
             :options="
               Object.fromEntries(
@@ -763,6 +797,8 @@ const boundTypesOptions = computed(() => {
               <InputText
                 v-model.trim="tokenModel"
                 class="grow"
+                :class="showTokenError && 'text-red-500 dark:text-red-400'"
+                :inputClass="showTokenError && 'border-red-500! dark:border-red-400!'"
                 :label="t('API token:')"
                 :placeholder="TOKEN_PLACEHOLDER"
               />
@@ -925,33 +961,42 @@ const boundTypesOptions = computed(() => {
         </VueDadata>
 
         <div
-          v-if="shownError"
+          v-if="showTokenError || shownError"
           class="relative rounded-xl bg-(--vp-c-danger-soft) px-3 py-2 text-(--vp-c-danger-1)"
         >
           <div class="font-bold">
-            <template v-if="showTokenError"> Oops... </template>
+            <template v-if="showTokenError"> {{ t('Oops...') }} </template>
             <template v-else>
-              {{ shownError.title }}
+              {{ shownError?.title || 'Error' }}
             </template>
           </div>
           <div>
             <template v-if="showTokenError">
-              Looks like the API token used on this page has reached its limit. Obtain a new token
-              from
+              {{
+                t(
+                  'Looks like the API token used on this page has reached its limit. Obtain a new token from',
+                )
+              }}
               <a
                 class="underline hover:no-underline"
                 href="https://dadata.ru/api/#:~:text=%D0%BA%D0%BE%D0%B3%D0%B4%D0%B0%20%D0%BF%D0%BE%D1%80%D0%B0%20%D0%BF%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D1%8F%D1%82%D1%8C.-,%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F,-%D0%B8%C2%A0%D0%BF%D0%BE%D0%BF%D1%80%D0%BE%D0%B1%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%20API"
+                rel="noopener"
+                target="_blank"
                 >Dadata.ru</a
               >
-              and paste it into <i>General options</i> → <i>API token</i> field above
+              {{ t('and paste it into') }} <i>'{{ t('General options') }}'</i> →
+              <i>'{{ t('API token') }}'</i> {{ t('above') }}
             </template>
-            <template v-else>
+            <template v-else-if="shownError?.description">
               {{ shownError.description }}
             </template>
           </div>
           <button
             class="absolute top-3 right-3 cursor-pointer hover:opacity-70"
-            @click="shownError = null"
+            @click="
+              shownError = null;
+              showTokenError = false;
+            "
           >
             <IconCross />
           </button>
@@ -965,7 +1010,7 @@ const boundTypesOptions = computed(() => {
                 — ({{ typeof suggestion }})</span
               >
             </span>
-            <AButton v-if="suggestion" @click="clearSuggestion">Clear</AButton>
+            <AButton v-if="suggestion" @click="clearSuggestion">{{ t('Clear') }}</AButton>
           </div>
 
           <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{

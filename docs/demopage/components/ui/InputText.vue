@@ -1,31 +1,31 @@
 <script lang="ts" setup>
 import { twMerge } from 'tailwind-merge';
-import type { PropType } from 'vue';
+import HelpHint from './HelpHint.vue';
 type TwMergeArgument = Parameters<typeof twMerge>[0];
 
-defineProps({
-  inputClass: {
-    type: [Array, String, Boolean, null, undefined] as PropType<TwMergeArgument>,
-    default: undefined,
-  },
-  label: {
-    type: String,
-    default: '',
-  },
-  placeholder: {
-    type: String,
-    default: '',
-  },
-  type: {
-    type: String,
-    default: 'text',
-  },
-});
+const {
+  inputClass = undefined,
+  label = '',
+  placeholder = '',
+  helpLink = '',
+  type = 'text',
+} = defineProps<{
+  inputClass?: TwMergeArgument;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  helpLink?: string;
+}>();
+
 const model = defineModel({ type: null });
 </script>
 <template>
   <label class="inline-flex flex-col gap-1">
-    <div v-if="label">{{ label }}</div>
+    <div v-if="label">
+      {{ label }}
+      <HelpHint v-if="helpLink" :helpLink />
+    </div>
+
     <input
       v-model="model"
       :class="

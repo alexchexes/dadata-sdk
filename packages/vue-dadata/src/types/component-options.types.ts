@@ -105,7 +105,8 @@ export interface VueDadataOptions {
    * - `[50, 77]` — Moscow and Moscow-City regions
    * - `{kladr_id: '02'}` or `[{kladr_id: '02'}, ...]` — native DaData API format
    *
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}
+   * - 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}
+   * - 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}
    *
    * Max: `10` items
    */
@@ -131,7 +132,9 @@ export interface VueDadataOptions {
    *
    * Corresponds to the `from_bound` API parameter.
    *
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
+   * - For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
+   *
+   * - 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}
    */
   fromBound?: BoundType;
   /**
@@ -181,22 +184,20 @@ export interface VueDadataOptions {
   language?: Language;
   /**
    * Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).
-   * `LEGAL` or `INDIVIDUAL`
-   * - {@link https://dadata.ru/api/suggest/party/}
    *
-   * for BY and KZ see:
-   * - {@link https://dadata.ru/api/suggest/party_by/}
-   * - {@link https://dadata.ru/api/suggest/party_kz/}
+   * for `party`: `LEGAL` or `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}
+   * - for `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}
    *
-   * for 'bank' see:
-   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}
+   * - for `party_by`: {@link https://dadata.ru/api/suggest/party_by/}
+   * - for `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}
    */
   entityType?: PartyType | OneOrMany<PartyByType> | OneOrMany<PartyKzType> | OneOrMany<BankType>;
   /**
    * Organization or bank status  (for `party`, `party_by` and `bank` suggestions)
    * - `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`
-   * - *party*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
-   * - *bank*: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
+   * - `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
+   * - `party_by`: {@link https://dadata.ru/api/suggest/party_by/}
+   * - `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
    */
   entityStatus?: OneOrMany<PartyStatus> | OneOrMany<PartyByStatus> | OneOrMany<BankStatus>;
   /**
