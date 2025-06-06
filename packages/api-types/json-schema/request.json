@@ -301,12 +301,6 @@
     "LocationRestrictionFias": {
       "type": "object",
       "properties": {
-        "country_iso_code": {
-          "type": "string"
-        },
-        "region_iso_code": {
-          "type": "string"
-        },
         "region": {
           "type": "string"
         },
