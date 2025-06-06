@@ -411,9 +411,14 @@ const builtPayload = computed(() =>
 
 const boundTypesOptions = computed(() => {
   return Object.fromEntries(
-    BOUND_TYPES.filter((el) => options.value.suggestType === 'address' || el !== 'country').map(
-      (boundType) => [t(boundType), boundType],
-    ),
+    BOUND_TYPES.filter(
+      (el) => options.value.suggestType === 'address' || (el !== 'country' && el !== 'flat'),
+    ).map((boundType) => [t(boundType), boundType]),
+  );
+});
+const boundTypesOptionsFrom = computed(() => {
+  return Object.fromEntries(
+    Object.entries(boundTypesOptions.value).filter(([, boundType]) => boundType !== 'flat'),
   );
 });
 </script>
@@ -617,7 +622,7 @@ const boundTypesOptions = computed(() => {
                     : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521'
                 "
                 :label="t('fromBound:')"
-                :options="boundTypesOptions"
+                :options="boundTypesOptionsFrom"
               />
               <SelectOptions
                 v-model="options.toBound"
