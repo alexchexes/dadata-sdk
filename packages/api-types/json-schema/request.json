@@ -5,13 +5,18 @@
       "type": "object",
       "properties": {
         "lat": {
-          "type": "string"
+          "type": "string",
+          "description": "Географическая широта, например: `'59.244634'`"
         },
         "lon": {
-          "type": "string"
+          "type": "string",
+          "description": "Географическая долгота, например: `'39.913355'`"
         },
         "radius_meters": {
-          "type": "number"
+          "type": "number",
+          "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
+          "default": 100,
+          "maximum": 100000
         }
       },
       "required": [
