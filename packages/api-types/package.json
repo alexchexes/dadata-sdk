@@ -34,7 +34,7 @@
     "@types/node": "^22.15.29",
     "chalk": "^5.4.1",
     "rimraf": "^6.0.1",
-    "ts-json-schema-generator": "2.4.1-next.0",
+    "ts-json-schema-generator": "2.4.1-next.1",
     "tsx": "^4.19.4"
   }
 }

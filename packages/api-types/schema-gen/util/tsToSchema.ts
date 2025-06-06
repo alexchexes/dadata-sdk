@@ -7,13 +7,9 @@ import {
 } from 'ts-json-schema-generator';
 import type { CompletedConfig, Config, Schema } from 'ts-json-schema-generator';
 import { ExtendedAnnotationsReader } from 'ts-json-schema-generator/dist/src/AnnotationsReader/ExtendedAnnotationsReader';
-import { MappedTypeNodeParser } from 'ts-json-schema-generator/dist/src/NodeParser/MappedTypeNodeParser';
 
 import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs';
-import {
-  ExtendedAnnotationsReader_getAnnotations,
-  MappedTypeNodeParser_createType,
-} from './ts-json-schema-generator-patches';
+import { ExtendedAnnotationsReader_getAnnotations } from './ts-json-schema-generator-patches';
 import { removeUnusedGenerics } from './removeUnusedGenerics';
 import { traverseSchemaObjects } from './schemaHelpers';
 import { log } from 'console';
@@ -48,8 +44,6 @@ export const tsToSchema = (generatorConfig: GeneratorConfig): Schema => {
   if (config.rawJsDoc) {
     ExtendedAnnotationsReader.prototype.getAnnotations = ExtendedAnnotationsReader_getAnnotations;
   }
-
-  MappedTypeNodeParser.prototype.createType = MappedTypeNodeParser_createType;
 
   const program = createProgram(config);
   const parser = createParser(program, config);
