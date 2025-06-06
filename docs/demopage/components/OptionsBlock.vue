@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import ButtonReset from './ui/ButtonReset.vue';
+import FadeOverlay from './ui/FadeOverlay.vue';
 import IconDown from './ui/IconDown.vue';
 
 defineProps<{

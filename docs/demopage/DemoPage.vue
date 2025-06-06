@@ -40,7 +40,6 @@ import OptionsBlock from './components/OptionsBlock.vue';
 import IconReset from './components/ui/IconReset.vue';
 import IconCross from './components/ui/IconCross.vue';
 import { buildPayload } from '@dadata-sdk/vue';
-import FadeOverlay from './components/ui/FadeOverlay.vue';
 
 import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();
@@ -527,8 +526,6 @@ const boundTypesOptionsFrom = computed(() => {
             :label="t('noSuggestionsHint:')"
             :placeholder="t('Not specified')"
           />
-
-          <FadeOverlay v-if="behaviorOptionsCollapsed" @click="behaviorOptionsCollapsed = false" />
         </OptionsBlock>
       </aside>
 
@@ -778,8 +775,6 @@ const boundTypesOptionsFrom = computed(() => {
             :placeholder="t(`'filters' API request parameter`)"
             allowArray
           />
-
-          <FadeOverlay v-if="apiOptionsCollapsed" @click="apiOptionsCollapsed = false" />
         </OptionsBlock>
       </aside>
 
@@ -876,8 +871,6 @@ const boundTypesOptionsFrom = computed(() => {
               <CheckBox v-model="options.httpCache" class="gap-2" :label="t('httpCache')" />
             </div>
           </div>
-
-          <FadeOverlay v-if="generalOptionsCollapsed" @click="generalOptionsCollapsed = false" />
         </OptionsBlock>
 
         <div class="flex flex-wrap items-center gap-3">
