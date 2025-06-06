@@ -1,7 +1,7 @@
 {
   "name": "dadata-sdk",
   "private": true,
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.11.1",
   "version": "0.0.0",
   "workspaces": [
     "packages/*",
