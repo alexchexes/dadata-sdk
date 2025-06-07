@@ -27,9 +27,6 @@
     "prune:stubs": "rimraf dist/cjs/types dist/esm/types",
     "gen:schema": "tsx schema-gen/main.ts"
   },
-  "dependencies": {
-    "type-fest": "^4.41.0"
-  },
   "devDependencies": {
     "@types/node": "^22.15.29",
     "chalk": "^5.4.1",

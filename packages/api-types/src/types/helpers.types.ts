@@ -51,9 +51,6 @@ type Merge<A, B> = {
 
 /**
  * Overrides the types of properties in T with those in R, while ensuring that all keys in R exist in T.
- *
- * @deprecated Until ts-json-schema-generator fixes https://github.com/vega/ts-json-schema-generator/issues/2234.
- * Use `type-fest`'s `OverrideProperties` instead
  */
 export type Override<
   TBase,

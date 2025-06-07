@@ -1,5 +1,5 @@
-import type { OverrideProperties as Override } from 'type-fest';
 import type { FioGenders, PartyStatus, PartyType } from '../common.types';
+import type { Override } from '../helpers.types';
 import type { PartySuggestionAddressData } from './address.types';
 
 /**

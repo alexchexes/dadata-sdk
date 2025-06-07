@@ -1,6 +1,4 @@
-import type { OverrideProperties as Override } from 'type-fest';
-
-import type { PickAndOverride } from '../../types/helpers.types';
+import type { Override, PickAndOverride } from '../../types/helpers.types';
 
 export interface AddressMetroItem {
   /** название станции */

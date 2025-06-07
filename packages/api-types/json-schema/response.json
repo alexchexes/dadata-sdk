@@ -3055,6 +3055,26 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "source": {
+          "type": "string",
+          "description": "Исходный адрес из ЕГРЮЛ одной строкой"
+        },
+        "qc": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "3"
+          ],
+          "description": "код качества адреса (19.1+)\n- `0` – Адрес из ЕГРЮЛ распознан уверенно\n- `1` – Остались «лишние» части\n- `3` – Есть альтернативные варианты"
+        },
+        "fias_code": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id`"
+        },
         "postal_code": {
           "type": [
             "null",
@@ -3736,26 +3756,6 @@
             "string"
           ],
           "description": "Адм. район города\n* В подсказках по адресам - заполняется при выборе конкретной подсказки (запрос с count=1)"
-        },
-        "source": {
-          "type": "string",
-          "description": "Исходный адрес из ЕГРЮЛ одной строкой"
-        },
-        "qc": {
-          "type": "string",
-          "enum": [
-            "0",
-            "1",
-            "3"
-          ],
-          "description": "код качества адреса (19.1+)\n- `0` – Адрес из ЕГРЮЛ распознан уверенно\n- `1` – Остались «лишние» части\n- `3` – Есть альтернативные варианты"
-        },
-        "fias_code": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id`"
         }
       },
       "required": [
@@ -3843,6 +3843,52 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "source": {
+          "type": "string",
+          "description": "Адрес одной строкой как в справочнике БИК"
+        },
+        "qc_complete": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+          ],
+          "description": "Код пригодности адреса к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete}"
+        },
+        "qc_house": {
+          "type": "string",
+          "enum": [
+            "2",
+            "3",
+            "10"
+          ],
+          "description": "Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house}"
+        },
+        "qc": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1",
+            "3"
+          ],
+          "description": "код качества адреса (19.1+)\n- `0` – Адрес из БИК распознан уверенно\n- `1` – Остались «лишние» части\n- `3` – Есть альтернативные варианты"
+        },
+        "fias_code": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id`"
+        },
         "postal_code": {
           "type": [
             "null",
@@ -4516,52 +4562,6 @@
             "string"
           ],
           "description": "Адм. район города\n* В подсказках по адресам - заполняется при выборе конкретной подсказки (запрос с count=1)"
-        },
-        "source": {
-          "type": "string",
-          "description": "Адрес одной строкой как в справочнике БИК"
-        },
-        "qc_complete": {
-          "type": "string",
-          "enum": [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"
-          ],
-          "description": "Код пригодности адреса к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete}"
-        },
-        "qc_house": {
-          "type": "string",
-          "enum": [
-            "2",
-            "3",
-            "10"
-          ],
-          "description": "Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house}"
-        },
-        "qc": {
-          "type": "string",
-          "enum": [
-            "0",
-            "1",
-            "3"
-          ],
-          "description": "код качества адреса (19.1+)\n- `0` – Адрес из БИК распознан уверенно\n- `1` – Остались «лишние» части\n- `3` – Есть альтернативные варианты"
-        },
-        "fias_code": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id`"
         }
       },
       "required": [
@@ -4999,6 +4999,17 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "cbr": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BankSuggestionDataCbr"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Управление Банка России, к которому относится банк. (21.2+)\n* В поле возвращается объект банка без заполнения гранулярных полей адреса."
+        },
         "bic": {
           "type": "string",
           "description": "Банковский идентификационный код (БИК) ЦБ РФ"
@@ -5090,17 +5101,6 @@
         "rkc": {
           "type": "null",
           "description": "Не заполняется"
-        },
-        "cbr": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/BankSuggestionDataCbr"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Управление Банка России, к которому относится банк. (21.2+)\n* В поле возвращается объект банка без заполнения гранулярных полей адреса."
         }
       },
       "required": [
@@ -5127,6 +5127,22 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "opf": {
+          "$ref": "#/definitions/BankOpfInfoCbr",
+          "description": "Тип кредитной организации (всегда — ГУ Банка России)"
+        },
+        "cbr": {
+          "type": "null",
+          "description": "Не заполняется для объекта адреса управления ЦБ РФ"
+        },
+        "address": {
+          "$ref": "#/definitions/BankSuggestionDataCbrAddress",
+          "description": "Данные об адресе управления ЦБ РФ"
+        },
+        "bic": {
+          "type": "string",
+          "description": "БИК управления ЦБ РФ"
+        },
         "swift": {
           "type": [
             "string",
@@ -5206,22 +5222,6 @@
         "rkc": {
           "type": "null",
           "description": "Не заполняется"
-        },
-        "opf": {
-          "$ref": "#/definitions/BankOpfInfoCbr",
-          "description": "Тип кредитной организации (всегда — ГУ Банка России)"
-        },
-        "cbr": {
-          "type": "null",
-          "description": "Не заполняется для объекта адреса управления ЦБ РФ"
-        },
-        "address": {
-          "$ref": "#/definitions/BankSuggestionDataCbrAddress",
-          "description": "Данные об адресе управления ЦБ РФ"
-        },
-        "bic": {
-          "type": "string",
-          "description": "БИК управления ЦБ РФ"
         }
       },
       "required": [
@@ -7421,150 +7421,6 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "inn": {
-          "type": "string",
-          "description": "ИНН"
-        },
-        "kpp": {
-          "type": "string",
-          "description": "КПП"
-        },
-        "kpp_largest": {
-          "type": "null",
-          "description": "Не заполняется"
-        },
-        "ogrn": {
-          "type": "string",
-          "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
-        },
-        "ogrn_date": {
-          "type": "number",
-          "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
-        },
-        "hid": {
-          "type": "string",
-          "description": "Внутренний идентификатор в Дадате"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "LEGAL",
-            "INDIVIDUAL"
-          ],
-          "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
-        },
-        "name": {
-          "$ref": "#/definitions/PartyNameInfo",
-          "description": "Наименование организации"
-        },
-        "okpo": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Код ОКПО"
-        },
-        "okato": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Код ОКАТО (20.9+)"
-        },
-        "oktmo": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Код ОКТМО (20.9+)"
-        },
-        "okogu": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Код ОКОГУ (20.9+)"
-        },
-        "okfs": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Код ОКФС (20.9+)"
-        },
-        "okved": {
-          "type": "string",
-          "description": "Код ОКВЭД"
-        },
-        "okved_type": {
-          "type": "string",
-          "enum": [
-            "2001",
-            "2014"
-          ],
-          "description": "Версия справочника ОКВЭД (2001 или 2014)"
-        },
-        "opf": {
-          "$ref": "#/definitions/PartyOpfInfo",
-          "description": "Организационно-правовая форма"
-        },
-        "invalid": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "enum": [
-            true,
-            null
-          ],
-          "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
-        },
-        "management": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/PartyManagementInfo"
-            }
-          ],
-          "description": "Руководитель (только для юрлиц)"
-        },
-        "branch_count": {
-          "type": "number",
-          "description": "Количество филиалов (только для юрлиц)"
-        },
-        "branch_type": {
-          "type": "string",
-          "enum": [
-            "MAIN",
-            "BRANCH"
-          ],
-          "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
-        },
-        "state": {
-          "$ref": "#/definitions/PartyStateInfo",
-          "description": "Состояние организации"
-        },
-        "fio": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/FioInfoBasic"
-            }
-          ],
-          "description": "ФИО индивидуального предпринимателя (21.3+)"
-        },
-        "source": {
-          "type": "null",
-          "description": "Не заполняется"
-        },
-        "qc": {
-          "type": "null",
-          "description": "Не заполняется"
-        },
         "employee_count": {
           "type": [
             "number",
@@ -7742,6 +7598,150 @@
         "address": {
           "$ref": "#/definitions/PartySuggestionDataAddressExtra",
           "description": "Подробности об адресе организации / о городе ИП"
+        },
+        "inn": {
+          "type": "string",
+          "description": "ИНН"
+        },
+        "kpp": {
+          "type": "string",
+          "description": "КПП"
+        },
+        "kpp_largest": {
+          "type": "null",
+          "description": "Не заполняется"
+        },
+        "ogrn": {
+          "type": "string",
+          "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
+        },
+        "ogrn_date": {
+          "type": "number",
+          "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
+        },
+        "hid": {
+          "type": "string",
+          "description": "Внутренний идентификатор в Дадате"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL"
+          ],
+          "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
+        },
+        "name": {
+          "$ref": "#/definitions/PartyNameInfo",
+          "description": "Наименование организации"
+        },
+        "okpo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКПО"
+        },
+        "okato": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКАТО (20.9+)"
+        },
+        "oktmo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКТМО (20.9+)"
+        },
+        "okogu": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКОГУ (20.9+)"
+        },
+        "okfs": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКФС (20.9+)"
+        },
+        "okved": {
+          "type": "string",
+          "description": "Код ОКВЭД"
+        },
+        "okved_type": {
+          "type": "string",
+          "enum": [
+            "2001",
+            "2014"
+          ],
+          "description": "Версия справочника ОКВЭД (2001 или 2014)"
+        },
+        "opf": {
+          "$ref": "#/definitions/PartyOpfInfo",
+          "description": "Организационно-правовая форма"
+        },
+        "invalid": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "enum": [
+            true,
+            null
+          ],
+          "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
+        },
+        "management": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/PartyManagementInfo"
+            }
+          ],
+          "description": "Руководитель (только для юрлиц)"
+        },
+        "branch_count": {
+          "type": "number",
+          "description": "Количество филиалов (только для юрлиц)"
+        },
+        "branch_type": {
+          "type": "string",
+          "enum": [
+            "MAIN",
+            "BRANCH"
+          ],
+          "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
+        },
+        "state": {
+          "$ref": "#/definitions/PartyStateInfo",
+          "description": "Состояние организации"
+        },
+        "fio": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/FioInfoBasic"
+            }
+          ],
+          "description": "ФИО индивидуального предпринимателя (21.3+)"
+        },
+        "source": {
+          "type": "null",
+          "description": "Не заполняется"
+        },
+        "qc": {
+          "type": "null",
+          "description": "Не заполняется"
         }
       },
       "required": [
@@ -8041,6 +8041,22 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "gender": {
+          "type": "string",
+          "enum": [
+            "MALE",
+            "FEMALE",
+            "UNKNOWN"
+          ],
+          "description": "Пол"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Исходная запись"
+        },
         "surname": {
           "type": [
             "string",
@@ -8065,22 +8081,6 @@
         "qc": {
           "type": "null",
           "description": "Не заполняется"
-        },
-        "gender": {
-          "type": "string",
-          "enum": [
-            "MALE",
-            "FEMALE",
-            "UNKNOWN"
-          ],
-          "description": "Пол"
-        },
-        "source": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Исходная запись"
         }
       },
       "required": [
@@ -9000,6 +9000,17 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "invalidity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/InvalidityInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Недостоверность сведений об адресе (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#invalidity}"
+        },
         "value": {
           "type": "string",
           "description": "Адрес одной строкой, сокращённый по правилам, описанным здесь: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1105068073}\n- Для юрлиц: **адрес организации**\n- Для ИП: **город проживания**\n\n* Стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ"
@@ -9011,17 +9022,6 @@
         "data": {
           "$ref": "#/definitions/PartySuggestionAddressData",
           "description": "Подробности об адресе организации"
-        },
-        "invalidity": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/InvalidityInfo"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Недостоверность сведений об адресе (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#invalidity}"
         }
       },
       "required": [

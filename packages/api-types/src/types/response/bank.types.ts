@@ -1,4 +1,4 @@
-import type { OverrideProperties as Override } from 'type-fest';
+import type { Override } from '../helpers.types';
 import type { BankStatus, BankType } from '../request/suggest-payload-bank.types';
 import type { BankSuggestionAddressData } from './address.types';
 
