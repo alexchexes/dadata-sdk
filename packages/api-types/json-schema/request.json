@@ -161,51 +161,6 @@
         "region_iso_code": {
           "type": "string"
         },
-        "country": {
-          "type": "string"
-        },
-        "region": {
-          "type": "string"
-        },
-        "area": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "city_district": {
-          "type": "string"
-        },
-        "settlement": {
-          "type": "string"
-        },
-        "street": {
-          "type": "string"
-        },
-        "planning_structure": {
-          "type": "string"
-        },
-        "region_type_full": {
-          "type": "string"
-        },
-        "area_type_full": {
-          "type": "string"
-        },
-        "city_type_full": {
-          "type": "string"
-        },
-        "city_district_type_full": {
-          "type": "string"
-        },
-        "settlement_type_full": {
-          "type": "string"
-        },
-        "street_type_full": {
-          "type": "string"
-        },
-        "planning_structure_type_full": {
-          "type": "string"
-        },
         "kladr_id": {
           "type": "string"
         },
@@ -224,10 +179,55 @@
         "settlement_fias_id": {
           "type": "string"
         },
+        "planning_structure_fias_id": {
+          "type": "string"
+        },
         "street_fias_id": {
           "type": "string"
         },
-        "planning_structure_fias_id": {
+        "country": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "city_district": {
+          "type": "string"
+        },
+        "settlement": {
+          "type": "string"
+        },
+        "planning_structure": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "region_type_full": {
+          "type": "string"
+        },
+        "area_type_full": {
+          "type": "string"
+        },
+        "city_type_full": {
+          "type": "string"
+        },
+        "city_district_type_full": {
+          "type": "string"
+        },
+        "settlement_type_full": {
+          "type": "string"
+        },
+        "planning_structure_type_full": {
+          "type": "string"
+        },
+        "street_type_full": {
           "type": "string"
         }
       },
@@ -301,48 +301,6 @@
     "LocationRestrictionFias": {
       "type": "object",
       "properties": {
-        "region": {
-          "type": "string"
-        },
-        "area": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "city_district": {
-          "type": "string"
-        },
-        "settlement": {
-          "type": "string"
-        },
-        "street": {
-          "type": "string"
-        },
-        "planning_structure": {
-          "type": "string"
-        },
-        "region_type_full": {
-          "type": "string"
-        },
-        "area_type_full": {
-          "type": "string"
-        },
-        "city_type_full": {
-          "type": "string"
-        },
-        "city_district_type_full": {
-          "type": "string"
-        },
-        "settlement_type_full": {
-          "type": "string"
-        },
-        "street_type_full": {
-          "type": "string"
-        },
-        "planning_structure_type_full": {
-          "type": "string"
-        },
         "kladr_id": {
           "type": "string"
         },
@@ -361,10 +319,52 @@
         "settlement_fias_id": {
           "type": "string"
         },
+        "planning_structure_fias_id": {
+          "type": "string"
+        },
         "street_fias_id": {
           "type": "string"
         },
-        "planning_structure_fias_id": {
+        "region": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "city_district": {
+          "type": "string"
+        },
+        "settlement": {
+          "type": "string"
+        },
+        "planning_structure": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "region_type_full": {
+          "type": "string"
+        },
+        "area_type_full": {
+          "type": "string"
+        },
+        "city_type_full": {
+          "type": "string"
+        },
+        "city_district_type_full": {
+          "type": "string"
+        },
+        "settlement_type_full": {
+          "type": "string"
+        },
+        "planning_structure_type_full": {
+          "type": "string"
+        },
+        "street_type_full": {
           "type": "string"
         }
       },

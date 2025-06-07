@@ -9,7 +9,10 @@ import type { CompletedConfig, Config, Schema } from 'ts-json-schema-generator';
 import { ExtendedAnnotationsReader } from 'ts-json-schema-generator/dist/src/AnnotationsReader/ExtendedAnnotationsReader';
 
 import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs';
-import { ExtendedAnnotationsReader_getAnnotations } from './ts-json-schema-generator-patches';
+import {
+  addSpreadSupport,
+  ExtendedAnnotationsReader_getAnnotations,
+} from './ts-json-schema-generator-patches';
 import { removeUnusedGenerics } from './removeUnusedGenerics';
 import { traverseSchemaObjects } from './schemaHelpers';
 import { log } from 'console';
@@ -46,7 +49,12 @@ export const tsToSchema = (generatorConfig: GeneratorConfig): Schema => {
   }
 
   const program = createProgram(config);
-  const parser = createParser(program, config);
+  const parser = createParser(
+    program,
+    config,
+    // add augmentor callback to support SpreadElement until ts-json-schema-generator/pull/2269 is merged
+    (chain) => addSpreadSupport(chain, program.getTypeChecker()),
+  );
   const formatter = createFormatter(config);
   const generator = new SchemaGenerator(program, parser, formatter, config);
   const schema = generator.createSchema(config.type);

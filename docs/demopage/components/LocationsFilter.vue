@@ -46,7 +46,7 @@ const restrictionGroupsLabels = computed(() => {
 });
 
 const restrictionsGroups = computed(() => {
-  let options: Record<string, (keyof LocationRestriction)[]> = {
+  let options: Record<string, readonly (keyof LocationRestriction)[]> = {
     [restrictionGroupsLabels.value.KLADR]: KLADR_ID_RESTRICTION_TYPES,
   };
 
