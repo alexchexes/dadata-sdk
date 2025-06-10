@@ -67,16 +67,16 @@ List of standartization types on Dadata website: https://dadata.ru/api/clean/
 
 Base URL: https://cleaner.dadata.ru/api/v1/clean
 
-| Standartization type                                        | API URL                                                               |
-| ----------------------------------------------------------- | --------------------------------------------------------------------- |
-| [Address](https://dadata.ru/api/clean/address/)             | [`clean/address`](https://cleaner.dadata.ru/api/v1/clean/address)     |
-| [Name](https://dadata.ru/api/clean/name/)                   | [`clean/name`](https://cleaner.dadata.ru/api/v1/clean/name)           |
-| [Email](https://dadata.ru/api/clean/email/)                 | [`clean/email`](https://cleaner.dadata.ru/api/v1/clean/email)         |
-| [Phones](https://dadata.ru/api/clean/phone/)                | [`clean/phone`](https://cleaner.dadata.ru/api/v1/clean/phone)         |
-| [Passport check](https://dadata.ru/api/clean/passport/)     | [`clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport)   |
-| [Dates](https://dadata.ru/api/clean/birthdate/)             | [`clean/birthdate`](https://cleaner.dadata.ru/api/v1/clean/birthdate) |
-| [Car brands & models](https://dadata.ru/api/clean/vehicle/) | [`clean/vehicle`](https://cleaner.dadata.ru/api/v1/clean/vehicle)     |
-| [Combined records](https://dadata.ru/api/clean/record/)     | [`clean`](https://cleaner.dadata.ru/api/v1/clean)                     |
+| Standartization type                                      | API URL                                                               |
+| --------------------------------------------------------- | --------------------------------------------------------------------- |
+| [Address](https://dadata.ru/api/clean/address/)           | [`clean/address`](https://cleaner.dadata.ru/api/v1/clean/address)     |
+| [Name](https://dadata.ru/api/clean/name/)                 | [`clean/name`](https://cleaner.dadata.ru/api/v1/clean/name)           |
+| [Email](https://dadata.ru/api/clean/email/)               | [`clean/email`](https://cleaner.dadata.ru/api/v1/clean/email)         |
+| [Phones](https://dadata.ru/api/clean/phone/)              | [`clean/phone`](https://cleaner.dadata.ru/api/v1/clean/phone)         |
+| [Passport check](https://dadata.ru/api/clean/passport/)   | [`clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport)   |
+| [Dates](https://dadata.ru/api/clean/birthdate/)           | [`clean/birthdate`](https://cleaner.dadata.ru/api/v1/clean/birthdate) |
+| [Car brand & model](https://dadata.ru/api/clean/vehicle/) | [`clean/vehicle`](https://cleaner.dadata.ru/api/v1/clean/vehicle)     |
+| [Combined records](https://dadata.ru/api/clean/record/)   | [`clean`](https://cleaner.dadata.ru/api/v1/clean)                     |
 
 ### Other APIs
 
@@ -186,10 +186,11 @@ Base URL: https://cleaner.dadata.ru/api/v1/clean
 
 ### Postal unit
 
-|                                                           |                                                                                                                                                  |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Suggestions](https://dadata.ru/api/suggest/postal_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit)   |
-| [Find by ID](https://dadata.ru/api/suggest/postal_unit/)  | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit) |
+|                                                              |                                                                                                                                                    |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Suggestions](https://dadata.ru/api/suggest/postal_unit/)    | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit)     |
+| [Find by ID](https://dadata.ru/api/suggest/postal_unit/)     | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit)   |
+| [By coordinates](https://dadata.ru/api/suggest/postal_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit) |
 
 ### Tax inspection unit
 
@@ -225,7 +226,7 @@ Base URL: https://cleaner.dadata.ru/api/v1/clean
 | [Suggestions](https://dadata.ru/api/suggest/car_brand/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/car_brand`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/car_brand)   |
 | [Find by ID](https://dadata.ru/api/suggest/car_brand/)  | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findById/car_brand`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/car_brand) |
 
-### Car brands & models
+### Car brand & model
 
 |                                                         |                                                                                            |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |

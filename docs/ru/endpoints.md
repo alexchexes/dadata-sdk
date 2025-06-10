@@ -186,10 +186,11 @@ outline: [2, 4]
 
 ### Почтовые отделения
 
-|                                                             |                                                                                                                                                  |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Подсказки](https://dadata.ru/api/suggest/postal_unit/)     | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit)   |
-| [Поиск по коду](https://dadata.ru/api/suggest/postal_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit) |
+|                                                              |                                                                                                                                                    |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Подсказки](https://dadata.ru/api/suggest/postal_unit/)      | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/postal_unit)     |
+| [Поиск по коду](https://dadata.ru/api/suggest/postal_unit/)  | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/postal_unit)   |
+| [По координатам](https://dadata.ru/api/suggest/postal_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit) |
 
 ### Налоговые инспекции
 
