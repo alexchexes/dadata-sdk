@@ -165,17 +165,17 @@ outline: [2, 4]
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | [Стандартизация](https://dadata.ru/api/clean/phone/) | [`cleaner.dadata.ru/api/v1/clean/phone`](https://cleaner.dadata.ru/api/v1/clean/phone) |
 
-### Проверка паспорта
-
-|                                                         |                                                                                              |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| [Стандартизация](https://dadata.ru/api/clean/passport/) | [`cleaner.dadata.ru/api/v1/clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport) |
-
 ### Кем выдан паспорт
 
 |                                                      |                                                                                                                                          |
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | [Подсказки](https://dadata.ru/api/suggest/fms_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fms_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fms_unit) |
+
+### Проверка паспорта
+
+|                                                         |                                                                                              |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [Стандартизация](https://dadata.ru/api/clean/passport/) | [`cleaner.dadata.ru/api/v1/clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport) |
 
 ### Даты
 

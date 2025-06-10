@@ -165,17 +165,17 @@ Base URL: https://cleaner.dadata.ru/api/v1/clean
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | [Standartization](https://dadata.ru/api/clean/phone/) | [`cleaner.dadata.ru/api/v1/clean/phone`](https://cleaner.dadata.ru/api/v1/clean/phone) |
 
-### Passport check
-
-|                                                          |                                                                                              |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| [Standartization](https://dadata.ru/api/clean/passport/) | [`cleaner.dadata.ru/api/v1/clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport) |
-
 ### FMS unit
 
 |                                                        |                                                                                                                                          |
 | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | [Suggestions](https://dadata.ru/api/suggest/fms_unit/) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fms_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fms_unit) |
+
+### Passport check
+
+|                                                          |                                                                                              |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [Standartization](https://dadata.ru/api/clean/passport/) | [`cleaner.dadata.ru/api/v1/clean/passport`](https://cleaner.dadata.ru/api/v1/clean/passport) |
 
 ### Dates
 
