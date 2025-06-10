@@ -80,12 +80,13 @@ Base URL: https://cleaner.dadata.ru/api/v1/clean
 
 ### Other APIs
 
-| API service                                                      | <span title="Docs on Dadata's Confluence resource">Docs</span>            | API URL                                                                                                                                          |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Address by coordinates](https://dadata.ru/api/geolocate/)       | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=808583277) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address)       |
-| [City by IP address](https://dadata.ru/api/iplocate/)            | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address)         |
-| [Affilated companies](https://dadata.ru/api/find-affiliated/)    | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=978026645) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findAffiliated/party`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findAffiliated/party) |
-| [Company by email](https://dadata.ru/api/find-company/by-email/) |                                                                           | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findByEmail/company`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findByEmail/company)   |
+| API service                                                              | <span title="Docs on Dadata's Confluence resource">Docs</span>            | API URL                                                                                                                                            |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Address by coordinates](https://dadata.ru/api/geolocate/)               | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=808583277) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address)         |
+| [City by IP address](https://dadata.ru/api/iplocate/)                    | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address)           |
+| [Postal unit by coordinates](https://dadata.ru/api/suggest/postal_unit/) |                                                                           | [`suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/postal_unit) |
+| [Affilated companies](https://dadata.ru/api/find-affiliated/)            | [🔗](https://confluence.hflabs.ru/pages/viewpage.action?pageId=978026645) | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findAffiliated/party`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findAffiliated/party)   |
+| [Company by email](https://dadata.ru/api/find-company/by-email/)         |                                                                           | [`suggestions.dadata.ru/suggestions/api/4_1/rs/findByEmail/company`](https://suggestions.dadata.ru/suggestions/api/4_1/rs/findByEmail/company)     |
 
 ### Account API
 
