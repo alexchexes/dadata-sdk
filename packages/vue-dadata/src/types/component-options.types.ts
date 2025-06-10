@@ -170,7 +170,7 @@ export interface VueDadataOptions {
   radiusFilter?: RadiusFilter;
   /**
    * Type of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`. Affects set of fields inside `suggestion.data`
-   * Default: `ADMINISTRATIVE`.
+   * @default 'ADMINISTRATIVE'
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589
    */
   division?: DivisionType;

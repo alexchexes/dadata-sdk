@@ -9,6 +9,7 @@ export interface SuggestPostalUnitPayload extends BaseSuggestPayload {
    *
    * @example { "query": "дежнева 2а" } // по адресу
    * @example { "query": "105" } // все отделения с индексом, начинающимся на 105
+   * @maxLength 300
    */
   query: string;
   /**

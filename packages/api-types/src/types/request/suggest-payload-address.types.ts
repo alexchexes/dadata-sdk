@@ -64,6 +64,7 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
   language?: Language;
   /**
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}
+   * @default 'ADMINISTRATIVE'
    */
   division?: DivisionType;
 }

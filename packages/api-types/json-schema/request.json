@@ -38,6 +38,559 @@
       "additionalProperties": false,
       "description": "Формат запроса для стандартизации составной записи с контактными данными, например:\n- ФИО + адрес + телефон + телефон\n- Дата рождения + паспорт\n- Адрес + email\n\nПример запроса:\n```\n{\n  structure: [ \"NAME\", \"ADDRESS\", \"PHONE\" ],\n  data: [\n    [\n        \"Федотов Алексей\",\n        \"Москва, Сухонская улица, 11 кв 89\",\n        \"8 916 823 3454\"\n    ]\n  ]\n}\n```\n\nИз чего состоит запрос в примере:\n- `structure` — структура записи, содержит четыре поля:\n  - `AS_IS` — оставить как есть (не стандартизировать),\n  - `NAME` — разобрать как ФИО,\n  - `ADDRESS` — разобрать как адрес,\n  - `PHONE` — разобрать как телефон.\n- `data` — составная запись из 4 полей (№, ФИО, адрес, телефон).\n\nТипы полей:\n- `ADDRESS` - Почтовый адрес\n- `PHONE` - Телефон\n- `PASSPORT` - Номер и серия паспорта\n- `NAME` - ФИО\n- `EMAIL` - Адрес электронной почты\n- `VEHICLE` - Марка и модель автомобиля\n- `AS_IS` - Скопировать поле в ответ «как есть»\n\nКоличество полей в `data` не должно быть больше указанного в `structure`.\n\nОграничения:\n- В запросе разрешено передавать только одну запись.\n- Максимальное количество полей в одной записи:\n  - 1 ФИО,\n  - 3 адреса,\n  - 3 телефона,\n  - 3 email,\n  - 1 дата рождения,\n  - 1 паспорт,\n  - 1 автомобиль\n\n@see https://dadata.ru/api/clean/record/"
     },
+    "BaseFindByIdPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "@maxLength 300"
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "FindAddressPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Любой из идентификаторов адреса:\n- ФИАС-код до дома, он же ГАР-код (`fias_id`), только для России (19.7+)\n- ФИАС-код квартиры (`flat_fias_id`), только для России (21.2+)\n- КЛАДР-код до улицы (`kladr_id`) - только для России\n- Идентификатор OpenStreetMap (`fias_id`) - для Беларуси, Казахстана и Узбекистана (20.7+)\n- Идентификатор GeoNames (`geoname_id`) - для всех остальных стран (20.7+)\n- кадастровый номер (`stead_cadnum`, `house_cadnum` или `flat_cadnum`) - только для России (22.5+)\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+\n\n@example {\"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\"} // ФИАС\n@example {\"query\": \"77000000000292300\"} // КЛАДР\n@example {\"query\": \"way:208547592\"} // OpenStreetMap\n@example {\"query\": \"1857910\", \"language\":\"en\"} // Geonames, вернуть результат на английском",
+          "examples": [
+            {
+              "query": "5f96fd6b-b3de-451f-b280-8fedf859e683"
+            },
+            {
+              "query": "77000000000292300"
+            },
+            {
+              "query": "way:208547592"
+            },
+            {
+              "query": "1857910",
+              "language": "en"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        },
+        "language": {
+          "type": "string",
+          "enum": [
+            "RU",
+            "EN"
+          ],
+          "description": "На каком языке вернуть результат (ru / en)"
+        },
+        "division": {
+          "type": "string",
+          "enum": [
+            "ADMINISTRATIVE",
+            "MUNICIPAL"
+          ],
+          "description": "Административное либо муниципальное деление\n@default 'ADMINISTRATIVE'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589",
+          "default": "ADMINISTRATIVE"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Адрес по коду\n@see https://dadata.ru/api/find-address/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944"
+    },
+    "FindFiasPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код КЛАДР или ФИАС, по которому нужно получить подсказку\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
+          "examples": [
+            {
+              "query": "5f96fd6b-b3de-451f-b280-8fedf859e683"
+            },
+            {
+              "query": "77000000000292300"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Адрес строго по ФИАС\n@see https://dadata.ru/api/find-fias/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835965"
+    },
+    "FindPartyPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "ИНН или ОГРН.\n\nТакже поддерживается поиск по КПП, однако налоговая не сообщает КПП для ~25% компаний,\nэти компании найти по КПП не получится\n\n@maxLength 300",
+          "maxLength": 300
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        },
+        "kpp": {
+          "type": "string",
+          "description": "КПП организации\n* для ~25% компаний налоговая не сообщает КПП филиалов\n\n@example { \"query\": \"7707083893\", \"kpp\": \"540602001\" }",
+          "examples": [
+            {
+              "query": "7707083893",
+              "kpp": "540602001"
+            }
+          ]
+        },
+        "branch_type": {
+          "type": "string",
+          "enum": [
+            "MAIN",
+            "BRANCH"
+          ],
+          "description": "Головная организация (`MAIN`) или филиал (`BRANCH`).\n\n@example { \"query\": \"7707083893\", \"branch_type\": \"MAIN\" }",
+          "examples": [
+            {
+              "query": "7707083893",
+              "branch_type": "MAIN"
+            }
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL"
+          ],
+          "description": "Юрлицо (`LEGAL`) или индивидуальный предприниматель (`INDIVIDUAL`)\n@example {\"query\": \"7707083893\",\"type\": \"LEGAL\"} // Юрлица\n@example {\"query\": \"784806113663\",\"type\": \"INDIVIDUAL\"} // Индивидуальные предприниматели",
+          "examples": [
+            {
+              "query": "7707083893",
+              "type": "LEGAL"
+            },
+            {
+              "query": "784806113663",
+              "type": "INDIVIDUAL"
+            }
+          ]
+        },
+        "status": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BANKRUPT",
+              "LIQUIDATED",
+              "LIQUIDATING",
+              "REORGANIZING"
+            ]
+          },
+          "description": "Ограничение по статусу организации"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Организации РФ\n@see https://dadata.ru/api/find-party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058"
+    },
+    "FindPartyByPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "УНП (учетный номер налогоплательщика)"
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Компании Беларуси\n@see https://dadata.ru/api/suggest/party_by/"
+    },
+    "FindPartyKzPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "БИН (бизнес-идентификационный номер)"
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Компании Казахстана\n@see https://dadata.ru/api/suggest/party_kz/"
+    },
+    "FindBankPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Любой из идентификаторов банка:\n- БИК,\n- SWIFT,\n- ИНН,\n- ИНН + КПП (для филиалов),\n- регистрационному номеру, присвоенному Банком России.\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+"
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        },
+        "kpp": {
+          "type": "string",
+          "description": "КПП банка\n\n* подсказки 20.3+"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Банк\n@see https://dadata.ru/api/find-bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560"
+    },
+    "FindPostalUnitPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Почтовый индекс\n@example { \"query\": \"127642\" }",
+          "examples": [
+            {
+              "query": "127642"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Отделения Почты России\n@see https://dadata.ru/api/suggest/postal_unit/"
+    },
+    "FindFnsUnitPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код инспекции или ИНН\n@example { \"query\": \"5257\" } // код инспекции\n@example { \"query\": \"7727406020\" } // ИНН",
+          "examples": [
+            {
+              "query": "5257"
+            },
+            {
+              "query": "7727406020"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Налоговые инспекции\n@see https://dadata.ru/api/suggest/fns_unit/"
+    },
+    "FindFtsUnitPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код таможни\n@example { \"query\": \"10002000\" }",
+          "examples": [
+            {
+              "query": "10002000"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Таможни\n@see https://dadata.ru/api/suggest/fts_unit/"
+    },
+    "FindRegionCourtPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код суда\n@example { \"query\": \"52MS0022\" }",
+          "examples": [
+            {
+              "query": "52MS0022"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Мировые суды\n@see https://dadata.ru/api/suggest/region_court/"
+    },
+    "FindCarBrandPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Идентификатор марки\n@example { \"query\": \"FORD\" }",
+          "examples": [
+            {
+              "query": "FORD"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Марки автомобилей\n@see https://dadata.ru/api/suggest/car_brand/"
+    },
+    "FindCountryPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
+          "examples": [
+            {
+              "query": "764"
+            },
+            {
+              "query": "TH"
+            },
+            {
+              "query": "THA"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Страны\n@see https://dadata.ru/api/suggest/country/"
+    },
+    "FindСurrencyPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Цифровой или буквенный код валюты\n@example { \"query\": \"RUB\" } // Буквенный код\n@example { \"query\": \"643\" } // Цифровой код",
+          "examples": [
+            {
+              "query": "RUB"
+            },
+            {
+              "query": "643"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Валюты\n@see https://dadata.ru/api/suggest/currency/"
+    },
+    "FindMktuPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Уникальный номер из МКТУ\n@example { \"query\": \"250173\" }",
+          "examples": [
+            {
+              "query": "250173"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Товары и услуги (МКТУ)\n@see https://dadata.ru/api/suggest/mktu/"
+    },
+    "FindOkved2Payload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код ОКВЭД\n@example { \"query\": \"51.22.3\" }",
+          "examples": [
+            {
+              "query": "51.22.3"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Виды деятельности (ОКВЭД 2)\n@see https://dadata.ru/api/suggest/okved2/"
+    },
+    "FindOkpd2Payload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код ОКПД\n@example { \"query\": \"95.23.10.133\" }",
+          "examples": [
+            {
+              "query": "95.23.10.133"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Виды продукции (ОКПД 2)\n@see https://dadata.ru/api/suggest/okpd2/"
+    },
+    "FindOktmoPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Код ОКТМО\n\nОсобенности:\n\nОригинальный справочник ОКТМО содержит 4 уровня муниципальных образований:\n- регион\n- муниципальный район,\n- муниципальное поселение,\n- населенный пункт.\n\nСправочник ОКТМО «Дадаты» содержит только 2 уровня — муниципальные районы и поселения.\nЭто объекты с 8-значным кодом ОКТМО.\nЧтобы получить муниципальное образование по 11-значному коду ОКТМО, возьмите первые 8 цифр.\n\n@example { \"query\": \"54623425\" }",
+          "examples": [
+            {
+              "query": "54623425"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "Муниципальные образования (ОКТМО)\n@see https://dadata.ru/api/suggest/oktmo/"
+    },
+    "FindDeliveryIdPayload": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "КЛАДР-код города\n@example { \"query\": \"3100400100000\" }",
+          "examples": [
+            {
+              "query": "3100400100000"
+            }
+          ]
+        },
+        "count": {
+          "type": "number",
+          "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+          "default": 10,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "description": "ID города в службах доставки\n@see https://dadata.ru/api/delivery/"
+    },
     "RadiusFilter": {
       "type": "object",
       "properties": {
@@ -150,7 +703,8 @@
             "ADMINISTRATIVE",
             "MUNICIPAL"
           ],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}"
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}\n@default 'ADMINISTRATIVE'",
+          "default": "ADMINISTRATIVE"
         }
       },
       "additionalProperties": false,
@@ -980,7 +1534,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Адрес строкой или почтовый индекс\n\n@example { \"query\": \"дежнева 2а\" } // по адресу\n@example { \"query\": \"105\" } // все отделения с индексом, начинающимся на 105",
+          "description": "Адрес строкой или почтовый индекс\n\n@example { \"query\": \"дежнева 2а\" } // по адресу\n@example { \"query\": \"105\" } // все отделения с индексом, начинающимся на 105\n@maxLength 300",
           "examples": [
             {
               "query": "дежнева 2а"
@@ -988,7 +1542,8 @@
             {
               "query": "105"
             }
-          ]
+          ],
+          "maxLength": 300
         },
         "count": {
           "type": "number",
