@@ -1642,7 +1642,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/car_brand/"
     },
     "SuggestCountryPayload": {
       "type": "object",
@@ -1663,7 +1664,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/country/"
     },
     "SuggestCurrencyPayload": {
       "type": "object",
@@ -1684,7 +1686,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/currency/"
     },
     "SuggestEmailPayload": {
       "type": "object",
@@ -1705,7 +1708,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/email/"
     },
     "SuggestFtsUnitPayload": {
       "type": "object",
@@ -1726,7 +1730,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/fts_unit/"
     },
     "SuggestOktmoPayload": {
       "type": "object",
@@ -1747,7 +1752,8 @@
       },
       "required": [
         "query"
-      ]
+      ],
+      "description": "@see https://dadata.ru/api/suggest/oktmo/"
     }
   }
 }
