@@ -97,8 +97,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       ts-json-schema-generator:
-        specifier: 2.4.1-next.1
-        version: 2.4.1-next.1
+        specifier: 2.5.0-next.1
+        version: 2.5.0-next.1
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
@@ -1855,9 +1855,9 @@ packages:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
     engines: {node: '>=14'}
 
-  commander@13.1.0:
-    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
-    engines: {node: '>=18'}
+  commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
 
   compare-versions@6.1.1:
     resolution: {integrity: sha512-4hm4VPpIecmlg59CHXnRDnqGplJFrbLG4aFEl5vl6cK1u76ws3LLvX7ikFnTDl5vo39sjWD6AaDPYodJp/NNHg==}
@@ -3389,8 +3389,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-json-schema-generator@2.4.1-next.1:
-    resolution: {integrity: sha512-NAlshPEGCeknXLBHXd3vRiyNztGoY5iTYXGu/CFNHo58WgcsVbrLOwQ/IM9YoTWvrK4M1fCoUei2bsbtygljww==}
+  ts-json-schema-generator@2.5.0-next.1:
+    resolution: {integrity: sha512-GDONBQVDMBw+VSWwbPXnpq/3GBOr6K4if08zXApip6Mxx6JBMYZC++AvLz2r0wBULEEK1LR8KSQsLjcy2B7cFg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5542,7 +5542,7 @@ snapshots:
 
   commander@10.0.1: {}
 
-  commander@13.1.0: {}
+  commander@14.0.0: {}
 
   compare-versions@6.1.1: {}
 
@@ -7012,10 +7012,10 @@ snapshots:
     dependencies:
       typescript: 5.8.3
 
-  ts-json-schema-generator@2.4.1-next.1:
+  ts-json-schema-generator@2.5.0-next.1:
     dependencies:
       '@types/json-schema': 7.0.15
-      commander: 13.1.0
+      commander: 14.0.0
       glob: 11.0.2
       json5: 2.2.3
       normalize-path: 3.0.0
