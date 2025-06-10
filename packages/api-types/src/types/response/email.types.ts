@@ -1,4 +1,6 @@
-/** @see https://dadata.ru/api/clean/email/ */
+/**
+ * @see https://dadata.ru/api/clean/email/
+ */
 export interface EmailClean {
   /** Исходный email */
   source: string;
@@ -29,7 +31,9 @@ export interface EmailClean {
   qc: 0 | 1 | 2 | 3 | 4;
 }
 
-/** @see https://dadata.ru/api/suggest/email/ */
+/**
+ * @see https://dadata.ru/api/suggest/email/
+ */
 export interface EmailSuggestion {
   /** Email одной строкой */
   value: string;
@@ -39,6 +43,9 @@ export interface EmailSuggestion {
   data: EmailSuggestionData;
 }
 
+/**
+ * @see https://dadata.ru/api/suggest/email/
+ */
 export interface EmailSuggestionData {
   /**
    * Локальная часть адреса (то, что до «собачки»)

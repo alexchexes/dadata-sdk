@@ -5339,6 +5339,473 @@
       ],
       "additionalProperties": false
     },
+    "CleanCombinedRecord": {
+      "type": "object",
+      "properties": {
+        "structure": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "PHONE",
+              "PASSPORT",
+              "NAME",
+              "EMAIL",
+              "VEHICLE"
+            ]
+          },
+          "description": "Структура записи – структура данных в `data`"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/AddressClean"
+                },
+                {
+                  "$ref": "#/definitions/PhoneClean"
+                },
+                {
+                  "$ref": "#/definitions/PassportClean"
+                },
+                {
+                  "$ref": "#/definitions/FioClean"
+                },
+                {
+                  "$ref": "#/definitions/EmailClean"
+                },
+                {
+                  "$ref": "#/definitions/VehicleClean"
+                }
+              ]
+            }
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "description": "Массив с одним элементом – массивом, внутри которого каждый элемент\n– это одна из стандартизированных частей записи. Какая именно - определяется структурой в поле `structure`."
+        }
+      },
+      "required": [
+        "structure",
+        "data"
+      ],
+      "additionalProperties": false,
+      "description": "Составная запись с контактными данными\nhttps://dadata.ru/api/clean/record/"
+    },
+    "PhoneClean": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Исходный телефон одной строкой"
+        },
+        "type": {
+          "type": "string",
+          "description": "Тип телефона\n| Тип                  | Пример           |\n| -------------------- | ---------------- |\n| `'Мобильный'`        | +7 911 243-45-68 |\n| `'Стационарный'`     | +7 495 456-55-77 |\n| `'Прямой мобильный'` | +7 495 243-45-68 |\n| `'Колл-центр'`       | 8 800 222-12-22  |\n| `'Неизвестный'`      | +7 333 1111112   |"
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Стандартизованный телефон одной строкой\n@example '+7 846 231-60-14 доб. 139'",
+          "examples": [
+            "+7 846 231-60-14 доб. 139"
+          ]
+        },
+        "country_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "7"
+          ],
+          "description": "@example '7'"
+        },
+        "city_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "846"
+          ],
+          "description": "@example '846'"
+        },
+        "number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "2316014"
+          ],
+          "description": "@example '2316014'"
+        },
+        "extension": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "139"
+          ],
+          "description": "@example '139'"
+        },
+        "provider": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "ООО \"СИПАУТНЭТ\""
+          ],
+          "description": "@example 'ООО \"СИПАУТНЭТ\"'"
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "Россия"
+          ],
+          "description": "@example 'Россия'"
+        },
+        "region": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "Самарская область"
+          ],
+          "description": "@example 'Самарская область'"
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "Самара"
+          ],
+          "description": "@example 'Самара'"
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "UTC+4"
+          ],
+          "description": "@example 'UTC+4'"
+        },
+        "qc": {
+          "type": "number",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            7
+          ],
+          "description": "Код проверки.\n\nНужно ли вручную проверить распознанный телефон\n| Код | Описание                                         | Проверить? |\n| --- | ------------------------------------------------ | ---------- |\n| `0` | Российский телефон, распознан уверенно           | Нет        |\n| `7` | Иностранный телефон, распознан уверенно          | Нет        |\n| `2` | Телефон пустой или заведомо «мусорный»           | Нет        |\n| `1` | Телефон распознан с допущениями или не распознан | Да         |\n| `3` | Обнаружено несколько телефонов, распознан первый | Да         |"
+        },
+        "qc_conflict": {
+          "type": "number",
+          "enum": [
+            0,
+            2,
+            3
+          ],
+          "description": "Признак конфликта телефона с адресом.\n\nУказал ли клиент телефон, соответствующий его адресу. Удобно для проверки уровня риска:\n- `0` - Телефон соответствует адресу\n- `2` - Города адреса и телефона отличаются\n- `3` - Регионы адреса и телефона отличаются"
+        }
+      },
+      "required": [
+        "source",
+        "type",
+        "phone",
+        "country_code",
+        "city_code",
+        "number",
+        "extension",
+        "provider",
+        "country",
+        "region",
+        "city",
+        "timezone",
+        "qc",
+        "qc_conflict"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/clean/phone/\n@see https://dadata.ru/product/phone/"
+    },
+    "PassportClean": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "examples": [
+            "4509 235857"
+          ],
+          "description": "@example '4509 235857'"
+        },
+        "series": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "45 09"
+          ],
+          "description": "@example '45 09'"
+        },
+        "number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "examples": [
+            "235857"
+          ],
+          "description": "@example '235857'"
+        },
+        "qc": {
+          "type": "number",
+          "enum": [
+            0,
+            1,
+            2,
+            10
+          ],
+          "description": "Код проверки\n\nДействует паспорт или нет, по данным Федеральной миграционной службы\n\n| Код | Описание                             | Проверить? |\n| --- | ------------------------------------ | ---------- |\n| 0   | Действующий паспорт                  | нет        |\n| 2   | Исходное значение пустое             | нет        |\n| 1   | Неправильный формат серии или номера | да         |\n| 10  | Недействительный паспорт             | да         |"
+        }
+      },
+      "required": [
+        "source",
+        "series",
+        "number",
+        "qc"
+      ],
+      "additionalProperties": false,
+      "description": "Проверка паспорта по базе ФМС/МВД\n@see https://dadata.ru/api/clean/passport/"
+    },
+    "FioClean": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Исходное ФИО одной строкой"
+        },
+        "result": {
+          "type": "string",
+          "description": "Стандартизованное ФИО одной строкой"
+        },
+        "result_genitive": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "в родительном падеже"
+        },
+        "result_dative": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "ФИО в дательном падеже"
+        },
+        "result_ablative": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "ФИО в творительном падеже"
+        },
+        "surname": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Фамилия"
+        },
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Имя"
+        },
+        "patronymic": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "description": "Отчество"
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "М",
+            "Ж",
+            "НД"
+          ],
+          "description": "Пол (Значение - Кириллицей):\n- `М` - мужской\n- `Ж` - женский\n- `НД` - не удалось однозначно определить"
+        },
+        "qc": {
+          "type": "number",
+          "enum": [
+            0,
+            1
+          ],
+          "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Проверить? | Описание |\n| --- | ---------- | ---------------------------------- |\n| 0   | Нет        | Исходное значение распознано уверенно |\n| 1   | Да         | Исходное значение распознано с допущениями или не распознано |\n| 2   | Нет        | Исходное значение пустое или заведомо «мусорное» |"
+        }
+      },
+      "required": [
+        "source",
+        "result",
+        "result_genitive",
+        "result_dative",
+        "result_ablative",
+        "surname",
+        "name",
+        "patronymic",
+        "gender",
+        "qc"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/clean/name/"
+    },
+    "EmailClean": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Исходный email"
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Стандартизованный email"
+        },
+        "local": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Локальная часть адреса (то, что до «собачки»)"
+        },
+        "domain": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Домен (то, что после «собачки»)"
+        },
+        "type": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "enum": [
+            null,
+            "PERSONAL",
+            "CORPORATE",
+            "ROLE",
+            "DISPOSABLE"
+          ],
+          "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
+        },
+        "qc": {
+          "type": "number",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "description": "Код проверки. Подходит ли email для маркетинговой рассылки:\n| Код | Нужно проверить вручную? | Описание |\n|-|-|-|\n| `0` | Нет | Корректный адрес (по общим правилам; существование не проверяется) |\n| `1` | ДА | Некорректное значение (синтаксически) |\n| `2` | Нет | Пустой или заведомо «мусорный» |\n| `3` | Нет | «Одноразовый» адрес (по списку известных доменов) |\n| `4` | ДА | Исправлены опечатки |"
+        }
+      },
+      "required": [
+        "source",
+        "email",
+        "local",
+        "domain",
+        "type",
+        "qc"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/clean/email/"
+    },
+    "VehicleClean": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Исходное значение"
+        },
+        "result": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Стандартизованное значение\n@example \"FORD FOCUS\"",
+          "examples": [
+            "FORD FOCUS"
+          ]
+        },
+        "brand": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Марка\n@example \"FORD\"",
+          "examples": [
+            "FORD"
+          ]
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Модель\n@example \"FOCUS\"",
+          "examples": [
+            "FOCUS"
+          ]
+        },
+        "qc": {
+          "type": "number",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "description": "Код проверки\n\nТребуется ли вручную проверить распознанное значение\n\n| Код | Описание                                                     | Проверить? |\n| --- | ------------------------------------------------------------ | ---------- |\n| 0   | Уверенно распознаны марка и модель                           | нет        |\n| 3   | Уверенно распознана марка, модели нет                        | нет        |\n| 2   | Исходное значение пустое или заведомо «мусорное»             | нет        |\n| 1   | Исходное значение распознано с допущениями или не распознано | да         |"
+        }
+      },
+      "required": [
+        "source",
+        "result",
+        "brand",
+        "model",
+        "qc"
+      ],
+      "additionalProperties": false,
+      "description": "стандартизация марки и модели авто\n@see https://dadata.ru/api/clean/vehicle/"
+    },
     "CountrySuggestion": {
       "type": "object",
       "properties": {
@@ -5448,70 +5915,106 @@
       ],
       "additionalProperties": false
     },
-    "EmailClean": {
+    "DateClean": {
       "type": "object",
       "properties": {
         "source": {
           "type": "string",
-          "description": "Исходный email"
+          "description": "Исходная дата"
         },
-        "email": {
+        "birthdate": {
           "type": [
             "string",
             "null"
           ],
-          "description": "Стандартизованный email"
-        },
-        "local": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Локальная часть адреса (то, что до «собачки»)"
-        },
-        "domain": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Домен (то, что после «собачки»)"
-        },
-        "type": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "enum": [
-            null,
-            "PERSONAL",
-            "CORPORATE",
-            "ROLE",
-            "DISPOSABLE"
-          ],
-          "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
+          "description": "Стандартизованная дата\n@example '24.03.2012'",
+          "examples": [
+            "24.03.2012"
+          ]
         },
         "qc": {
           "type": "number",
           "enum": [
             0,
             1,
-            2,
-            3,
-            4
+            2
           ],
-          "description": "Код проверки. Подходит ли email для маркетинговой рассылки:\n| Код | Нужно проверить вручную? | Описание |\n|-|-|-|\n| `0` | Нет | Корректный адрес (по общим правилам; существование не проверяется) |\n| `1` | ДА | Некорректное значение (синтаксически) |\n| `2` | Нет | Пустой или заведомо «мусорный» |\n| `3` | Нет | «Одноразовый» адрес (по списку известных доменов) |\n| `4` | ДА | Исправлены опечатки |"
+          "description": "Код проверки\n\nТребуется ли вручную проверить распознанное значение\n\n| Код | Описание                                                     | Проверить? |\n| --- | ------------------------------------------------------------ | ---------- |\n| 0   | Исходное значение распознано уверенно                        | нет        |\n| 2   | Исходное значение пустое или заведомо «мусорное»             | нет        |\n| 1   | Исходное значение распознано с допущениями или не распознано | да         |"
         }
       },
       "required": [
         "source",
-        "email",
-        "local",
-        "domain",
-        "type",
+        "birthdate",
         "qc"
       ],
       "additionalProperties": false,
-      "description": "@see https://dadata.ru/api/clean/email/"
+      "description": "Стандартизация дат\n@see https://dadata.ru/api/clean/birthdate/"
+    },
+    "DeliverySuggestion": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "КЛАДР-код запрошенного города"
+        },
+        "unrestricted_value": {
+          "type": "string",
+          "description": "ФИАС-код запрошенного города"
+        },
+        "data": {
+          "$ref": "#/definitions/DeliverySuggestion",
+          "description": "Подробные идентификаторы города в службах доставки"
+        }
+      },
+      "required": [
+        "value",
+        "unrestricted_value",
+        "data"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/delivery/"
+    },
+    "DeliverySuggestionData": {
+      "type": "object",
+      "properties": {
+        "kladr_id": {
+          "type": "string",
+          "description": "КЛАДР-код города"
+        },
+        "fias_id": {
+          "type": "string",
+          "description": "ФИАС-код города"
+        },
+        "boxberry_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Идентификатор города по справочнику Boxberry\n@see https://help.boxberry.ru/pages/viewpage.action?pageId=1703974"
+        },
+        "cdek_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Идентификатор города по справочнику СДЭК\n@see https://passport.cdek.ru/clients/integrator.html"
+        },
+        "dpd_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Идентификатор города по справочнику DPD\n@see https://www.dpd.ru/dpd/integration/integration.do2"
+        }
+      },
+      "required": [
+        "kladr_id",
+        "fias_id",
+        "boxberry_id",
+        "cdek_id",
+        "dpd_id"
+      ],
+      "additionalProperties": false
     },
     "EmailSuggestion": {
       "type": "object",
@@ -5574,7 +6077,8 @@
         "qc",
         "source"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/suggest/email/"
     },
     "FiasSuggestion": {
       "type": "object",
@@ -5599,92 +6103,6 @@
       ],
       "additionalProperties": false,
       "description": "Suggestion object returned from `suggest/fias` or `findById/fias` API"
-    },
-    "FioClean": {
-      "type": "object",
-      "properties": {
-        "source": {
-          "type": "string",
-          "description": "Исходное ФИО одной строкой"
-        },
-        "result": {
-          "type": "string",
-          "description": "Стандартизованное ФИО одной строкой"
-        },
-        "result_genitive": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "в родительном падеже"
-        },
-        "result_dative": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "ФИО в дательном падеже"
-        },
-        "result_ablative": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "ФИО в творительном падеже"
-        },
-        "surname": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Фамилия"
-        },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Имя"
-        },
-        "patronymic": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Отчество"
-        },
-        "gender": {
-          "type": "string",
-          "enum": [
-            "М",
-            "Ж",
-            "НД"
-          ],
-          "description": "Пол (Значение - Кириллицей):\n- `М` - мужской\n- `Ж` - женский\n- `НД` - не удалось однозначно определить"
-        },
-        "qc": {
-          "type": "number",
-          "enum": [
-            0,
-            1
-          ],
-          "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Нужно проверить вручную? | Описание |\n|-|-|-|\n| 0 | Нет | Исходное значение распознано уверенно |\n| 1 | Да  | Исходное значение распознано с допущениями или не распознано |\n| 2 | Нет | Исходное значение пустое или заведомо «мусорное» |"
-        }
-      },
-      "required": [
-        "source",
-        "result",
-        "result_genitive",
-        "result_dative",
-        "result_ablative",
-        "surname",
-        "name",
-        "patronymic",
-        "gender",
-        "qc"
-      ],
-      "additionalProperties": false,
-      "description": "@see https://dadata.ru/api/clean/name/"
     },
     "FioSuggestionData": {
       "type": "object",
@@ -5740,7 +6158,8 @@
         "qc",
         "source"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/suggest/name"
     },
     "FioSuggestion": {
       "type": "object",
@@ -5788,7 +6207,7 @@
         "data"
       ],
       "additionalProperties": false,
-      "description": "@see https://dadata.ru/api/suggest/fms_unit/"
+      "description": "Кем выдан паспорт\n@see https://dadata.ru/api/suggest/fms_unit/"
     },
     "FmsUnitSuggestionData": {
       "type": "object",

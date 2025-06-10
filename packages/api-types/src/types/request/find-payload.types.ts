@@ -316,7 +316,7 @@ export interface FindOktmoPayload extends BaseFindByIdPayload {
  * ID города в службах доставки
  * @see https://dadata.ru/api/delivery/
  */
-export interface FindDeliveryIdPayload extends BaseFindByIdPayload {
+export interface FindDeliveryPayload extends BaseFindByIdPayload {
   /**
    * КЛАДР-код города
    * @example { "query": "3100400100000" }

@@ -1,6 +1,8 @@
 import type { FioGenders } from '../common.types';
 
-/** @see https://dadata.ru/api/clean/name/ */
+/**
+ * @see https://dadata.ru/api/clean/name/
+ */
 export interface FioClean {
   /** Исходное ФИО одной строкой */
   source: string;
@@ -29,15 +31,18 @@ export interface FioClean {
    * Код проверки {@link https://dadata.ru/api/clean/name/#qc}
    *
    * Требуется ли вручную проверить распознанное значение:
-   * | Код | Нужно проверить вручную? | Описание |
-   * |-|-|-|
-   * | 0 | Нет | Исходное значение распознано уверенно |
-   * | 1 | Да  | Исходное значение распознано с допущениями или не распознано |
-   * | 2 | Нет | Исходное значение пустое или заведомо «мусорное» |
+   * | Код | Проверить? | Описание |
+   * | --- | ---------- | ---------------------------------- |
+   * | 0   | Нет        | Исходное значение распознано уверенно |
+   * | 1   | Да         | Исходное значение распознано с допущениями или не распознано |
+   * | 2   | Нет        | Исходное значение пустое или заведомо «мусорное» |
    */
   qc: 0 | 1;
 }
 
+/**
+ * @see https://dadata.ru/api/suggest/name
+ */
 export interface FioSuggestionData {
   /** Фамилия */
   surname: null | string;
@@ -62,7 +67,9 @@ export interface FioSuggestionData {
   source: null;
 }
 
-/** @see https://dadata.ru/api/suggest/name */
+/**
+ * @see https://dadata.ru/api/suggest/name
+ */
 export interface FioSuggestion {
   /** ФИО одной строкой */
   value: string;

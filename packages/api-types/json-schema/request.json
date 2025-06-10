@@ -566,7 +566,7 @@
       "additionalProperties": false,
       "description": "Муниципальные образования (ОКТМО)\n@see https://dadata.ru/api/suggest/oktmo/"
     },
-    "FindDeliveryIdPayload": {
+    "FindDeliveryPayload": {
       "type": "object",
       "properties": {
         "query": {

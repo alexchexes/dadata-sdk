@@ -1,6 +1,9 @@
 import type { FmsUnitType } from '../common.types';
 
-/** @see https://dadata.ru/api/suggest/fms_unit/ */
+/**
+ * Кем выдан паспорт
+ * @see https://dadata.ru/api/suggest/fms_unit/
+ */
 export interface FmsUnitSuggestion {
   /**
    * Название подразделения одной строкой (как показывается в списке подсказок)
