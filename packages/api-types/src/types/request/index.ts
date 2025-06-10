@@ -1,3 +1,4 @@
+export * from './clean-payload.types';
 export * from './endpoints.types';
 export * from './suggest-payload-address.types';
 export * from './suggest-payload-bank.types';

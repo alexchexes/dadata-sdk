@@ -5,6 +5,13 @@ import type { BaseSuggestPayload } from './suggest-payload.types';
  */
 export interface SuggestPostalUnitPayload extends BaseSuggestPayload {
   /**
+   * Адрес строкой или почтовый индекс
+   *
+   * @example { "query": "дежнева 2а" } // по адресу
+   * @example { "query": "105" } // все отделения с индексом, начинающимся на 105
+   */
+  query: string;
+  /**
    * Фильтрация почтовых отделений
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */

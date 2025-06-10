@@ -1,6 +1,43 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "CleanCombinedPayload": {
+      "type": "object",
+      "properties": {
+        "structure": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "PHONE",
+              "PASSPORT",
+              "NAME",
+              "EMAIL",
+              "VEHICLE",
+              "AS_IS"
+            ]
+          }
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "structure",
+        "data"
+      ],
+      "additionalProperties": false,
+      "description": "Формат запроса для стандартизации составной записи с контактными данными, например:\n- ФИО + адрес + телефон + телефон\n- Дата рождения + паспорт\n- Адрес + email\n\nПример запроса:\n```\n{\n  structure: [ \"NAME\", \"ADDRESS\", \"PHONE\" ],\n  data: [\n    [\n        \"Федотов Алексей\",\n        \"Москва, Сухонская улица, 11 кв 89\",\n        \"8 916 823 3454\"\n    ]\n  ]\n}\n```\n\nИз чего состоит запрос в примере:\n- `structure` — структура записи, содержит четыре поля:\n  - `AS_IS` — оставить как есть (не стандартизировать),\n  - `NAME` — разобрать как ФИО,\n  - `ADDRESS` — разобрать как адрес,\n  - `PHONE` — разобрать как телефон.\n- `data` — составная запись из 4 полей (№, ФИО, адрес, телефон).\n\nТипы полей:\n- `ADDRESS` - Почтовый адрес\n- `PHONE` - Телефон\n- `PASSPORT` - Номер и серия паспорта\n- `NAME` - ФИО\n- `EMAIL` - Адрес электронной почты\n- `VEHICLE` - Марка и модель автомобиля\n- `AS_IS` - Скопировать поле в ответ «как есть»\n\nКоличество полей в `data` не должно быть больше указанного в `structure`.\n\nОграничения:\n- В запросе разрешено передавать только одну запись.\n- Максимальное количество полей в одной записи:\n  - 1 ФИО,\n  - 3 адреса,\n  - 3 телефона,\n  - 3 email,\n  - 1 дата рождения,\n  - 1 паспорт,\n  - 1 автомобиль\n\n@see https://dadata.ru/api/clean/record/"
+    },
     "RadiusFilter": {
       "type": "object",
       "properties": {
@@ -872,7 +909,7 @@
             "LEGAL",
             "INDIVIDUAL"
           ],
-          "description": "Ограничение по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+          "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
         },
         "status": {
           "type": "array",
@@ -886,21 +923,43 @@
               "REORGANIZING"
             ]
           },
-          "description": "Ограничение по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+          "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+        },
+        "branch_type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "MAIN",
+                "BRANCH"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "MAIN",
+                  "BRANCH"
+                ]
+              }
+            }
+          ],
+          "description": "Фильтр по типу филиала\n- `MAIN` - искать только по головным организациям\n- `BRANCH` - искать только по филиалам"
         },
         "okved": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Ограничение по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "locations": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/KladrIdFilter"
           },
-          "description": "Ограничение по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+          "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
         },
         "locations_boost": {
           "type": "array",
@@ -921,8 +980,15 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Query string\n@maxLength 300",
-          "maxLength": 300
+          "description": "Адрес строкой или почтовый индекс\n\n@example { \"query\": \"дежнева 2а\" } // по адресу\n@example { \"query\": \"105\" } // все отделения с индексом, начинающимся на 105",
+          "examples": [
+            {
+              "query": "дежнева 2а"
+            },
+            {
+              "query": "105"
+            }
+          ]
         },
         "count": {
           "type": "number",
@@ -939,10 +1005,10 @@
           "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": [
         "query"
       ],
+      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/postal_unit/"
     },
     "SuggestPostalUnitFilter": {
