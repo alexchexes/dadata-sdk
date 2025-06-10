@@ -87,6 +87,7 @@ const suggestion = ref(undefined);
 | ------------ | ----------------------------------------------------------------------------------------------------------- | ---------------------- | ------- |
 | entityType   | Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions)                     | `string`\|`string[]`   |         |
 | entityStatus | Organization or bank status (for `party`, `party_by` and `bank` suggestions)                                | `string`\|`string[]`   |         |
+| branchType   | Branch type filter (for `party` suggestions) `MAIN` or `BRANCH`                                             | `string`\|`string[]`   |         |
 | okved        | OKVED code filter (for `party` suggestions). Max: `10` items                                                | `string`\|`string[]`   |         |
 | fioParts     | Filter by FIO parts (for `fio` suggestions)                                                                 | `string`\|`string[]`   |         |
 | fioGender    | Filter by gender (for `fio` suggestions)                                                                    | `string`               |         |

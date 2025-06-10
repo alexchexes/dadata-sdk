@@ -1,4 +1,4 @@
-import type { FioGenders, PartyStatus, PartyType } from '../common.types';
+import type { BranchType, FioGenders, PartyStatus, PartyType } from '../common.types';
 import type { Override } from '../helpers.types';
 import type { PartySuggestionAddressData } from './address.types';
 
@@ -265,7 +265,7 @@ export interface PartySuggestionData {
    * - `MAIN` — головная организация
    * - `BRANCH` — филиал
    */
-  branch_type?: 'MAIN' | 'BRANCH';
+  branch_type?: BranchType;
 
   /** Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации */
   address: PartySuggestionDataAddressBasic;

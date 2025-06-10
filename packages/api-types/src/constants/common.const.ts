@@ -27,6 +27,8 @@ export const PARTY_STATUSES = [
   'REORGANIZING', // нет в документации по фильтрам
 ] as const;
 
+export const BRANCH_TYPES = ['MAIN', 'BRANCH'] as const;
+
 /** {@link https://dadata.ru/api/suggest/party_by/} */
 export const PARTY_BY_STATUSES = [
   'ACTIVE',

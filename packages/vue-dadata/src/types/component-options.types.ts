@@ -27,6 +27,7 @@ import type {
   SuggestRegionCourtFilter,
   SuggestType,
   OneOrMany,
+  BranchType,
 } from '@dadata-sdk/api-types';
 
 import type { InputHTMLAttributes } from 'vue';
@@ -200,6 +201,14 @@ export interface VueDadataOptions {
    * - `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
    */
   entityStatus?: OneOrMany<PartyStatus> | OneOrMany<PartyByStatus> | OneOrMany<BankStatus>;
+  /**
+   * Branch type filter (for `party` suggestions)
+   * - `MAIN` - to search only for head offices
+   * - `BRANCH` - search only for branches
+   *
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095
+   */
+  branchType?: OneOrMany<BranchType>;
   /**
    * OKVED code filter (for `party` suggestions). Max: `10` items
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}

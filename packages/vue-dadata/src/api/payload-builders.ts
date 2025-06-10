@@ -251,6 +251,14 @@ const buildPartyPayload = (options: SuggestPartyOptions) => {
     }
   }
 
+  if (Array.isArray(options.branchType)) {
+    if (options.branchType.length) {
+      payload.branch_type = options.branchType;
+    }
+  } else if (options.branchType) {
+    payload.branch_type = options.branchType;
+  }
+
   if (options.okved) {
     const okvedArray = toArray(options.okved);
     if (okvedArray.length) {

@@ -1,4 +1,10 @@
-import type { KladrIdFilter, PartyStatus, PartyType, OneOrMany } from '@dadata-sdk/api-types';
+import type {
+  KladrIdFilter,
+  PartyStatus,
+  PartyType,
+  OneOrMany,
+  BranchType,
+} from '@dadata-sdk/api-types';
 import type { BaseSuggestOptions } from './suggest-options.types';
 
 /**
@@ -28,6 +34,15 @@ export interface SuggestPartyOptions extends BaseSuggestOptions {
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
    */
   entityStatus?: OneOrMany<PartyStatus>;
+
+  /**
+   * Branch type filter (for `party` suggestions)
+   * - `MAIN` - to search only for head offices
+   * - `BRANCH` - search only for branches
+   *
+   * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095
+   */
+  branchType?: OneOrMany<BranchType>;
 
   /**
    * Ограничение по коду ОКВЭД. Максимально - 10 кодов.

@@ -110,7 +110,7 @@ export default {
     'locationsBoost:': 'Приоритет города/региона:',
     "KLADR ID or IDs, e.g. '77, 46'": "Коды КЛАДР, напр. '77, 46'",
     // Filters examples
-    'locationsFilter examples:': 'Примеры фильтров:',
+    'locationsFilter examples:': 'Примеры гео-фильтров:',
     'Show': 'Показать',
     'Hide': 'Скрыть',
     'Without restrictions': 'Без фильтров',
@@ -127,7 +127,7 @@ export default {
     'Country and region': 'Страна и регион',
     'Allow any country': 'Любые страны',
     // Filters
-    'locationsFilter:': 'Фильтры:',
+    'locationsFilter:': 'Гео-фильтры:',
     'By name of...': 'По названию...',
     'By type': 'По типу',
     'By ISO code': 'По ISO коду',
@@ -216,8 +216,8 @@ export default {
     'gender-any': 'любой',
     //
     entityType: {
-      party: 'Тип организации:',
-      bank: 'Тип банка:',
+      'label-party': 'Тип организации:',
+      'label-bank': 'Тип банка:',
       'LEGAL': 'юр. лицо',
       'INDIVIDUAL': 'ИП',
       'any': 'любой',
@@ -260,6 +260,12 @@ export default {
         'LIQUIDATED': 'ликвидирован',
         'LIQUIDATING': 'ликвидируется',
       },
+    },
+    branchType: {
+      label: 'Тип филиала:',
+      'MAIN': 'головной офис',
+      'BRANCH': 'филиал',
+      'any': 'любой',
     },
   },
   en: {

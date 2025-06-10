@@ -6,12 +6,14 @@ import type {
   PARTY_STATUSES,
   PARTY_TYPES,
   FIO_GENDERS,
+  BRANCH_TYPES,
 } from '../constants';
 
 export type FioGenders = (typeof FIO_GENDERS)[number];
 
 export type PartyType = (typeof PARTY_TYPES)[number];
 export type PartyStatus = (typeof PARTY_STATUSES)[number];
+export type BranchType = (typeof BRANCH_TYPES)[number];
 
 export type PartyByType = (typeof PARTY_BY_TYPES)[number];
 export type PartyByStatus = (typeof PARTY_BY_STATUSES)[number];

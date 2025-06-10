@@ -16,6 +16,7 @@ import {
   BANK_TYPES,
   BASE_SUGGEST_URL,
   BOUND_TYPES,
+  BRANCH_TYPES,
   DIVISION_TYPES,
   FIO_GENDERS,
   FIO_PARTS,
@@ -231,6 +232,7 @@ const apiOptionsKeys: (keyof VueDadataOptions)[] = [
   'language',
   'entityType',
   'entityStatus',
+  'branchType',
   'okved',
   'fioParts',
   'fioGender',
@@ -664,7 +666,7 @@ const boundTypesOptionsFrom = computed(() => {
           <RadioGroup
             v-if="options.suggestType === 'party'"
             v-model="options.entityType"
-            :label="t('entityType.party', 'entityType:')"
+            :label="t('entityType.label-party', 'entityType:')"
             :options="
               Object.fromEntries(
                 [undefined, ...PARTY_TYPES].map((item) => [
@@ -678,7 +680,7 @@ const boundTypesOptionsFrom = computed(() => {
           <TogglesGroup
             v-else-if="options.suggestType === 'party_by'"
             v-model="options.entityType"
-            :label="t('entityType.party', 'entityType:')"
+            :label="t('entityType.label-party', 'entityType:')"
             :options="
               Object.fromEntries(
                 PARTY_BY_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
@@ -689,7 +691,7 @@ const boundTypesOptionsFrom = computed(() => {
           <TogglesGroup
             v-else-if="options.suggestType === 'party_kz'"
             v-model="options.entityType"
-            :label="t('entityType.party', 'entityType:')"
+            :label="t('entityType.label-party', 'entityType:')"
             :options="
               Object.fromEntries(
                 PARTY_KZ_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
@@ -700,7 +702,7 @@ const boundTypesOptionsFrom = computed(() => {
           <TogglesGroup
             v-else-if="options.suggestType === 'bank'"
             v-model="options.entityType"
-            :label="t('entityType.bank', 'entityType:')"
+            :label="t('entityType.label-bank', 'entityType:')"
             :options="
               Object.fromEntries(BANK_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
             "
@@ -735,6 +737,21 @@ const boundTypesOptionsFrom = computed(() => {
                 ]),
               )
             "
+          />
+
+          <RadioGroup
+            v-if="options.suggestType === 'party'"
+            v-model="options.branchType"
+            :label="t('branchType.label', 'branchType:')"
+            :options="
+              Object.fromEntries(
+                [undefined, ...BRANCH_TYPES].map((item) => [
+                  t(item ? `branchType.${item}` : 'branchType.any', item || 'any'),
+                  item,
+                ]),
+              )
+            "
+            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
           />
 
           <!-- 'fio' -->
