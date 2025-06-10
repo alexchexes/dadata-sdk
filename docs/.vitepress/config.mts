@@ -69,7 +69,7 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'Home', link: '/' },
-          { text: 'Examples', link: '/markdown-examples' },
+          { text: 'API endpoints', link: '/endpoints' },
           { text: 'Demo', link: '/demo' },
         ],
 
@@ -80,6 +80,9 @@ export default defineConfig({
               { text: 'Markdown Examples', link: '/markdown-examples' },
               { text: 'Runtime API Examples', link: '/api-examples' },
             ],
+          },
+          {
+            items: [{ text: 'API endpoints', link: '/endpoints' }],
           },
         ],
       },
@@ -97,19 +100,26 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'Главная', link: '/ru' },
-          { text: 'Примеры', link: '/ru/markdown-examples' },
+          { text: 'Список API', link: '/ru/endpoints' },
           { text: 'Демо', link: '/ru/demo' },
         ],
 
         sidebar: [
           {
-            text: 'Examples',
+            text: 'Примеры',
             items: [
-              { text: 'Markdown Examples', link: '/ru/markdown-examples' },
-              { text: 'Runtime API Examples', link: '/ru/api-examples' },
+              { text: 'Примеры Markdown', link: '/ru/markdown-examples' },
+              { text: 'Пример Runtime API', link: '/ru/api-examples' },
             ],
           },
+          {
+            items: [{ text: 'Список API', link: '/ru/endpoints' }],
+          },
         ],
+
+        outline: {
+          label: 'Содержание',
+        },
       },
     },
   },
