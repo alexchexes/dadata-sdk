@@ -1,60 +1,30 @@
-import {
-  createProgram,
-  createParser,
-  createFormatter,
-  SchemaGenerator,
-  DEFAULT_CONFIG,
-} from 'ts-json-schema-generator';
+import { createGenerator, DEFAULT_CONFIG } from 'ts-json-schema-generator';
 import type { CompletedConfig, Config, Schema } from 'ts-json-schema-generator';
-import { ExtendedAnnotationsReader } from 'ts-json-schema-generator/dist/src/AnnotationsReader/ExtendedAnnotationsReader';
 
 import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs';
-import { ExtendedAnnotationsReader_getAnnotations } from './ts-json-schema-generator-patches';
 import { removeUnusedGenerics } from './removeUnusedGenerics';
 import { traverseSchemaObjects } from './schemaHelpers';
 import { log } from 'console';
 import { logPanic } from './log';
+import { replaceFullDescription } from './replaceFullDescription';
 
-interface ConfigPatch {
-  /**
-   * Until https://github.com/vega/ts-json-schema-generator/pull/2224 is merged
-   * this option enables monkey-patch to add "rawJsDoc" field to the schema
-   */
-  rawJsDoc?: boolean;
-}
-interface ConfigPatched extends Config, ConfigPatch {}
-interface CompletedConfigPatched extends CompletedConfig, ConfigPatch {}
-
-interface GeneratorConfig extends ConfigPatched {
-  path: string;
-}
-
-export const tsToSchema = (generatorConfig: GeneratorConfig): Schema => {
-  const config: CompletedConfigPatched = {
+export const tsToSchema = (generatorConfig: Config): Schema => {
+  const config: CompletedConfig = {
     ...DEFAULT_CONFIG,
     tsconfig: 'tsconfig.schema-gen.json',
     type: '*',
     encodeRefs: false,
-    rawJsDoc: true,
+    fullDescription: true,
     ...generatorConfig,
   };
 
-  // Monkey-patch 'ts-json-schema-generator' until according PRs are merged
-
-  if (config.rawJsDoc) {
-    ExtendedAnnotationsReader.prototype.getAnnotations = ExtendedAnnotationsReader_getAnnotations;
-  }
-
-  const program = createProgram(config);
-  const parser = createParser(program, config);
-  const formatter = createFormatter(config);
-  const generator = new SchemaGenerator(program, parser, formatter, config);
-  const schema = generator.createSchema(config.type);
+  const schema = createGenerator(config).createSchema(config.type);
 
   return postProcessGeneratedSchema(schema);
 };
 
 function postProcessGeneratedSchema(schema: Schema) {
+  schema = replaceFullDescription(schema);
   schema = removeUnusedGenerics(schema);
   schema = inlineTopLevelNonObjectDefs(schema);
 

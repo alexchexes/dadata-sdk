@@ -97,8 +97,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       ts-json-schema-generator:
-        specifier: 2.5.0-next.1
-        version: 2.5.0-next.1
+        specifier: 2.5.0-next.2
+        version: 2.5.0-next.2
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
@@ -3389,8 +3389,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-json-schema-generator@2.5.0-next.1:
-    resolution: {integrity: sha512-GDONBQVDMBw+VSWwbPXnpq/3GBOr6K4if08zXApip6Mxx6JBMYZC++AvLz2r0wBULEEK1LR8KSQsLjcy2B7cFg==}
+  ts-json-schema-generator@2.5.0-next.2:
+    resolution: {integrity: sha512-1WcgEymfdBKrZ0AIdmJd1WoyICV1VKSprl+XLUIqVR4zSOaDBEhPq7kgQVFg/ALw6ZopDW501WJRVm8d1uJYIA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -7012,7 +7012,7 @@ snapshots:
     dependencies:
       typescript: 5.8.3
 
-  ts-json-schema-generator@2.5.0-next.1:
+  ts-json-schema-generator@2.5.0-next.2:
     dependencies:
       '@types/json-schema': 7.0.15
       commander: 14.0.0
