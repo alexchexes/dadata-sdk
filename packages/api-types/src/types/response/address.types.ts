@@ -1102,3 +1102,6 @@ export interface AddressAdminSuggestion extends BaseAddressSuggestion<AddressAdm
  * Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option
  */
 export interface AddressMunicipalSuggestion extends BaseAddressSuggestion<AddressMunicipalData> {}
+
+// About Geolocate API (https://dadata.ru/api/geolocate/)
+// DaData page says that some fields are not filled in this API method, but at least in new versions - they are

@@ -1,6 +1,7 @@
 import type { BranchType, FioGenders, PartyStatus, PartyType } from '../common.types';
 import type { Override } from '../helpers.types';
 import type { PartySuggestionAddressData } from './address.types';
+import type { EmailSuggestionData } from './email.types';
 
 /**
  * Generic suggestion object returned from 'suggest/party' or 'findById/party' APIs
@@ -34,6 +35,12 @@ export interface PartySuggestion extends BasePartySuggestion<PartySuggestionData
  * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058}
  */
 export interface PartyByIdSuggestion extends BasePartySuggestion<PartyByIdSuggestionData> {}
+
+/**
+ * Suggestion object returned from 'findAffiliated/party' API endpoint
+ * @see https://dadata.ru/api/find-affiliated/
+ */
+export interface PartyAffiliatedSuggestion extends BasePartySuggestion<PartyAffiliatedData> {}
 
 /**
  * `data.address` object returned from 'suggest/party' API
@@ -311,6 +318,22 @@ export interface PartySuggestionData {
   /** Не заполняется */
   qc: null;
 }
+
+/**
+ * @see https://dadata.ru/api/find-affiliated
+ */
+export interface PartyAffiliatedData
+  extends Override<
+    PartySuggestionData,
+    {
+      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
+      management: null;
+      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
+      opf: null;
+      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
+      name: null;
+    }
+  > {}
 
 export interface PartyAuthoritiesItem {
   /** Код гос. органа */
@@ -696,3 +719,81 @@ export interface PartyEmailInfo {
 }
 
 export type OkvedType = '2001' | '2014';
+
+/**
+ * @see https://dadata.ru/api/find-company/by-email/
+ */
+export interface PartyByEmailCompanyInfo {
+  /**
+   * Домен компании
+   * @example 'dadata.ru'
+   */
+  domain: string;
+  /**
+   * Краткое наименование компании
+   * @example 'ООО "ДЕЙТА КЬЮ"'
+   */
+  name: string;
+  /**
+   * ИНН компании
+   * @example '7721581040'
+   */
+  inn: string | null;
+  /**
+   * ОГРН компании
+   * @example '5077746329876'
+   */
+  ogrn: string | null;
+  /**
+   * Основной код ОКВЭД
+   * @example '63.11'
+   */
+  okved: string | null;
+  /**
+   * Расшифровка кода ОКВЭД
+   * @example 'Деятельность по обработке данных ... и связанная с этим деятельность'
+   */
+  okved_name: string | null;
+  /**
+   * Среднесписочная численность работников (заполнена для 65% компаний)
+   * @example 10
+   */
+  employee_count: number | null;
+  /**
+   * Доходы за год по открытой бух. отчётности (заполнены для 65% компаний)
+   * @example 204250000
+   */
+  income: number | null;
+  /**
+   * Город регистрации
+   * @example 'Москва'
+   */
+  city: string | null;
+  /**
+   * Часовой пояс
+   * @example 'UTC+3'
+   */
+  timezone: string | null;
+}
+
+/**
+ * @see https://dadata.ru/api/find-company/by-email/
+ */
+export interface PartyByEmailSuggestionData {
+  /** Подробности об имейл-адресе из запроса */
+  email: EmailSuggestionData;
+  /** Подробности об организации, если найдена (если нет - `null`) */
+  company: PartyByEmailCompanyInfo | null;
+}
+
+/**
+ * @see https://dadata.ru/api/find-company/by-email/
+ */
+export interface PartyByEmailSuggestion {
+  /** Email одной строкой */
+  value: string;
+  /** = value */
+  unrestricted_value: string;
+  /** Подробности об имейле и о компании */
+  data: PartyByEmailSuggestionData;
+}

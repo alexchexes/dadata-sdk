@@ -9451,6 +9451,433 @@
       ],
       "description": "`data.address` object returned from 'findById/party' API"
     },
+    "PartyAffiliatedSuggestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Краткое наименование организации (data.name.short_with_opf).\nЕсли краткое наименование не указано — полное наименование (data.name.full_with_opf)"
+        },
+        "unrestricted_value": {
+          "type": "string",
+          "description": "Краткое наименование организации (То же, что и value)"
+        },
+        "data": {
+          "$ref": "#/definitions/PartyAffiliatedData",
+          "description": "Подробности об организации"
+        }
+      },
+      "required": [
+        "data",
+        "unrestricted_value",
+        "value"
+      ],
+      "description": "Suggestion object returned from 'findAffiliated/party' API endpoint\n@see https://dadata.ru/api/find-affiliated/"
+    },
+    "PartyAffiliatedData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "management": {
+          "type": "null",
+          "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
+        },
+        "opf": {
+          "type": "null",
+          "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
+        },
+        "name": {
+          "type": "null",
+          "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
+        },
+        "inn": {
+          "type": "string",
+          "description": "ИНН"
+        },
+        "kpp": {
+          "type": "string",
+          "description": "КПП"
+        },
+        "kpp_largest": {
+          "type": "null",
+          "description": "Не заполняется"
+        },
+        "ogrn": {
+          "type": "string",
+          "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
+        },
+        "ogrn_date": {
+          "type": "number",
+          "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
+        },
+        "hid": {
+          "type": "string",
+          "description": "Внутренний идентификатор в Дадате"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "LEGAL",
+            "INDIVIDUAL"
+          ],
+          "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
+        },
+        "okpo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКПО"
+        },
+        "okato": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКАТО (20.9+)"
+        },
+        "oktmo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКТМО (20.9+)"
+        },
+        "okogu": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКОГУ (20.9+)"
+        },
+        "okfs": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Код ОКФС (20.9+)"
+        },
+        "okved": {
+          "type": "string",
+          "description": "Код ОКВЭД"
+        },
+        "okved_type": {
+          "type": "string",
+          "enum": [
+            "2001",
+            "2014"
+          ],
+          "description": "Версия справочника ОКВЭД (2001 или 2014)"
+        },
+        "invalid": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "enum": [
+            true,
+            null
+          ],
+          "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
+        },
+        "branch_count": {
+          "type": "number",
+          "description": "Количество филиалов (только для юрлиц)"
+        },
+        "branch_type": {
+          "type": "string",
+          "enum": [
+            "MAIN",
+            "BRANCH"
+          ],
+          "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
+        },
+        "address": {
+          "$ref": "#/definitions/PartySuggestionDataAddressBasic",
+          "description": "Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации"
+        },
+        "state": {
+          "$ref": "#/definitions/PartyStateInfo",
+          "description": "Состояние организации"
+        },
+        "fio": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/FioInfoBasic"
+            }
+          ],
+          "description": "ФИО индивидуального предпринимателя (21.3+)"
+        },
+        "employee_count": {
+          "type": "null",
+          "description": "Среднесписочная численность работников (только в «Организация по ИНН»)"
+        },
+        "okveds": {
+          "type": "null",
+          "description": "Коды ОКВЭД дополнительных видов деятельности (только в «Организация по ИНН»)"
+        },
+        "authorities": {
+          "type": "null",
+          "description": "Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН»)"
+        },
+        "citizenship": {
+          "type": "null",
+          "description": "Гражданство ИП (только в «Организация по ИНН»)"
+        },
+        "founders": {
+          "type": "null",
+          "description": "Учредители компании, только для юрлиц (только в «Организация по ИНН»)"
+        },
+        "managers": {
+          "type": "null",
+          "description": "Руководители компании, только для юрлиц (только в «Организация по ИНН»)"
+        },
+        "predecessors": {
+          "type": "null",
+          "description": "Правопредшественники компании, только для юрлиц (только в «Организация по ИНН»)"
+        },
+        "successors": {
+          "type": "null",
+          "description": "Правопреемники компании, только для юрлиц (только в «Организация по ИНН»)"
+        },
+        "capital": {
+          "type": "null",
+          "description": "Уставной капитал компании, только для юрлиц (только в «Организация по ИНН»)"
+        },
+        "finance": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/PartyFinanceInfoBasic"
+            }
+          ],
+          "description": "Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН»)"
+        },
+        "documents": {
+          "type": "null",
+          "description": "Документы и реестры (только в «Организация по ИНН»)"
+        },
+        "licenses": {
+          "type": "null",
+          "description": "Лицензии (только в «Организация по ИНН»)"
+        },
+        "phones": {
+          "type": "null",
+          "description": "Телефоны (только в «Организация по ИНН»)"
+        },
+        "emails": {
+          "type": "null",
+          "description": "Адреса эл. почты (только в «Организация по ИНН»)"
+        },
+        "source": {
+          "type": "null",
+          "description": "Не заполняется"
+        },
+        "qc": {
+          "type": "null",
+          "description": "Не заполняется"
+        }
+      },
+      "required": [
+        "address",
+        "authorities",
+        "documents",
+        "emails",
+        "employee_count",
+        "finance",
+        "hid",
+        "inn",
+        "licenses",
+        "management",
+        "name",
+        "ogrn",
+        "ogrn_date",
+        "okato",
+        "okfs",
+        "okogu",
+        "okpo",
+        "oktmo",
+        "okved",
+        "okved_type",
+        "okveds",
+        "opf",
+        "phones",
+        "qc",
+        "source",
+        "state",
+        "type"
+      ],
+      "description": "@see https://dadata.ru/api/find-affiliated"
+    },
+    "PartyByEmailCompanyInfo": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Домен компании\n@example 'dadata.ru'",
+          "examples": [
+            "dadata.ru"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Краткое наименование компании\n@example 'ООО \"ДЕЙТА КЬЮ\"'",
+          "examples": [
+            "ООО \"ДЕЙТА КЬЮ\""
+          ]
+        },
+        "inn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ИНН компании\n@example '7721581040'",
+          "examples": [
+            "7721581040"
+          ]
+        },
+        "ogrn": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ОГРН компании\n@example '5077746329876'",
+          "examples": [
+            "5077746329876"
+          ]
+        },
+        "okved": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Основной код ОКВЭД\n@example '63.11'",
+          "examples": [
+            "63.11"
+          ]
+        },
+        "okved_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Расшифровка кода ОКВЭД\n@example 'Деятельность по обработке данных ... и связанная с этим деятельность'",
+          "examples": [
+            "Деятельность по обработке данных ... и связанная с этим деятельность"
+          ]
+        },
+        "employee_count": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Среднесписочная численность работников (заполнена для 65% компаний)\n@example 10",
+          "examples": [
+            10
+          ]
+        },
+        "income": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Доходы за год по открытой бух. отчётности (заполнены для 65% компаний)\n@example 204250000",
+          "examples": [
+            204250000
+          ]
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Город регистрации\n@example 'Москва'",
+          "examples": [
+            "Москва"
+          ]
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Часовой пояс\n@example 'UTC+3'",
+          "examples": [
+            "UTC+3"
+          ]
+        }
+      },
+      "required": [
+        "domain",
+        "name",
+        "inn",
+        "ogrn",
+        "okved",
+        "okved_name",
+        "employee_count",
+        "income",
+        "city",
+        "timezone"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/find-company/by-email/"
+    },
+    "PartyByEmailSuggestionData": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/EmailSuggestionData",
+          "description": "Подробности об имейл-адресе из запроса"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/PartyByEmailCompanyInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Подробности об организации, если найдена (если нет - `null`)"
+        }
+      },
+      "required": [
+        "email",
+        "company"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/find-company/by-email/"
+    },
+    "PartyByEmailSuggestion": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Email одной строкой"
+        },
+        "unrestricted_value": {
+          "type": "string",
+          "description": "= value"
+        },
+        "data": {
+          "$ref": "#/definitions/PartyByEmailSuggestionData",
+          "description": "Подробности об имейле и о компании"
+        }
+      },
+      "required": [
+        "value",
+        "unrestricted_value",
+        "data"
+      ],
+      "additionalProperties": false,
+      "description": "@see https://dadata.ru/api/find-company/by-email/"
+    },
     "PostalUnitSuggestion": {
       "type": "object",
       "properties": {

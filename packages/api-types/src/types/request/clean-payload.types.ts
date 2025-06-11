@@ -66,7 +66,7 @@ export type BaseCleanPayload = [string];
  *
  * @see https://dadata.ru/api/clean/record/
  */
-export type CleanCombinedPayload = {
+export interface CleanCombinedPayload {
   structure: ('ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL' | 'VEHICLE' | 'AS_IS')[];
   data: [string[]];
-};
+}
