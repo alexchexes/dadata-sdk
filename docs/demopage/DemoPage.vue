@@ -902,12 +902,12 @@ const boundTypesOptionsFrom = computed(() => {
 
         <pre
           v-if="showAllOptions"
-          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
+          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap"
         ><b>{{t('Current component options:')}} </b> {{ isTokenProvided ? options : {...options, token: TOKEN_PLACEHOLDER} }}</pre>
 
         <pre
           v-if="showBuiltPayload"
-          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px]"
+          class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap"
         ><b>{{t('Final payload:')}} </b>{{ builtPayload }}</pre>
 
         <!-- Current query string -->
@@ -1017,7 +1017,7 @@ const boundTypesOptionsFrom = computed(() => {
           </button>
         </div>
 
-        <div class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
+        <div class="min-h-96 rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
           <div class="flex justify-between">
             <span>
               {{ t('Current suggestion:') }}

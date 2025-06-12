@@ -34,7 +34,7 @@ export default defineConfig({
 
   // <meta name="description" ...>
   description:
-    'Unofficial DaData (dadata.ru) SDK; TypeScript types, Vue component, rich API playground and docs.',
+    'Full API contract in TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -75,14 +75,20 @@ export default defineConfig({
 
         sidebar: [
           {
-            text: 'Examples',
             items: [
-              { text: 'Markdown Examples', link: '/markdown-examples' },
-              { text: 'Runtime API Examples', link: '/api-examples' },
+              { text: 'API endpoints', link: '/endpoints' },
+              { text: 'Demo', link: '/demo' },
             ],
           },
           {
-            items: [{ text: 'API endpoints', link: '/endpoints' }],
+            text: 'External links',
+            items: [
+              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
+              {
+                text: 'JSON-schema',
+                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
+              },
+            ],
           },
         ],
       },
@@ -94,26 +100,32 @@ export default defineConfig({
 
       // <meta name="description" ...>
       description:
-        'Неофициальный DaData (dadata.ru) SDK; TypeScript types, Vue component, rich API playground and docs.',
+        'Неофициальный SDK для работы с API DaData.ru: Полное описание API в типах TypeScript, JSON-schema всех API «Дадаты», полнофункциональный компонент «подсказок» для Vue, и плейграунд чтобы тестировать подсказки в реальном времени.',
 
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Главная', link: '/ru' },
+          { text: 'Главная', link: '/ru/' },
           { text: 'Список API', link: '/ru/endpoints' },
           { text: 'Демо', link: '/ru/demo' },
         ],
 
         sidebar: [
           {
-            text: 'Примеры',
             items: [
-              { text: 'Примеры Markdown', link: '/ru/markdown-examples' },
-              { text: 'Пример Runtime API', link: '/ru/api-examples' },
+              { text: 'Список API «Дадаты»', link: '/ru/endpoints' },
+              { text: 'Демо', link: '/ru/demo' },
             ],
           },
           {
-            items: [{ text: 'Список API', link: '/ru/endpoints' }],
+            text: 'Внешние ссылки',
+            items: [
+              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
+              {
+                text: 'JSON-schema',
+                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
+              },
+            ],
           },
         ],
 

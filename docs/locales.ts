@@ -8,7 +8,7 @@ export default {
     // Main area
     // --------------------------
 
-    'Show live snippet': 'Интерактивный пример',
+    'Show live snippet': 'Интерактивный код',
     'Show all options': 'Показать все опции',
     'Show payload': 'Тело API запроса',
 
@@ -40,8 +40,8 @@ export default {
     'clearOnChange': 'Сброс при изменениях в поле...',
     'significant': 'при значительных',
     'any': 'при любых',
-    'selectOnBlur': 'Выбрать 1-ю при потере фокуса',
-    'selectOnEnter': 'Выбрать 1-ю по нажатию Enter',
+    'selectOnBlur': 'Выбирать 1-ю при потере фокуса',
+    'selectOnEnter': 'Выбирать 1-ю по нажатию Enter',
     'enrichOnSelect': 'Запрашивать доп. данные',
     'addSpace': 'Добавлять пробел',
     'continueSelecting': 'Не убирать список',

@@ -4,24 +4,24 @@ layout: home
 
 hero:
   name: 'DaData SDK'
-  text: 'Unofficial SDK for DaData API (dadata.ru)'
-  tagline: Full API contract in TypeScript and JSON schema, feature-rich Vue Component and demo app
+  text: 'Unofficial toolkit for Dadata.ru API'
+  tagline: Full API contract in TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.
   actions:
     - theme: brand
-      text: Demo App
+      text: Playground
       link: /demo
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: All Dadata API endpoints
+      link: /endpoints
     - theme: alt
-      text: Russian
+      text: In Russian
       link: /ru
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Attention!
+    details:
+      This documentation site is in an early stage of development. It may change frequently, but we’ll do our best to make it as user-friendly as possible.
+      <br>
+      Click here to go to GitHub if you’d like to contribute.
+    link: https://github.com/alexchexes/dadata-sdk
 ---

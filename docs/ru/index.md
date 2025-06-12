@@ -4,24 +4,24 @@ layout: home
 
 hero:
   name: 'DaData SDK'
-  text: 'Неофициальный SDK для DaData API (dadata.ru)'
-  tagline: Полное описание API в TypeScript типах и JSON schema. Полнофункциональный компонент для Vue + демо песочница
+  text: 'Неофициальный набор инструментов для работы с API DaData.ru'
+  tagline: Полное описание API в типах TypeScript, JSON-schema всех API «Дадаты», полнофункциональный компонент «подсказок» для Vue, и плейграунд чтобы тестировать подсказки в реальном времени.
   actions:
     - theme: brand
-      text: Демо
+      text: Плейграунд
       link: /ru/demo
     - theme: alt
-      text: API Examples
-      link: /ru/api-examples
+      text: Список API «Дадаты»
+      link: /ru/endpoints
     - theme: alt
       text: English
       link: /
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Внимание!
+    details:
+      Эта документация находится на ранней стадии разработки. Сайт может часто меняться, но мы постараемся сделать его как можно более удобным.
+      <br>
+      Нажмите здесь, чтобы перейти на GitHub, если хотите помочь.
+    link: https://github.com/alexchexes/dadata-sdk
 ---
