@@ -5,7 +5,7 @@ import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs';
 import { removeUnusedGenerics } from './removeUnusedGenerics';
 import { traverseSchemaObjects } from './schemaHelpers';
 import { log } from 'console';
-import { logPanic } from './log';
+import { logPanic, logWarn } from './log';
 import { replaceFullDescription } from './replaceFullDescription';
 import { allowAdditionalProperties } from './allowAdditionalProperties';
 
@@ -46,13 +46,17 @@ function checkForWarnings(schema: Schema) {
       const addPropsCount = Object.keys(node.additionalProperties || {}).length;
 
       if (!propsCount && !addPropsCount) {
-        logPanic('Found "type": "object", but no properties were found:');
+        logPanic(
+          'Found "type": "object", but no properties were found. This is likely unintended:',
+        );
         log(node);
       }
 
       // 2. Warn if there's object that is not in top-level (definitions)
       if (level > 2) {
-        logPanic('Found an inlined object. Define it as a separate exported interface:');
+        logWarn(
+          "Found an inlined object. It's better to define it as a separate exported interface:",
+        );
         log(node);
       }
     }
