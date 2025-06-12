@@ -16,7 +16,6 @@
         }
       },
       "required": ["structure", "data"],
-      "additionalProperties": false,
       "description": "Формат запроса для стандартизации составной записи с контактными данными, например:\n- ФИО + адрес + телефон + телефон\n- Дата рождения + паспорт\n- Адрес + email\n\nПример запроса:\n```\n{\n  structure: [ \"NAME\", \"ADDRESS\", \"PHONE\" ],\n  data: [\n    [\n        \"Федотов Алексей\",\n        \"Москва, Сухонская улица, 11 кв 89\",\n        \"8 916 823 3454\"\n    ]\n  ]\n}\n```\n\nИз чего состоит запрос в примере:\n- `structure` — структура записи, содержит четыре поля:\n  - `AS_IS` — оставить как есть (не стандартизировать),\n  - `NAME` — разобрать как ФИО,\n  - `ADDRESS` — разобрать как адрес,\n  - `PHONE` — разобрать как телефон.\n- `data` — составная запись из 4 полей (№, ФИО, адрес, телефон).\n\nТипы полей:\n- `ADDRESS` - Почтовый адрес\n- `PHONE` - Телефон\n- `PASSPORT` - Номер и серия паспорта\n- `NAME` - ФИО\n- `EMAIL` - Адрес электронной почты\n- `VEHICLE` - Марка и модель автомобиля\n- `AS_IS` - Скопировать поле в ответ «как есть»\n\nКоличество полей в `data` не должно быть больше указанного в `structure`.\n\nОграничения:\n- В запросе разрешено передавать только одну запись.\n- Максимальное количество полей в одной записи:\n  - 1 ФИО,\n  - 3 адреса,\n  - 3 телефона,\n  - 3 email,\n  - 1 дата рождения,\n  - 1 паспорт,\n  - 1 автомобиль\n\n@see https://dadata.ru/api/clean/record/"
     },
     "FindAffiliatedPayload": {
@@ -41,7 +40,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "https://dadata.ru/api/find-affiliated/"
     },
     "FindPartyByEmailPayload": {
@@ -54,7 +52,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/find-company/by-email/"
     },
     "BaseFindByIdPayload": {
@@ -68,8 +65,7 @@
           "maximum": 20
         }
       },
-      "required": ["query"],
-      "additionalProperties": false
+      "required": ["query"]
     },
     "FindAddressPayload": {
       "type": "object",
@@ -103,7 +99,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Адрес по коду\n@see https://dadata.ru/api/find-address/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944"
     },
     "FindFiasPayload": {
@@ -122,7 +117,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Адрес строго по ФИАС\n@see https://dadata.ru/api/find-fias/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835965"
     },
     "FindPartyPayload": {
@@ -166,7 +160,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Организации РФ\n@see https://dadata.ru/api/find-party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058"
     },
     "FindPartyByPayload": {
@@ -181,7 +174,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Компании Беларуси\n@see https://dadata.ru/api/suggest/party_by/"
     },
     "FindPartyKzPayload": {
@@ -196,7 +188,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Компании Казахстана\n@see https://dadata.ru/api/suggest/party_kz/"
     },
     "FindBankPayload": {
@@ -215,7 +206,6 @@
         "kpp": { "type": "string", "description": "КПП банка\n\n* подсказки 20.3+" }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Банк\n@see https://dadata.ru/api/find-bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560"
     },
     "FindPostalUnitPayload": {
@@ -234,7 +224,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Отделения Почты России\n@see https://dadata.ru/api/suggest/postal_unit/"
     },
     "FindFnsUnitPayload": {
@@ -253,7 +242,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Налоговые инспекции\n@see https://dadata.ru/api/suggest/fns_unit/"
     },
     "FindFtsUnitPayload": {
@@ -272,7 +260,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Таможни\n@see https://dadata.ru/api/suggest/fts_unit/"
     },
     "FindRegionCourtPayload": {
@@ -291,7 +278,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Мировые суды\n@see https://dadata.ru/api/suggest/region_court/"
     },
     "FindCarBrandPayload": {
@@ -310,7 +296,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Марки автомобилей\n@see https://dadata.ru/api/suggest/car_brand/"
     },
     "FindCountryPayload": {
@@ -329,7 +314,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Страны\n@see https://dadata.ru/api/suggest/country/"
     },
     "FindСurrencyPayload": {
@@ -348,7 +332,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Валюты\n@see https://dadata.ru/api/suggest/currency/"
     },
     "FindMktuPayload": {
@@ -367,7 +350,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Товары и услуги (МКТУ)\n@see https://dadata.ru/api/suggest/mktu/"
     },
     "FindOkved2Payload": {
@@ -386,7 +368,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Виды деятельности (ОКВЭД 2)\n@see https://dadata.ru/api/suggest/okved2/"
     },
     "FindOkpd2Payload": {
@@ -405,7 +386,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Виды продукции (ОКПД 2)\n@see https://dadata.ru/api/suggest/okpd2/"
     },
     "FindOktmoPayload": {
@@ -424,7 +404,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "Муниципальные образования (ОКТМО)\n@see https://dadata.ru/api/suggest/oktmo/"
     },
     "FindDeliveryPayload": {
@@ -443,7 +422,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "ID города в службах доставки\n@see https://dadata.ru/api/delivery/"
     },
     "GeolocateAddressPayload": {
@@ -485,7 +463,6 @@
         }
       },
       "required": ["lat", "lon"],
-      "additionalProperties": false,
       "description": "https://dadata.ru/api/geolocate/"
     },
     "GeolocatePostalUnitPayload": {
@@ -507,7 +484,6 @@
         }
       },
       "required": ["lat", "lon"],
-      "additionalProperties": false,
       "description": "https://dadata.ru/api/suggest/postal_unit/"
     },
     "IpLocatePayload": {
@@ -528,7 +504,6 @@
         }
       },
       "required": ["ip"],
-      "additionalProperties": false,
       "description": "https://dadata.ru/api/iplocate/"
     },
     "RadiusFilter": {
@@ -543,8 +518,7 @@
           "maximum": 100000
         }
       },
-      "required": ["lat", "lon", "radius_meters"],
-      "additionalProperties": false
+      "required": ["lat", "lon", "radius_meters"]
     },
     "Bound": {
       "type": "object",
@@ -554,8 +528,7 @@
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
         }
       },
-      "required": ["value"],
-      "additionalProperties": false
+      "required": ["value"]
     },
     "SuggestAddressPayload": {
       "type": "object",
@@ -609,7 +582,6 @@
           "default": "ADMINISTRATIVE"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "{@link https://dadata.ru/api/suggest/address/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}"
     },
@@ -625,14 +597,9 @@
           "default": 10
         }
       },
-      "required": ["query"],
-      "additionalProperties": false
+      "required": ["query"]
     },
-    "KladrIdFilter": {
-      "type": "object",
-      "properties": { "kladr_id": { "type": "string" } },
-      "additionalProperties": false
-    },
+    "KladrIdFilter": { "type": "object", "properties": { "kladr_id": { "type": "string" } } },
     "LocationRestriction": {
       "type": "object",
       "properties": {
@@ -661,8 +628,7 @@
         "settlement_type_full": { "type": "string" },
         "planning_structure_type_full": { "type": "string" },
         "street_type_full": { "type": "string" }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestBankPayload": {
       "type": "object",
@@ -699,7 +665,6 @@
           "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078"
     },
@@ -728,8 +693,7 @@
         "settlement_type_full": { "type": "string" },
         "planning_structure_type_full": { "type": "string" },
         "street_type_full": { "type": "string" }
-      },
-      "additionalProperties": false
+      }
     },
     "BoundFias": {
       "type": "object",
@@ -739,8 +703,7 @@
           "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
         }
       },
-      "required": ["value"],
-      "additionalProperties": false
+      "required": ["value"]
     },
     "SuggestFiasPayload": {
       "type": "object",
@@ -776,7 +739,6 @@
           "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "{@link https://dadata.ru/api/suggest/fias/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953}"
     },
@@ -802,7 +764,6 @@
           "description": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/name/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669111"
     },
@@ -823,7 +784,6 @@
           "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/fms_unit/"
     },
@@ -839,8 +799,7 @@
           "enum": ["0", "1", "2", "3"],
           "description": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestFnsUnitPayload": {
       "type": "object",
@@ -859,7 +818,6 @@
           "description": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/fns_unit/"
     },
@@ -870,8 +828,7 @@
           "type": "string",
           "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestMetroPayload": {
       "type": "object",
@@ -890,7 +847,6 @@
           "description": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:\n  `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:\n  `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/metro/"
     },
@@ -912,8 +868,7 @@
           "enum": [true, null],
           "description": "Фильтр по признаку «закрыта»\n- `true` - только закрытые\n- `null` - только открытые\n@note Документация на https://dadata.ru/api/suggest/metro/ предполагает здесь `true/false`,\nоднако фактически API использует `true/null`."
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestMktuPayload": {
       "type": "object",
@@ -932,14 +887,12 @@
           "description": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/mktu/"
     },
     "SuggestMktuFilter": {
       "type": "object",
-      "properties": { "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" } },
-      "additionalProperties": false
+      "properties": { "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" } }
     },
     "SuggestOkpd2Payload": {
       "type": "object",
@@ -958,7 +911,6 @@
           "description": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/okpd2/"
     },
@@ -966,8 +918,7 @@
       "type": "object",
       "properties": {
         "razdel": { "type": "string", "description": "Код раздела классификатора ОКПД 2 (например `'S'`)" }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestOkved2Payload": {
       "type": "object",
@@ -986,7 +937,6 @@
           "description": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/okved2/"
     },
@@ -994,8 +944,7 @@
       "type": "object",
       "properties": {
         "razdel": { "type": "string", "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)" }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestPartyByPayload": {
       "type": "object",
@@ -1014,7 +963,6 @@
           "description": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем,\nа массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно:\n`[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно:\n`[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/party_by/"
     },
@@ -1027,8 +975,7 @@
           "description": "Статус организации"
         },
         "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestPartyKzPayload": {
       "type": "object",
@@ -1047,7 +994,6 @@
           "description": "Фильтрация работает по полю `type` (тип организации)"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/party_kz/"
     },
@@ -1059,8 +1005,7 @@
           "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"],
           "description": "Тип организации"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestPartyPayload": {
       "type": "object",
@@ -1106,7 +1051,6 @@
           "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669120"
     },
@@ -1133,7 +1077,6 @@
         }
       },
       "required": ["query"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/postal_unit/"
     },
     "SuggestPostalUnitFilter": {
@@ -1148,8 +1091,7 @@
           "type": "string",
           "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestRegionCourtPayload": {
       "type": "object",
@@ -1168,7 +1110,6 @@
           "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
-      "additionalProperties": false,
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/region_court/"
     },
@@ -1179,12 +1120,10 @@
           "type": "string",
           "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "SuggestCarBrandPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {
@@ -1200,7 +1139,6 @@
     },
     "SuggestCountryPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {
@@ -1216,7 +1154,6 @@
     },
     "SuggestCurrencyPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {
@@ -1232,7 +1169,6 @@
     },
     "SuggestEmailPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {
@@ -1248,7 +1184,6 @@
     },
     "SuggestFtsUnitPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {
@@ -1264,7 +1199,6 @@
     },
     "SuggestOktmoPayload": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
         "count": {

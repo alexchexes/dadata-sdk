@@ -7,6 +7,7 @@ import { traverseSchemaObjects } from './schemaHelpers';
 import { log } from 'console';
 import { logPanic } from './log';
 import { replaceFullDescription } from './replaceFullDescription';
+import { allowAdditionalProperties } from './allowAdditionalProperties';
 
 export const tsToSchema = (generatorConfig: Config): Schema => {
   const config: CompletedConfig = {
@@ -15,6 +16,7 @@ export const tsToSchema = (generatorConfig: Config): Schema => {
     type: '*',
     encodeRefs: false,
     fullDescription: true,
+    // additionalProperties: true, // can't use this until https://github.com/vega/ts-json-schema-generator/issues/2273 resolved
     ...generatorConfig,
   };
 
@@ -27,6 +29,10 @@ function postProcessGeneratedSchema(schema: Schema) {
   schema = replaceFullDescription(schema);
   schema = removeUnusedGenerics(schema);
   schema = inlineTopLevelNonObjectDefs(schema);
+
+  // Since schemas aren't unofficial, we should allow "additionalProperties" on all types so schemas
+  // remain usable when Dadata adds new fields and we haven't updated the schemas yet
+  schema = allowAdditionalProperties(schema);
 
   checkForWarnings(schema);
   return schema;

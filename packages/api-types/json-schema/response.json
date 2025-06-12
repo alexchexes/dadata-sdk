@@ -8,8 +8,7 @@
         "line": { "type": ["null", "string"], "description": "название линии" },
         "distance": { "type": ["null", "number"], "description": "расстояние до станции в километрах" }
       },
-      "required": ["name", "line", "distance"],
-      "additionalProperties": false
+      "required": ["name", "line", "distance"]
     },
     "AddressDivisionsAdministrativeItem": {
       "type": "object",
@@ -24,8 +23,7 @@
           "description": "Название с типом, например \"р-н Академический\""
         }
       },
-      "required": ["fias_id", "kladr_id", "type", "type_full", "name", "name_with_type"],
-      "additionalProperties": false
+      "required": ["fias_id", "kladr_id", "type", "type_full", "name", "name_with_type"]
     },
     "AddressDivisionsAdministrative": {
       "type": "object",
@@ -40,8 +38,7 @@
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }]
         }
       },
-      "required": ["area", "city", "city_district", "settlement", "planning_structure"],
-      "additionalProperties": false
+      "required": ["area", "city", "city_district", "settlement", "planning_structure"]
     },
     "AddressDivisions": {
       "type": "object",
@@ -51,12 +48,10 @@
           "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
         }
       },
-      "required": ["administrative"],
-      "additionalProperties": false
+      "required": ["administrative"]
     },
     "AddressAdminData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "postal_code": {
           "type": ["null", "string"],
@@ -401,7 +396,6 @@
     },
     "AddressMunicipalData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "postal_code": {
           "type": ["null", "string"],
@@ -737,7 +731,6 @@
     },
     "AddressClean": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "source": { "type": "string", "description": "Исходный адрес одной строкой" },
         "result": { "type": "string", "description": "Стандартизированный адрес одной строкой" },
@@ -1076,7 +1069,6 @@
     },
     "FiasSuggestionData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "fias_code": {
           "type": ["null", "string"],
@@ -1296,7 +1288,6 @@
     },
     "PartySuggestionAddressData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "source": { "type": "string", "description": "Исходный адрес из ЕГРЮЛ одной строкой" },
         "qc": {
@@ -1638,7 +1629,6 @@
     },
     "BankSuggestionAddressData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "source": { "type": "string", "description": "Адрес одной строкой как в справочнике БИК" },
         "qc_complete": {
@@ -1982,7 +1972,6 @@
     },
     "AddressAdminSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -1996,7 +1985,6 @@
     },
     "AddressMunicipalSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -2010,7 +1998,6 @@
     },
     "BankSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -2070,7 +2057,6 @@
         "phones",
         "rkc"
       ],
-      "additionalProperties": false,
       "description": "`suggestions[ ]data` object returned from `suggest/bank`."
     },
     "BankNameInfo": {
@@ -2080,8 +2066,7 @@
         "full": { "type": "null", "description": "не заполняется" },
         "short": { "type": ["string", "null"], "description": "краткое наименование" }
       },
-      "required": ["payment", "full", "short"],
-      "additionalProperties": false
+      "required": ["payment", "full", "short"]
     },
     "BankOpfInfo": {
       "type": "object",
@@ -2094,8 +2079,7 @@
         "full": { "type": "null", "description": "не заполняется" },
         "short": { "type": "null", "description": "не заполняется" }
       },
-      "required": ["type", "full", "short"],
-      "additionalProperties": false
+      "required": ["type", "full", "short"]
     },
     "BankSuggestionDataAddress": {
       "type": "object",
@@ -2111,7 +2095,6 @@
         "data": { "$ref": "#/definitions/BankSuggestionAddressData", "description": "Подробности об адресе банка" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "`suggestions[ ]data.address` object returned from `suggest/bank` и `findById/bank` API"
     },
     "BankStateInfo": {
@@ -2139,12 +2122,10 @@
           "description": "Детальный статус (c декабря 2020) (часто не заполнен)\n- {@link https://github.com/hflabs/party-state/blob/master/party-state.csv}"
         }
       },
-      "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"],
-      "additionalProperties": false
+      "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"]
     },
     "BankByIdSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -2158,7 +2139,6 @@
     },
     "BankByIdSuggestionData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "cbr": {
           "anyOf": [{ "$ref": "#/definitions/BankSuggestionDataCbr" }, { "type": "null" }],
@@ -2209,7 +2189,6 @@
     },
     "BankSuggestionDataCbr": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "opf": {
           "$ref": "#/definitions/BankOpfInfoCbr",
@@ -2268,8 +2247,7 @@
         "full": { "type": "null", "description": "не заполняется" },
         "short": { "type": "null", "description": "не заполняется" }
       },
-      "required": ["type", "full", "short"],
-      "additionalProperties": false
+      "required": ["type", "full", "short"]
     },
     "BankSuggestionDataCbrAddress": {
       "type": "object",
@@ -2282,7 +2260,6 @@
         "data": { "type": "null", "description": "не заполняется для объекта адреса управления ЦБ РФ" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "`suggestions[ ]data.cbr.address` object returned from `findById/bank`."
     },
     "CarBrandSuggestion": {
@@ -2296,7 +2273,6 @@
         "data": { "$ref": "#/definitions/CarBrandSuggestionData", "description": "Подробности о марке автомобиля" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/car_brand/"
     },
     "CarBrandSuggestionData": {
@@ -2306,8 +2282,7 @@
         "name": { "type": "string", "description": "Наименование марки (латиницей)" },
         "name_ru": { "type": "string", "description": "Наименование марки на русском языке" }
       },
-      "required": ["id", "name", "name_ru"],
-      "additionalProperties": false
+      "required": ["id", "name", "name_ru"]
     },
     "CleanCombinedRecord": {
       "type": "object",
@@ -2338,7 +2313,6 @@
         }
       },
       "required": ["structure", "data"],
-      "additionalProperties": false,
       "description": "Составная запись с контактными данными\nhttps://dadata.ru/api/clean/record/"
     },
     "PhoneClean": {
@@ -2398,7 +2372,6 @@
         "qc",
         "qc_conflict"
       ],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/clean/phone/\n@see https://dadata.ru/product/phone/"
     },
     "PassportClean": {
@@ -2414,7 +2387,6 @@
         }
       },
       "required": ["source", "series", "number", "qc"],
-      "additionalProperties": false,
       "description": "Проверка паспорта по базе ФМС/МВД\n@see https://dadata.ru/api/clean/passport/"
     },
     "FioClean": {
@@ -2451,7 +2423,6 @@
         "gender",
         "qc"
       ],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/clean/name/"
     },
     "EmailClean": {
@@ -2473,7 +2444,6 @@
         }
       },
       "required": ["source", "email", "local", "domain", "type", "qc"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/clean/email/"
     },
     "VehicleClean": {
@@ -2494,7 +2464,6 @@
         }
       },
       "required": ["source", "result", "brand", "model", "qc"],
-      "additionalProperties": false,
       "description": "стандартизация марки и модели авто\n@see https://dadata.ru/api/clean/vehicle/"
     },
     "CountrySuggestion": {
@@ -2511,7 +2480,6 @@
         "data": { "$ref": "#/definitions/CountrySuggestionData", "description": "Подробные данные о стране" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/country/"
     },
     "CountrySuggestionData": {
@@ -2523,8 +2491,7 @@
         "name_short": { "type": "string", "description": "Краткое название страны, например, \"Таиланд\"" },
         "name": { "type": "string", "description": "Полное название страны. Например, \"Королевство Таиланд\"" }
       },
-      "required": ["code", "alfa2", "alfa3", "name_short", "name"],
-      "additionalProperties": false
+      "required": ["code", "alfa2", "alfa3", "name_short", "name"]
     },
     "CurrencySuggestion": {
       "type": "object",
@@ -2534,7 +2501,6 @@
         "data": { "$ref": "#/definitions/CurrencySuggestionData", "description": "Подробности о валюте" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/currency/"
     },
     "CurrencySuggestionData": {
@@ -2548,8 +2514,7 @@
           "description": "Страна, в которой валюта является официальной.\nЕсли стран несколько, они вернутся строкой через точку с запятой, например:\n`'Австралия; Кирибати; ...; Тувалу'`"
         }
       },
-      "required": ["code", "strcode", "name", "country"],
-      "additionalProperties": false
+      "required": ["code", "strcode", "name", "country"]
     },
     "DateClean": {
       "type": "object",
@@ -2567,7 +2532,6 @@
         }
       },
       "required": ["source", "birthdate", "qc"],
-      "additionalProperties": false,
       "description": "Стандартизация дат\n@see https://dadata.ru/api/clean/birthdate/"
     },
     "DeliverySuggestion": {
@@ -2581,7 +2545,6 @@
         }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/delivery/"
     },
     "DeliverySuggestionData": {
@@ -2602,8 +2565,7 @@
           "description": "Идентификатор города по справочнику DPD\n@see https://www.dpd.ru/dpd/integration/integration.do2"
         }
       },
-      "required": ["kladr_id", "fias_id", "boxberry_id", "cdek_id", "dpd_id"],
-      "additionalProperties": false
+      "required": ["kladr_id", "fias_id", "boxberry_id", "cdek_id", "dpd_id"]
     },
     "EmailSuggestion": {
       "type": "object",
@@ -2613,7 +2575,6 @@
         "data": { "$ref": "#/definitions/EmailSuggestionData", "description": "Подробности об email" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/email/"
     },
     "EmailSuggestionData": {
@@ -2629,7 +2590,6 @@
         "source": { "type": "null", "description": "Исходный email (только для Стандартизации)" }
       },
       "required": ["local", "domain", "type", "qc", "source"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/email/"
     },
     "FiasSuggestion": {
@@ -2640,7 +2600,6 @@
         "data": { "$ref": "#/definitions/FiasSuggestionData", "description": "Подробные поля адреса" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "Suggestion object returned from `suggest/fias` or `findById/fias` API"
     },
     "FioSuggestionData": {
@@ -2662,7 +2621,6 @@
         "source": { "type": "null", "description": "Не используется" }
       },
       "required": ["surname", "name", "patronymic", "gender", "qc", "source"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/name"
     },
     "FioSuggestion": {
@@ -2673,7 +2631,6 @@
         "data": { "$ref": "#/definitions/FioSuggestionData", "description": "Подробности о ФИО" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/name"
     },
     "FmsUnitSuggestion": {
@@ -2687,7 +2644,6 @@
         "data": { "$ref": "#/definitions/FmsUnitSuggestionData", "description": "Подробности о подразделении" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "Кем выдан паспорт\n@see https://dadata.ru/api/suggest/fms_unit/"
     },
     "FmsUnitSuggestionData": {
@@ -2705,8 +2661,7 @@
           "description": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции"
         }
       },
-      "required": ["code", "name", "region_code", "type"],
-      "additionalProperties": false
+      "required": ["code", "name", "region_code", "type"]
     },
     "FnsUnitSuggestion": {
       "type": "object",
@@ -2719,7 +2674,6 @@
         "data": { "$ref": "#/definitions/FnsUnitSuggestionData", "description": "Подробности об инспекции ФНС" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/fns_unit/"
     },
     "FnsUnitSuggestionData": {
@@ -2765,8 +2719,7 @@
         "parent_address",
         "parent_phone",
         "parent_comment"
-      ],
-      "additionalProperties": false
+      ]
     },
     "FtsUnitSuggestion": {
       "type": "object",
@@ -2776,7 +2729,6 @@
         "data": { "$ref": "#/definitions/FtsUnitSuggestionData", "description": "Подробности о таможенном органе" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/fts_unit/"
     },
     "FtsUnitSuggestionData": {
@@ -2794,8 +2746,7 @@
         "fax": { "type": ["string", "null"], "description": "Факс" },
         "email": { "type": ["string", "null"], "description": "Адрес электронной почты" }
       },
-      "required": ["code", "name_short", "name", "inn", "ogrn", "okpo", "osf", "address", "phone", "fax", "email"],
-      "additionalProperties": false
+      "required": ["code", "name_short", "name", "inn", "ogrn", "okpo", "osf", "address", "phone", "fax", "email"]
     },
     "MetroSuggestion": {
       "type": "object",
@@ -2805,7 +2756,6 @@
         "data": { "$ref": "#/definitions/MetroSuggestionData", "description": "Подробности о станции метро" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/metro/"
     },
     "MetroSuggestionData": {
@@ -2837,8 +2787,7 @@
         "geo_lon",
         "color",
         "is_closed"
-      ],
-      "additionalProperties": false
+      ]
     },
     "MktuSuggestion": {
       "type": "object",
@@ -2848,7 +2797,6 @@
         "data": { "$ref": "#/definitions/MktuSuggestionData", "description": "Подробности из классификатора МКТУ" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/mktu/"
     },
     "MktuSuggestionData": {
@@ -2860,8 +2808,7 @@
         "name_en": { "type": "string", "description": "Наименование на английском языке" },
         "name_fr": { "type": "string", "description": "Наименование на французском языке" }
       },
-      "required": ["class", "number", "name_ru", "name_en", "name_fr"],
-      "additionalProperties": false
+      "required": ["class", "number", "name_ru", "name_en", "name_fr"]
     },
     "Okpd2Suggestion": {
       "type": "object",
@@ -2871,7 +2818,6 @@
         "data": { "$ref": "#/definitions/Okpd2SuggestionData", "description": "Подробности из классификатора ОКПД 2" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/okpd2/"
     },
     "Okpd2SuggestionData": {
@@ -2882,8 +2828,7 @@
         "kod": { "type": "string", "description": "Код (например, \"95.23.10.133\")" },
         "name": { "type": "string", "description": "Наименование продукции или услуги" }
       },
-      "required": ["idx", "razdel", "kod", "name"],
-      "additionalProperties": false
+      "required": ["idx", "razdel", "kod", "name"]
     },
     "OktmoSuggestion": {
       "type": "object",
@@ -2893,7 +2838,6 @@
         "data": { "$ref": "#/definitions/OktmoSuggestionData", "description": "Подробности из справочника ОКТМО" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/oktmo/"
     },
     "OktmoSuggestionData": {
@@ -2915,8 +2859,7 @@
         "subarea_code": { "type": ["string", "null"], "description": "Код муниципального поселения" },
         "subarea": { "type": ["string", "null"], "description": "Название муниципального поселения" }
       },
-      "required": ["oktmo", "area_type", "area_code", "area", "subarea_type", "subarea_code", "subarea"],
-      "additionalProperties": false
+      "required": ["oktmo", "area_type", "area_code", "area", "subarea_type", "subarea_code", "subarea"]
     },
     "Okved2Suggestion": {
       "type": "object",
@@ -2929,7 +2872,6 @@
         "data": { "$ref": "#/definitions/Okved2SuggestionData", "description": "Подробности из классификатора ОКВЭД 2" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/okved2/"
     },
     "Okved2SuggestionData": {
@@ -2940,8 +2882,7 @@
         "kod": { "type": "string", "description": "Код (например, \"51.22.3\")" },
         "name": { "type": "string", "description": "Наименование вида деятельности" }
       },
-      "required": ["idx", "razdel", "kod", "name"],
-      "additionalProperties": false
+      "required": ["idx", "razdel", "kod", "name"]
     },
     "PartyBySuggestion": {
       "type": "object",
@@ -2954,7 +2895,6 @@
         "data": { "$ref": "#/definitions/PartyBySuggestionData", "description": "Подробности об организации" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "Suggestion returned from `suggest/party_by` and `findById/party_by` APIs\n@see https://dadata.ru/api/suggest/party_by"
     },
     "PartyBySuggestionData": {
@@ -3022,8 +2962,7 @@
         "address",
         "oked",
         "oked_name"
-      ],
-      "additionalProperties": false
+      ]
     },
     "PartyKzSuggestion": {
       "type": "object",
@@ -3033,7 +2972,6 @@
         "data": { "$ref": "#/definitions/PartyKzSuggestionData", "description": "Подробности об организации" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "Suggestion returned from `suggest/party_kz` and `findById/party_kz` APIs\n@see https://dadata.ru/api/suggest/party_kz/"
     },
     "PartyKzSuggestionData": {
@@ -3126,12 +3064,10 @@
         "kfs",
         "kfs_name_ru",
         "kfs_name_kz"
-      ],
-      "additionalProperties": false
+      ]
     },
     "PartySuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -3272,7 +3208,6 @@
         "source",
         "qc"
       ],
-      "additionalProperties": false,
       "description": "`suggestion[ ].data` object, returned from 'suggest/party' API"
     },
     "PartyNameInfo": {
@@ -3290,8 +3225,7 @@
         },
         "latin": { "type": ["string", "null"], "description": "Не заполняется" }
       },
-      "required": ["full_with_opf", "short_with_opf", "full", "short", "latin"],
-      "additionalProperties": false
+      "required": ["full_with_opf", "short_with_opf", "full", "short", "latin"]
     },
     "PartyOpfInfo": {
       "type": "object",
@@ -3301,8 +3235,7 @@
         "full": { "type": "string", "description": "Полное название ОПФ" },
         "short": { "type": "string", "description": "Краткое название ОПФ" }
       },
-      "required": ["code", "type", "full", "short"],
-      "additionalProperties": false
+      "required": ["code", "type", "full", "short"]
     },
     "PartyManagementInfo": {
       "type": "object",
@@ -3318,8 +3251,7 @@
           "description": "Дата вступления в должность (unix-время в миллисекундах). (24.9+)"
         }
       },
-      "required": ["name", "post", "disqualified", "start_date"],
-      "additionalProperties": false
+      "required": ["name", "post", "disqualified", "start_date"]
     },
     "PartySuggestionDataAddressBasic": {
       "type": "object",
@@ -3342,7 +3274,6 @@
         }
       },
       "required": ["value", "unrestricted_value", "invalidity", "data"],
-      "additionalProperties": false,
       "description": "`data.address` object returned from 'suggest/party' API"
     },
     "PartyStateInfo": {
@@ -3367,8 +3298,7 @@
           "description": "Детальный статус (c декабря 2020) (часто не заполнен)\n- {@link https://github.com/hflabs/party-state/blob/master/party-state.csv}"
         }
       },
-      "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"],
-      "additionalProperties": false
+      "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"]
     },
     "FioInfoBasic": {
       "type": "object",
@@ -3380,8 +3310,7 @@
         "qc": { "type": "null", "description": "Не заполняется" },
         "source": { "type": "null", "description": "Не заполняется" }
       },
-      "required": ["surname", "name", "patronymic", "gender", "qc", "source"],
-      "additionalProperties": false
+      "required": ["surname", "name", "patronymic", "gender", "qc", "source"]
     },
     "PartyFinanceInfoBasic": {
       "type": "object",
@@ -3394,12 +3323,10 @@
         "debt": { "type": "null", "description": "Недоимки по налогам (только в «Организация по ИНН»)" },
         "penalty": { "type": "null", "description": "Налоговые штрафы (только в «Организация по ИНН»)" }
       },
-      "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"],
-      "additionalProperties": false
+      "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
     },
     "PartyByIdSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -3416,7 +3343,6 @@
     },
     "PartyByIdSuggestionData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "employee_count": {
           "type": ["number", "null"],
@@ -3570,8 +3496,7 @@
         "code": { "type": "string", "description": "Код по справочнику" },
         "name": { "type": "string", "description": "Наименование по справочнику" }
       },
-      "required": ["main", "type", "code", "name"],
-      "additionalProperties": false
+      "required": ["main", "type", "code", "name"]
     },
     "PartyAuthorities": {
       "type": "object",
@@ -3581,8 +3506,7 @@
         "pf": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/PartyAuthoritiesItem" }] },
         "sif": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/PartyAuthoritiesItem" }] }
       },
-      "required": ["fts_registration", "fts_report", "pf", "sif"],
-      "additionalProperties": false
+      "required": ["fts_registration", "fts_report", "pf", "sif"]
     },
     "PartyAuthoritiesItem": {
       "type": "object",
@@ -3592,8 +3516,7 @@
         "name": { "type": "string", "description": "Наименование отделения" },
         "address": { "type": ["string", "null"], "description": "Адрес отделения одной строкой" }
       },
-      "required": ["type", "code", "name", "address"],
-      "additionalProperties": false
+      "required": ["type", "code", "name", "address"]
     },
     "PartyCitizenshipInfo": {
       "type": "object",
@@ -3601,8 +3524,7 @@
         "code": { "$ref": "#/definitions/PartyCitizenshipCode", "description": "Числовой и буквенный код страны" },
         "name": { "$ref": "#/definitions/PartyCitizenshipName", "description": "Полное и краткое название страны" }
       },
-      "required": ["code", "name"],
-      "additionalProperties": false
+      "required": ["code", "name"]
     },
     "PartyCitizenshipCode": {
       "type": "object",
@@ -3610,8 +3532,7 @@
         "numeric": { "type": "number", "description": "Числовой код страны по ОКСМ" },
         "alpha_3": { "type": "string", "description": "Трехбуквенный код страны по ОКСМ" }
       },
-      "required": ["numeric", "alpha_3"],
-      "additionalProperties": false
+      "required": ["numeric", "alpha_3"]
     },
     "PartyCitizenshipName": {
       "type": "object",
@@ -3619,8 +3540,7 @@
         "full": { "type": "string", "description": "Полное название страны" },
         "short": { "type": "string", "description": "Краткое название страны" }
       },
-      "required": ["full", "short"],
-      "additionalProperties": false
+      "required": ["full", "short"]
     },
     "PartyFounder": {
       "type": "object",
@@ -3651,12 +3571,10 @@
           "description": "Дата вступления в права учредителя (unix-время в миллисекундах)"
         }
       },
-      "required": ["inn", "hid", "type", "share", "invalidity", "start_date"],
-      "additionalProperties": false
+      "required": ["inn", "hid", "type", "share", "invalidity", "start_date"]
     },
     "FioInfoExtra": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "gender": { "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"], "description": "Пол" },
         "source": { "type": ["string", "null"], "description": "Исходная запись" },
@@ -3682,8 +3600,7 @@
         "numerator": { "type": "number", "description": "Числитель дроби у доли (для type = `FRACTION`)" },
         "denominator": { "type": "number", "description": "Знаменатель дроби у доли (для type = `FRACTION`)" }
       },
-      "required": ["type"],
-      "additionalProperties": false
+      "required": ["type"]
     },
     "InvalidityInfo": {
       "type": "object",
@@ -3698,8 +3615,7 @@
           "description": "Решение суда (только для code = `COURT`)"
         }
       },
-      "required": ["code"],
-      "additionalProperties": false
+      "required": ["code"]
     },
     "CourtDecisionInfo": {
       "type": "object",
@@ -3708,8 +3624,7 @@
         "number": { "type": ["string", "null"], "description": "Номер судебного решения" },
         "date": { "type": ["number", "null"], "description": "Дата судебного решения (unix-время в миллисекундах)" }
       },
-      "required": ["court_name", "number", "date"],
-      "additionalProperties": false
+      "required": ["court_name", "number", "date"]
     },
     "PartyManager": {
       "type": "object",
@@ -3737,8 +3652,7 @@
           "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)"
         }
       },
-      "required": ["inn", "hid", "type", "invalidity", "start_date"],
-      "additionalProperties": false
+      "required": ["inn", "hid", "type", "invalidity", "start_date"]
     },
     "LinkedLegalEntity": {
       "type": "object",
@@ -3753,8 +3667,7 @@
           "description": "Наименование предшественника (`predecessors`) или преемника (`successors`)"
         }
       },
-      "required": ["ogrn", "inn", "name"],
-      "additionalProperties": false
+      "required": ["ogrn", "inn", "name"]
     },
     "PartyCapital": {
       "type": "object",
@@ -3762,8 +3675,7 @@
         "type": { "type": "string", "description": "Тип капитала" },
         "value": { "type": "number", "description": "Размер капитала" }
       },
-      "required": ["type", "value"],
-      "additionalProperties": false
+      "required": ["type", "value"]
     },
     "PartyFinanceInfoExtra": {
       "type": "object",
@@ -3797,8 +3709,7 @@
           "description": "Налоговые штрафы за позапрошлый год, руб (Только «Максимальный» тариф)"
         }
       },
-      "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"],
-      "additionalProperties": false
+      "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
     },
     "PartyDocuments": {
       "type": "object",
@@ -3824,8 +3735,7 @@
           "description": "Запись в реестре малого и среднего предпринимательства"
         }
       },
-      "required": ["fts_registration", "fts_report", "pf_registration", "sif_registration", "smb"],
-      "additionalProperties": false
+      "required": ["fts_registration", "fts_report", "pf_registration", "sif_registration", "smb"]
     },
     "DocumentInfoFtsReg": {
       "type": "object",
@@ -3839,8 +3749,7 @@
         },
         "issue_authority": { "type": ["string", "null"], "description": "Серия документа" }
       },
-      "required": ["type", "series", "number", "issue_date", "issue_authority"],
-      "additionalProperties": false
+      "required": ["type", "series", "number", "issue_date", "issue_authority"]
     },
     "DocumentInfoFtsReport": {
       "type": "object",
@@ -3854,8 +3763,7 @@
         },
         "issue_authority": { "type": ["string", "null"], "description": "Серия документа" }
       },
-      "required": ["type", "series", "number", "issue_date", "issue_authority"],
-      "additionalProperties": false
+      "required": ["type", "series", "number", "issue_date", "issue_authority"]
     },
     "DocumentInfoPfReg": {
       "type": "object",
@@ -3869,8 +3777,7 @@
         },
         "issue_authority": { "type": ["string", "null"], "description": "Серия документа" }
       },
-      "required": ["type", "series", "number", "issue_date", "issue_authority"],
-      "additionalProperties": false
+      "required": ["type", "series", "number", "issue_date", "issue_authority"]
     },
     "DocumentInfoSifReg": {
       "type": "object",
@@ -3884,8 +3791,7 @@
         },
         "issue_authority": { "type": ["string", "null"], "description": "Серия документа" }
       },
-      "required": ["type", "series", "number", "issue_date", "issue_authority"],
-      "additionalProperties": false
+      "required": ["type", "series", "number", "issue_date", "issue_authority"]
     },
     "DocumentInfoSmb": {
       "type": "object",
@@ -3904,8 +3810,7 @@
           "description": "Категория предприятия:\n- `MICRO` — микро-предприятие\n- `SMALL` — малое предприятие\n- `MEDIUM` — среднее предприятие"
         }
       },
-      "required": ["category", "issue_authority", "issue_date", "number", "series", "type"],
-      "additionalProperties": false
+      "required": ["category", "issue_authority", "issue_date", "number", "series", "type"]
     },
     "LicenseInfo": {
       "type": "object",
@@ -3944,8 +3849,7 @@
         "valid_to",
         "activities",
         "addresses"
-      ],
-      "additionalProperties": false
+      ]
     },
     "PartyPhoneInfo": {
       "type": "object",
@@ -3957,8 +3861,7 @@
         },
         "data": { "$ref": "#/definitions/PartyPhoneInfoData", "description": "Подробности о телефоне организации" }
       },
-      "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false
+      "required": ["value", "unrestricted_value", "data"]
     },
     "PartyPhoneInfoData": {
       "type": "object",
@@ -4005,8 +3908,7 @@
         "extension",
         "qc_conflict",
         "qc"
-      ],
-      "additionalProperties": false
+      ]
     },
     "PartyPhoneContact": {
       "type": "object",
@@ -4017,8 +3919,7 @@
         },
         "name": { "type": ["string", "null"], "description": "Имя контактного лица" }
       },
-      "required": ["type", "name"],
-      "additionalProperties": false
+      "required": ["type", "name"]
     },
     "PartyEmailInfo": {
       "type": "object",
@@ -4030,8 +3931,7 @@
         "unrestricted_value": { "type": "string", "description": "Email одной строкой (то же, что value)" },
         "data": { "$ref": "#/definitions/PartyEmailInfoData", "description": "Подробности об email-адресе" }
       },
-      "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false
+      "required": ["value", "unrestricted_value", "data"]
     },
     "PartyEmailInfoData": {
       "type": "object",
@@ -4045,12 +3945,10 @@
         },
         "qc": { "type": "null", "description": "Не заполняется" }
       },
-      "required": ["local", "domain", "type", "source", "qc"],
-      "additionalProperties": false
+      "required": ["local", "domain", "type", "source", "qc"]
     },
     "PartySuggestionDataAddressExtra": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "invalidity": {
           "anyOf": [{ "$ref": "#/definitions/InvalidityInfo" }, { "type": "null" }],
@@ -4074,7 +3972,6 @@
     },
     "PartyAffiliatedSuggestion": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "value": {
           "type": "string",
@@ -4091,7 +3988,6 @@
     },
     "PartyAffiliatedData": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "management": {
           "type": "null",
@@ -4291,7 +4187,6 @@
         "city",
         "timezone"
       ],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/find-company/by-email/"
     },
     "PartyByEmailSuggestionData": {
@@ -4307,7 +4202,6 @@
         }
       },
       "required": ["email", "company"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/find-company/by-email/"
     },
     "PartyByEmailSuggestion": {
@@ -4321,7 +4215,6 @@
         }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/find-company/by-email/"
     },
     "PostalUnitSuggestion": {
@@ -4332,7 +4225,6 @@
         "data": { "$ref": "#/definitions/PostalUnitSuggestionData", "description": "Подробности об отделении" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/postal_unit/"
     },
     "PostalUnitSuggestionData": {
@@ -4376,8 +4268,7 @@
         "schedule_fri",
         "schedule_sat",
         "schedule_sun"
-      ],
-      "additionalProperties": false
+      ]
     },
     "RegionCourtSuggestion": {
       "type": "object",
@@ -4390,7 +4281,6 @@
         "data": { "$ref": "#/definitions/RegionCourtSuggestionData", "description": "Подробности о судебном участке" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "additionalProperties": false,
       "description": "@see https://dadata.ru/api/suggest/region_court/"
     },
     "RegionCourtSuggestionData": {
@@ -4400,8 +4290,7 @@
         "name": { "type": "string", "description": "Полное название суда" },
         "region_code": { "type": "string", "description": "Код региона (первые 2 цифры КЛАДР-кода)" }
       },
-      "required": ["code", "name", "region_code"],
-      "additionalProperties": false
+      "required": ["code", "name", "region_code"]
     }
   }
 }
