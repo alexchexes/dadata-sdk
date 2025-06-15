@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "description": "Generate JSON Schema from TypeScript types",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
-    "schema-gen": "./src/cli.ts"
+    "schema-gen": "./dist/cli.js"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "cli": "tsx src/cli.ts"
   },
   "dependencies": {

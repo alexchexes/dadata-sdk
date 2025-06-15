@@ -18,7 +18,7 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
   }
 
   // Recursive function to traverse the schema.
-  function replaceRefs(node: Schema) {
+  function replaceRefs(node: Schema): any {
     if (Array.isArray(node)) {
       return node.map(replaceRefs);
     } else if (node && typeof node === 'object') {
@@ -26,7 +26,7 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
 
       if (refDefName && defsToInline[refDefName]) {
         // Deep copy the definition.
-        const inlined = cloneSchema(defsToInline[refDefName]);
+        const inlined: Record<string, any> = cloneSchema(defsToInline[refDefName]) as any;
 
         // Merge additional properties from the referencing object (other than $ref).
         for (const key in node) {
@@ -34,17 +34,17 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
 
           if (inlined.hasOwnProperty(key)) {
             // Merge if property already exists.
-            inlined[key] = mergeValues(inlined[key], node[key]);
+            (inlined as any)[key] = mergeValues((inlined as any)[key], (node as any)[key]);
           } else {
-            inlined[key] = node[key];
+            (inlined as any)[key] = (node as any)[key];
           }
         }
         return inlined;
       }
 
-      const newObj = {};
+      const newObj: Record<string, any> = {};
       for (const key in node) {
-        newObj[key] = replaceRefs(node[key]);
+        newObj[key] = replaceRefs((node as any)[key]);
       }
       return newObj;
     }
@@ -76,14 +76,14 @@ function mergeValues(defValue: Schema, refValue: Schema) {
 
   // Shallow merge objects: for keys that exist in both, use mergeValues recursively.
   else if (defValue && typeof defValue === 'object' && refValue && typeof refValue === 'object') {
-    const merged = Object.assign({}, defValue);
+    const merged: Record<string, any> = Object.assign({}, defValue as any);
 
     for (const key in refValue) {
-      if (merged.hasOwnProperty(key)) {
-        merged[key] = mergeValues(merged[key], refValue[key]);
-      } else {
-        merged[key] = refValue[key];
-      }
+        if (merged.hasOwnProperty(key)) {
+          merged[key] = mergeValues(merged[key], (refValue as any)[key]);
+        } else {
+          merged[key] = (refValue as any)[key];
+        }
     }
 
     return merged;
