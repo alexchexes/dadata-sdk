@@ -1,8 +1,9 @@
 {
   "extends": "../tsconfig.schema-gen.json",
   "compilerOptions": {
+    "moduleResolution": "bundler",
     "paths": {
-      "@dadata-sdk/schema-gen": ["../../schema-gen/src"]
+      "@dadata-sdk/schema-gen": ["../schema-gen/src"]
     }
   },
   "include": ["./**/*"]

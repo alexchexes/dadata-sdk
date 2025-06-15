@@ -1,4 +1,4 @@
-import { Schema } from 'ts-json-schema-generator';
+import type { Schema } from 'ts-json-schema-generator';
 import { cloneSchema, getDefNameFromRef } from './schemaHelpers';
 
 export function inlineTopLevelNonObjectDefs(schema: Schema) {
