@@ -6,7 +6,8 @@
     "**/*.vue",
     "**/*.md",
     "../packages/vue-dadata/src/**/*",
-    "../packages/api-types/src/**/*"
+    "../packages/api-types/src/**/*",
+    "../packages/schema-gen/src/**/*"
   ],
 
   "compilerOptions": {
@@ -14,7 +15,8 @@
     "baseUrl": ".",
     "paths": {
       "@dadata-sdk/vue": ["../packages/vue-dadata/src"],
-      "@dadata-sdk/api-types": ["../packages/api-types/src/index.d.ts"]
+      "@dadata-sdk/api-types": ["../packages/api-types/src/index.d.ts"],
+      "@dadata-sdk/schema-gen": ["../packages/schema-gen/src"]
     },
     "types": ["vue"]
   },
