@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "allowJs": true
   },
-  "include": ["src/**/*.ts", "src/cli.js"]
+  "include": ["src/**/*"]
 }

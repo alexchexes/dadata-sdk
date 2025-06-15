@@ -1,0 +1,809 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/VueDadataOptionsDocs",
+  "definitions": {
+    "VueDadataOptionsDocs": {
+      "type": "object",
+      "properties": {
+        "token": { "type": "string", "description": "Your DaData API key (token)." },
+        "suggestType": {
+          "type": "string",
+          "enum": [
+            "address",
+            "country",
+            "postal_unit",
+            "fias",
+            "party",
+            "party_by",
+            "party_kz",
+            "bank",
+            "fio",
+            "fms_unit",
+            "email",
+            "car_brand",
+            "fns_unit",
+            "fts_unit",
+            "region_court",
+            "metro",
+            "mktu",
+            "currency",
+            "okved2",
+            "okpd2",
+            "oktmo"
+          ],
+          "description": "Type of suggestions (Dadata suggest API endpoint):\n- `address` - Normal addresses {@link https://dadata.ru/api/suggest/address/}\n- `fias` - FIAS addresses (discouraged by Dadata) {@link https://dadata.ru/api/suggest/fias/}\n- `party` - Legal entities {@link https://dadata.ru/api/suggest/party/}\n- `bank` - Finance organizations {@link https://dadata.ru/api/suggest/bank/}\n- `fio` - Names, surnames, patronymics {@link https://dadata.ru/api/suggest/name/}\n- `email` - Email address {@link https://dadata.ru/api/suggest/email/}\n\nDefault `address`"
+        },
+        "url": {
+          "type": "string",
+          "description": "Custom API URL.\nUseful when proxying requests to the DaData API.\n\nNote: the endpoint (i.e. `suggestType`) is not appended automatically.\nYou must provide the full URL, e.g. `https://example.com/suggest_api/address`.\n\nDefault: The final URL is built from the base DaData suggest API (`.../api/4_1/rs/suggest/`) + `suggestType`."
+        },
+        "httpCache": {
+          "type": "boolean",
+          "description": "If `false`, HTTP requests will not be cached.\nDefault `true`"
+        },
+        "payload": {
+          "$ref": "#/definitions/OptionalSuggestPayload",
+          "description": "Custom payload for the API request.\nAny fields specified here will be added to the final request payload, or override existing values if already set."
+        },
+        "headers": {
+          "$ref": "#/definitions/PlainHeaders",
+          "description": "Custom headers for the API request.\nAny headers specified here will be added to the final request headers, or override existing values if already set."
+        },
+        "count": {
+          "type": "number",
+          "description": "Maximum number of suggestion items to fetch from the DaData API.\nMax: `20`, Default: `10`"
+        },
+        "locationsBoost": {
+          "$ref": "#/definitions/OneOrMany<(KladrIdFilter|string|number)>",
+          "description": "`kladr_id` or an array of `kladr_id`s for the region/city to be prioritized in suggestions.\nCorresponds to the `locations_boost` API parameter.\n\nExamples:\n- `55` — Omsk region\n- `63000001` — Samara city\n- `6300000100000` — Samara city (full KLADR code)\n- `[50, 77]` — Moscow and Moscow-City regions\n- `{kladr_id: '02'}` or `[{kladr_id: '02'}, ...]` — native DaData API format\n\n- 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}\n\nMax: `10` items"
+        },
+        "locationsFilter": {
+          "$ref": "#/definitions/OneOrMany<(LocationRestriction|string|number)>",
+          "description": "Restricts the search to specific locations (API `locations` parameter).\nMax: `10` items\n\nFor example (when `suggestType=address`), to search only in Voronezh city and in Rostov region:\n`:locationsFilter=\"[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]\"`\n\n- For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}\n- For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}\n\nFor `party` and `bank`, the only supported filter is `kladr_id`.\n- For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}\n- For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
+        },
+        "fromBound": {
+          "type": "string",
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
+          "description": "Limits the type of address object from which DaData begins searching:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `from_bound` API parameter.\n\n- For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+        },
+        "toBound": {
+          "type": "string",
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
+          "description": "Limits the type of address object to which DaData performs the search:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `to_bound` API parameter.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+        },
+        "restrictValue": {
+          "type": "boolean",
+          "description": "Used with `locationsFilter`. If `true`, the displayed suggestion (i.e., `value` field)\nwill exclude address parts up to the restricted level.\n\nFor example, if the filter specifies a `region`, that region will be omitted in the result;\nif it specifies a `city`, both the region and city will be omitted.\n\nCorresponds to the `restrict_value` API parameter.\n\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+        },
+        "radiusFilter": {
+          "$ref": "#/definitions/RadiusFilter",
+          "description": "Restrict the search to a specific radius around a latitude/longitude point.\nCorresponds to the `locations_geo` API parameter.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
+        },
+        "division": {
+          "type": "string",
+          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "description": "Type of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`. Affects set of fields inside `suggestion.data`\n@default 'ADMINISTRATIVE'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589",
+          "default": "ADMINISTRATIVE"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["RU", "EN"],
+          "description": "Display language for address suggestions.\n`RU` or `EN`. The `EN` version mostly provides transliteration.\n\nDefault: `RU`.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+        },
+        "entityType": {
+          "anyOf": [
+            { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
+            { "$ref": "#/definitions/OneOrMany<PartyByType>" },
+            { "$ref": "#/definitions/OneOrMany<PartyKzType>" },
+            { "$ref": "#/definitions/OneOrMany<BankType>" }
+          ],
+          "description": "Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).\n\nfor `party`: `LEGAL` or `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}\n- for `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}\n\n- for `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- for `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}"
+        },
+        "entityStatus": {
+          "anyOf": [
+            { "$ref": "#/definitions/OneOrMany<PartyStatus>" },
+            { "$ref": "#/definitions/OneOrMany<PartyByStatus>" },
+            { "$ref": "#/definitions/OneOrMany<BankStatus>" }
+          ],
+          "description": "Organization or bank status  (for `party`, `party_by` and `bank` suggestions)\n- `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`\n- `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}\n- `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+        },
+        "branchType": {
+          "$ref": "#/definitions/OneOrMany<BranchType>",
+          "description": "Branch type filter (for `party` suggestions)\n- `MAIN` - to search only for head offices\n- `BRANCH` - search only for branches\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
+        },
+        "okved": {
+          "$ref": "#/definitions/OneOrMany<string>",
+          "description": "OKVED code filter (for `party` suggestions). Max: `10` items\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+        },
+        "fioParts": {
+          "$ref": "#/definitions/OneOrMany<FioParts>",
+          "description": "Filter by FIO parts (for `fio` suggestions, see {@link https://dadata.ru/api/suggest/name/}).\n\nExamples:\n- Names only: `['NAME']` or `NAME`\n- Names and patronymics: `['NAME', 'PATRONYMIC']`\n- Names and surnames: `['NAME', 'SURNAME']`"
+        },
+        "fioGender": {
+          "type": "string",
+          "enum": ["MALE", "FEMALE", "UNKNOWN"],
+          "description": "Filter by gender (for `fio` suggestions).\n- `UNKNOWN` / `MALE` / `FEMALE`"
+        },
+        "filters": {
+          "$ref": "#/definitions/OneOrMany<(SuggestFmsUnitFilter|SuggestFnsUnitFilter|SuggestMetroFilter|SuggestMktuFilter|SuggestOkpd2Filter|SuggestOkved2Filter|SuggestPartyByFilter|SuggestPartyKzFilter|SuggestPostalUnitFilter|SuggestRegionCourtFilter)>",
+          "description": "Filters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `region_court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
+        },
+        "debounce": {
+          "type": "number",
+          "description": "Delay (in ms) after the user changes the query before triggering a request.\nDefault `100`"
+        },
+        "minChars": {
+          "type": "number",
+          "description": "Minimum length of text in the input after which suggestions are triggered.\nDefault `1`"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Disables the input, suggestions, and all interactions.\nDefault `false`"
+        },
+        "placeholder": { "type": "string", "description": "Text used for the input's `placeholder` attribute." },
+        "inputName": {
+          "type": "string",
+          "description": "Value for the input's `name` attribute.\nDefault `vue-dadata-input`"
+        },
+        "classes": {
+          "$ref": "#/definitions/VueDadataClasses",
+          "description": "Custom CSS classes names for component elements.\nDefaults: @see DEFAULT_CLASSES"
+        },
+        "inputAttributes": {
+          "type": "object",
+          "additionalProperties": { "anyOf": [{ "type": "string" }, {}] },
+          "description": "Additional attributes to pass to the internal `<input>` element.\n\nUseful for controlling browser behavior (`autocomplete`, `autocapitalize`, `inputmode`, `enterkeyhint`, etc.)\n\nNote:\n- Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed   internally and cannot be overridden.\n- The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,   not through `inputAttributes`.\n- To listen for `onFocus`/`onBlur`, use `@focus`/`@blur` on the `VueDadata` component.\n\n**Example:** ```vue <VueDadata :input-attributes=\"{ autocomplete: 'one-time-code', inputmode: 'numeric' }\" /> ```"
+        },
+        "showOnFocus": {
+          "type": ["string", "boolean"],
+          "enum": ["no_selection", "always", false],
+          "description": "Controls when to show the dropdown with suggestions list on input focus.\n\n- `false`: Never show dropdown on focus\n- `'always'`: Always show dropdown on focus (if input and suggestions list is not empty).\n- `'no_selection'`: Show dropdown on focus when there's no selected suggestion\n\nDefault: `'no_selection'`"
+        },
+        "selectOnBlur": {
+          "type": "boolean",
+          "description": "If `true`, the first suggestion will be auto-selected after input lost focus.\nDefault: `false`"
+        },
+        "selectOnEnter": {
+          "type": "boolean",
+          "description": "If `true`, pressing Enter selects the first suggestion (if list is open).\nDefault: `true`"
+        },
+        "enrichOnSelect": {
+          "type": "boolean",
+          "description": "Whether to send an additional request after a suggestion is selected to enrich it with\ndata like `geo_lat`, `geo_lon`, `city_district` (and full `value` when `restrictValue` is used).\n\nSet to `false` if you want to save API usage and don’t need that data.\nDefault: `true`"
+        },
+        "clearOnChange": {
+          "type": ["string", "boolean"],
+          "enum": ["significant", "any", false],
+          "description": "Determines whether the suggestion (i.e., `v-model:suggestion`) is cleared when the input changes after a suggestion is selected.\n\n- `false`: The suggestion is never cleared when the input changes.\n- `'any'`: The suggestion is cleared whenever input value is changed.\n- `'significant'`: The suggestion is cleared only if the new input, after being normalized (e.g., trimmed and case-normalized), differs from the previous value.\n\nDefault: `'significant'`"
+        },
+        "addSpace": {
+          "type": "boolean",
+          "description": "If `true`, adds a space to the input after a suggestion is selected. This way, for example,\nuser can select street and then type house number without adding a space by himself.\nDefault `true`"
+        },
+        "continueSelecting": {
+          "type": "boolean",
+          "description": "If `true`, the suggestions list will remain visible after selecting a suggestion.\nDefault: `false`"
+        },
+        "showClearButton": {
+          "type": "boolean",
+          "description": "If `true`, shows a clear (×) button in the input when not empty.\nDefault: `false`"
+        },
+        "suggestionsHint": {
+          "anyOf": [{ "type": "string" }, { "type": "boolean", "const": false }],
+          "description": "Text to show above the suggestions list"
+        },
+        "noSuggestionsHint": {
+          "anyOf": [{ "type": "string" }, { "type": "boolean", "const": false }],
+          "description": "Text to show in place of suggestions when there's no suggestions"
+        },
+        "focusOnMounted": {
+          "type": "boolean",
+          "description": "If `true`, input will be focused immediately when the component is mounted.\nDefault `false`"
+        },
+        "forceShow": {
+          "type": "boolean",
+          "description": "Forces the suggestions list to always remain visible.\nUseful during development (e.g., when styling elements).\nDefault: `false`"
+        },
+        "forceHide": {
+          "type": "boolean",
+          "description": "Forces the suggestions list to always remain hidden.\nUseful when creating custom UI using `v-model:suggestionsList`\nDefault: `false`"
+        }
+      },
+      "required": ["inputAttributes", "token"]
+    },
+    "OptionalSuggestPayload": {
+      "$ref": "#/definitions/DistributivePartial<SuggestPayload>",
+      "description": "Union of all possible 'suggest' payload types where each property of each payload type is optional"
+    },
+    "DistributivePartial<SuggestPayload>": {
+      "type": "object",
+      "properties": {
+        "locations_boost": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
+            }
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+        },
+        "from_bound": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Bound",
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+            },
+            {
+              "$ref": "#/definitions/BoundFias",
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+            }
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+        },
+        "to_bound": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Bound",
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+            },
+            {
+              "$ref": "#/definitions/BoundFias",
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+            }
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+        },
+        "locations": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LocationRestriction" },
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "Ограничение по региону или городу\nAPI принимает массив вида `{ kladr_id: string }[]`\n {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LocationRestrictionFias" },
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/KladrIdFilter" },
+              "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+            }
+          ],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+        },
+        "restrict_value": {
+          "anyOf": [
+            {
+              "type": "boolean",
+              "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+            },
+            {
+              "type": "boolean",
+              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
+            }
+          ],
+          "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+        },
+        "locations_geo": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RadiusFilter" },
+          "minItems": 1,
+          "maxItems": 1,
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["RU", "EN"],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+        },
+        "division": {
+          "type": "string",
+          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}\n@default 'ADMINISTRATIVE'",
+          "default": "ADMINISTRATIVE"
+        },
+        "query": {
+          "anyOf": [
+            { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+            {
+              "type": "string",
+              "description": "Адрес строкой или почтовый индекс\n\n@example { \"query\": \"дежнева 2а\" } // по адресу\n@example { \"query\": \"105\" } // все отделения с индексом, начинающимся на 105\n@maxLength 300",
+              "examples": [{ "query": "дежнева 2а" }, { "query": "105" }],
+              "maxLength": 300
+            }
+          ],
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
+        "count": {
+          "type": "number",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 10
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+              },
+              "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
+            },
+            {
+              "type": "string",
+              "enum": ["LEGAL", "INDIVIDUAL"],
+              "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+            }
+          ],
+          "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
+              "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
+              },
+              "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+            }
+          ],
+          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["MALE", "FEMALE", "UNKNOWN"],
+          "description": "Пол (`UNKNOWN` / `MALE` / `FEMALE`)"
+        },
+        "parts": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
+          "description": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`"
+        },
+        "filters": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+              "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+              "description": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestMetroFilter" },
+              "description": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:\n  `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:\n  `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestMktuFilter" },
+              "description": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestOkpd2Filter" },
+              "description": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestOkved2Filter" },
+              "description": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestPartyByFilter" },
+              "description": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем,\nа массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно:\n`[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно:\n`[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestPartyKzFilter" },
+              "description": "Фильтрация работает по полю `type` (тип организации)"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+              "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/SuggestRegionCourtFilter" },
+              "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            }
+          ],
+          "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+        },
+        "branch_type": {
+          "anyOf": [
+            { "type": "string", "enum": ["MAIN", "BRANCH"] },
+            { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
+          ],
+          "description": "Фильтр по типу филиала\n- `MAIN` - искать только по головным организациям\n- `BRANCH` - искать только по филиалам"
+        },
+        "okved": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+        }
+      },
+      "description": "Makes all properties of a union optional"
+    },
+    "KladrIdFilter": { "type": "object", "properties": { "kladr_id": { "type": "string" } } },
+    "Bound": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+        }
+      },
+      "required": ["value"]
+    },
+    "BoundFias": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+        }
+      },
+      "required": ["value"]
+    },
+    "LocationRestriction": {
+      "type": "object",
+      "properties": {
+        "country_iso_code": { "type": "string" },
+        "region_iso_code": { "type": "string" },
+        "kladr_id": { "type": "string" },
+        "fias_id": { "type": "string" },
+        "region_fias_id": { "type": "string" },
+        "area_fias_id": { "type": "string" },
+        "city_fias_id": { "type": "string" },
+        "settlement_fias_id": { "type": "string" },
+        "planning_structure_fias_id": { "type": "string" },
+        "street_fias_id": { "type": "string" },
+        "country": { "type": "string" },
+        "region": { "type": "string" },
+        "area": { "type": "string" },
+        "city": { "type": "string" },
+        "city_district": { "type": "string" },
+        "settlement": { "type": "string" },
+        "planning_structure": { "type": "string" },
+        "street": { "type": "string" },
+        "region_type_full": { "type": "string" },
+        "area_type_full": { "type": "string" },
+        "city_type_full": { "type": "string" },
+        "city_district_type_full": { "type": "string" },
+        "settlement_type_full": { "type": "string" },
+        "planning_structure_type_full": { "type": "string" },
+        "street_type_full": { "type": "string" }
+      }
+    },
+    "LocationRestrictionFias": {
+      "type": "object",
+      "properties": {
+        "kladr_id": { "type": "string" },
+        "fias_id": { "type": "string" },
+        "region_fias_id": { "type": "string" },
+        "area_fias_id": { "type": "string" },
+        "city_fias_id": { "type": "string" },
+        "settlement_fias_id": { "type": "string" },
+        "planning_structure_fias_id": { "type": "string" },
+        "street_fias_id": { "type": "string" },
+        "region": { "type": "string" },
+        "area": { "type": "string" },
+        "city": { "type": "string" },
+        "city_district": { "type": "string" },
+        "settlement": { "type": "string" },
+        "planning_structure": { "type": "string" },
+        "street": { "type": "string" },
+        "region_type_full": { "type": "string" },
+        "area_type_full": { "type": "string" },
+        "city_type_full": { "type": "string" },
+        "city_district_type_full": { "type": "string" },
+        "settlement_type_full": { "type": "string" },
+        "planning_structure_type_full": { "type": "string" },
+        "street_type_full": { "type": "string" }
+      }
+    },
+    "RadiusFilter": {
+      "type": "object",
+      "properties": {
+        "lat": { "type": "string", "description": "Географическая широта, например: `'59.244634'`" },
+        "lon": { "type": "string", "description": "Географическая долгота, например: `'39.913355'`" },
+        "radius_meters": {
+          "type": "number",
+          "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
+          "default": 100,
+          "maximum": 100000
+        }
+      },
+      "required": ["lat", "lon", "radius_meters"]
+    },
+    "SuggestFmsUnitFilter": {
+      "type": "object",
+      "properties": {
+        "region_code": {
+          "type": "string",
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) подразделения ФМС"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["0", "1", "2", "3"],
+          "description": "Вид подразделения:\n- `0` — подразделение ФМС\n- `1` — ГУВД или МВД региона\n- `2` — УВД или ОВД района или города\n- `3` — отделение полиции"
+        }
+      }
+    },
+    "SuggestFnsUnitFilter": {
+      "type": "object",
+      "properties": {
+        "region_code": {
+          "type": "string",
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
+        }
+      }
+    },
+    "SuggestMetroFilter": {
+      "type": "object",
+      "properties": {
+        "city_kladr_id": {
+          "type": "string",
+          "description": "КЛАДР-код города (например, \"7700000000000\" для Москвы)"
+        },
+        "city_fias_id": {
+          "type": "string",
+          "description": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)"
+        },
+        "city": { "type": "string", "description": "Название города (например, \"Москва\")" },
+        "line_id": { "type": "string", "description": "Номер линии метро (например, \"5\" для Кольцевой линии)" },
+        "is_closed": {
+          "type": ["boolean", "null"],
+          "enum": [true, null],
+          "description": "Фильтр по признаку «закрыта»\n- `true` - только закрытые\n- `null` - только открытые\n@note Документация на https://dadata.ru/api/suggest/metro/ предполагает здесь `true/false`,\nоднако фактически API использует `true/null`."
+        }
+      }
+    },
+    "SuggestMktuFilter": {
+      "type": "object",
+      "properties": { "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" } }
+    },
+    "SuggestOkpd2Filter": {
+      "type": "object",
+      "properties": {
+        "razdel": { "type": "string", "description": "Код раздела классификатора ОКПД 2 (например `'S'`)" }
+      }
+    },
+    "SuggestOkved2Filter": {
+      "type": "object",
+      "properties": {
+        "razdel": { "type": "string", "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)" }
+      }
+    },
+    "SuggestPartyByFilter": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"],
+          "description": "Статус организации"
+        },
+        "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
+      }
+    },
+    "SuggestPartyKzFilter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"],
+          "description": "Тип организации"
+        }
+      }
+    },
+    "SuggestPostalUnitFilter": {
+      "type": "object",
+      "properties": {
+        "is_closed": {
+          "type": "boolean",
+          "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
+        },
+        "type_code": { "type": "string", "description": "Фильтрация по типу отделения (например, `ГОПС`)" },
+        "address_kladr_id": {
+          "type": "string",
+          "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
+        }
+      }
+    },
+    "SuggestRegionCourtFilter": {
+      "type": "object",
+      "properties": {
+        "region_code": {
+          "type": "string",
+          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
+        }
+      }
+    },
+    "PlainHeaders": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }, { "type": "null" }, { "not": {} }]
+      }
+    },
+    "OneOrMany<(KladrIdFilter|string|number)>": {
+      "anyOf": [
+        { "$ref": "#/definitions/KladrIdFilter" },
+        { "type": "string" },
+        { "type": "number" },
+        {
+          "type": "array",
+          "items": { "anyOf": [{ "$ref": "#/definitions/KladrIdFilter" }, { "type": "string" }, { "type": "number" }] }
+        }
+      ]
+    },
+    "OneOrMany<(LocationRestriction|string|number)>": {
+      "anyOf": [
+        { "$ref": "#/definitions/LocationRestriction" },
+        { "type": "string" },
+        { "type": "number" },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [{ "$ref": "#/definitions/LocationRestriction" }, { "type": "string" }, { "type": "number" }]
+          }
+        }
+      ]
+    },
+    "OneOrMany<PartyByType>": {
+      "anyOf": [
+        { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
+        { "type": "array", "items": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] } }
+      ]
+    },
+    "OneOrMany<PartyKzType>": {
+      "anyOf": [
+        { "type": "string", "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"] },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
+          }
+        }
+      ]
+    },
+    "OneOrMany<BankType>": {
+      "anyOf": [
+        { "type": "string", "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"] },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+          }
+        }
+      ]
+    },
+    "OneOrMany<PartyStatus>": {
+      "anyOf": [
+        { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+        {
+          "type": "array",
+          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] }
+        }
+      ]
+    },
+    "OneOrMany<PartyByStatus>": {
+      "anyOf": [
+        { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"] },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+          }
+        }
+      ]
+    },
+    "OneOrMany<BankStatus>": {
+      "anyOf": [
+        { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
+        { "type": "array", "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] } }
+      ]
+    },
+    "OneOrMany<BranchType>": {
+      "anyOf": [
+        { "type": "string", "enum": ["MAIN", "BRANCH"] },
+        { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
+      ]
+    },
+    "OneOrMany<string>": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+    "OneOrMany<FioParts>": {
+      "anyOf": [
+        { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
+        { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } }
+      ]
+    },
+    "OneOrMany<(SuggestFmsUnitFilter|SuggestFnsUnitFilter|SuggestMetroFilter|SuggestMktuFilter|SuggestOkpd2Filter|SuggestOkved2Filter|SuggestPartyByFilter|SuggestPartyKzFilter|SuggestPostalUnitFilter|SuggestRegionCourtFilter)>": {
+      "anyOf": [
+        { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+        { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+        { "$ref": "#/definitions/SuggestMetroFilter" },
+        { "$ref": "#/definitions/SuggestMktuFilter" },
+        { "$ref": "#/definitions/SuggestOkpd2Filter" },
+        { "$ref": "#/definitions/SuggestOkved2Filter" },
+        { "$ref": "#/definitions/SuggestPartyByFilter" },
+        { "$ref": "#/definitions/SuggestPartyKzFilter" },
+        { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+        { "$ref": "#/definitions/SuggestRegionCourtFilter" },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+              { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+              { "$ref": "#/definitions/SuggestMetroFilter" },
+              { "$ref": "#/definitions/SuggestMktuFilter" },
+              { "$ref": "#/definitions/SuggestOkpd2Filter" },
+              { "$ref": "#/definitions/SuggestOkved2Filter" },
+              { "$ref": "#/definitions/SuggestPartyByFilter" },
+              { "$ref": "#/definitions/SuggestPartyKzFilter" },
+              { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+              { "$ref": "#/definitions/SuggestRegionCourtFilter" }
+            ]
+          }
+        }
+      ]
+    },
+    "VueDadataClasses": {
+      "type": "object",
+      "properties": {
+        "container": { "type": "string" },
+        "inputWrapper": { "type": "string" },
+        "input": { "type": "string" },
+        "dropdown": { "type": "string" },
+        "hint": { "type": "string" },
+        "suggestionItem": { "type": "string" },
+        "suggestionTitle": { "type": "string" },
+        "suggestionSubtitle": { "type": "string" },
+        "navigatedSuggestionItem": { "type": "string" },
+        "strikethroughText": { "type": "string" },
+        "highlightedText": { "type": "string" },
+        "clearButton": { "type": "string" }
+      },
+      "description": "@see DEFAULT_CLASSES"
+    }
+  }
+}

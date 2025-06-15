@@ -4,7 +4,7 @@ import type { CompletedConfig, Config, Schema } from 'ts-json-schema-generator';
 import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs.js';
 import { removeUnusedGenerics } from './removeUnusedGenerics.js';
 import { traverseSchemaObjects } from './schemaHelpers.js';
-import { log, logPanic, logWarn } from './log.js';
+import { log, logWarn } from './log.js';
 import { replaceFullDescription } from './replaceFullDescription.js';
 import { allowAdditionalProperties } from './allowAdditionalProperties.js';
 
@@ -45,9 +45,7 @@ function checkForWarnings(schema: Schema) {
       const addPropsCount = Object.keys(node.additionalProperties || {}).length;
 
       if (!propsCount && !addPropsCount) {
-        logPanic(
-          'Found "type": "object", but no properties were found. This is likely unintended:',
-        );
+        logWarn('Found "type": "object", but no properties were found. This is likely unintended:');
         log(node);
       }
 

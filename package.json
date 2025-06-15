@@ -8,13 +8,14 @@
     "docs"
   ],
   "scripts": {
-    "build": "pnpm -r build && pnpm docs:build",
+    "build": "pnpm -r build && pnpm docs:gen-vue-schema && pnpm docs:build",
     "test": "pnpm -r test",
     "lint": "eslint \"**/*.{ts,tsx,vue}\"",
     "dev": "pnpm docs:dev",
     "docs:dev": "rm -rf docs/.vitepress/cache && pnpm vitepress dev docs --host",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
+    "docs:gen-vue-schema": "pnpm -F schema-gen schema-gen --input ../../docs/component.types.ts --output ../../docs/component-schema.json",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish-packages": "changeset publish",

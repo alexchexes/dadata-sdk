@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "cli": "tsx src/cli.ts"
+    "cli": "tsx src/cli.js",
+    "schema-gen": "pnpm cli"
   },
   "dependencies": {
     "chalk": "^5.4.1",

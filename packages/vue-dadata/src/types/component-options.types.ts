@@ -39,6 +39,8 @@ export type ClearOnChangeOption = (typeof CLEAR_ON_CHANGE_OPTIONS)[number];
 /** @see DEFAULT_CLASSES */
 export type VueDadataClasses = Partial<{ -readonly [K in keyof typeof DEFAULT_CLASSES]: string }>;
 
+export type PlainHeaders = Record<string, string | number | boolean | null | undefined>;
+
 export interface VueDadataOptions {
   // ***************************
   // General options
@@ -84,7 +86,7 @@ export interface VueDadataOptions {
    * Custom headers for the API request.
    * Any headers specified here will be added to the final request headers, or override existing values if already set.
    */
-  headers?: Record<string, string>;
+  headers?: PlainHeaders;
 
   // ***************************
   // API request options
