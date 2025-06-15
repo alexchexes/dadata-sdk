@@ -1,5 +1,5 @@
 import type { Schema } from 'ts-json-schema-generator';
-import { traverseSchemaObjects } from './schemaHelpers';
+import { traverseSchemaObjects } from './schemaHelpers.js';
 
 /**
  * Copies `fullDescription` into `description` (over-writing any existing value)

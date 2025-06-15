@@ -87,6 +87,9 @@ importers:
 
   packages/api-types:
     devDependencies:
+      '@dadata-sdk/schema-gen':
+        specifier: workspace:*
+        version: link:../schema-gen
       '@types/node':
         specifier: ^22.15.29
         version: 22.15.30
@@ -99,6 +102,28 @@ importers:
       ts-json-schema-generator:
         specifier: 2.5.0-next.2
         version: 2.5.0-next.2
+      tsx:
+        specifier: ^4.19.4
+        version: 4.19.4
+
+  packages/schema-gen:
+    dependencies:
+      chalk:
+        specifier: ^5.4.1
+        version: 5.4.1
+      commander:
+        specifier: ^11.1.0
+        version: 11.1.0
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
+      ts-json-schema-generator:
+        specifier: 2.5.0-next.2
+        version: 2.5.0-next.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.29
+        version: 22.15.30
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
@@ -1854,6 +1879,10 @@ packages:
   commander@10.0.1:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
     engines: {node: '>=14'}
+
+  commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
 
   commander@14.0.0:
     resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
@@ -5541,6 +5570,8 @@ snapshots:
   comma-separated-tokens@2.0.3: {}
 
   commander@10.0.1: {}
+
+  commander@11.1.0: {}
 
   commander@14.0.0: {}
 

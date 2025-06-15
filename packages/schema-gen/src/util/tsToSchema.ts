@@ -1,18 +1,17 @@
 import { createGenerator, DEFAULT_CONFIG } from 'ts-json-schema-generator';
 import type { CompletedConfig, Config, Schema } from 'ts-json-schema-generator';
 
-import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs';
-import { removeUnusedGenerics } from './removeUnusedGenerics';
-import { traverseSchemaObjects } from './schemaHelpers';
-import { log } from 'console';
-import { logPanic, logWarn } from './log';
-import { replaceFullDescription } from './replaceFullDescription';
-import { allowAdditionalProperties } from './allowAdditionalProperties';
+import { inlineTopLevelNonObjectDefs } from './inlineTopLevelNonObjectDefs.js';
+import { removeUnusedGenerics } from './removeUnusedGenerics.js';
+import { traverseSchemaObjects } from './schemaHelpers.js';
+import { log, logPanic, logWarn } from './log.js';
+import { replaceFullDescription } from './replaceFullDescription.js';
+import { allowAdditionalProperties } from './allowAdditionalProperties.js';
 
-export const tsToSchema = (generatorConfig: Config): Schema => {
+export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Schema => {
   const config: CompletedConfig = {
     ...DEFAULT_CONFIG,
-    tsconfig: 'tsconfig.schema-gen.json',
+    tsconfig: generatorConfig.tsconfig ?? 'tsconfig.schema-gen.json',
     type: '*',
     encodeRefs: false,
     fullDescription: true,

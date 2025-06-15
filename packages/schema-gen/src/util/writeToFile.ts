@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { log } from './log';
+import { log } from './log.js';
 import chalk from 'chalk';
 
 function ensureDirectoryExists(dirPath: string): void {

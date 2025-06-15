@@ -1,6 +1,6 @@
 import type { Schema } from 'ts-json-schema-generator';
-import { log, logY } from './log';
-import { cloneSchema, getDefNameFromRef, traverseSchemaObjects } from './schemaHelpers';
+import { log, logY } from './log.js';
+import { cloneSchema, getDefNameFromRef, traverseSchemaObjects } from './schemaHelpers.js';
 import chalk from 'chalk';
 type SchemaDefinition = boolean | Schema;
 

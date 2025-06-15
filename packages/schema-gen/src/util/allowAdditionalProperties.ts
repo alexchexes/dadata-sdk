@@ -1,5 +1,5 @@
 import type { Schema } from 'ts-json-schema-generator';
-import { traverseSchemaObjects } from './schemaHelpers';
+import { traverseSchemaObjects } from './schemaHelpers.js';
 
 /**
  * Remove `"additionalProperties": false` from all schema levels
