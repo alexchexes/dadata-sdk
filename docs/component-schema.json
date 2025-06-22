@@ -1,7 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$ref": "#/definitions/VueDadataOptionsDocs",
   "definitions": {
+    "InputHTMLAttributes": {
+      "type": "object",
+      "additionalProperties": {},
+      "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement"
+    },
     "VueDadataOptionsDocs": {
       "type": "object",
       "properties": {
@@ -150,8 +154,7 @@
           "description": "Custom CSS classes names for component elements.\nDefaults: @see DEFAULT_CLASSES"
         },
         "inputAttributes": {
-          "type": "object",
-          "additionalProperties": { "anyOf": [{ "type": "string" }, {}] },
+          "$ref": "#/definitions/InputHTMLAttributes",
           "description": "Additional attributes to pass to the internal `<input>` element.\n\nUseful for controlling browser behavior (`autocomplete`, `autocapitalize`, `inputmode`, `enterkeyhint`, etc.)\n\nNote:\n- Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed   internally and cannot be overridden.\n- The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,   not through `inputAttributes`.\n- To listen for `onFocus`/`onBlur`, use `@focus`/`@blur` on the `VueDadata` component.\n\n**Example:** ```vue <VueDadata :input-attributes=\"{ autocomplete: 'one-time-code', inputmode: 'numeric' }\" /> ```"
         },
         "showOnFocus": {

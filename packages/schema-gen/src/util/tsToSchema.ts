@@ -11,7 +11,7 @@ import { allowAdditionalProperties } from './allowAdditionalProperties.js';
 export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Schema => {
   const config: CompletedConfig = {
     ...DEFAULT_CONFIG,
-    tsconfig: generatorConfig.tsconfig ?? 'tsconfig.schema-gen.json',
+    tsconfig: generatorConfig.tsconfig ?? undefined,
     type: '*',
     encodeRefs: false,
     fullDescription: true,
