@@ -1,11 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/VueDadataOptionsDocs",
   "definitions": {
-    "InputHTMLAttributes": {
-      "type": "object",
-      "additionalProperties": {},
-      "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement"
-    },
     "VueDadataOptionsDocs": {
       "type": "object",
       "properties": {
@@ -58,11 +54,31 @@
           "description": "Maximum number of suggestion items to fetch from the DaData API.\nMax: `20`, Default: `10`"
         },
         "locationsBoost": {
-          "$ref": "#/definitions/OneOrMany<(KladrIdFilter|string|number)>",
+          "anyOf": [
+            { "$ref": "#/definitions/KladrIdFilter" },
+            { "type": "string" },
+            { "type": "number" },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [{ "$ref": "#/definitions/KladrIdFilter" }, { "type": "string" }, { "type": "number" }]
+              }
+            }
+          ],
           "description": "`kladr_id` or an array of `kladr_id`s for the region/city to be prioritized in suggestions.\nCorresponds to the `locations_boost` API parameter.\n\nExamples:\n- `55` — Omsk region\n- `63000001` — Samara city\n- `6300000100000` — Samara city (full KLADR code)\n- `[50, 77]` — Moscow and Moscow-City regions\n- `{kladr_id: '02'}` or `[{kladr_id: '02'}, ...]` — native DaData API format\n\n- 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}\n\nMax: `10` items"
         },
         "locationsFilter": {
-          "$ref": "#/definitions/OneOrMany<(LocationRestriction|string|number)>",
+          "anyOf": [
+            { "$ref": "#/definitions/LocationRestriction" },
+            { "type": "string" },
+            { "type": "number" },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [{ "$ref": "#/definitions/LocationRestriction" }, { "type": "string" }, { "type": "number" }]
+              }
+            }
+          ],
           "description": "Restricts the search to specific locations (API `locations` parameter).\nMax: `10` items\n\nFor example (when `suggestType=address`), to search only in Voronezh city and in Rostov region:\n`:locationsFilter=\"[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]\"`\n\n- For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}\n- For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}\n\nFor `party` and `bank`, the only supported filter is `kladr_id`.\n- For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}\n- For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
         },
         "fromBound": {
@@ -97,30 +113,99 @@
         "entityType": {
           "anyOf": [
             { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
-            { "$ref": "#/definitions/OneOrMany<PartyByType>" },
-            { "$ref": "#/definitions/OneOrMany<PartyKzType>" },
-            { "$ref": "#/definitions/OneOrMany<BankType>" }
+            {
+              "anyOf": [
+                { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
+                { "type": "array", "items": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] } }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
+                  }
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+                  }
+                }
+              ]
+            }
           ],
           "description": "Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).\n\nfor `party`: `LEGAL` or `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}\n- for `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}\n\n- for `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- for `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}"
         },
         "entityStatus": {
           "anyOf": [
-            { "$ref": "#/definitions/OneOrMany<PartyStatus>" },
-            { "$ref": "#/definitions/OneOrMany<PartyByStatus>" },
-            { "$ref": "#/definitions/OneOrMany<BankStatus>" }
+            {
+              "anyOf": [
+                { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
+                  }
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+                  }
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
+                { "type": "array", "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] } }
+              ]
+            }
           ],
           "description": "Organization or bank status  (for `party`, `party_by` and `bank` suggestions)\n- `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`\n- `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}\n- `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
         },
         "branchType": {
-          "$ref": "#/definitions/OneOrMany<BranchType>",
+          "anyOf": [
+            { "type": "string", "enum": ["MAIN", "BRANCH"] },
+            { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
+          ],
           "description": "Branch type filter (for `party` suggestions)\n- `MAIN` - to search only for head offices\n- `BRANCH` - search only for branches\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
         },
         "okved": {
-          "$ref": "#/definitions/OneOrMany<string>",
+          "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }],
           "description": "OKVED code filter (for `party` suggestions). Max: `10` items\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "fioParts": {
-          "$ref": "#/definitions/OneOrMany<FioParts>",
+          "anyOf": [
+            { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
+            { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } }
+          ],
           "description": "Filter by FIO parts (for `fio` suggestions, see {@link https://dadata.ru/api/suggest/name/}).\n\nExamples:\n- Names only: `['NAME']` or `NAME`\n- Names and patronymics: `['NAME', 'PATRONYMIC']`\n- Names and surnames: `['NAME', 'SURNAME']`"
         },
         "fioGender": {
@@ -129,7 +214,35 @@
           "description": "Filter by gender (for `fio` suggestions).\n- `UNKNOWN` / `MALE` / `FEMALE`"
         },
         "filters": {
-          "$ref": "#/definitions/OneOrMany<(SuggestFmsUnitFilter|SuggestFnsUnitFilter|SuggestMetroFilter|SuggestMktuFilter|SuggestOkpd2Filter|SuggestOkved2Filter|SuggestPartyByFilter|SuggestPartyKzFilter|SuggestPostalUnitFilter|SuggestRegionCourtFilter)>",
+          "anyOf": [
+            { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+            { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+            { "$ref": "#/definitions/SuggestMetroFilter" },
+            { "$ref": "#/definitions/SuggestMktuFilter" },
+            { "$ref": "#/definitions/SuggestOkpd2Filter" },
+            { "$ref": "#/definitions/SuggestOkved2Filter" },
+            { "$ref": "#/definitions/SuggestPartyByFilter" },
+            { "$ref": "#/definitions/SuggestPartyKzFilter" },
+            { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+            { "$ref": "#/definitions/SuggestRegionCourtFilter" },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+                  { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+                  { "$ref": "#/definitions/SuggestMetroFilter" },
+                  { "$ref": "#/definitions/SuggestMktuFilter" },
+                  { "$ref": "#/definitions/SuggestOkpd2Filter" },
+                  { "$ref": "#/definitions/SuggestOkved2Filter" },
+                  { "$ref": "#/definitions/SuggestPartyByFilter" },
+                  { "$ref": "#/definitions/SuggestPartyKzFilter" },
+                  { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+                  { "$ref": "#/definitions/SuggestRegionCourtFilter" }
+                ]
+              }
+            }
+          ],
           "description": "Filters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `region_court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
         },
         "debounce": {
@@ -153,10 +266,7 @@
           "$ref": "#/definitions/VueDadataClasses",
           "description": "Custom CSS classes names for component elements.\nDefaults: @see DEFAULT_CLASSES"
         },
-        "inputAttributes": {
-          "$ref": "#/definitions/InputHTMLAttributes",
-          "description": "Additional attributes to pass to the internal `<input>` element.\n\nUseful for controlling browser behavior (`autocomplete`, `autocapitalize`, `inputmode`, `enterkeyhint`, etc.)\n\nNote:\n- Critical attributes and event handlers (`value`, `onInput`, `onBlur`, etc.) are managed   internally and cannot be overridden.\n- The `disabled` state must be controlled via the `disabled` prop on `VueDadata`,   not through `inputAttributes`.\n- To listen for `onFocus`/`onBlur`, use `@focus`/`@blur` on the `VueDadata` component.\n\n**Example:** ```vue <VueDadata :input-attributes=\"{ autocomplete: 'one-time-code', inputmode: 'numeric' }\" /> ```"
-        },
+        "inputAttributes": { "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement" },
         "showOnFocus": {
           "type": ["string", "boolean"],
           "enum": ["no_selection", "always", false],
@@ -212,13 +322,9 @@
           "description": "Forces the suggestions list to always remain hidden.\nUseful when creating custom UI using `v-model:suggestionsList`\nDefault: `false`"
         }
       },
-      "required": ["inputAttributes", "token"]
+      "required": ["token"]
     },
     "OptionalSuggestPayload": {
-      "$ref": "#/definitions/DistributivePartial<SuggestPayload>",
-      "description": "Union of all possible 'suggest' payload types where each property of each payload type is optional"
-    },
-    "DistributivePartial<SuggestPayload>": {
       "type": "object",
       "properties": {
         "locations_boost": {
@@ -462,7 +568,7 @@
           "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         }
       },
-      "description": "Makes all properties of a union optional"
+      "description": "Union of all possible 'suggest' payload types where each property of each payload type is optional"
     },
     "KladrIdFilter": { "type": "object", "properties": { "kladr_id": { "type": "string" } } },
     "Bound": {
@@ -664,131 +770,6 @@
       "additionalProperties": {
         "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }, { "type": "null" }, { "not": {} }]
       }
-    },
-    "OneOrMany<(KladrIdFilter|string|number)>": {
-      "anyOf": [
-        { "$ref": "#/definitions/KladrIdFilter" },
-        { "type": "string" },
-        { "type": "number" },
-        {
-          "type": "array",
-          "items": { "anyOf": [{ "$ref": "#/definitions/KladrIdFilter" }, { "type": "string" }, { "type": "number" }] }
-        }
-      ]
-    },
-    "OneOrMany<(LocationRestriction|string|number)>": {
-      "anyOf": [
-        { "$ref": "#/definitions/LocationRestriction" },
-        { "type": "string" },
-        { "type": "number" },
-        {
-          "type": "array",
-          "items": {
-            "anyOf": [{ "$ref": "#/definitions/LocationRestriction" }, { "type": "string" }, { "type": "number" }]
-          }
-        }
-      ]
-    },
-    "OneOrMany<PartyByType>": {
-      "anyOf": [
-        { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
-        { "type": "array", "items": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] } }
-      ]
-    },
-    "OneOrMany<PartyKzType>": {
-      "anyOf": [
-        { "type": "string", "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"] },
-        {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
-          }
-        }
-      ]
-    },
-    "OneOrMany<BankType>": {
-      "anyOf": [
-        { "type": "string", "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"] },
-        {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
-          }
-        }
-      ]
-    },
-    "OneOrMany<PartyStatus>": {
-      "anyOf": [
-        { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
-        {
-          "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] }
-        }
-      ]
-    },
-    "OneOrMany<PartyByStatus>": {
-      "anyOf": [
-        { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"] },
-        {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
-          }
-        }
-      ]
-    },
-    "OneOrMany<BankStatus>": {
-      "anyOf": [
-        { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
-        { "type": "array", "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] } }
-      ]
-    },
-    "OneOrMany<BranchType>": {
-      "anyOf": [
-        { "type": "string", "enum": ["MAIN", "BRANCH"] },
-        { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
-      ]
-    },
-    "OneOrMany<string>": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
-    "OneOrMany<FioParts>": {
-      "anyOf": [
-        { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
-        { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } }
-      ]
-    },
-    "OneOrMany<(SuggestFmsUnitFilter|SuggestFnsUnitFilter|SuggestMetroFilter|SuggestMktuFilter|SuggestOkpd2Filter|SuggestOkved2Filter|SuggestPartyByFilter|SuggestPartyKzFilter|SuggestPostalUnitFilter|SuggestRegionCourtFilter)>": {
-      "anyOf": [
-        { "$ref": "#/definitions/SuggestFmsUnitFilter" },
-        { "$ref": "#/definitions/SuggestFnsUnitFilter" },
-        { "$ref": "#/definitions/SuggestMetroFilter" },
-        { "$ref": "#/definitions/SuggestMktuFilter" },
-        { "$ref": "#/definitions/SuggestOkpd2Filter" },
-        { "$ref": "#/definitions/SuggestOkved2Filter" },
-        { "$ref": "#/definitions/SuggestPartyByFilter" },
-        { "$ref": "#/definitions/SuggestPartyKzFilter" },
-        { "$ref": "#/definitions/SuggestPostalUnitFilter" },
-        { "$ref": "#/definitions/SuggestRegionCourtFilter" },
-        {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              { "$ref": "#/definitions/SuggestFmsUnitFilter" },
-              { "$ref": "#/definitions/SuggestFnsUnitFilter" },
-              { "$ref": "#/definitions/SuggestMetroFilter" },
-              { "$ref": "#/definitions/SuggestMktuFilter" },
-              { "$ref": "#/definitions/SuggestOkpd2Filter" },
-              { "$ref": "#/definitions/SuggestOkved2Filter" },
-              { "$ref": "#/definitions/SuggestPartyByFilter" },
-              { "$ref": "#/definitions/SuggestPartyKzFilter" },
-              { "$ref": "#/definitions/SuggestPostalUnitFilter" },
-              { "$ref": "#/definitions/SuggestRegionCourtFilter" }
-            ]
-          }
-        }
-      ]
     },
     "VueDadataClasses": {
       "type": "object",

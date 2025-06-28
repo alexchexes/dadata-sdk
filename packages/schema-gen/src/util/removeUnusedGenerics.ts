@@ -1,7 +1,6 @@
 import type { Schema } from 'ts-json-schema-generator';
 import { log, logY } from './log.js';
 import { cloneSchema, getDefNameFromRef, traverseSchemaObjects } from './schemaHelpers.js';
-import chalk from 'chalk';
 type SchemaDefinition = boolean | Schema;
 
 export function removeUnusedGenerics(schema: Schema): Schema {
@@ -29,7 +28,6 @@ export function removeUnusedGenerics(schema: Schema): Schema {
     return used;
   }
 
-  const allFoundGenericsNames: string[] = [];
   const defNamesToRemove: string[] = [];
 
   function recursivelyAddToRemove(defName: string, defValue: SchemaDefinition) {
@@ -51,7 +49,6 @@ export function removeUnusedGenerics(schema: Schema): Schema {
 
   Object.entries(definitions).forEach(([defName, defValue]) => {
     if (defName.includes('<')) {
-      allFoundGenericsNames.push(defName);
       if (!isGenericUsed(defName)) {
         logY('\nRemoving generic definitions...');
         recursivelyAddToRemove(defName, defValue);
@@ -59,25 +56,9 @@ export function removeUnusedGenerics(schema: Schema): Schema {
     }
   });
 
-  let remainingGenerics: string[] = [...allFoundGenericsNames];
-
   defNamesToRemove.forEach((defName) => {
     delete cloned.definitions[defName];
-    remainingGenerics = remainingGenerics.filter((name) => name !== defName);
   });
-
-  if (remainingGenerics.length) {
-    log(
-      chalk.bgRed.yellowBright(
-        "\n The generated schema contains the following generic definitions that can't be removed automatically.\n" +
-          ' Generics in the schema are generally the result of "ts-json-schema-generator" bug/limitation.\n' +
-          ' To avoid this:\n' +
-          '  - Export the types/interfaces that use the generic structures listed below\n' +
-          '  - Use interfaces (instead of types) when defining the shape of objects\n',
-      ),
-    );
-    remainingGenerics.forEach((defName) => log('\n * ' + defName));
-  }
 
   return cloned;
 }

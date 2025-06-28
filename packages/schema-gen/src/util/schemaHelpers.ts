@@ -12,16 +12,17 @@ export function getDefNameFromRef(ref?: string): string | undefined {
 
 export function traverseSchemaObjects(
   node: Schema,
-  fn: (n: Schema, level: number) => void,
-  initialLevel: number = 0,
+  fn: (n: Schema, level: number, path: string[]) => void,
+  level = 0,
+  path: string[] = [],
 ): void {
   if (Array.isArray(node)) {
-    // Call fn on every element of array
-    node.forEach((n: Schema) => traverseSchemaObjects(n, fn, initialLevel));
+    node.forEach((n, i) => traverseSchemaObjects(n, fn, level, path.concat(String(i))));
   } else if (node && typeof node === 'object') {
-    // Call fn on the node itself
-    fn(node, initialLevel);
-    // Call fn on every node key
-    Object.values(node).forEach((v: Schema) => traverseSchemaObjects(v, fn, initialLevel + 1));
+    fn(node, level, path); // full path
+
+    Object.entries(node).forEach(([k, v]) =>
+      traverseSchemaObjects(v as Schema, fn, level + 1, path.concat(k)),
+    );
   }
 }

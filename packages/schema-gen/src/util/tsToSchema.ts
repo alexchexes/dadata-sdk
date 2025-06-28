@@ -7,6 +7,7 @@ import { traverseSchemaObjects } from './schemaHelpers.js';
 import { log, logWarn } from './log.js';
 import { replaceFullDescription } from './replaceFullDescription.js';
 import { allowAdditionalProperties } from './allowAdditionalProperties.js';
+import { inlineSingleRefGenerics } from './inlineSingleRefGenerics.js';
 
 export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Schema => {
   const config: CompletedConfig = {
@@ -26,6 +27,7 @@ export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Sch
 
 function postProcessGeneratedSchema(schema: Schema) {
   schema = replaceFullDescription(schema);
+  schema = inlineSingleRefGenerics(schema);
   schema = removeUnusedGenerics(schema);
   schema = inlineTopLevelNonObjectDefs(schema);
 
@@ -38,22 +40,41 @@ function postProcessGeneratedSchema(schema: Schema) {
 }
 
 function checkForWarnings(schema: Schema) {
-  traverseSchemaObjects(schema, (node, level) => {
+  if (schema.definitions) {
+    const remainingGenerics = Object.keys(schema.definitions).filter((name) => name.includes('<'));
+
+    if (remainingGenerics.length) {
+      logWarn(
+        "The generated schema contains the following generic definitions that can't be inlined or removed automatically.\n" +
+          'This is how ts-json-schema-generator works.' +
+          ' If you find this undesirable, consider:\n' +
+          '  - Defining separate, exported types/interfaces that use these generic structures\n' +
+          '  - Try using interfaces instead of types',
+      );
+      remainingGenerics.forEach((name) => log('\n * ' + name));
+    }
+  }
+
+  traverseSchemaObjects(schema, (node, level, path) => {
     if (node.type && node.type === 'object') {
       // 1. Warn if there's object without properties/additional properties
       const propsCount = Object.keys(node.properties || {}).length;
       const addPropsCount = Object.keys(node.additionalProperties || {}).length;
 
       if (!propsCount && !addPropsCount) {
-        logWarn('Found "type": "object", but no properties were found. This is likely unintended:');
+        logWarn(
+          `Found "type": "object", but no properties were found. Decide whether this is intentional: `,
+        );
+        log(path.join('.'));
         log(node);
       }
 
       // 2. Warn if there's object that is not in top-level (definitions)
       if (level > 2) {
         logWarn(
-          "Found an inlined object. It's better to define it as a separate exported interface:",
+          `Found an inlined object. Consider defining it as an exported type/interface so it gets its own reusable definition:`,
         );
+        log(path.join('.'));
         log(node);
       }
     }
