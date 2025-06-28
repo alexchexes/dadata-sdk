@@ -585,20 +585,6 @@
       "required": ["query"],
       "description": "{@link https://dadata.ru/api/suggest/address/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}"
     },
-    "BaseSuggestPayload": {
-      "type": "object",
-      "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
-        "count": {
-          "type": "number",
-          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
-          "minimum": 1,
-          "maximum": 20,
-          "default": 10
-        }
-      },
-      "required": ["query"]
-    },
     "KladrIdFilter": { "type": "object", "properties": { "kladr_id": { "type": "string" } } },
     "LocationRestriction": {
       "type": "object",
@@ -1121,6 +1107,20 @@
           "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
         }
       }
+    },
+    "BaseSuggestPayload": {
+      "type": "object",
+      "properties": {
+        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "count": {
+          "type": "number",
+          "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 10
+        }
+      },
+      "required": ["query"]
     },
     "SuggestCarBrandPayload": {
       "type": "object",

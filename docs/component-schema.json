@@ -266,7 +266,9 @@
           "$ref": "#/definitions/VueDadataClasses",
           "description": "Custom CSS classes names for component elements.\nDefaults: @see DEFAULT_CLASSES"
         },
-        "inputAttributes": { "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement" },
+        "inputAttributes": {
+          "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#instance_properties"
+        },
         "showOnFocus": {
           "type": ["string", "boolean"],
           "enum": ["no_selection", "always", false],
