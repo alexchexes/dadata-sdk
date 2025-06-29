@@ -74,6 +74,7 @@ export default defineConfig({
         nav: [
           { text: 'Home', link: '/' },
           { text: 'Demo', link: '/demo' },
+          { text: 'Vue', link: '/vue' },
           { text: 'API endpoints', link: '/endpoints' },
         ],
 
@@ -115,6 +116,7 @@ export default defineConfig({
         nav: [
           { text: 'Главная', link: '/ru/' },
           { text: 'Демо', link: '/ru/demo' },
+          { text: 'Vue', link: '/ru/vue' },
           { text: 'Список API', link: '/ru/endpoints' },
         ],
 

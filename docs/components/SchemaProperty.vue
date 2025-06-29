@@ -27,10 +27,9 @@ const propData = computed(
 );
 
 const description = computed<string | null>(() => {
-  const descr = propData.value.description?.replaceAll(
-    /{\s*@link (https*:\/\/(.+?))\s*}/g,
-    '[$2]($1)',
-  );
+  const descr = propData.value.description
+    ?.replaceAll(/{\s*@link (https?:\/\/(.+?))\s*}/g, '[$2]($1)')
+    .replaceAll(/@see\s+(https?:\/\/(\S+?))(\s|\n|$)/g, 'see: [$2]($1)');
   return descr ? md.render(descr) : null;
 });
 
