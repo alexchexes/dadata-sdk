@@ -19,7 +19,7 @@ if (!opts.input) {
 }
 
 await generateSchemas({
-  inputDirOrFile: opts.input,
-  outputDirOrFile: opts.output,
-  tsconfigPath: opts.tsconfig,
+  input: opts.input,
+  output: opts.output,
+  tsconfig: opts.tsconfig,
 });

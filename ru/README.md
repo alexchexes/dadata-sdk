@@ -1,117 +1,52 @@
-# Vue Dadata
+# Dadata SDK
 
-![Publish](https://github.com/rusproject/vue-dadata/workflows/Publish/badge.svg)
-[![gitlocalized ](https://gitlocalize.com/repo/3342/whole_project/badge.svg)](https://gitlocalize.com/repo/3342/whole_project?utm_source=badge)
+### [README in English](../README.md)
 
-Это vue компонент для подсказок с использованием сервиса [DaData.ru](https://dadata.ru).
+### [Docs website](../docs/ru/index.md) (not hosted yet)
 
-Данная документация на русском языке безнадёжно устарела, она будет обновлена позже. Пока что, воспользуйтесь [документацией на английском](https://github.com/rusproject/vue-dadata/tree/rewritten/README.md)
+## JSON-схемы
 
-## Установка
+Полное описание контракта API «Дадаты» в формате JSON-schema:
 
-[npm package](https://www.npmjs.com/package/vue-dadata)
+- [Request.json](packages/api-types/json-schema/request.json)
+- [Response.json](packages/api-types/json-schema/response.json)
 
-```bash
-$ npm install vue-dadata --save
-```
+Аккуратно сгенерировано из типов TypeScript (см. ниже ↓).
 
-[yarn package](https://yarnpkg.com/en/package/vue-dadata)
+## Типы TypeScript
 
-```bash
-$ yarn add vue-dadata
-```
+`@dadata-sdk/api-types`
 
-## Применение
+Библиотека типов TypeScript, подробно документирующая все API Дадаты (типы для запросов и ответов для всех API) с полной экспортируемостью и подробной JSDoc документацией.
 
-### Глобальный импорт
+_Начать помогли эти библиотеки:_
 
-```js
-import VueDadata from 'vue-dadata'  Vue.use(VueDadata)
-```
+> - _[DefinitelyTyped/dadata-api](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/dadata-api)_
+> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata)_
+> - _[ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)_
 
-### Локальный импорт
+## Компонент для Vue
 
-```html
-<template>
-  <div id="app">
-    <vue-dadata token="dadata_api_key"></vue-dadata>
-  </div>
-</template>
+`@dadata-sdk/vue`
 
-<script>
-  import VueDadata from 'vue-dadata';
+Компонент подсказок [DaData.ru](https://dadata.ru) для Vue 3, поддерживающий адреса, организации (РФ / КЗ / РБ), банки и все остальные API.
 
-  export default {
-    name: 'VueDadataTest',
-    components: {
-      'vue-dadata': VueDadata,
-    },
-  };
-</script>
-```
+### [Документация](../docs/ru/vue.md)     [Демо](../docs/ru/demo.md)
 
-### Свойства (пропсы)
+**Vue 2** не поддерживается. Возможно, вам пригодится одна из старых версий [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata).
 
-| Свойство          | Обязательно | Тип                                            | Описание                                                                                                            |
-| ----------------- | ----------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| token             | Да          | string                                         | Авторизационный токен DaData.ru                                                                                     |
-| placeholder       | Нет         | string                                         | Подсказка в input                                                                                                   |
-| query             | Нет         | string                                         | Поле ввода начального состояния                                                                                     |
-| autoload          | Нет         | boolean                                        | Если `true` , то запрос на подсказки будет инициирован в фоновом режиме в созданном хуке                            |
-| onChange          | Нет         | function(suggestion: DadataSuggestion) -> void | Функция вызывается при выборе всплывающей подсказки                                                                 |
-| selectOnBlur      | Нет         | string                                         |                                                                                                                     |
-| selectOnEnter     | Нет         | boolean                                        | Если `true`, выбирает первую подсказку по нажатию Enter                                                             |
-| defaultClass      | Нет         | string                                         | Компонент класса по умолчанию, значение по умолчанию - `vue-dadata`                                                 |
-| classes           | Нет         | string                                         | Дополнительные классы                                                                                               |
-| inputName         | Нет         | string                                         | Input name атрибут                                                                                                  |
-| fromBound         | Нет         | string                                         | Тип привязки Dadata ОТ                                                                                              |
-| toBound           | Нет         | string                                         | Dadata привязанного типа к                                                                                          |
-| locationsFilter   | Нет         | object                                         | [Ограничение сектора поиска адреса](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)            |
-| autoSelectOnEnter | Нет         | boolean                                        | Если `true`, то при нажатии клавиши `ENTER` будет выбираться первая подсказка, если не одна из подсказок не активна |
+_На чёт основано / вдохновлено:_
 
-## Зависимости
+> - _[ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata) by Ivan Monastyrev_
+> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata) (отдельные идеи и приёмы)_
+> - _[hflabs/suggestions-jquery](https://github.com/hflabs/suggestions-jquery) (официальный jQuery-плагин)_
 
-- [axios](https://github.com/axios/axios)
-- [core-js](https://github.com/zloirock/core-js)
-- [vue](https://github.com/vuejs/vue)
-- [vue-class-component](https://github.com/vuejs/vue-class-component)
-- [vue-property-decorator](https://github.com/kaorun343/vue-property-decorator)
-- [vue-highlight-words](https://github.com/Astray-git/vue-highlight-words)
-- [vue-debounce-decorator](https://github.com/trepz/vue-debounce-decorator)
+## Утилиты
 
-## Отчет о проблемах
+`@dadata-sdk/schema-gen` — [Генератор JSON-схем из TypeScript](../docs/ru/schema-gen.md)
 
-Если вы обнаружили ошибку или у вас есть запрос на добавление функции, сообщите об этом в [разделе проблем с](https://github.com/rusproject/vue-dadata/issues) хранилищем.
+## Лицензия
 
-## Собираемся сделать
+MIT
 
-[Показать проект Vue Dadata](https://github.com/rusproject/vue-dadata/projects/1)
-
-## Основные этапы
-
-[Показать основные этапы](https://github.com/rusproject/vue-dadata/milestones)
-
-## Свяжитесь со мной
-
-- Сайт: [ikloster.ru](http://ikloster.ru)
-- E-mail: [ikloster@yandex.ru](mailto:ikloster@yandex.ru)
-- Twitter: [twitter.com/IvanMonastyrev](https://twitter.com/IvanMonastyrev)
-
-## Авторы
-
-- [Valery Roshett](https://github.com/Roshett)
-- [Ilya Kiselev](https://github.com/kiselev-webdev)
-
-##
-
-[CHANGELOG](https://github.com/rusproject/vue-dadata/blob/rewritten/CHANGELOG.md)
-
-##
-
-[CONTRIBUTING](https://github.com/rusproject/vue-dadata/blob/rewritten/CONTRIBUTING.md)
-
-##
-
-[ЛИЦЕНЗИЯ](https://github.com/rusproject/vue-dadata/blob/rewritten/LICENSE)
-
-Forked from [original author’s repo](https://github.com/ikloster03/vue-dadata) by Ivan Monastyrev
+DaData — товарный знак HFLabs.

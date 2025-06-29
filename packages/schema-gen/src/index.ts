@@ -6,11 +6,11 @@ import { writeToFile } from './util/writeToFile.js';
 
 export interface GenerateOptions {
   /** Directory or file containing `.types.ts` definitions */
-  inputDirOrFile: string;
+  input: string;
   /** Directory where generated schemas will be placed */
-  outputDirOrFile: string;
+  output: string;
   /** Path to tsconfig used for type generation */
-  tsconfigPath?: string;
+  tsconfig?: string;
 }
 
 function safeStat(p: string): fs.Stats | null {
@@ -23,8 +23,8 @@ function safeStat(p: string): fs.Stats | null {
 }
 
 export async function generateSchemas(options: GenerateOptions) {
-  const absoluteInput = path.resolve(options.inputDirOrFile);
-  const absoluteOutput = path.resolve(options.outputDirOrFile);
+  const absoluteInput = path.resolve(options.input);
+  const absoluteOutput = path.resolve(options.output);
 
   let files: string[] = [];
 
@@ -50,7 +50,7 @@ export async function generateSchemas(options: GenerateOptions) {
 
   await Promise.all(
     files.map(async (file) => {
-      const schema = tsToSchema({ path: file, tsconfig: options.tsconfigPath });
+      const schema = tsToSchema({ path: file, tsconfig: options.tsconfig });
       const schemaString = await prettier.format(JSON.stringify(schema), {
         parser: 'json',
         printWidth: 120,

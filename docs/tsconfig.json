@@ -18,7 +18,8 @@
       "@dadata-sdk/api-types": ["../packages/api-types/src/index.d.ts"],
       "@dadata-sdk/schema-gen": ["../packages/schema-gen/src"]
     },
-    "types": ["vue"]
+    "types": ["vue"],
+    "resolveJsonModule": true
   },
 
   "vueCompilerOptions": {

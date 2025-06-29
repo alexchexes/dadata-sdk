@@ -73,17 +73,20 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'Home', link: '/' },
-          { text: 'API endpoints', link: '/endpoints' },
           { text: 'Demo', link: '/demo' },
+          { text: 'API endpoints', link: '/endpoints' },
         ],
 
         sidebar: [
           {
             items: [
-              { text: 'API endpoints', link: '/endpoints' },
               { text: 'Demo', link: '/demo' },
-              { text: 'Schema generator', link: '/schema-gen' },
+              { text: 'API endpoints', link: '/endpoints' },
+              { text: 'Vue component', link: '/vue' },
             ],
+          },
+          {
+            items: [{ text: 'Schema generator', link: '/schema-gen' }],
           },
           {
             text: 'External links',
@@ -111,17 +114,20 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'Главная', link: '/ru/' },
-          { text: 'Список API', link: '/ru/endpoints' },
           { text: 'Демо', link: '/ru/demo' },
+          { text: 'Список API', link: '/ru/endpoints' },
         ],
 
         sidebar: [
           {
             items: [
-              { text: 'Список API «Дадаты»', link: '/ru/endpoints' },
               { text: 'Демо', link: '/ru/demo' },
-              { text: 'Генератор схем', link: '/ru/schema-gen' },
+              { text: 'Список API «Дадаты»', link: '/ru/endpoints' },
+              { text: 'Vue компонент', link: '/ru/vue' },
             ],
+          },
+          {
+            items: [{ text: 'Генератор схем', link: '/ru/schema-gen' }],
           },
           {
             text: 'Внешние ссылки',

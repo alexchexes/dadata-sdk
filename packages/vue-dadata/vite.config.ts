@@ -14,7 +14,7 @@ export default defineConfig(({ command }) => {
         dts({
           outDir: 'dist/types',
           insertTypesEntry: true,
-          tsconfigPath: resolve(__dirname, 'tsconfig.json'),
+          tsconfig: resolve(__dirname, 'tsconfig.json'),
           aliasesExclude: ['@dadata-sdk/api-types'],
         }),
     ].filter(Boolean),
