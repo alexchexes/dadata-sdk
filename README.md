@@ -19,7 +19,7 @@ Carefully generated from the TypeScript types (see below ↓).
 
 Hand-crafted, fully exported, JSDoc-documented TypeScript types library for all request and response models for each Dadata API endpoint.
 
-_Thanks for the kickstart types to:_
+_Thanks for the kickstart to:_
 
 > - _[DefinitelyTyped/dadata-api](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/dadata-api)_
 > - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata)_
