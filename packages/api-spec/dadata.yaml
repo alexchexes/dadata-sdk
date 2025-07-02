@@ -180,6 +180,10 @@ paths:
             examples:
               simple_query:
                 value: { query: 'онлайнер' }
+              only_liquidated:
+                value: { 'query': 'лар', 'filters': [{ 'status': 'LIQUIDATED' }] }
+              only_individual:
+                value: { 'query': 'лар', 'filters': [{ 'type': 'INDIVIDUAL' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -219,6 +223,8 @@ paths:
             examples:
               simple_query:
                 value: { query: 'онлайн' }
+              only_foreign_branch:
+                value: { 'query': 'хен', 'filters': [{ 'type': 'FOREIGN_BRANCH' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -428,6 +434,9 @@ paths:
             examples:
               simple_query:
                 value: { query: 'нижнего' }
+              filter_region_code:
+                description: Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)
+                value: { query: 'вор', filters: [{ region_code: '36' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -536,10 +545,10 @@ paths:
               simple_query:
                 summary: Пример запроса
                 value: { query: 'алек' }
-              filtered_spb:
+              only_spb:
                 summary: Поиск среди станций Санкт-Петербурга
                 value: { query: 'алек', filters: [{ city_kladr_id: '7800000000000' }] }
-              filtered_moscow_line_open:
+              only_open_in_moscow_on_line_5:
                 summary: Поиск только среди открытых станций Кольцевой ветки Москвы
                 value: { query: 'па', filters: [{ city: 'Москва', line_id: '5', is_closed: null }] }
       responses:
@@ -787,13 +796,295 @@ paths:
             schema: { $ref: './schemas/request.json#/definitions/SuggestOktmoPayload' }
             examples:
               simple_query:
-                value: { query: 'калоши' }
+                value: { query: '54623425' }
       responses:
         '200':
           description: Запрос успешно обработан
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOktmoResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, address]
+      summary: Адрес по коду ФИАС, ГАР, КЛАДР или кадастровому номеру
+      description: |
+        Находит адрес по идентификатору:
+        - кадастровый номер (`stead_cadnum`, `house_cadnum` или `flat_cadnum`), только для России;
+        - ФИАС-код, он же ГАР-код (`fias_id`), только для России;
+        - КЛАДР-код (`kladr_id`), только для России;
+        - Идентификатор OpenStreetMap (`fias_id`), только для Беларуси, Казахстана и Узбекистана;
+        - Идентификатор GeoNames (`geoname_id`), для всех остальных стран.
+        По КЛАДР-коду ищет до улицы, по ФИАС-коду — до квартиры.
+      externalDocs: { url: https://dadata.ru/api/find-address/ }
+      operationId: findAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindAddressPayload' }
+            examples:
+              simple_query:
+                value: { query: '9120b43f-2fae-4838-a144-85e43c2bfb29' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestAddressResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/fias:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, fias]
+      summary: Адрес в ФИАС по идентификатору
+      description: |
+        Находит адрес в справочнике ФИАС по коду КЛАДР или ФИАС.
+        По КЛАДР-коду ищет до улицы, по ФИАС-коду — до дома. По ФИАС-коду квартиры не ищет
+      externalDocs: { url: https://dadata.ru/api/find-fias/ }
+      operationId: findFias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindFiasPayload' }
+            examples:
+              simple_query:
+                value: { query: '9120b43f-2fae-4838-a144-85e43c2bfb29' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestFiasResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/party:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, party]
+      summary: Организация по ИНН или ОГРН
+      description: |
+        Находит компанию или ИП по ИНН или ОГРН.
+        Возвращает все доступные сведения о компании, в отличие от метода suggest, который возвращает только базовые поля.
+      externalDocs: { url: https://dadata.ru/api/find-party/ }
+      operationId: findParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindPartyPayload' }
+            examples:
+              simple_query:
+                value: { query: '7707083893' }
+              only_main_branch:
+                value: { 'query': '7707083893', 'branch_type': 'MAIN' }
+              find_branch_by_kpp:
+                value: { 'query': '7707083893', 'kpp': '540602001' }
+              only_companies:
+                value: { 'query': '7707083893', 'type': 'LEGAL' }
+              only_individuals:
+                value: { 'query': '784806113663', 'type': 'INDIVIDUAL' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindPartyResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/party_by:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, party_by]
+      summary: Компании Беларуси по УНП
+      description: |
+        Поиск в справочнике организаций и индивидуальных предпринимателей Беларуси по УНП (учетному номеру налогоплательщика)
+      externalDocs: { url: https://dadata.ru/api/suggest/party_by/ }
+      operationId: findPartyBy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindPartyByPayload' }
+            examples:
+              simple_query:
+                value: { query: '190657494' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyByResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/party_kz:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, party_kz]
+      summary: Компании Казахстана по БИН
+      description: |
+        Поиск в справочнике организаций и индивидуальных предпринимателей Казахстана по БИН (бизнес-идентификационный номер)
+      externalDocs: { url: https://dadata.ru/api/suggest/party_kz/ }
+      operationId: findPartyKz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindPartyKzPayload' }
+            examples:
+              simple_query:
+                value: { query: '140440031745' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyKzResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/bank:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, bank]
+      summary: Банк по БИК, SWIFT, ИНН или регистрационному номеру
+      description: |
+        Находит банк по любому из идентификаторов:
+        - БИК,
+        - SWIFT,
+        - ИНН,
+        - ИНН + КПП (для филиалов),
+        - регистрационному номеру, присвоенному Банком России.
+        Ищет только по точному совпадению, для частичного совпадения используйте метод suggest.
+      externalDocs: { url: https://dadata.ru/api/find-bank/ }
+      operationId: findBank
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindBankPayload' }
+            examples:
+              simple_query:
+                value: { query: '044525225' }
+              simple_query_swift:
+                value: { query: 'SABRRUMM012' }
+              inn_i_kpp:
+                value: { query: '7728168971', kpp: '667102002' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindBankResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/postal_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, postal_unit]
+      summary: Отделение почты РФ по индексу
+      description: |
+        Находит отделение Почты России по почтовому индексу
+      externalDocs: { url: https://dadata.ru/api/suggest/postal_unit/ }
+      operationId: findPostalUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindPostalUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '127642' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/fns_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, fns_unit]
+      summary: Налоговая инспекция по коду или ИНН
+      description: |
+        Находит запись в справочнике инспекций Налоговой службы по коду инспекции или ИНН
+      externalDocs: { url: https://dadata.ru/api/suggest/fns_unit/ }
+      operationId: findFnsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindFnsUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '127642' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }

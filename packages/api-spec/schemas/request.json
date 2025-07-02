@@ -106,7 +106,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Код КЛАДР или ФИАС, по которому нужно получить подсказку\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
+          "description": "Код КЛАДР или ФИАС, по которому нужно получить адрес\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
           "examples": [{ "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" }, { "query": "77000000000292300" }]
         },
         "count": {
@@ -303,7 +303,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
+          "description": "Название или один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
           "examples": [{ "query": "764" }, { "query": "TH" }, { "query": "THA" }]
         },
         "count": {
