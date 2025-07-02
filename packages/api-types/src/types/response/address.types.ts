@@ -1,4 +1,5 @@
 import type { Override, PickAndOverride } from '../../types/helpers.types';
+import type { SuggestionsResponse } from '../common.types';
 
 export interface AddressMetroItem {
   /** название станции */
@@ -1105,3 +1106,8 @@ export interface AddressMunicipalSuggestion extends BaseAddressSuggestion<Addres
 
 // About Geolocate API (https://dadata.ru/api/geolocate/)
 // DaData page says that some fields are not filled in this API method, but at least in new versions - they are
+
+export type SuggestAddressAdminResponse = SuggestionsResponse<AddressAdminSuggestion>;
+export type SuggestAddressMunicipalResponse = SuggestionsResponse<AddressMunicipalSuggestion>;
+
+export type SuggestAddressResponse = SuggestAddressAdminResponse | SuggestAddressMunicipalResponse;

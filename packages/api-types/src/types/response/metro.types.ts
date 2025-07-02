@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/metro/ */
 export interface MetroSuggestion {
   /**
@@ -39,3 +41,5 @@ export interface MetroSuggestionData {
    */
   is_closed: true | null;
 }
+
+export type SuggestMetroResponse = SuggestionsResponse<MetroSuggestion>;

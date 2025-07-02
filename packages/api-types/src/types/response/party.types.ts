@@ -1,4 +1,10 @@
-import type { BranchType, FioGenders, PartyStatus, PartyType } from '../common.types';
+import type {
+  BranchType,
+  FioGenders,
+  PartyStatus,
+  PartyType,
+  SuggestionsResponse,
+} from '../common.types';
 import type { Override } from '../helpers.types';
 import type { PartySuggestionAddressData } from './address.types';
 import type { EmailSuggestionData } from './email.types';
@@ -797,3 +803,8 @@ export interface PartyByEmailSuggestion {
   /** Подробности об имейле и о компании */
   data: PartyByEmailSuggestionData;
 }
+
+export type SuggestPartyResponse = SuggestionsResponse<PartySuggestion>;
+export type FindPartyResponse = SuggestionsResponse<PartyByIdSuggestion>;
+export type PartyByEmailResponse = SuggestionsResponse<PartyByEmailSuggestion>;
+export type FindAffiliatedResponse = SuggestionsResponse<PartyAffiliatedSuggestion>;

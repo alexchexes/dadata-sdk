@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/okpd2/ */
 export interface Okpd2Suggestion {
   /** Наименование продукции (как показывается в списке подсказок) */
@@ -18,3 +20,5 @@ export interface Okpd2SuggestionData {
   /** Наименование продукции или услуги */
   name: string;
 }
+
+export type SuggestOkpd2Response = SuggestionsResponse<Okpd2Suggestion>;

@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/currency/ */
 export interface CurrencySuggestion {
   /** Название валюты (как показывается в списке подсказок) */
@@ -22,3 +24,5 @@ export interface CurrencySuggestionData {
    */
   country: string;
 }
+
+export type SuggestCurrencyResponse = SuggestionsResponse<CurrencySuggestion>;

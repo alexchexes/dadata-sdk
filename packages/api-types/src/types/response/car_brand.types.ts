@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/car_brand/ */
 export interface CarBrandSuggestion {
   /**
@@ -22,3 +24,5 @@ export interface CarBrandSuggestionData {
   /** Наименование марки на русском языке */
   name_ru: string;
 }
+
+export type SuggestCarBrandResponse = SuggestionsResponse<CarBrandSuggestion>;

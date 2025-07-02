@@ -22,3 +22,10 @@ export type PartyKzType = (typeof PARTY_KZ_TYPES)[number];
 export type PartyKzStatus = (typeof PARTY_KZ_STATUSES)[number];
 
 export type FmsUnitType = '0' | '1' | '2' | '3';
+
+/**
+ * Объект с массивом подсказок
+ */
+export type SuggestionsResponse<T> = {
+  suggestions: T[];
+};

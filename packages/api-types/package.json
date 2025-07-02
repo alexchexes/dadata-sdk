@@ -25,7 +25,7 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prune:stubs": "rimraf dist/cjs/types dist/esm/types",
-    "gen:schema": "pnpm schema-gen --input schema-types --output ./json-schema"
+    "gen:schema": "pnpm schema-gen --input schema-types --output ../api-spec/schemas"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",

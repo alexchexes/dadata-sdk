@@ -1,3 +1,4 @@
+import type { SuggestionsResponse } from '../common.types';
 import type { Override } from '../helpers.types';
 import type { BankStatus, BankType } from '../request/suggest-payload-bank.types';
 import type { BankSuggestionAddressData } from './address.types';
@@ -199,3 +200,6 @@ export interface BankSuggestionDataCbr
       bic: string;
     }
   > {}
+
+export type SuggestBankResponse = SuggestionsResponse<BankSuggestion>;
+export type FindBankResponse = SuggestionsResponse<BankByIdSuggestion>;

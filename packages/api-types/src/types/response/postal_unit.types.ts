@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/postal_unit/ */
 export interface PostalUnitSuggestion {
   /** Почтовый индекс  */
@@ -40,3 +42,5 @@ export interface PostalUnitSuggestionData {
   /** Режим работы в воскресенье */
   schedule_sun: string | null;
 }
+
+export type SuggestPostalUnitResponse = SuggestionsResponse<PostalUnitSuggestion>;

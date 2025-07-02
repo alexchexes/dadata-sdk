@@ -1,4 +1,4 @@
-import type { FmsUnitType } from '../common.types';
+import type { FmsUnitType, SuggestionsResponse } from '../common.types';
 
 /**
  * Кем выдан паспорт
@@ -35,3 +35,5 @@ export interface FmsUnitSuggestionData {
    */
   type: FmsUnitType;
 }
+
+export type SuggestFmsUnitResponse = SuggestionsResponse<FmsUnitSuggestion>;

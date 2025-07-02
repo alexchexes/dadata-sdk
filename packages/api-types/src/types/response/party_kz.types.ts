@@ -1,4 +1,4 @@
-import type { PartyKzStatus, PartyKzType } from '../common.types';
+import type { PartyKzStatus, PartyKzType, SuggestionsResponse } from '../common.types';
 
 /**
  * Suggestion returned from `suggest/party_kz` and `findById/party_kz` APIs
@@ -85,3 +85,5 @@ export interface PartyKzSuggestionData {
   /** Наименование формы собственности на казахском языке */
   kfs_name_kz: string | null;
 }
+
+export type SuggestPartyKzResponse = SuggestionsResponse<PartyKzSuggestion>;

@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /**
  * @see https://dadata.ru/api/delivery/
  */
@@ -35,3 +37,5 @@ export interface DeliverySuggestionData {
    */
   dpd_id: string | null;
 }
+
+export type FindDeliveryResponse = SuggestionsResponse<DeliverySuggestion>;

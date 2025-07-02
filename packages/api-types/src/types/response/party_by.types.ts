@@ -1,4 +1,4 @@
-import type { PartyByStatus, PartyByType } from '../common.types';
+import type { PartyByStatus, PartyByType, SuggestionsResponse } from '../common.types';
 
 /**
  * Suggestion returned from `suggest/party_by` and `findById/party_by` APIs
@@ -67,3 +67,5 @@ export interface PartyBySuggestionData {
   /** Наименование основного вида деятельности на русском языке */
   oked_name: string | null;
 }
+
+export type SuggestPartyByResponse = SuggestionsResponse<PartyBySuggestion>;

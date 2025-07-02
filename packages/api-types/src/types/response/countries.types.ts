@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/country/ */
 export interface CountrySuggestion {
   /** Краткое название страны (как показывается в списке подсказок), например, "Таиланд" */
@@ -20,3 +22,5 @@ export interface CountrySuggestionData {
   /** Полное название страны. Например, "Королевство Таиланд" */
   name: string;
 }
+
+export type SuggestCountryResponse = SuggestionsResponse<CountrySuggestion>;

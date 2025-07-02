@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/okved2/ */
 export interface Okved2Suggestion {
   /** Наименование вида деятельности (как показывается в списке подсказок) */
@@ -18,3 +20,5 @@ export interface Okved2SuggestionData {
   /** Наименование вида деятельности */
   name: string;
 }
+
+export type SuggestOkved2Response = SuggestionsResponse<Okved2Suggestion>;

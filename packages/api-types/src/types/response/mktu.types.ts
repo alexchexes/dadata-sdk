@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/mktu/ */
 export interface MktuSuggestion {
   /** Наименование на русском (как показывается в списке подсказок) */
@@ -20,3 +22,5 @@ export interface MktuSuggestionData {
   /** Наименование на французском языке */
   name_fr: string;
 }
+
+export type SuggestMktuResponse = SuggestionsResponse<MktuSuggestion>;

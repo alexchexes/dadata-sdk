@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/fns_unit/ */
 export interface FnsUnitSuggestion {
   /**
@@ -54,3 +56,5 @@ export interface FnsUnitSuggestionData {
   /** Режим работы регистрирующей инспекции */
   parent_comment: string | null;
 }
+
+export type SuggestFnsUnitResponse = SuggestionsResponse<FnsUnitSuggestion>;

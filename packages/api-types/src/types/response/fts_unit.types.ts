@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/fts_unit/ */
 export interface FtsUnitSuggestion {
   /**
@@ -38,3 +40,5 @@ export interface FtsUnitSuggestionData {
   /** Адрес электронной почты */
   email: string | null;
 }
+
+export type SuggestFtsUnitResponse = SuggestionsResponse<FtsUnitSuggestion>;

@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/region_court/ */
 export interface RegionCourtSuggestion {
   /**
@@ -22,3 +24,5 @@ export interface RegionCourtSuggestionData {
   /** Код региона (первые 2 цифры КЛАДР-кода) */
   region_code: string;
 }
+
+export type SuggestRegionCourtResponse = SuggestionsResponse<RegionCourtSuggestion>;

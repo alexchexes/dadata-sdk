@@ -1,4 +1,4 @@
-import type { FioGenders } from '../common.types';
+import type { FioGenders, SuggestionsResponse } from '../common.types';
 
 /**
  * @see https://dadata.ru/api/clean/name/
@@ -78,3 +78,5 @@ export interface FioSuggestion {
   /** Подробности о ФИО */
   data: FioSuggestionData;
 }
+
+export type SuggestFioResponse = SuggestionsResponse<FioSuggestion>;

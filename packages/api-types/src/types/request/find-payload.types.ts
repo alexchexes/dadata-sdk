@@ -226,7 +226,7 @@ export interface FindCarBrandPayload extends BaseFindByIdPayload {
  */
 export interface FindCountryPayload extends BaseFindByIdPayload {
   /**
-   * Один из кодов страны:
+   * Название или один из кодов страны:
    * - Цифровой код страны (поле `code` в ответе)
    * - Буквенный код альфа-2 (поле `alfa2` в ответе)
    * - Буквенный код альфа-3 (поле `alfa3` в ответе)

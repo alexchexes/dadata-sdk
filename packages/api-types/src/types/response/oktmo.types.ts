@@ -1,3 +1,5 @@
+import type { SuggestionsResponse } from '../common.types';
+
 /** @see https://dadata.ru/api/suggest/oktmo/ */
 export interface OktmoSuggestion {
   /** 8-значный код ОКТМО (как показывается в списке подсказок) */
@@ -36,3 +38,5 @@ export interface OktmoSuggestionData {
   /** Название муниципального поселения */
   subarea: string | null;
 }
+
+export type SuggestOktmoResponse = SuggestionsResponse<OktmoSuggestion>;

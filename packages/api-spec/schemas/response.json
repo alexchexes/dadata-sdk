@@ -1996,6 +1996,26 @@
       "required": ["data", "unrestricted_value", "value"],
       "description": "Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option"
     },
+    "SuggestAddressAdminResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressAdminSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "SuggestAddressMunicipalResponse": {
+      "type": "object",
+      "properties": {
+        "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressMunicipalSuggestion" } }
+      },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "SuggestAddressResponse": {
+      "anyOf": [
+        { "$ref": "#/definitions/SuggestAddressAdminResponse" },
+        { "$ref": "#/definitions/SuggestAddressMunicipalResponse" }
+      ]
+    },
     "BankSuggestion": {
       "type": "object",
       "properties": {
@@ -2262,6 +2282,18 @@
       "required": ["value", "unrestricted_value", "data"],
       "description": "`suggestions[ ]data.cbr.address` object returned from `findById/bank`."
     },
+    "SuggestBankResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/BankSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "FindBankResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/BankByIdSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "CarBrandSuggestion": {
       "type": "object",
       "properties": {
@@ -2283,6 +2315,12 @@
         "name_ru": { "type": "string", "description": "Наименование марки на русском языке" }
       },
       "required": ["id", "name", "name_ru"]
+    },
+    "SuggestCarBrandResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CarBrandSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "CleanCombinedRecord": {
       "type": "object",
@@ -2493,6 +2531,12 @@
       },
       "required": ["code", "alfa2", "alfa3", "name_short", "name"]
     },
+    "SuggestCountryResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CountrySuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "CurrencySuggestion": {
       "type": "object",
       "properties": {
@@ -2515,6 +2559,12 @@
         }
       },
       "required": ["code", "strcode", "name", "country"]
+    },
+    "SuggestCurrencyResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CurrencySuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "DateClean": {
       "type": "object",
@@ -2567,6 +2617,12 @@
       },
       "required": ["kladr_id", "fias_id", "boxberry_id", "cdek_id", "dpd_id"]
     },
+    "FindDeliveryResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/DeliverySuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "EmailSuggestion": {
       "type": "object",
       "properties": {
@@ -2592,6 +2648,12 @@
       "required": ["local", "domain", "type", "qc", "source"],
       "description": "@see https://dadata.ru/api/suggest/email/"
     },
+    "SuggestEmailResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/EmailSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "FiasSuggestion": {
       "type": "object",
       "properties": {
@@ -2601,6 +2663,12 @@
       },
       "required": ["value", "unrestricted_value", "data"],
       "description": "Suggestion object returned from `suggest/fias` or `findById/fias` API"
+    },
+    "SuggestFiasResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FiasSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "FioSuggestionData": {
       "type": "object",
@@ -2633,6 +2701,12 @@
       "required": ["value", "unrestricted_value", "data"],
       "description": "@see https://dadata.ru/api/suggest/name"
     },
+    "SuggestFioResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FioSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "FmsUnitSuggestion": {
       "type": "object",
       "properties": {
@@ -2662,6 +2736,12 @@
         }
       },
       "required": ["code", "name", "region_code", "type"]
+    },
+    "SuggestFmsUnitResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FmsUnitSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "FnsUnitSuggestion": {
       "type": "object",
@@ -2721,6 +2801,12 @@
         "parent_comment"
       ]
     },
+    "SuggestFnsUnitResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FnsUnitSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "FtsUnitSuggestion": {
       "type": "object",
       "properties": {
@@ -2747,6 +2833,12 @@
         "email": { "type": ["string", "null"], "description": "Адрес электронной почты" }
       },
       "required": ["code", "name_short", "name", "inn", "ogrn", "okpo", "osf", "address", "phone", "fax", "email"]
+    },
+    "SuggestFtsUnitResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FtsUnitSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "MetroSuggestion": {
       "type": "object",
@@ -2789,6 +2881,12 @@
         "is_closed"
       ]
     },
+    "SuggestMetroResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/MetroSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "MktuSuggestion": {
       "type": "object",
       "properties": {
@@ -2810,6 +2908,12 @@
       },
       "required": ["class", "number", "name_ru", "name_en", "name_fr"]
     },
+    "SuggestMktuResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/MktuSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "Okpd2Suggestion": {
       "type": "object",
       "properties": {
@@ -2829,6 +2933,12 @@
         "name": { "type": "string", "description": "Наименование продукции или услуги" }
       },
       "required": ["idx", "razdel", "kod", "name"]
+    },
+    "SuggestOkpd2Response": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/Okpd2Suggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "OktmoSuggestion": {
       "type": "object",
@@ -2861,6 +2971,12 @@
       },
       "required": ["oktmo", "area_type", "area_code", "area", "subarea_type", "subarea_code", "subarea"]
     },
+    "SuggestOktmoResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/OktmoSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "Okved2Suggestion": {
       "type": "object",
       "properties": {
@@ -2883,6 +2999,12 @@
         "name": { "type": "string", "description": "Наименование вида деятельности" }
       },
       "required": ["idx", "razdel", "kod", "name"]
+    },
+    "SuggestOkved2Response": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/Okved2Suggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "PartyBySuggestion": {
       "type": "object",
@@ -2963,6 +3085,12 @@
         "oked",
         "oked_name"
       ]
+    },
+    "SuggestPartyByResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyBySuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "PartyKzSuggestion": {
       "type": "object",
@@ -3065,6 +3193,12 @@
         "kfs_name_ru",
         "kfs_name_kz"
       ]
+    },
+    "SuggestPartyKzResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyKzSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "PartySuggestion": {
       "type": "object",
@@ -4217,6 +4351,32 @@
       "required": ["value", "unrestricted_value", "data"],
       "description": "@see https://dadata.ru/api/find-company/by-email/"
     },
+    "SuggestPartyResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartySuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "FindPartyResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyByIdSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "PartyByEmailResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyByEmailSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
+    "FindAffiliatedResponse": {
+      "type": "object",
+      "properties": {
+        "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyAffiliatedSuggestion" } }
+      },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "PostalUnitSuggestion": {
       "type": "object",
       "properties": {
@@ -4270,6 +4430,12 @@
         "schedule_sun"
       ]
     },
+    "SuggestPostalUnitResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PostalUnitSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
+    },
     "RegionCourtSuggestion": {
       "type": "object",
       "properties": {
@@ -4291,6 +4457,12 @@
         "region_code": { "type": "string", "description": "Код региона (первые 2 цифры КЛАДР-кода)" }
       },
       "required": ["code", "name", "region_code"]
+    },
+    "SuggestRegionCourtResponse": {
+      "type": "object",
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/RegionCourtSuggestion" } } },
+      "required": ["suggestions"],
+      "description": "Объект с массивом подсказок"
     },
     "AccountBalance": {
       "type": "object",

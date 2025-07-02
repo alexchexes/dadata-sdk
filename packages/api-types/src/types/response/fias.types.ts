@@ -1,3 +1,4 @@
+import type { SuggestionsResponse } from '../common.types';
 import type { FiasSuggestionData } from './address.types';
 
 /**
@@ -11,3 +12,5 @@ export interface FiasSuggestion {
   /** Подробные поля адреса */
   data: FiasSuggestionData;
 }
+
+export type SuggestFiasResponse = SuggestionsResponse<FiasSuggestion>;
