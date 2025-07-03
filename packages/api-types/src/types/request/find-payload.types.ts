@@ -61,7 +61,7 @@ export interface FindAddressPayload extends BaseFindByIdPayload {
  */
 export interface FindFiasPayload extends BaseFindByIdPayload {
   /**
-   * Код КЛАДР или ФИАС, по которому нужно получить подсказку
+   * Код КЛАДР или ФИАС, по которому нужно получить адрес
    *
    * @example { "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" } // ФИАС
    * @example { "query": "77000000000292300" } // КЛАДР
@@ -242,7 +242,7 @@ export interface FindCountryPayload extends BaseFindByIdPayload {
  * Валюты
  * @see https://dadata.ru/api/suggest/currency/
  */
-export interface FindСurrencyPayload extends BaseFindByIdPayload {
+export interface FindCurrencyPayload extends BaseFindByIdPayload {
   /**
    * Цифровой или буквенный код валюты
    * @example { "query": "RUB" } // Буквенный код
