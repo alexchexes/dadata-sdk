@@ -4530,8 +4530,14 @@
       "type": "object",
       "properties": {
         "clean": { "type": "number", "description": "Кол-во запросов к \"Стандартизации\" с начала суток" },
-        "company": { "type": "number", "description": "Кол-во запросов к \"Компания по Email\" с начала суток" },
-        "merging": { "type": "number" },
+        "company": {
+          "type": "number",
+          "description": "Кол-во запросов к сервису \"Компания по Email\" с начала суток"
+        },
+        "merging": {
+          "type": "number",
+          "description": "Кол-во обработанных записей в сервисе \"Поиск дублей\" с начала суток"
+        },
         "suggestions": { "type": "number", "description": "Кол-во запросов к \"Подсказкам\" с начала суток" }
       },
       "required": ["clean", "company", "merging", "suggestions"]
@@ -4544,7 +4550,10 @@
           "type": "number",
           "description": "Расчётное количество оставшихся запросов \"Компаний по емейлу\""
         },
-        "merging": { "type": "number" },
+        "merging": {
+          "type": "number",
+          "description": "Расчётное кол-во оставшихся записей в сервисе \"Поиск дублей\""
+        },
         "suggestions": { "type": "number", "description": "Расчётное количество оставшихся запросов к \"Подсказкам\"" }
       },
       "required": ["clean", "company", "merging", "suggestions"]
