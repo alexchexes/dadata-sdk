@@ -1284,7 +1284,7 @@
         "tax_office",
         "tax_office_legal"
       ],
-      "description": "Address fields returned by the API when using FIAS suggestions or FIAS-by-ID (findById/fias).\n@see https://dadata.ru/suggestions/usage/fias/\n@see https://dadata.ru/api/find-fias/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937"
+      "description": "Address fields returned by the API when using FIAS suggestions or FIAS-by-ID (findById/fias).\n@see https://dadata.ru/api/suggest/fias/\n@see https://dadata.ru/suggestions/usage/fias/\n@see https://dadata.ru/api/find-fias/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937"
     },
     "PartySuggestionAddressData": {
       "type": "object",
@@ -2016,6 +2016,22 @@
         { "$ref": "#/definitions/SuggestAddressMunicipalResponse" }
       ]
     },
+    "IpLocateAdminResponse": {
+      "type": "object",
+      "properties": { "location": { "anyOf": [{ "$ref": "#/definitions/AddressAdminData" }, { "type": "null" }] } },
+      "required": ["location"]
+    },
+    "IpLocateMunicipalResponse": {
+      "type": "object",
+      "properties": { "location": { "anyOf": [{ "$ref": "#/definitions/AddressMunicipalData" }, { "type": "null" }] } },
+      "required": ["location"]
+    },
+    "IpLocateResponse": {
+      "anyOf": [
+        { "$ref": "#/definitions/IpLocateAdminResponse" },
+        { "$ref": "#/definitions/IpLocateMunicipalResponse" }
+      ]
+    },
     "BankSuggestion": {
       "type": "object",
       "properties": {
@@ -2334,7 +2350,7 @@
         "structure": {
           "type": "array",
           "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
-          "description": "Порядок и тип данных в поле `data`.\nСоответствует изначально отправленному в запросе.\n\nНапример, когда в поле `data` стандартизированные имя, адрес и телефон,\nто в поле `structure` будет указано `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`"
+          "description": "Порядок и тип данных в поле `data`.\n\nНапример, если в поле `data` три объекта - имя, адрес и телефон,\nто в поле `structure` будет `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`, соответственно."
         },
         "data": {
           "type": "array",
@@ -3481,7 +3497,7 @@
       },
       "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
     },
-    "PartyByIdSuggestion": {
+    "RichPartySuggestion": {
       "type": "object",
       "properties": {
         "value": {
@@ -3492,12 +3508,12 @@
           "type": "string",
           "description": "Краткое наименование организации (То же, что и value)"
         },
-        "data": { "$ref": "#/definitions/PartyByIdSuggestionData", "description": "Подробности об организации" }
+        "data": { "$ref": "#/definitions/RichPartySuggestionData", "description": "Подробности об организации" }
       },
       "required": ["data", "unrestricted_value", "value"],
       "description": "Suggestion object returned from 'findById/party' API\n- {@link https://dadata.ru/api/find-party/}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058}"
     },
-    "PartyByIdSuggestionData": {
+    "RichPartySuggestionData": {
       "type": "object",
       "properties": {
         "employee_count": {
@@ -4381,11 +4397,11 @@
     },
     "FindPartyResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyByIdSuggestion" } } },
+      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/RichPartySuggestion" } } },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
-    "PartyByEmailResponse": {
+    "FindPartyByEmailResponse": {
       "type": "object",
       "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyByEmailSuggestion" } } },
       "required": ["suggestions"],
@@ -4486,7 +4502,7 @@
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
-    "AccountBalance": {
+    "ProfileBalanceResponse": {
       "type": "object",
       "properties": {
         "balance": { "type": "number", "description": "Баланс в рублях\n@example 9922.30", "examples": [9922.3] }
@@ -4536,7 +4552,10 @@
     "ServiceVersions": {
       "type": "object",
       "properties": {
-        "dadata": { "$ref": "#/definitions/ServiceVersionsDadata" },
+        "dadata": {
+          "$ref": "#/definitions/ServiceVersionsDadata",
+          "description": "Сведения о версии бэк-энда «Дадаты»"
+        },
         "factor": {
           "$ref": "#/definitions/ServiceVersionsFactor",
           "description": "Сведения о версиях \"Стандартизации\""
@@ -4554,8 +4573,8 @@
       "properties": {
         "version": {
           "type": "string",
-          "examples": ["stable (14385:607a88c61a1e)"],
-          "description": "@example 'stable (14385:607a88c61a1e)'"
+          "description": "Версия бэк-энда «ДаДаты»\n@example 'stable (14385:607a88c61a1e)'",
+          "examples": ["stable (14385:607a88c61a1e)"]
         }
       },
       "required": ["version"]
@@ -4565,8 +4584,8 @@
       "properties": {
         "version": {
           "type": "string",
-          "examples": ["25.4.85497 (5bd0bdda)"],
-          "description": "@example '25.4.85497 (5bd0bdda)'"
+          "description": "Версия бэк-энда сервиса Стандартизации\n@example '25.4.85497 (5bd0bdda)'\n@example 'feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)'",
+          "examples": ["25.4.85497 (5bd0bdda)", "feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)"]
         },
         "resources": {
           "$ref": "#/definitions/ServiceVersionsFactorResources",
@@ -4601,7 +4620,11 @@
     "ServiceVersionsSuggestions": {
       "type": "object",
       "properties": {
-        "version": { "type": "string", "examples": ["25.5 (412a3f5c)"], "description": "@example '25.5 (412a3f5c)'" },
+        "version": {
+          "type": "string",
+          "description": "Версия бэк-энда сервиса Подсказок\n@example '25.5 (412a3f5c)'",
+          "examples": ["25.5 (412a3f5c)"]
+        },
         "resources": {
           "$ref": "#/definitions/ServiceVersionsSuggestionsResources",
           "description": "Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'`"

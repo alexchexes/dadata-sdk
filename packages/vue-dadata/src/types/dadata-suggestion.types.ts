@@ -17,7 +17,7 @@ import type {
   Okpd2Suggestion,
   OktmoSuggestion,
   Okved2Suggestion,
-  PartyByIdSuggestion,
+  RichPartySuggestion,
   PartyBySuggestion,
   PartyKzSuggestion,
   PartySuggestion,
@@ -44,7 +44,7 @@ export type DadataSuggestion =
   | Okpd2Suggestion
   | OktmoSuggestion
   | Okved2Suggestion
-  | PartyByIdSuggestion
+  | RichPartySuggestion
   | PartyBySuggestion
   | PartyKzSuggestion
   | PartySuggestion

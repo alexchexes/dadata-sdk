@@ -12,7 +12,7 @@ import type { EmailSuggestionData } from './email.types';
 /**
  * Generic suggestion object returned from 'suggest/party' or 'findById/party' APIs
  */
-export interface BasePartySuggestion<T = PartyByIdSuggestionData | PartySuggestionData> {
+export interface BasePartySuggestion<T = RichPartySuggestionData | PartySuggestionData> {
   /**
    * Краткое наименование организации (data.name.short_with_opf).
    * Если краткое наименование не указано — полное наименование (data.name.full_with_opf)
@@ -40,7 +40,7 @@ export interface PartySuggestion extends BasePartySuggestion<PartySuggestionData
  * - {@link https://dadata.ru/api/find-party/}
  * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058}
  */
-export interface PartyByIdSuggestion extends BasePartySuggestion<PartyByIdSuggestionData> {}
+export interface RichPartySuggestion extends BasePartySuggestion<RichPartySuggestionData> {}
 
 /**
  * Suggestion object returned from 'findAffiliated/party' API endpoint
@@ -464,7 +464,7 @@ export interface PartyDocuments {
 /**
  * `suggestion[ ].data` object, returned from 'findById/party' API
  */
-export interface PartyByIdSuggestionData
+export interface RichPartySuggestionData
   extends Override<
     PartySuggestionData,
     {
@@ -805,6 +805,6 @@ export interface PartyByEmailSuggestion {
 }
 
 export type SuggestPartyResponse = SuggestionsResponse<PartySuggestion>;
-export type FindPartyResponse = SuggestionsResponse<PartyByIdSuggestion>;
-export type PartyByEmailResponse = SuggestionsResponse<PartyByEmailSuggestion>;
+export type FindPartyResponse = SuggestionsResponse<RichPartySuggestion>;
+export type FindPartyByEmailResponse = SuggestionsResponse<PartyByEmailSuggestion>;
 export type FindAffiliatedResponse = SuggestionsResponse<PartyAffiliatedSuggestion>;

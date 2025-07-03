@@ -14,10 +14,9 @@ export type CleanFieldType = 'ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL'
 export interface CleanCombinedRecord {
   /**
    * Порядок и тип данных в поле `data`.
-   * Соответствует изначально отправленному в запросе.
    *
-   * Например, когда в поле `data` стандартизированные имя, адрес и телефон,
-   * то в поле `structure` будет указано `[ "NAME", "ADDRESS", "PHONE" ]`
+   * Например, если в поле `data` три объекта - имя, адрес и телефон,
+   * то в поле `structure` будет `[ "NAME", "ADDRESS", "PHONE" ]`, соответственно.
    */
   structure: CleanFieldType[];
 
