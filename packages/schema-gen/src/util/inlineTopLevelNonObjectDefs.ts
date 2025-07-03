@@ -10,12 +10,16 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
 
   // Collect definitions that are not of type "object" from schema.definitions.
   const defsToInline: Record<string, Schema> = {};
+
   for (const defName in definitions) {
     const defValue = definitions[defName];
     if (typeof defValue === 'object' && defValue?.type && defValue.type !== 'object') {
       defsToInline[defName] = defValue;
     }
   }
+
+  // we delete only those non-object defs that actually were inlined
+  const actuallyInlined = new Set<string>();
 
   // Recursive function to traverse the schema.
   function replaceRefs(node: Schema): any {
@@ -25,6 +29,9 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
       const refDefName = getDefNameFromRef(node.$ref);
 
       if (refDefName && defsToInline[refDefName]) {
+        // mark this def as inlined
+        actuallyInlined.add(refDefName);
+
         // Deep copy the definition.
         const inlined: Record<string, any> = cloneSchema(defsToInline[refDefName]) as any;
 
@@ -54,10 +61,8 @@ export function inlineTopLevelNonObjectDefs(schema: Schema) {
   const newSchema = replaceRefs(cloned);
 
   // Remove the inlined definitions from the top-level "definitions".
-  if (newSchema.definitions) {
-    for (const key in defsToInline) {
-      delete newSchema.definitions[key];
-    }
+  for (const key in actuallyInlined) {
+    delete newSchema.definitions?.[key];
   }
 
   return newSchema;

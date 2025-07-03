@@ -13,12 +13,20 @@ export type CleanFieldType = 'ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL'
  */
 export interface CleanCombinedRecord {
   /**
-   * Структура записи – структура данных в `data`
+   * Порядок и тип данных в поле `data`.
+   * Соответствует изначально отправленному в запросе.
+   *
+   * Например, когда в поле `data` стандартизированные имя, адрес и телефон,
+   * то в поле `structure` будет указано `[ "NAME", "ADDRESS", "PHONE" ]`
    */
   structure: CleanFieldType[];
+
   /**
-   * Массив с одним элементом – массивом, внутри которого каждый элемент
-   * – это одна из стандартизированных частей записи. Какая именно - определяется структурой в поле `structure`.
+   * Массив из одного элемента – тоже массива, внутри которого каждый элемент -
+   * это одна из стандартизированных частей записи.
+   * Какая именно - определяется структурой в поле `structure`.
    */
   data: [(AddressClean | PhoneClean | PassportClean | FioClean | EmailClean | VehicleClean)[]];
 }
+
+export type CleanResponse<T> = [T];

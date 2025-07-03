@@ -1,23 +1,68 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "BaseCleanPayload": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "maxItems": 1,
+      "description": "Формат запроса ко всем эндпоинтам API стандартизации (`clean`) «Дадаты»,\nкроме стандартизации составной записи {@link https://dadata.ru/api/clean/record/}\n\nВсе эндпоинты поддерживают стандартизацию только одной записи в одном запросе, например:\n@example [ \"мск сухонска 11/-89\" ] // Адрес - https://dadata.ru/api/clean/address/\n@example [ \"Срегей владимерович иванов\" ] // ФИО - https://dadata.ru/api/clean/name/\n@example [ \"serega@yandex/ru\" ] // Email - https://dadata.ru/api/clean/email/\n@example [ \"раб 846)231.60.14 *139\" ] // Телефон - https://dadata.ru/api/clean/phone/\n@example [ \"4509 235857\" ] // Проверка паспорта - https://dadata.ru/api/clean/passport/\n@example [ \"24/3/12\" ] // Дата - https://dadata.ru/api/clean/birthdate/\n@example [ \"форд фокус\" ] // Марка и модель автомобиля - https://dadata.ru/api/clean/vehicle/",
+      "examples": [
+        ["мск сухонска 11/-89"],
+        ["Срегей владимерович иванов"],
+        ["serega@yandex/ru"],
+        ["раб 846)231.60.14 *139"],
+        ["4509 235857"],
+        ["24/3/12"],
+        ["форд фокус"]
+      ]
+    },
     "CleanCombinedPayload": {
       "type": "object",
       "properties": {
         "structure": {
           "type": "array",
-          "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE", "AS_IS"] }
+          "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE", "AS_IS"] },
+          "description": "Поле `structure` определяет тип данных в поле `data`.\n\nНапример, если нужно стандартизировать одновременно имя, адрес и телефон,\nто поле `structure` должно иметь вид `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`,\nа в массиве в поле `data` - исходные имя, адрес и телефон в том же порядке"
         },
         "data": {
           "type": "array",
           "items": { "type": "array", "items": { "type": "string" } },
           "minItems": 1,
-          "maxItems": 1
+          "maxItems": 1,
+          "description": "Массив из одного элемента, тоже массива, элементы которого (строки) - это составные\nчасти записи, требующие стандартизации.\n\nНапример, если нужно стандартизировать одновременно имя, адрес и телефон,\nто в поле `structure` следует указать `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`,\nа поле `data` будет иметь вид:\n```json\n[\n  [\n    \"Федотов Алексей\",\n    \"Москва, Сухонская улица, 11 кв 89\",\n    \"8 916 823 3454\"\n  ]\n]\n```"
         }
       },
       "required": ["structure", "data"],
       "description": "Формат запроса для стандартизации составной записи с контактными данными, например:\n- ФИО + адрес + телефон + телефон\n- Дата рождения + паспорт\n- Адрес + email\n\nПример запроса:\n```\n{\n  structure: [ \"NAME\", \"ADDRESS\", \"PHONE\" ],\n  data: [\n    [\n        \"Федотов Алексей\",\n        \"Москва, Сухонская улица, 11 кв 89\",\n        \"8 916 823 3454\"\n    ]\n  ]\n}\n```\n\nИз чего состоит запрос в примере:\n- `structure` — структура записи, содержит четыре поля:\n  - `AS_IS` — оставить как есть (не стандартизировать),\n  - `NAME` — разобрать как ФИО,\n  - `ADDRESS` — разобрать как адрес,\n  - `PHONE` — разобрать как телефон.\n- `data` — составная запись из 4 полей (№, ФИО, адрес, телефон).\n\nТипы полей:\n- `ADDRESS` - Почтовый адрес\n- `PHONE` - Телефон\n- `PASSPORT` - Номер и серия паспорта\n- `NAME` - ФИО\n- `EMAIL` - Адрес электронной почты\n- `VEHICLE` - Марка и модель автомобиля\n- `AS_IS` - Скопировать поле в ответ «как есть»\n\nКоличество полей в `data` не должно быть больше указанного в `structure`.\n\nОграничения:\n- В запросе разрешено передавать только одну запись.\n- Максимальное количество полей в одной записи:\n  - 1 ФИО,\n  - 3 адреса,\n  - 3 телефона,\n  - 3 email,\n  - 1 дата рождения,\n  - 1 паспорт,\n  - 1 автомобиль\n\n@see https://dadata.ru/api/clean/record/"
     },
+    "SuggestType": {
+      "type": "string",
+      "enum": [
+        "address",
+        "country",
+        "postal_unit",
+        "fias",
+        "party",
+        "party_by",
+        "party_kz",
+        "bank",
+        "fio",
+        "fms_unit",
+        "email",
+        "car_brand",
+        "fns_unit",
+        "fts_unit",
+        "region_court",
+        "metro",
+        "mktu",
+        "currency",
+        "okved2",
+        "okpd2",
+        "oktmo"
+      ]
+    },
+    "AffilatedSearchScope": { "type": "string", "enum": ["FOUNDERS", "MANAGERS"] },
     "FindAffiliatedPayload": {
       "type": "object",
       "properties": {
@@ -101,6 +146,8 @@
       "required": ["query"],
       "description": "Адрес по коду\n@see https://dadata.ru/api/find-address/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944"
     },
+    "Language": { "type": "string", "enum": ["RU", "EN"] },
+    "DivisionType": { "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] },
     "FindFiasPayload": {
       "type": "object",
       "properties": {
@@ -162,6 +209,9 @@
       "required": ["query"],
       "description": "Организации РФ\n@see https://dadata.ru/api/find-party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058"
     },
+    "BranchType": { "type": "string", "enum": ["MAIN", "BRANCH"] },
+    "PartyType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
+    "PartyStatus": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
     "FindPartyByPayload": {
       "type": "object",
       "properties": {
@@ -303,7 +353,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
+          "description": "Название или один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
           "examples": [{ "query": "764" }, { "query": "TH" }, { "query": "THA" }]
         },
         "count": {
@@ -530,6 +580,10 @@
       },
       "required": ["value"]
     },
+    "BoundType": {
+      "type": "string",
+      "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+    },
     "SuggestAddressPayload": {
       "type": "object",
       "properties": {
@@ -616,6 +670,11 @@
         "street_type_full": { "type": "string" }
       }
     },
+    "BankType": {
+      "type": "string",
+      "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+    },
+    "BankStatus": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
     "SuggestBankPayload": {
       "type": "object",
       "properties": {
@@ -653,6 +712,10 @@
       },
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078"
+    },
+    "BoundTypeFias": {
+      "type": "string",
+      "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
     },
     "LocationRestrictionFias": {
       "type": "object",
@@ -728,6 +791,7 @@
       "required": ["query"],
       "description": "{@link https://dadata.ru/api/suggest/fias/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953}"
     },
+    "FioParts": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
     "SuggestFioPayload": {
       "type": "object",
       "properties": {
@@ -753,6 +817,7 @@
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/name/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669111"
     },
+    "FioGenders": { "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"] },
     "SuggestFmsUnitPayload": {
       "type": "object",
       "properties": {
@@ -787,6 +852,7 @@
         }
       }
     },
+    "FmsUnitType": { "type": "string", "enum": ["0", "1", "2", "3"] },
     "SuggestFnsUnitPayload": {
       "type": "object",
       "properties": {
@@ -963,6 +1029,11 @@
         "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
       }
     },
+    "PartyByStatus": {
+      "type": "string",
+      "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+    },
+    "PartyByType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "SuggestPartyKzPayload": {
       "type": "object",
       "properties": {
@@ -992,6 +1063,10 @@
           "description": "Тип организации"
         }
       }
+    },
+    "PartyKzType": {
+      "type": "string",
+      "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
     },
     "SuggestPartyPayload": {
       "type": "object",
@@ -1107,6 +1182,36 @@
           "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
         }
       }
+    },
+    "LocationRestrictionKey": {
+      "type": "string",
+      "enum": [
+        "country_iso_code",
+        "region_iso_code",
+        "kladr_id",
+        "fias_id",
+        "region_fias_id",
+        "area_fias_id",
+        "city_fias_id",
+        "settlement_fias_id",
+        "planning_structure_fias_id",
+        "street_fias_id",
+        "country",
+        "region",
+        "area",
+        "city",
+        "city_district",
+        "settlement",
+        "planning_structure",
+        "street",
+        "region_type_full",
+        "area_type_full",
+        "city_type_full",
+        "city_district_type_full",
+        "settlement_type_full",
+        "planning_structure_type_full",
+        "street_type_full"
+      ]
     },
     "BaseSuggestPayload": {
       "type": "object",

@@ -124,8 +124,8 @@ importers:
         specifier: ^3.5.3
         version: 3.5.3
       ts-json-schema-generator:
-        specifier: 2.5.0-next.4
-        version: 2.5.0-next.4
+        specifier: 2.5.0-next.5
+        version: 2.5.0-next.5
     devDependencies:
       '@types/node':
         specifier: ^22.15.29
@@ -3515,8 +3515,8 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  ts-json-schema-generator@2.5.0-next.4:
-    resolution: {integrity: sha512-ahatEw8mTKJ7dBl0wXXkMWbmk/xFGKipoN4E4jf8CbDT4o1lfLHUkNSP1LcVqUSO8Pl++9A6mkXUzbilKc4jCw==}
+  ts-json-schema-generator@2.5.0-next.5:
+    resolution: {integrity: sha512-HIAVjOT8cU35Ctaxtq3KDahrubLUeqEVefdy+kEl8lDIvoq1x2vocjLp+H0aqYlskxyzJTF3ll9La6KahwEVBw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -7286,7 +7286,7 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.8.3
 
-  ts-json-schema-generator@2.5.0-next.4:
+  ts-json-schema-generator@2.5.0-next.5:
     dependencies:
       '@types/json-schema': 7.0.15
       commander: 14.0.0
