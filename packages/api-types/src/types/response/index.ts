@@ -1,3 +1,4 @@
+export * from './account.types';
 export * from './address.types';
 export * from './bank.types';
 export * from './car_brand.types';
@@ -7,6 +8,7 @@ export * from './currency.types';
 export * from './date.types';
 export * from './delivery.types';
 export * from './email.types';
+export * from './error.types';
 export * from './fias.types';
 export * from './fio.types';
 export * from './fms_unit.types';
@@ -25,4 +27,3 @@ export * from './phone.types';
 export * from './postal_unit.types';
 export * from './region_court.types';
 export * from './vehicle.types';
-export * from './account.types';
