@@ -42,7 +42,7 @@ export default {
     'any': 'при любых',
     'selectOnBlur': 'Выбирать 1-ю при потере фокуса',
     'selectOnEnter': 'Выбирать 1-ю по нажатию Enter',
-    'enrichOnSelect': 'Запрашивать доп. данные',
+    'enrichOnSelect': 'Получать доп. данные',
     'addSpace': 'Добавлять пробел',
     'continueSelecting': 'Не убирать список',
     'showClearButton': 'Отображать «крестик»',
