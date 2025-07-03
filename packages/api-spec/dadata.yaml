@@ -80,20 +80,6 @@ externalDocs:
     Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
 
 components:
-  schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        family:
-          type: string
-          description: asdasdsadasdas
-        reason:
-          type: string
-          description: asdsadsadsadasd
-        message:
-          type: string
-          description: Error message
-
   responses:
     BadRequest:
       description: |
@@ -104,12 +90,12 @@ components:
         - В structure указан неподдерживаемый тип.
         - Количество полей в data более указанного в structure.
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     Unauthorized:
       description: В запросе отсутствует API-ключ (для "Стандартизации", также, секретный ключ)
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     Forbidden:
       description: |
@@ -118,34 +104,34 @@ components:
         Или исчерпан дневной лимит запросов (проверьте через личный кабинет или API stat/daily)
         Или (Стандартизация) - недостаточно средств для обработки запроса, пополните баланс
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     NotFound:
       description: |
         Запрошенный ресурс не найден.
         Скорее всего, допущена ошибка при формировании URL для выполнения запроса
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     MethodNotAllowed:
       description: Запрос сделан с не доступным для данного API HTTP-методом, например GET там, где разрешён только POST
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     ContentTooLarge:
       description: Слишком большая длина запроса или слишком много условий
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     TooManyRequests:
       description: Слишком много запросов в секунду или новых соединений в минуту
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     InternalServerError:
       description: Произошла внутренняя ошибка сервиса
       content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
   securitySchemes:
     TokenAuth:
