@@ -2101,6 +2101,10 @@
       },
       "required": ["type", "full", "short"]
     },
+    "BankType": {
+      "type": "string",
+      "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+    },
     "BankSuggestionDataAddress": {
       "type": "object",
       "properties": {
@@ -2144,6 +2148,7 @@
       },
       "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"]
     },
+    "BankStatus": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
     "BankByIdSuggestion": {
       "type": "object",
       "properties": {
@@ -2322,13 +2327,14 @@
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
+    "CleanFieldType": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
     "CleanCombinedRecord": {
       "type": "object",
       "properties": {
         "structure": {
           "type": "array",
           "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
-          "description": "Структура записи – структура данных в `data`"
+          "description": "Порядок и тип данных в поле `data`.\nСоответствует изначально отправленному в запросе.\n\nНапример, когда в поле `data` стандартизированные имя, адрес и телефон,\nто в поле `structure` будет указано `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`"
         },
         "data": {
           "type": "array",
@@ -2347,7 +2353,7 @@
           },
           "minItems": 1,
           "maxItems": 1,
-          "description": "Массив с одним элементом – массивом, внутри которого каждый элемент\n– это одна из стандартизированных частей записи. Какая именно - определяется структурой в поле `structure`."
+          "description": "Массив из одного элемента – тоже массива, внутри которого каждый элемент -\nэто одна из стандартизированных частей записи.\nКакая именно - определяется структурой в поле `structure`."
         }
       },
       "required": ["structure", "data"],
@@ -2691,6 +2697,7 @@
       "required": ["surname", "name", "patronymic", "gender", "qc", "source"],
       "description": "@see https://dadata.ru/api/suggest/name"
     },
+    "FioGenders": { "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"] },
     "FioSuggestion": {
       "type": "object",
       "properties": {
@@ -2737,6 +2744,7 @@
       },
       "required": ["code", "name", "region_code", "type"]
     },
+    "FmsUnitType": { "type": "string", "enum": ["0", "1", "2", "3"] },
     "SuggestFmsUnitResponse": {
       "type": "object",
       "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FmsUnitSuggestion" } } },
@@ -3086,6 +3094,11 @@
         "oked_name"
       ]
     },
+    "PartyByStatus": {
+      "type": "string",
+      "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+    },
+    "PartyByType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "SuggestPartyByResponse": {
       "type": "object",
       "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyBySuggestion" } } },
@@ -3193,6 +3206,11 @@
         "kfs_name_ru",
         "kfs_name_kz"
       ]
+    },
+    "PartyKzStatus": { "type": "string", "enum": ["ACTIVE", "INACTIVE", "LIQUIDATED", "LIQUIDATING", "SUSPENDED"] },
+    "PartyKzType": {
+      "type": "string",
+      "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
     },
     "SuggestPartyKzResponse": {
       "type": "object",
@@ -3344,6 +3362,7 @@
       ],
       "description": "`suggestion[ ].data` object, returned from 'suggest/party' API"
     },
+    "PartyType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "PartyNameInfo": {
       "type": "object",
       "properties": {
@@ -3361,6 +3380,7 @@
       },
       "required": ["full_with_opf", "short_with_opf", "full", "short", "latin"]
     },
+    "OkvedType": { "type": "string", "enum": ["2001", "2014"] },
     "PartyOpfInfo": {
       "type": "object",
       "properties": {
@@ -3387,6 +3407,7 @@
       },
       "required": ["name", "post", "disqualified", "start_date"]
     },
+    "BranchType": { "type": "string", "enum": ["MAIN", "BRANCH"] },
     "PartySuggestionDataAddressBasic": {
       "type": "object",
       "properties": {
@@ -3434,6 +3455,7 @@
       },
       "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"]
     },
+    "PartyStatus": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
     "FioInfoBasic": {
       "type": "object",
       "properties": {

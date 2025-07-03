@@ -9,6 +9,8 @@ export interface GenerateOptions {
   input: string;
   /** Directory where generated schemas will be placed */
   output: string;
+  /** Type to include in schema */
+  type?: string;
   /** Path to tsconfig used for type generation */
   tsconfig?: string;
 }
@@ -50,7 +52,12 @@ export async function generateSchemas(options: GenerateOptions) {
 
   await Promise.all(
     files.map(async (file) => {
-      const schema = tsToSchema({ path: file, tsconfig: options.tsconfig });
+      const schema = tsToSchema({
+        path: file,
+        type: options.type,
+        tsconfig: options.tsconfig,
+      });
+
       const schemaString = await prettier.format(JSON.stringify(schema), {
         parser: 'json',
         printWidth: 120,

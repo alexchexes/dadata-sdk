@@ -21,7 +21,7 @@
     "chalk": "^5.4.1",
     "commander": "^11.1.0",
     "prettier": "^3.5.3",
-    "ts-json-schema-generator": "2.5.0-next.4"
+    "ts-json-schema-generator": "2.5.0-next.5"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",

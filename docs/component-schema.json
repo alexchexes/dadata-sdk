@@ -326,6 +326,32 @@
       },
       "required": ["token"]
     },
+    "SuggestType": {
+      "type": "string",
+      "enum": [
+        "address",
+        "country",
+        "postal_unit",
+        "fias",
+        "party",
+        "party_by",
+        "party_kz",
+        "bank",
+        "fio",
+        "fms_unit",
+        "email",
+        "car_brand",
+        "fns_unit",
+        "fts_unit",
+        "region_court",
+        "metro",
+        "mktu",
+        "currency",
+        "okved2",
+        "okpd2",
+        "oktmo"
+      ]
+    },
     "OptionalSuggestPayload": {
       "type": "object",
       "properties": {
@@ -583,6 +609,10 @@
       },
       "required": ["value"]
     },
+    "BoundType": {
+      "type": "string",
+      "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+    },
     "BoundFias": {
       "type": "object",
       "properties": {
@@ -592,6 +622,10 @@
         }
       },
       "required": ["value"]
+    },
+    "BoundTypeFias": {
+      "type": "string",
+      "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
     },
     "LocationRestriction": {
       "type": "object",
@@ -664,6 +698,17 @@
       },
       "required": ["lat", "lon", "radius_meters"]
     },
+    "Language": { "type": "string", "enum": ["RU", "EN"] },
+    "DivisionType": { "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] },
+    "BankType": {
+      "type": "string",
+      "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+    },
+    "PartyType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
+    "BankStatus": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
+    "PartyStatus": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+    "FioGenders": { "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"] },
+    "FioParts": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
     "SuggestFmsUnitFilter": {
       "type": "object",
       "properties": {
@@ -678,6 +723,7 @@
         }
       }
     },
+    "FmsUnitType": { "type": "string", "enum": ["0", "1", "2", "3"] },
     "SuggestFnsUnitFilter": {
       "type": "object",
       "properties": {
@@ -734,6 +780,11 @@
         "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
       }
     },
+    "PartyByStatus": {
+      "type": "string",
+      "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
+    },
+    "PartyByType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "SuggestPartyKzFilter": {
       "type": "object",
       "properties": {
@@ -743,6 +794,10 @@
           "description": "Тип организации"
         }
       }
+    },
+    "PartyKzType": {
+      "type": "string",
+      "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
     },
     "SuggestPostalUnitFilter": {
       "type": "object",
@@ -767,6 +822,7 @@
         }
       }
     },
+    "BranchType": { "type": "string", "enum": ["MAIN", "BRANCH"] },
     "PlainHeaders": {
       "type": "object",
       "additionalProperties": {
@@ -790,6 +846,8 @@
         "clearButton": { "type": "string" }
       },
       "description": "@see DEFAULT_CLASSES"
-    }
+    },
+    "ShowOnFocusOption": { "type": ["string", "boolean"], "enum": ["no_selection", "always", false] },
+    "ClearOnChangeOption": { "type": ["string", "boolean"], "enum": ["significant", "any", false] }
   }
 }

@@ -12,12 +12,12 @@ import { inlineSingleRefGenerics } from './inlineSingleRefGenerics.js';
 export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Schema => {
   const config: CompletedConfig = {
     ...DEFAULT_CONFIG,
-    tsconfig: generatorConfig.tsconfig ?? undefined,
-    type: '*',
     encodeRefs: false,
     fullDescription: true,
     // additionalProperties: true, // can't use this until https://github.com/vega/ts-json-schema-generator/issues/2273 resolved
     ...generatorConfig,
+    tsconfig: generatorConfig.tsconfig ?? undefined,
+    type: generatorConfig.type ?? '*',
   };
 
   const schema = createGenerator(config).createSchema(config.type);
