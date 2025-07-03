@@ -242,7 +242,7 @@ export interface FindCountryPayload extends BaseFindByIdPayload {
  * Валюты
  * @see https://dadata.ru/api/suggest/currency/
  */
-export interface FindСurrencyPayload extends BaseFindByIdPayload {
+export interface FindCurrencyPayload extends BaseFindByIdPayload {
   /**
    * Цифровой или буквенный код валюты
    * @example { "query": "RUB" } // Буквенный код

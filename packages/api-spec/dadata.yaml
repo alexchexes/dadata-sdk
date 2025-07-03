@@ -507,6 +507,9 @@ paths:
             examples:
               simple_query:
                 value: { query: 'нижний' }
+              filter_region_code:
+                description: Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)
+                value: { query: 'ленинск', filters: [{ region_code: '58' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -694,6 +697,8 @@ paths:
             examples:
               simple_query:
                 value: { query: 'валенки' }
+              filter_by_mktu_class:
+                value: { 'query': 'кра', 'filters': [{ 'class': '03' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -729,6 +734,8 @@ paths:
             examples:
               simple_query:
                 value: { query: 'запуск' }
+              filter_by_razdel:
+                value: { 'query': 'мыл', 'filters': [{ 'razdel': 'C' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -764,6 +771,8 @@ paths:
             examples:
               simple_query:
                 value: { query: 'калоши' }
+              filter_by_razdel:
+                value: { 'query': 'уст', 'filters': [{ 'razdel': 'A' }] }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -1085,6 +1094,274 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/fts_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, fts_unit]
+      summary: Таможня по коду
+      description: |
+        Находит запись в справочнике таможенных органов и постов по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/fts_unit/ }
+      operationId: findFtsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindFtsUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '10002000' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestFtsUnitResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/region_court:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, region_court]
+      summary: Мировой суд по коду
+      description: |
+        Находит запись в справочнике мировых судов России по коду суда
+        Источник данных: [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)
+      externalDocs: { url: https://dadata.ru/api/suggest/region_court/ }
+      operationId: findRegionCourt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindRegionCourtPayload' }
+            examples:
+              simple_query:
+                value: { query: '52MS0022' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              {
+                schema: { $ref: './schemas/response.json#/definitions/SuggestRegionCourtResponse' },
+              }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/car_brand:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, car_brand]
+      summary: Марка авто по ID
+      description: |
+        Находит марку автомобиля по внутреннему полю `id` (`ZAZ`, `FORD`, и т.д.). Получить такой ID можно из объекта в ответе API `findById/car_brand` или `suggest/car_brand`
+      externalDocs: { url: https://dadata.ru/api/suggest/car_brand/ }
+      operationId: findCarBrand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindCarBrandPayload' }
+            examples:
+              simple_query:
+                value: { query: 'FORD' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestCarBrandResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/country:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, country]
+      summary: Страна по коду (стандарт ISO 3166)
+      description: |
+        Находит страну по одному из кодов:
+        - `code` - Цифровой код страны
+        - `alfa2` - Буквенный код альфа-2
+        - `alfa3` - Буквенный код альфа-3
+      externalDocs: { url: https://dadata.ru/api/suggest/country/ }
+      operationId: findCountry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindCountryPayload' }
+            examples:
+              simple_query:
+                value: { query: 'TH' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestCountryResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/currency:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, currency]
+      summary: Валюта по коду (стандарт ISO 4217)
+      description: |
+        Находит валюту по одному из кодов:
+        - `code` - Цифровой код валюты
+        - `strcode` - Буквенный код валюты
+
+        Источник данных: [Общероссийский классификатор валют (ОКВ)](https://data.gov.ru/opendata/7710168515-okw)
+      externalDocs: { url: https://dadata.ru/api/suggest/currency/ }
+      operationId: findCurrency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindCurrencyPayload' }
+            examples:
+              simple_query:
+                value: { query: 'RUB' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestCurrencyResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/mktu:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, mktu]
+      summary: Запись МКТУ по уникальному номеру позиции
+      description: |
+        Находит запись по уникальному номеру позиции в Международном классификаторе товаров и услуг (МКТУ)
+
+        Источник данных: [Международный классификатор товаров и услуг (МКТУ)](https://www.fips.ru/publication-web/classification/mktu?view=index)
+      externalDocs: { url: https://dadata.ru/api/suggest/mktu/ }
+      operationId: findMktu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindMktuPayload' }
+            examples:
+              simple_query:
+                value: { query: '250173' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestMktuResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/okved2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, okved2]
+      summary: Вид деятельности из ОКВЭД 2 по коду
+      description: |
+        Находит запись в общероссийском классификаторе видов экономической деятельности (ОКВЭД 2) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/okved2/ }
+      operationId: findOkved2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindOkved2Payload' }
+            examples:
+              simple_query:
+                value: { query: '51.22.3' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestOkved2Response' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+
+  /findById/okpd2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, okpd2]
+      summary: Вид продукции из ОКПД 2 по коду
+      description: |
+        Находит запись в Общероссийском классификаторе продукции по видам экономической деятельности (ОКПД 2) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/okpd2/ }
+      operationId: findOkpd2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindOkpd2Payload' }
+            examples:
+              simple_query:
+                value: { query: '95.23.10.133' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestOkpd2Response' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }

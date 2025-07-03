@@ -6,7 +6,10 @@
       "properties": {
         "structure": {
           "type": "array",
-          "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE", "AS_IS"] }
+          "items": {
+            "type": "string",
+            "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE", "AS_IS"]
+          }
         },
         "data": {
           "type": "array",
@@ -107,7 +110,10 @@
         "query": {
           "type": "string",
           "description": "Код КЛАДР или ФИАС, по которому нужно получить адрес\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
-          "examples": [{ "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" }, { "query": "77000000000292300" }]
+          "examples": [
+            { "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" },
+            { "query": "77000000000292300" }
+          ]
         },
         "count": {
           "type": "number",
@@ -155,7 +161,10 @@
         },
         "status": {
           "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+          "items": {
+            "type": "string",
+            "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
+          },
           "description": "Ограничение по статусу организации"
         }
       },
@@ -316,7 +325,7 @@
       "required": ["query"],
       "description": "Страны\n@see https://dadata.ru/api/suggest/country/"
     },
-    "FindСurrencyPayload": {
+    "FindCurrencyPayload": {
       "type": "object",
       "properties": {
         "query": {
@@ -468,8 +477,16 @@
     "GeolocatePostalUnitPayload": {
       "type": "object",
       "properties": {
-        "lat": { "type": "number", "description": "Географическая широта\n@example 55.878", "examples": [55.878] },
-        "lon": { "type": "number", "description": "Географическая долгота\n@example 37.653", "examples": [37.653] },
+        "lat": {
+          "type": "number",
+          "description": "Географическая широта\n@example 55.878",
+          "examples": [55.878]
+        },
+        "lon": {
+          "type": "number",
+          "description": "Географическая долгота\n@example 37.653",
+          "examples": [37.653]
+        },
         "radius_meters": {
           "type": "number",
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 1000",
@@ -489,7 +506,11 @@
     "IpLocatePayload": {
       "type": "object",
       "properties": {
-        "ip": { "type": "string", "description": "IP-адрес\n@example '46.226.227.20'", "examples": ["46.226.227.20"] },
+        "ip": {
+          "type": "string",
+          "description": "IP-адрес\n@example '46.226.227.20'",
+          "examples": ["46.226.227.20"]
+        },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
@@ -509,8 +530,14 @@
     "RadiusFilter": {
       "type": "object",
       "properties": {
-        "lat": { "type": "string", "description": "Географическая широта, например: `'59.244634'`" },
-        "lon": { "type": "string", "description": "Географическая долгота, например: `'39.913355'`" },
+        "lat": {
+          "type": "string",
+          "description": "Географическая широта, например: `'59.244634'`"
+        },
+        "lon": {
+          "type": "string",
+          "description": "Географическая долгота, например: `'39.913355'`"
+        },
         "radius_meters": {
           "type": "number",
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
@@ -525,7 +552,17 @@
       "properties": {
         "value": {
           "type": "string",
-          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+          "enum": [
+            "country",
+            "region",
+            "area",
+            "city",
+            "settlement",
+            "planning_structure",
+            "street",
+            "house",
+            "flat"
+          ]
         }
       },
       "required": ["value"]
@@ -533,7 +570,11 @@
     "SuggestAddressPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -619,7 +660,11 @@
     "SuggestBankPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -686,7 +731,16 @@
       "properties": {
         "value": {
           "type": "string",
-          "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
+          "enum": [
+            "region",
+            "area",
+            "city",
+            "settlement",
+            "planning_structure",
+            "street",
+            "house",
+            "flat"
+          ]
         }
       },
       "required": ["value"]
@@ -694,7 +748,11 @@
     "SuggestFiasPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -731,7 +789,11 @@
     "SuggestFioPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -756,7 +818,11 @@
     "SuggestFmsUnitPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -790,7 +856,11 @@
     "SuggestFnsUnitPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -819,7 +889,11 @@
     "SuggestMetroPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -848,7 +922,10 @@
           "description": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)"
         },
         "city": { "type": "string", "description": "Название города (например, \"Москва\")" },
-        "line_id": { "type": "string", "description": "Номер линии метро (например, \"5\" для Кольцевой линии)" },
+        "line_id": {
+          "type": "string",
+          "description": "Номер линии метро (например, \"5\" для Кольцевой линии)"
+        },
         "is_closed": {
           "type": ["boolean", "null"],
           "enum": [true, null],
@@ -859,7 +936,11 @@
     "SuggestMktuPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -878,12 +959,18 @@
     },
     "SuggestMktuFilter": {
       "type": "object",
-      "properties": { "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" } }
+      "properties": {
+        "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" }
+      }
     },
     "SuggestOkpd2Payload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -903,13 +990,20 @@
     "SuggestOkpd2Filter": {
       "type": "object",
       "properties": {
-        "razdel": { "type": "string", "description": "Код раздела классификатора ОКПД 2 (например `'S'`)" }
+        "razdel": {
+          "type": "string",
+          "description": "Код раздела классификатора ОКПД 2 (например `'S'`)"
+        }
       }
     },
     "SuggestOkved2Payload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -929,13 +1023,20 @@
     "SuggestOkved2Filter": {
       "type": "object",
       "properties": {
-        "razdel": { "type": "string", "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)" }
+        "razdel": {
+          "type": "string",
+          "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)"
+        }
       }
     },
     "SuggestPartyByPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -960,13 +1061,21 @@
           "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"],
           "description": "Статус организации"
         },
-        "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
+        "type": {
+          "type": "string",
+          "enum": ["LEGAL", "INDIVIDUAL"],
+          "description": "Тип организации"
+        }
       }
     },
     "SuggestPartyKzPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -996,7 +1105,11 @@
     "SuggestPartyPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1011,7 +1124,10 @@
         },
         "status": {
           "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+          "items": {
+            "type": "string",
+            "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
+          },
           "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
         },
         "branch_type": {
@@ -1072,7 +1188,10 @@
           "type": "boolean",
           "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
         },
-        "type_code": { "type": "string", "description": "Фильтрация по типу отделения (например, `ГОПС`)" },
+        "type_code": {
+          "type": "string",
+          "description": "Фильтрация по типу отделения (например, `ГОПС`)"
+        },
         "address_kladr_id": {
           "type": "string",
           "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
@@ -1082,7 +1201,11 @@
     "SuggestRegionCourtPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1111,7 +1234,11 @@
     "BaseSuggestPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1125,7 +1252,11 @@
     "SuggestCarBrandPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1140,7 +1271,11 @@
     "SuggestCountryPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1155,7 +1290,11 @@
     "SuggestCurrencyPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1170,7 +1309,11 @@
     "SuggestEmailPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1185,7 +1328,11 @@
     "SuggestFtsUnitPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
@@ -1200,7 +1347,11 @@
     "SuggestOktmoPayload": {
       "type": "object",
       "properties": {
-        "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
+        "query": {
+          "type": "string",
+          "description": "Query string\n@maxLength 300",
+          "maxLength": 300
+        },
         "count": {
           "type": "number",
           "description": "Maximum number of results to fetch\n@minimum 1\n@maximum 20\n@default 10",
