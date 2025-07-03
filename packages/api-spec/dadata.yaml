@@ -1,5 +1,103 @@
 openapi: 3.0.4
 
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        family:
+          type: string
+          description: asdasdsadasdas
+        reason:
+          type: string
+          description: asdsadsadsadasd
+        message:
+          type: string
+          description: Error message
+
+  responses:
+    BadRequest:
+      description: |
+        Некорректный запрос (невалидный JSON или XML)
+
+        Для API стандартизации составных записей (clean/record):
+        - Отсутствуют обязательные параметры structure или data.
+        - В structure указан неподдерживаемый тип.
+        - Количество полей в data более указанного в structure.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    Unauthorized:
+      description: В запросе отсутствует API-ключ (для "Стандартизации", также, секретный ключ)
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    Forbidden:
+      description: |
+        В запросе указан неверный API-ключ
+        Или не подтверждена почта
+        Или исчерпан дневной лимит запросов (проверьте через личный кабинет или API stat/daily)
+        Или (Стандартизация) - недостаточно средств для обработки запроса, пополните баланс
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    NotFound:
+      description: |
+        Запрошенный ресурс не найден.
+        Скорее всего, допущена ошибка при формировании URL для выполнения запроса
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    MethodNotAllowed:
+      description: Запрос сделан с не доступным для данного API HTTP-методом, например GET там, где разрешён только POST
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    ContentTooLarge:
+      description: Слишком большая длина запроса или слишком много условий
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    TooManyRequests:
+      description: Слишком много запросов в секунду или новых соединений в минуту
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+    InternalServerError:
+      description: Произошла внутренняя ошибка сервиса
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+
+  securitySchemes:
+    TokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Full header format: `Authorization: Token <YOUR_API_KEY>`'
+    SecretKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Secret
+      description: Секретный ключ для API Стандартизации
+
+security:
+  - TokenAuth: []
+
+tags:
+  - name: suggest
+    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+    externalDocs: { url: https://dadata.ru/api/suggest/ }
+
+  - name: metro
+    description: Станции метро
+    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+
+externalDocs:
+  url: https://confluence.hflabs.ru/display/SGTDOC
+  description: |
+    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
+    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
+
 info:
   title: DaData.ru API
   description: |
@@ -9,12 +107,17 @@ info:
     DaData — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
 
     **Аутентификация**
-    - Все запросы требуют передачи API-ключа в заголовке `Authorization: Token <API_KEY>`.
+    - Запросы к API подсказок и "Поиск по коду" требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`.
+    - Запросы к API стандартизации, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
 
     **Лимиты запросов**
+    API типа "Подсказки" (`suggest`) и "Поиск по коду" (`findById`):
     - До **30 запросов в секунду** на один IP
     - До **60 новых соединений в минуту** на один IP
     - Суточные лимиты зависят от тарифного плана.
+    API стандартизации:
+    - До **20 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
 
     **Важно:** Данная спецификация не является официальной. Составлено по официальной документации DaData и анализу ответов API.
 
@@ -27,9 +130,13 @@ info:
     **Authentication:** All endpoints require an API key passed in the Authorization header.
 
     **Rate Limits:**
+    All `suggest` and `findById` APIs:
     - Maximum 30 requests per second per IP
     - Maximum 60 new connections per minute per IP
     - Daily limits vary by subscription plan
+    Standartization (`clean`) API:
+    - Maximum 20 requests per second per IP
+    - Maximum 60 new connections per minute per IP
 
     **Note:** This is an unofficial specification based on official Dadata API documentation and reverse-engineering API responses.
   termsOfService: https://dadata.ru/offer/
@@ -46,7 +153,7 @@ servers:
   - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
     description: Suggestions API server
 
-  - url: https://cleaner.dadata.ru/api/v1/clean
+  - url: https://cleaner.dadata.ru/api/v1
     description: Standartization API server
 
   - url: https://dadata.ru/api/v2
@@ -792,7 +899,7 @@ paths:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
       tags: [suggest, oktmo]
-      summary: Подсказки по видам продукции (ОКПД 2)
+      summary: Подсказки по кодам муниципальных образований (ОКТМО)
       description: |
         Общероссийский классификатор территорий муниципальных образований
         Поиск выполняется по полю `oktmo` (8-значный код ОКТМО)
@@ -805,7 +912,7 @@ paths:
             schema: { $ref: './schemas/request.json#/definitions/SuggestOktmoPayload' }
             examples:
               simple_query:
-                value: { query: '54623425' }
+                value: { query: '546234' }
       responses:
         '200':
           description: Запрос успешно обработан
@@ -1371,88 +1478,699 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
 
-components:
-  schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        family:
-          type: string
-          description: asdasdsadasdas
-        reason:
-          type: string
-          description: asdsadsadsadasd
-        message:
-          type: string
-          description: Error message
-
-  responses:
-    BadRequest:
-      description: Некорректный запрос (невалидный JSON или XML)
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
-
-    Unauthorized:
-      description: В запросе отсутствует API-ключ
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
-
-    Forbidden:
+  /findById/oktmo:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, oktmo]
+      summary: Муниципальные образования (ОКТМО) по коду
       description: |
-        В запросе указан неверный API-ключ
-        Или не подтверждена почта
-        Или исчерпан дневной лимит запросов (проверьте через личный кабинет или API stat/daily)
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        Находит запись в Общероссийском классификаторе территорий муниципальных образований (ОКТМО) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/oktmo/ }
+      operationId: findOktmo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindOktmoPayload' }
+            examples:
+              simple_query:
+                value: { query: '54623425' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestOktmoResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
 
-    NotFound:
+  /findById/delivery:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, delivery, address]
+      summary: Идентификатор города в службах доставки
       description: |
-        Запрошенный ресурс не найден.
-        Скорее всего, допущена ошибка при формировании URL для выполнения запроса
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+        Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.
+        Метод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.
+        Пока поддерживаются службы доставки СДЭК, Boxberry и DPD
+      externalDocs: { url: https://dadata.ru/api/suggest/delivery/ }
+      operationId: findDelivery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindDeliveryPayload' }
+            examples:
+              simple_query:
+                value: { query: '3100400100000' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindDeliveryResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
 
-    MethodNotAllowed:
-      description: Запрос сделан с методом, отличным от POST
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+  /clean/address:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, address]
+      summary: Стандартизация адресов
+      description: |
+        - Разбивает адрес по отдельным полям (регион, город, улица, дом, квартира).
+        - Рассчитывает корректный индекс по данным Почты России.
+        - Определяет координаты.
+        - Показывает округ и район города, ближайшее метро, площадь и стоимость квартиры.
+        - Достает коды КЛАДР, ФИАС (ГАР), ОКАТО, ОКТМО и ИФНС.
+      externalDocs: { url: https://dadata.ru/api/clean/address/ }
+      operationId: cleanAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['мск сухонска 11/-89']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/AddressClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-    ContentTooLarge:
-      description: Слишком большая длина запроса или слишком много условий
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+  /clean/name:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, fio]
+      summary: Стандартизация ФИО
+      description: |
+        - Исправляет опечатки и транслитерирует.
+        - Проставляет пол.
+        - Склоняет по падежам (кого? кому? кем?).
+      externalDocs: { url: https://dadata.ru/api/clean/name/ }
+      operationId: cleanFio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['Срегей владимерович иванов']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json: { schema: { $ref: './schemas/response.json#/definitions/FioClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-    TooManyRequests:
-      description: Слишком много запросов в секунду или новых соединений в минуту
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+  /clean/email:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, email]
+      summary: Стандартизация email
+      description: |
+        - Проверяет формат адреса.
+        - Исправляет распространённые опечатки.
+        - Проверяет, не «одноразовый» ли адрес.
+        - Классифицирует адреса на личные (@mail.ru, @yandex.ru), корпоративные (@myshop.ru) и «ролевые» (info@, support@).
+      externalDocs: { url: https://dadata.ru/api/clean/email/ }
+      operationId: cleanEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['serega@yandex/ru']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/EmailClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-    InternalServerError:
-      description: Произошла внутренняя ошибка сервиса
-      content:
-        application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } }
+  /clean/phone:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, phone]
+      summary: Стандартизация телефонов
+      description: |
+        - Проверяет телефон.
+        - Проставляет актуальный код города / DEF-код.
+        - Восстанавливает оператора. Учитывает переносы номера между операторами.
+        - Определяет страну, регион, город и часовой пояс.
+      externalDocs: { url: https://dadata.ru/api/clean/phone/ }
+      operationId: cleanPhone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['раб 846)231.60.14 *139']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/PhoneClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: 'Use format: Token YOUR_API_KEY'
+  /clean/passport:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, passport]
+      summary: Стандартизация паспортов
+      description: |
+        - Проверяет формат серии и номера.
+        - Проверяет паспорт по справочнику недействительных паспортов МВД.
 
-security:
-  - ApiKeyAuth: []
+        **Внимание**
+        МВД сломало реестр паспортов, поэтому сервис работает по справочнику от 21 июня 2023 года.
+        Подробнее см.: https://t.me/dadataru_health/186
+      externalDocs: { url: https://dadata.ru/api/clean/passport/ }
+      operationId: cleanPassport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['4509 235857']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/PassportClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-tags:
-  - name: suggest
-    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
-    externalDocs: { url: https://dadata.ru/api/suggest/ }
+  /clean/birthdate:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, birthdate]
+      summary: Стандартизация дат рождения
+      description: |
+        Проверяет и приводит дату рождения к единому формату
+      externalDocs: { url: https://dadata.ru/api/clean/birthdate/ }
+      operationId: cleanBirthdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['24/3/12']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json: { schema: { $ref: './schemas/response.json#/definitions/DateClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-  - name: metro
-    description: Станции метро
-    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+  /clean/vehicle:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, vehicle]
+      summary: Стандартизация автомобилей
+      description: |
+        Распознает марки и модели автомобилей
+      externalDocs: { url: https://dadata.ru/api/clean/vehicle/ }
+      operationId: cleanVehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['форд фокус']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/VehicleClean' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
 
-externalDocs:
-  url: https://confluence.hflabs.ru/display/SGTDOC
-  description: |
-    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
-    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
+  /clean:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean]
+      summary: Стандартизация составных записей
+      description: |
+        Стандартизует запись, которая состоит из нескольких полей. Например:
+        - ФИО + адрес + телефон + второй телефон
+        - Дата рождения + паспорт
+        - Адрес + email
+
+        В одном запросе можно передавать только одну составную запись.
+        Максимальное количество полей в одной записи:
+        - 3 адреса
+        - 3 телефона
+        - 3 email
+        - 1 ФИО
+        - 1 дата рождения
+        - 1 паспорт
+        - 1 автомобиль
+      externalDocs: { url: https://dadata.ru/api/clean/record/ }
+      operationId: cleanCombined
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/CleanCombinedPayload' }
+            examples:
+              simple_query:
+                value:
+                  {
+                    structure: ['NAME', 'ADDRESS', 'PHONE'],
+                    data:
+                      [['Федотов Алексей', 'Москва, Сухонская улица, 11 кв 89', '8 916 823 3454']],
+                  }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/CleanCombinedRecord' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
+
+  /geolocate/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, geolocate, address]
+      summary: Адрес по координатам
+      description: |
+        Находит ближайшие адреса (дома, улицы, города) по географическим координатам. Только для России.
+      externalDocs: { url: https://dadata.ru/api/geolocate/ }
+      operationId: geolocateAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/GeolocateAddressPayload' }
+            examples:
+              simple_query:
+                value: { lat: 55.878, lon: 37.653 }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestAddressResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+
+  /geolocate/postal_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, geolocate, postal_unit]
+      summary: Ближайшие почтовые отделения
+      description: |
+        Находит ближайшие к указанным координатам отделения Почты России
+        Можно указать радиус максимального удаления от указанных координат
+      externalDocs: { url: https://dadata.ru/api/suggest/postal_unit/ }
+      operationId: geolocatePostalUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/GeolocatePostalUnitPayload' }
+            examples:
+              simple_query:
+                value: { lat: 55.878, lon: 37.653, radius_meters: 1000 }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+
+  /iplocate/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    summary: Город по IP-адресу
+    description: |
+      - Определяет город по IP-адресу в России. Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.
+      - Поддерживает как IPv4, так и IPv6 адреса.
+      - Возвращает детальную информацию о городе, в том числе почтовый индекс.
+
+      **Алгоритм выбора IP-адреса из параметров запроса**
+      ```
+      ЕСЛИ IP указан в параметре ip
+      ТО использовать его
+      ИНАЧЕ
+        ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For
+        ТО использовать его
+        ИНАЧЕ вернуть IP сокета соединения
+      Местоположение определяется только для российских адресов.
+      ```
+    post:
+      tags: [other, iplocate, address]
+      summary: POST-версия метода "Город по IP-адресу"
+      description: |
+        Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`,
+        или по IP сокета соединения.
+      externalDocs: { url: https://dadata.ru/api/geolocate/ }
+      operationId: ipLocate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/IpLocatePayload' }
+            examples:
+              simple_query:
+                value: { ip: '46.226.227.20' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/IpLocateResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+    get:
+      tags: [other, iplocate, address]
+      summary: GET-версия метода "Город по IP-адресу"
+      description: |
+        Определяет город по IP-адресу, указанному в URL параметре, или в заголовке `X-Forwarded-For`,
+        или по IP сокета соединения.
+      parameters:
+        - name: ip
+          in: query
+          description: IP-адрес для определения города (IPv4 или IPv6)
+          schema: { type: string }
+        - name: language
+          in: query
+          description: Язык результата
+          schema:
+            type: string
+            enum: [ru, en]
+            default: ru
+        - name: division
+          in: query
+          description: Административное либо муниципальное деление
+          schema:
+            type: string
+            enum: [ADMINISTRATIVE, MUNICIPAL]
+            default: ADMINISTRATIVE
+        - name: X-Forwarded-For
+          in: header
+          description: IP-адрес клиента (используется если ip не указан в параметрах)
+          schema: { type: string }
+      operationId: ipLocateGet
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/IpLocateResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+
+  /findAffiliated/party:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, findAffiliated, party]
+      summary: Поиск аффилированных компаний
+      description: |
+        Часто учредитель или директор не ограничивается участием в одном юрлице, а фигурирует в нескольких. Порой — в десятках разных компаний. Знать об этом полезно как для оценки надёжности контрагента, так и для более эффективного маркетинга и продаж. Чтобы облегчить поиск аффилированных компаний, «Дадата» находит организации по ИНН учредителей и руководителей.
+
+        Ищет по ИНН физлиц и юрлиц.
+
+        По каждой организации возвращается ограниченный набор полей. Чтобы получить все поля, выберите конкретную компанию из ответа и вызовите метод "Организация по ИНН/ОГРН" (`findById/party`).
+      externalDocs: { url: https://dadata.ru/api/find-affiliated/ }
+      operationId: findAffiliated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindAffiliatedPayload' }
+            examples:
+              simple_query:
+                value: { query: '7736207543' }
+              only_founders:
+                description: Искать только среди учредителей
+                value: { query: '7736207543', scope: ['FOUNDERS'] }
+              only_managers:
+                description: Искать только среди руководителей
+                value: { query: '7736207543', scope: ['MANAGERS'] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindAffiliatedResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+
+  /findByEmail/company:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, findByEmail, party]
+      summary: Компания по email
+      description: |
+        Находит компанию по адресу электронной почты
+      externalDocs: { url: https://dadata.ru/api/find-company/by-email/ }
+      operationId: findPartyByEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindPartyByEmailPayload' }
+            examples:
+              simple_query:
+                value: { query: 'info@dadata.ru' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindPartyByEmailResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+
+  /stat/daily:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, stats]
+      summary: Статистика использования сервисов «ДаДаты»
+      description: |
+        Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:
+        - стандартизация (`clean`)
+        - компания по email (`company`)
+        - поиск дублей (`merging`)
+        - подсказки (`suggestions`)
+
+        В поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.
+        В поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.
+      externalDocs: { url: https://dadata.ru/api/stat/ }
+      operationId: fetchDailyStats
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/DailyStats' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
+
+  /profile/balance:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, balance]
+      summary: Баланс пользователя «Дадаты»
+      description: |
+        Возвращает текущий баланс счета в рублях с точностью до копеек
+      externalDocs: { url: https://dadata.ru/api/balance/ }
+      operationId: fetchBalance
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/ProfileBalanceResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []
+          SecretKeyAuth: []
+
+  /version:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, dadata, versions]
+      summary: Версии и даты справочников «ДаДаты»
+      description: |
+        Возвращает версии сервисов и даты актуальности справочников (ФИАС, ЕГРЮЛ, банки и другие).
+      externalDocs: { url: https://dadata.ru/api/version/ }
+      operationId: fetchVersions
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/ServiceVersions' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
+      security:
+        - TokenAuth: []

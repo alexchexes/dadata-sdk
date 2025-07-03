@@ -153,7 +153,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "Код КЛАДР или ФИАС, по которому нужно получить подсказку\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
+          "description": "Код КЛАДР или ФИАС, по которому нужно получить адрес\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
           "examples": [{ "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" }, { "query": "77000000000292300" }]
         },
         "count": {
@@ -366,7 +366,7 @@
       "required": ["query"],
       "description": "Страны\n@see https://dadata.ru/api/suggest/country/"
     },
-    "FindСurrencyPayload": {
+    "FindCurrencyPayload": {
       "type": "object",
       "properties": {
         "query": {
