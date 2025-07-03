@@ -1,12 +1,12 @@
 // --------------------------
-//  AccountBalance
+//  ProfileBalanceResponse
 // --------------------------
 
 /**
  * Ответ из API "Баланс пользователя"
  * @see https://dadata.ru/api/balance/
  */
-export interface AccountBalance {
+export interface ProfileBalanceResponse {
   /**
    * Баланс в рублях
    * @example 9922.30
@@ -49,11 +49,16 @@ export interface DailyStats {
 export interface DailyStatsServices {
   /** Кол-во запросов к "Стандартизации" с начала суток */
   clean: number;
-  /** Кол-во запросов к "Компания по Email" с начала суток */
+  /** Кол-во запросов к сервису "Компания по Email" с начала суток */
   company: number;
+  /** Кол-во обработанных записей в сервисе "Поиск дублей" с начала суток */
   merging: number;
   /** Кол-во запросов к "Подсказкам" с начала суток */
   suggestions: number;
+
+  // /** Кол-во запросов к сервису "Похожие компании" {@link https://dadata.ru/lookalike/} */
+  // company_similar: number;
+  // NOT RELEASED YET
 }
 
 export interface DailyStatsRemaining {
@@ -61,9 +66,14 @@ export interface DailyStatsRemaining {
   clean: number;
   /** Расчётное количество оставшихся запросов "Компаний по емейлу" */
   company: number;
+  /** Расчётное кол-во оставшихся записей в сервисе "Поиск дублей" */
   merging: number;
   /** Расчётное количество оставшихся запросов к "Подсказкам" */
   suggestions: number;
+
+  // /** Расчётное количество оставшихся запросов к сервису "Похожие компании" {@link https://dadata.ru/lookalike/} */
+  // company_similar: number;
+  // NOT RELEASED YET
 }
 
 // --------------------------
@@ -75,6 +85,7 @@ export interface DailyStatsRemaining {
  * @see https://dadata.ru/api/version/
  */
 export interface ServiceVersions {
+  /** Сведения о версии бэк-энда «Дадаты» */
   dadata: ServiceVersionsDadata;
   /** Сведения о версиях "Стандартизации" */
   factor: ServiceVersionsFactor;
@@ -84,6 +95,7 @@ export interface ServiceVersions {
 
 export interface ServiceVersionsDadata {
   /**
+   * Версия бэк-энда «ДаДаты»
    * @example 'stable (14385:607a88c61a1e)'
    */
   version: string;
@@ -91,7 +103,9 @@ export interface ServiceVersionsDadata {
 
 export interface ServiceVersionsFactor {
   /**
+   * Версия бэк-энда сервиса Стандартизации
    * @example '25.4.85497 (5bd0bdda)'
+   * @example 'feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)'
    */
   version: string;
   /** Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'` */
@@ -111,6 +125,7 @@ export interface ServiceVersionsFactorResources {
 
 export interface ServiceVersionsSuggestions {
   /**
+   * Версия бэк-энда сервиса Подсказок
    * @example '25.5 (412a3f5c)'
    */
   version: string;

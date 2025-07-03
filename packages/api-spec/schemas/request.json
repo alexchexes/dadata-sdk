@@ -539,7 +539,11 @@
     "IpLocatePayload": {
       "type": "object",
       "properties": {
-        "ip": { "type": "string", "description": "IP-адрес\n@example '46.226.227.20'", "examples": ["46.226.227.20"] },
+        "ip": {
+          "type": "string",
+          "description": "IP-адрес для определения города.\n\nЕсли не указан, будет использован IP из заголовка `X-Forwarded-For`.\nЕсли и там пусто, будет использован IP сокета соединения.\n\n@example '46.226.227.20'",
+          "examples": ["46.226.227.20"]
+        },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
@@ -553,7 +557,6 @@
           "default": "ADMINISTRATIVE"
         }
       },
-      "required": ["ip"],
       "description": "https://dadata.ru/api/iplocate/"
     },
     "RadiusFilter": {

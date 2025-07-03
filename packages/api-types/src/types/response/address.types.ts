@@ -960,6 +960,7 @@ export interface AddressClean
 
 /**
  * Address fields returned by the API when using FIAS suggestions or FIAS-by-ID (findById/fias).
+ * @see https://dadata.ru/api/suggest/fias/
  * @see https://dadata.ru/suggestions/usage/fias/
  * @see https://dadata.ru/api/find-fias/
  * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937
@@ -1111,3 +1112,12 @@ export type SuggestAddressAdminResponse = SuggestionsResponse<AddressAdminSugges
 export type SuggestAddressMunicipalResponse = SuggestionsResponse<AddressMunicipalSuggestion>;
 
 export type SuggestAddressResponse = SuggestAddressAdminResponse | SuggestAddressMunicipalResponse;
+
+export type IpLocateAdminResponse = {
+  location: AddressAdminData | null;
+};
+export type IpLocateMunicipalResponse = {
+  location: AddressMunicipalData | null;
+};
+
+export type IpLocateResponse = IpLocateAdminResponse | IpLocateMunicipalResponse;

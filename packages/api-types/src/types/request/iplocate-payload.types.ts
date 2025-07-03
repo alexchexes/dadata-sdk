@@ -5,10 +5,14 @@ import type { DivisionType, Language } from './suggest-payload-address.types';
  */
 export interface IpLocatePayload {
   /**
-   * IP-адрес
+   * IP-адрес для определения города.
+   *
+   * Если не указан, будет использован IP из заголовка `X-Forwarded-For`.
+   * Если и там пусто, будет использован IP сокета соединения.
+   *
    * @example '46.226.227.20'
    */
-  ip: string;
+  ip?: string;
   /**
    * На каком языке вернуть результат
    * @default 'ru'
