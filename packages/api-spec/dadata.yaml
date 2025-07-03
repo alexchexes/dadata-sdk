@@ -1,23 +1,5 @@
 openapi: 3.0.4
 
-security:
-  - TokenAuth: []
-
-tags:
-  - name: suggest
-    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
-    externalDocs: { url: https://dadata.ru/api/suggest/ }
-
-  - name: metro
-    description: Станции метро
-    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
-
-externalDocs:
-  url: https://confluence.hflabs.ru/display/SGTDOC
-  description: |
-    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
-    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
-
 info:
   title: DaData.ru API
   description: |
@@ -78,6 +60,24 @@ servers:
 
   - url: https://dadata.ru/api/v2
     description: General API server (serves account-related endpoints)
+
+security:
+  - TokenAuth: []
+
+tags:
+  - name: suggest
+    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+    externalDocs: { url: https://dadata.ru/api/suggest/ }
+
+  - name: metro
+    description: Станции метро
+    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+
+externalDocs:
+  url: https://confluence.hflabs.ru/display/SGTDOC
+  description: |
+    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
+    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
 
 components:
   schemas:
