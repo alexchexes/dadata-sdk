@@ -1,6 +1,158 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "ProfileBalanceResponse": {
+      "type": "object",
+      "properties": {
+        "balance": { "type": "number", "description": "Баланс в рублях\n@example 9922.30", "examples": [9922.3] }
+      },
+      "required": ["balance"],
+      "description": "Ответ из API \"Баланс пользователя\"\n@see https://dadata.ru/api/balance/"
+    },
+    "DailyStats": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "description": "Текущая дата\n@example '2023-05-23'", "examples": ["2023-05-23"] },
+        "services": {
+          "$ref": "#/definitions/DailyStatsServices",
+          "description": "Суммарное количество запросов, израсходованное по каждому сервису с начала суток"
+        },
+        "remaining": {
+          "$ref": "#/definitions/DailyStatsRemaining",
+          "description": "Расчетное количество оставшихся запросов согласно балансу и тарифу.\n\nНапример, если баланс составляет `150 ₽`, то, согласно тарифам «Дадаты», его достаточно для:\n\n- 7500 записей «Поиска дублей»;\n- или 750 записей «Стандартизации»;\n- или 21 запросов «Компаний по емейлу».\n\nТо есть количества в `remaining.clean`, `remaining.company` и `remaining.merging` — взаимоисключающие. Именно это и отражает пример выше.\n\nКоличество в `remaining.suggestions` рассчитывается из тарифного плана и не зависит от баланса."
+        }
+      },
+      "required": ["date", "services", "remaining"],
+      "description": "Ответ из API \"Статистика использования\"\n@see https://dadata.ru/api/stat/"
+    },
+    "DailyStatsServices": {
+      "type": "object",
+      "properties": {
+        "clean": { "type": "number", "description": "Кол-во запросов к \"Стандартизации\" с начала суток" },
+        "company": {
+          "type": "number",
+          "description": "Кол-во запросов к сервису \"Компания по Email\" с начала суток"
+        },
+        "merging": {
+          "type": "number",
+          "description": "Кол-во обработанных записей в сервисе \"Поиск дублей\" с начала суток"
+        },
+        "suggestions": { "type": "number", "description": "Кол-во запросов к \"Подсказкам\" с начала суток" }
+      },
+      "required": ["clean", "company", "merging", "suggestions"]
+    },
+    "DailyStatsRemaining": {
+      "type": "object",
+      "properties": {
+        "clean": { "type": "number", "description": "Расчётное количество оставшихся запросов \"Стандартизации\"" },
+        "company": {
+          "type": "number",
+          "description": "Расчётное количество оставшихся запросов \"Компаний по емейлу\""
+        },
+        "merging": {
+          "type": "number",
+          "description": "Расчётное кол-во оставшихся записей в сервисе \"Поиск дублей\""
+        },
+        "suggestions": { "type": "number", "description": "Расчётное количество оставшихся запросов к \"Подсказкам\"" }
+      },
+      "required": ["clean", "company", "merging", "suggestions"]
+    },
+    "ServiceVersions": {
+      "type": "object",
+      "properties": {
+        "dadata": {
+          "$ref": "#/definitions/ServiceVersionsDadata",
+          "description": "Сведения о версии бэк-энда «Дадаты»"
+        },
+        "factor": {
+          "$ref": "#/definitions/ServiceVersionsFactor",
+          "description": "Сведения о версиях \"Стандартизации\""
+        },
+        "suggestions": {
+          "$ref": "#/definitions/ServiceVersionsSuggestions",
+          "description": "Сведения о версиях \"Подсказок\""
+        }
+      },
+      "required": ["dadata", "factor", "suggestions"],
+      "description": "Ответ из API \"Версии справочников\"\n@see https://dadata.ru/api/version/"
+    },
+    "ServiceVersionsDadata": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Версия бэк-энда «ДаДаты»\n@example 'stable (14385:607a88c61a1e)'",
+          "examples": ["stable (14385:607a88c61a1e)"]
+        }
+      },
+      "required": ["version"]
+    },
+    "ServiceVersionsFactor": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Версия бэк-энда сервиса Стандартизации\n@example '25.4.85497 (5bd0bdda)'\n@example 'feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)'",
+          "examples": ["25.4.85497 (5bd0bdda)", "feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)"]
+        },
+        "resources": {
+          "$ref": "#/definitions/ServiceVersionsFactorResources",
+          "description": "Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'`"
+        }
+      },
+      "required": ["version", "resources"]
+    },
+    "ServiceVersionsFactorResources": {
+      "type": "object",
+      "properties": {
+        "Перенесённые номера": { "type": "string" },
+        "ФИАС": { "type": "string" },
+        "Геокоординаты": { "type": "string" },
+        "Площади квартир": { "type": "string" },
+        "Недейств. паспорта": { "type": "string" },
+        "Цены квартир": { "type": "string" },
+        "Телефоны": { "type": "string" },
+        "Индексы Почты": { "type": "string" }
+      },
+      "required": [
+        "Перенесённые номера",
+        "ФИАС",
+        "Геокоординаты",
+        "Площади квартир",
+        "Недейств. паспорта",
+        "Цены квартир",
+        "Телефоны",
+        "Индексы Почты"
+      ]
+    },
+    "ServiceVersionsSuggestions": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Версия бэк-энда сервиса Подсказок\n@example '25.5 (412a3f5c)'",
+          "examples": ["25.5 (412a3f5c)"]
+        },
+        "resources": {
+          "$ref": "#/definitions/ServiceVersionsSuggestionsResources",
+          "description": "Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'`"
+        }
+      },
+      "required": ["version", "resources"]
+    },
+    "ServiceVersionsSuggestionsResources": {
+      "type": "object",
+      "properties": {
+        "ГАР": { "type": "string" },
+        "IP-адреса": { "type": "string" },
+        "Банки": { "type": "string" },
+        "ФИАС": { "type": "string" },
+        "ЕГРЮЛ": { "type": "string" },
+        "ЕГРЮЛ Беларусь": { "type": "string" },
+        "ЕГРЮЛ Казахстан": { "type": "string" }
+      },
+      "required": ["ГАР", "IP-адреса", "Банки", "ФИАС", "ЕГРЮЛ", "ЕГРЮЛ Беларусь", "ЕГРЮЛ Казахстан"]
+    },
     "AddressMetroItem": {
       "type": "object",
       "properties": {
@@ -2676,6 +2828,23 @@
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "family": { "type": "string", "examples": ["CLIENT_ERROR"], "description": "@example 'CLIENT_ERROR'" },
+        "reason": {
+          "type": "string",
+          "examples": ["Unauthorized", "Forbidden"],
+          "description": "@example 'Unauthorized'\n@example 'Forbidden'"
+        },
+        "message": {
+          "type": "string",
+          "examples": ["You should provide Authorization header with your api token"],
+          "description": "@example 'You should provide Authorization header with your api token'\n@example \"Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.\"\""
+        }
+      },
+      "required": ["family", "reason", "message"]
+    },
     "FiasSuggestion": {
       "type": "object",
       "properties": {
@@ -4501,158 +4670,6 @@
       "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/RegionCourtSuggestion" } } },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
-    },
-    "ProfileBalanceResponse": {
-      "type": "object",
-      "properties": {
-        "balance": { "type": "number", "description": "Баланс в рублях\n@example 9922.30", "examples": [9922.3] }
-      },
-      "required": ["balance"],
-      "description": "Ответ из API \"Баланс пользователя\"\n@see https://dadata.ru/api/balance/"
-    },
-    "DailyStats": {
-      "type": "object",
-      "properties": {
-        "date": { "type": "string", "description": "Текущая дата\n@example '2023-05-23'", "examples": ["2023-05-23"] },
-        "services": {
-          "$ref": "#/definitions/DailyStatsServices",
-          "description": "Суммарное количество запросов, израсходованное по каждому сервису с начала суток"
-        },
-        "remaining": {
-          "$ref": "#/definitions/DailyStatsRemaining",
-          "description": "Расчетное количество оставшихся запросов согласно балансу и тарифу.\n\nНапример, если баланс составляет `150 ₽`, то, согласно тарифам «Дадаты», его достаточно для:\n\n- 7500 записей «Поиска дублей»;\n- или 750 записей «Стандартизации»;\n- или 21 запросов «Компаний по емейлу».\n\nТо есть количества в `remaining.clean`, `remaining.company` и `remaining.merging` — взаимоисключающие. Именно это и отражает пример выше.\n\nКоличество в `remaining.suggestions` рассчитывается из тарифного плана и не зависит от баланса."
-        }
-      },
-      "required": ["date", "services", "remaining"],
-      "description": "Ответ из API \"Статистика использования\"\n@see https://dadata.ru/api/stat/"
-    },
-    "DailyStatsServices": {
-      "type": "object",
-      "properties": {
-        "clean": { "type": "number", "description": "Кол-во запросов к \"Стандартизации\" с начала суток" },
-        "company": {
-          "type": "number",
-          "description": "Кол-во запросов к сервису \"Компания по Email\" с начала суток"
-        },
-        "merging": {
-          "type": "number",
-          "description": "Кол-во обработанных записей в сервисе \"Поиск дублей\" с начала суток"
-        },
-        "suggestions": { "type": "number", "description": "Кол-во запросов к \"Подсказкам\" с начала суток" }
-      },
-      "required": ["clean", "company", "merging", "suggestions"]
-    },
-    "DailyStatsRemaining": {
-      "type": "object",
-      "properties": {
-        "clean": { "type": "number", "description": "Расчётное количество оставшихся запросов \"Стандартизации\"" },
-        "company": {
-          "type": "number",
-          "description": "Расчётное количество оставшихся запросов \"Компаний по емейлу\""
-        },
-        "merging": {
-          "type": "number",
-          "description": "Расчётное кол-во оставшихся записей в сервисе \"Поиск дублей\""
-        },
-        "suggestions": { "type": "number", "description": "Расчётное количество оставшихся запросов к \"Подсказкам\"" }
-      },
-      "required": ["clean", "company", "merging", "suggestions"]
-    },
-    "ServiceVersions": {
-      "type": "object",
-      "properties": {
-        "dadata": {
-          "$ref": "#/definitions/ServiceVersionsDadata",
-          "description": "Сведения о версии бэк-энда «Дадаты»"
-        },
-        "factor": {
-          "$ref": "#/definitions/ServiceVersionsFactor",
-          "description": "Сведения о версиях \"Стандартизации\""
-        },
-        "suggestions": {
-          "$ref": "#/definitions/ServiceVersionsSuggestions",
-          "description": "Сведения о версиях \"Подсказок\""
-        }
-      },
-      "required": ["dadata", "factor", "suggestions"],
-      "description": "Ответ из API \"Версии справочников\"\n@see https://dadata.ru/api/version/"
-    },
-    "ServiceVersionsDadata": {
-      "type": "object",
-      "properties": {
-        "version": {
-          "type": "string",
-          "description": "Версия бэк-энда «ДаДаты»\n@example 'stable (14385:607a88c61a1e)'",
-          "examples": ["stable (14385:607a88c61a1e)"]
-        }
-      },
-      "required": ["version"]
-    },
-    "ServiceVersionsFactor": {
-      "type": "object",
-      "properties": {
-        "version": {
-          "type": "string",
-          "description": "Версия бэк-энда сервиса Стандартизации\n@example '25.4.85497 (5bd0bdda)'\n@example 'feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)'",
-          "examples": ["25.4.85497 (5bd0bdda)", "feature-DADATA-3839-25.4-SNAPSHOT (d8a5f29b)"]
-        },
-        "resources": {
-          "$ref": "#/definitions/ServiceVersionsFactorResources",
-          "description": "Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'`"
-        }
-      },
-      "required": ["version", "resources"]
-    },
-    "ServiceVersionsFactorResources": {
-      "type": "object",
-      "properties": {
-        "Перенесённые номера": { "type": "string" },
-        "ФИАС": { "type": "string" },
-        "Геокоординаты": { "type": "string" },
-        "Площади квартир": { "type": "string" },
-        "Недейств. паспорта": { "type": "string" },
-        "Цены квартир": { "type": "string" },
-        "Телефоны": { "type": "string" },
-        "Индексы Почты": { "type": "string" }
-      },
-      "required": [
-        "Перенесённые номера",
-        "ФИАС",
-        "Геокоординаты",
-        "Площади квартир",
-        "Недейств. паспорта",
-        "Цены квартир",
-        "Телефоны",
-        "Индексы Почты"
-      ]
-    },
-    "ServiceVersionsSuggestions": {
-      "type": "object",
-      "properties": {
-        "version": {
-          "type": "string",
-          "description": "Версия бэк-энда сервиса Подсказок\n@example '25.5 (412a3f5c)'",
-          "examples": ["25.5 (412a3f5c)"]
-        },
-        "resources": {
-          "$ref": "#/definitions/ServiceVersionsSuggestionsResources",
-          "description": "Даты актуальности используемых источников данных в формате `'ДД.ММ.ГГГГ'`"
-        }
-      },
-      "required": ["version", "resources"]
-    },
-    "ServiceVersionsSuggestionsResources": {
-      "type": "object",
-      "properties": {
-        "ГАР": { "type": "string" },
-        "IP-адреса": { "type": "string" },
-        "Банки": { "type": "string" },
-        "ФИАС": { "type": "string" },
-        "ЕГРЮЛ": { "type": "string" },
-        "ЕГРЮЛ Беларусь": { "type": "string" },
-        "ЕГРЮЛ Казахстан": { "type": "string" }
-      },
-      "required": ["ГАР", "IP-адреса", "Банки", "ФИАС", "ЕГРЮЛ", "ЕГРЮЛ Беларусь", "ЕГРЮЛ Казахстан"]
     }
   }
 }
