@@ -1,5 +1,84 @@
 openapi: 3.0.4
 
+security:
+  - TokenAuth: []
+
+tags:
+  - name: suggest
+    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+    externalDocs: { url: https://dadata.ru/api/suggest/ }
+
+  - name: metro
+    description: Станции метро
+    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+
+externalDocs:
+  url: https://confluence.hflabs.ru/display/SGTDOC
+  description: |
+    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
+    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
+
+info:
+  title: DaData.ru API
+  description: |
+    ### English version below
+
+    Неофициальная спецификация OpenAPI для сервисов DaData
+    DaData — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
+
+    **Аутентификация**
+    - Запросы к API подсказок и "Поиск по коду" требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`.
+    - Запросы к API стандартизации, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
+
+    **Лимиты запросов**
+    API типа "Подсказки" (`suggest`) и "Поиск по коду" (`findById`):
+    - До **30 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+    - Суточные лимиты зависят от тарифного плана.
+    API стандартизации:
+    - До **20 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+
+    **Важно:** Данная спецификация не является официальной. Составлено по официальной документации DaData и анализу ответов API.
+
+    ---
+    ### English version
+
+    Unofficial OpenAPI specification for Dadata.ru APIs.
+    Dadata provides various suggestion and lookup services for Russian addresses, companies, and other data.
+
+    **Authentication:** All endpoints require an API key passed in the Authorization header.
+
+    **Rate Limits:**
+    All `suggest` and `findById` APIs:
+    - Maximum 30 requests per second per IP
+    - Maximum 60 new connections per minute per IP
+    - Daily limits vary by subscription plan
+    Standartization (`clean`) API:
+    - Maximum 20 requests per second per IP
+    - Maximum 60 new connections per minute per IP
+
+    **Note:** This is an unofficial specification based on official Dadata API documentation and reverse-engineering API responses.
+  termsOfService: https://dadata.ru/offer/
+  contact:
+    name: Dadata DSK on GitHub (unofficial)
+    url: https://github.com/alexchexes/dadata-sdk
+    email: alexchexes@gmail.com
+  license:
+    name: DaData ToS
+    url: https://dadata.ru/offer/
+  version: 0.1.0
+
+servers:
+  - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
+    description: Suggestions API server
+
+  - url: https://cleaner.dadata.ru/api/v1
+    description: Standartization API server
+
+  - url: https://dadata.ru/api/v2
+    description: General API server (serves account-related endpoints)
+
 components:
   schemas:
     ErrorResponse:
@@ -79,85 +158,6 @@ components:
       in: header
       name: X-Secret
       description: Секретный ключ для API Стандартизации
-
-security:
-  - TokenAuth: []
-
-tags:
-  - name: suggest
-    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
-    externalDocs: { url: https://dadata.ru/api/suggest/ }
-
-  - name: metro
-    description: Станции метро
-    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
-
-externalDocs:
-  url: https://confluence.hflabs.ru/display/SGTDOC
-  description: |
-    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
-    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
-
-info:
-  title: DaData.ru API
-  description: |
-    ### English version below
-
-    Неофициальная спецификация OpenAPI для сервисов DaData
-    DaData — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
-
-    **Аутентификация**
-    - Запросы к API подсказок и "Поиск по коду" требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`.
-    - Запросы к API стандартизации, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
-
-    **Лимиты запросов**
-    API типа "Подсказки" (`suggest`) и "Поиск по коду" (`findById`):
-    - До **30 запросов в секунду** на один IP
-    - До **60 новых соединений в минуту** на один IP
-    - Суточные лимиты зависят от тарифного плана.
-    API стандартизации:
-    - До **20 запросов в секунду** на один IP
-    - До **60 новых соединений в минуту** на один IP
-
-    **Важно:** Данная спецификация не является официальной. Составлено по официальной документации DaData и анализу ответов API.
-
-    ---
-    ### English version
-
-    Unofficial OpenAPI specification for Dadata.ru APIs.
-    Dadata provides various suggestion and lookup services for Russian addresses, companies, and other data.
-
-    **Authentication:** All endpoints require an API key passed in the Authorization header.
-
-    **Rate Limits:**
-    All `suggest` and `findById` APIs:
-    - Maximum 30 requests per second per IP
-    - Maximum 60 new connections per minute per IP
-    - Daily limits vary by subscription plan
-    Standartization (`clean`) API:
-    - Maximum 20 requests per second per IP
-    - Maximum 60 new connections per minute per IP
-
-    **Note:** This is an unofficial specification based on official Dadata API documentation and reverse-engineering API responses.
-  termsOfService: https://dadata.ru/offer/
-  contact:
-    name: Dadata DSK on GitHub (unofficial)
-    url: https://github.com/alexchexes/dadata-sdk
-    email: alexchexes@gmail.com
-  license:
-    name: DaData ToS
-    url: https://dadata.ru/offer/
-  version: 0.1.0
-
-servers:
-  - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
-    description: Suggestions API server
-
-  - url: https://cleaner.dadata.ru/api/v1
-    description: Standartization API server
-
-  - url: https://dadata.ru/api/v2
-    description: General API server (serves account-related endpoints)
 
 paths:
   /suggest/address:
