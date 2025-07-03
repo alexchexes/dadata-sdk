@@ -2,6 +2,7 @@ openapi: 3.0.4
 
 info:
   title: DaData.ru API
+  version: 0.1.0
   description: |
     ### English version below
 
@@ -49,7 +50,6 @@ info:
   license:
     name: DaData ToS
     url: https://dadata.ru/offer/
-  version: 0.1.0
 
 servers:
   - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
