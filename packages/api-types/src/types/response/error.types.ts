@@ -10,7 +10,7 @@ export type ErrorResponse = {
   reason: string;
   /**
    * @example 'You should provide Authorization header with your api token'
-   * @example "Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.""
+   * @example "Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help."
    */
   message: string;
 };
