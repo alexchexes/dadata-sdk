@@ -2839,8 +2839,11 @@
         },
         "message": {
           "type": "string",
-          "examples": ["You should provide Authorization header with your api token"],
-          "description": "@example 'You should provide Authorization header with your api token'\n@example \"Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.\"\""
+          "examples": [
+            "You should provide Authorization header with your api token",
+            "Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help."
+          ],
+          "description": "@example 'You should provide Authorization header with your api token'\n@example \"Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.\""
         }
       },
       "required": ["family", "reason", "message"]
