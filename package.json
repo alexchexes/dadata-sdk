@@ -25,7 +25,7 @@
     "@changesets/cli": "^2.29.5",
     "@shikijs/langs": "^3.7.0",
     "@shikijs/themes": "^3.7.0",
-    "@tailwindcss/postcss": "^4.1.10",
+    "@tailwindcss/postcss": "^4.1.11",
     "@tsconfig/node22": "^22.0.2",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^22.15.32",
@@ -43,7 +43,7 @@
     "prettier-plugin-tailwindcss": "^0.6.13",
     "shiki": "^3.7.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.10",
+    "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4",
@@ -53,6 +53,7 @@
     "node": ">=22"
   },
   "dependencies": {
+    "vitepress-openapi": "file:D:/repos/vitepress-openapi",
     "vue-i18n": "^11.1.7"
   }
 }

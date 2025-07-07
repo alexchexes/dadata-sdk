@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import './demopage.css';
+
 import { computed, onMounted, ref, useTemplateRef, watch, type Ref } from 'vue';
 import AButton from './components/ui/AButton.vue';
 import CheckBox from './components/ui/CheckBox.vue';
