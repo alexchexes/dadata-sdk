@@ -28,42 +28,42 @@ export interface Bound {
 }
 
 /**
- * {@link https://dadata.ru/api/suggest/address/}
- * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}
+ * [см. Dadata.ru](https://dadata.ru/api/suggest/address/)
+ * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107)
  */
 export interface SuggestAddressPayload extends BaseSuggestPayload {
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)
    */
   locations_boost?: KladrIdFilter[];
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)
    */
   from_bound?: Bound;
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)
    */
   to_bound?: Bound;
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)
    */
   locations?: LocationRestriction[];
   /**
-   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}
-   * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}
-   * - {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}
+   * - [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)
+   * - [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)
+   * - [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)
    */
   restrict_value?: boolean;
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)
    */
   locations_geo?: [RadiusFilter];
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)
    */
   language?: Language;
   /**
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}
+   * [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)
    * @default 'ADMINISTRATIVE'
    */
   division?: DivisionType;

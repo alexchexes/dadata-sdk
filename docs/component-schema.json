@@ -360,7 +360,7 @@
             {
               "type": "array",
               "items": { "$ref": "#/definitions/KladrIdFilter" },
-              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
             },
             {
               "type": "array",
@@ -378,40 +378,40 @@
               "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
             }
           ],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
         },
         "from_bound": {
           "anyOf": [
             {
               "$ref": "#/definitions/Bound",
-              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
             },
             {
               "$ref": "#/definitions/BoundFias",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
             }
           ],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
         },
         "to_bound": {
           "anyOf": [
             {
               "$ref": "#/definitions/Bound",
-              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
             },
             {
               "$ref": "#/definitions/BoundFias",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
             }
           ],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
         },
         "locations": {
           "anyOf": [
             {
               "type": "array",
               "items": { "$ref": "#/definitions/LocationRestriction" },
-              "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
             },
             {
               "type": "array",
@@ -429,37 +429,37 @@
               "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
             }
           ],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
         },
         "restrict_value": {
           "anyOf": [
             {
               "type": "boolean",
-              "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+              "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
             },
             {
               "type": "boolean",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
             }
           ],
-          "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+          "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
         },
         "locations_geo": {
           "type": "array",
           "items": { "$ref": "#/definitions/RadiusFilter" },
           "minItems": 1,
           "maxItems": 1,
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)"
         },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)"
         },
         "division": {
           "type": "string",
           "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
-          "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}\n@default 'ADMINISTRATIVE'",
+          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)\n@default 'ADMINISTRATIVE'",
           "default": "ADMINISTRATIVE"
         },
         "query": {

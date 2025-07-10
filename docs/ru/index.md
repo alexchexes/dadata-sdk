@@ -15,7 +15,7 @@ hero:
       link: /ru/endpoints
     - theme: alt
       text: English
-      link: /
+      link: /en
 
 features:
   - title: Внимание!

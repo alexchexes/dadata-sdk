@@ -3,8 +3,8 @@ outline: [2, 3]
 ---
 
 <script setup lang="ts">
-import schema from './component-schema.json' 
-import SchemaProperty from './components/SchemaProperty.vue'
+import schema from '../component-schema.json' 
+import SchemaProperty from '../components/SchemaProperty.vue'
 </script>
 
 # DaData-suggestions component for Vue 3

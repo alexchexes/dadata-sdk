@@ -20,12 +20,13 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema",
+    "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema && pnpm run gen:spec",
     "build:types": "tsc -p tsconfig.types.json && node -e \"require('fs').copyFileSync('src/index.d.ts','dist/index.d.ts')\"",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prune:stubs": "rimraf dist/cjs/types dist/esm/types",
-    "gen:schema": "pnpm exec schema-gen --input schema-types --output ../api-spec/schemas"
+    "gen:schema": "pnpm exec schema-gen --input schema-types --output ../api-spec/schemas",
+    "gen:spec": "pnpm redocly bundle ../api-spec/dadata.yaml -o ../api-spec/dadata.json"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",

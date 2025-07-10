@@ -9,7 +9,7 @@ export interface DeliverySuggestion {
   /** ФИАС-код запрошенного города */
   unrestricted_value: string;
   /** Подробные идентификаторы города в службах доставки */
-  data: DeliverySuggestion;
+  data: DeliverySuggestionData;
 }
 
 export interface DeliverySuggestionData {

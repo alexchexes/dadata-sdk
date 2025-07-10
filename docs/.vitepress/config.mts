@@ -1,6 +1,9 @@
-import { defineConfig } from 'vitepress';
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitepress';
+import { useSidebar } from 'vitepress-openapi';
+
+import spec from '../../packages/api-spec/dadata.json';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const vuePkg = resolve(root, '../../packages/vue-dadata');
@@ -31,6 +34,13 @@ viteResolveAliases = {
     ? resolve(schemaGenPkg, 'dist/index.js')
     : resolve(schemaGenPkg, 'src/index.ts'),
 };
+
+// OpenAPI
+const sidebar = useSidebar({
+  spec: spec as any,
+  // Optionally, you can specify a link prefix for all generated sidebar items.
+  linkPrefix: '/operations/',
+});
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -67,27 +77,26 @@ export default defineConfig({
     root: {
       label: 'English',
       lang: 'en',
-      link: '/',
+      link: '/en',
 
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Home', link: '/' },
-          { text: 'Demo', link: '/demo' },
-          { text: 'Vue', link: '/vue' },
-          { text: 'API endpoints', link: '/endpoints' },
+          { text: 'Demo', link: '/en/demo' },
+          { text: 'Vue', link: '/en/vue' },
+          { text: 'API endpoints', link: '/en/endpoints' },
         ],
 
         sidebar: [
           {
             items: [
-              { text: 'Demo', link: '/demo' },
-              { text: 'API endpoints', link: '/endpoints' },
-              { text: 'Vue component', link: '/vue' },
+              { text: 'Demo', link: '/en/demo' },
+              { text: 'API endpoints', link: '/en/endpoints' },
+              { text: 'Vue component', link: '/en/vue' },
             ],
           },
           {
-            items: [{ text: 'Schema generator', link: '/schema-gen' }],
+            items: [{ text: 'Schema generator', link: '/en/schema-gen' }],
           },
           {
             text: 'External links',
@@ -97,6 +106,31 @@ export default defineConfig({
                 text: 'JSON-schema',
                 link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
               },
+            ],
+          },
+          {
+            text: 'By Tags',
+            items: [
+              {
+                text: 'Introduction',
+                link: '/en/introduction',
+              },
+              ...sidebar.itemsByTags({ linkPrefix: '/en/tags/' }),
+            ],
+          },
+          {
+            text: 'By Operations',
+            items: [...sidebar.generateSidebarGroups({ linkPrefix: '/en/operations/' })],
+          },
+          {
+            text: 'By Paths',
+            items: [...sidebar.itemsByPaths({ linkPrefix: '/en/operations/' })],
+          },
+          {
+            text: 'One Page',
+            items: [
+              { text: 'One Page', link: '/en/one-page' },
+              { text: 'Without Sidebar', link: '/en/without-sidebar' },
             ],
           },
         ],
@@ -114,7 +148,6 @@ export default defineConfig({
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Главная', link: '/ru/' },
           { text: 'Демо', link: '/ru/demo' },
           { text: 'Vue', link: '/ru/vue' },
           { text: 'Список API', link: '/ru/endpoints' },

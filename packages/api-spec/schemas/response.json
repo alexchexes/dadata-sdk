@@ -2764,7 +2764,7 @@
         "value": { "type": "string", "description": "КЛАДР-код запрошенного города" },
         "unrestricted_value": { "type": "string", "description": "ФИАС-код запрошенного города" },
         "data": {
-          "$ref": "#/definitions/DeliverySuggestion",
+          "$ref": "#/definitions/DeliverySuggestionData",
           "description": "Подробные идентификаторы города в службах доставки"
         }
       },

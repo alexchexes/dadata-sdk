@@ -1,15 +1,16 @@
 import { usePaths } from 'vitepress-openapi';
-import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
+
+import spec from '../../../packages/api-spec/dadata.json' with { type: 'json' };
 
 export default {
   paths() {
     return usePaths({ spec })
       .getPathsByVerbs()
-      .map(({ operationId, summary }) => {
+      .map((path) => {
         return {
           params: {
-            operationId,
-            pageTitle: `${summary} - Dadata`,
+            operationId: path?.operationId,
+            pageTitle: `${path?.summary} - Dadata`,
           },
         };
       });

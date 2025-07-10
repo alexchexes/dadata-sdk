@@ -4545,26 +4545,26 @@
             "items": {
               "$ref": "#/components/schemas/KladrIdFilter"
             },
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
           },
           "from_bound": {
             "$ref": "#/components/schemas/Bound",
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
           },
           "to_bound": {
             "$ref": "#/components/schemas/Bound",
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
           },
           "locations": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LocationRestriction"
             },
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
           },
           "restrict_value": {
             "type": "boolean",
-            "description": "- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+            "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
           },
           "locations_geo": {
             "type": "array",
@@ -4573,7 +4573,7 @@
             },
             "minItems": 1,
             "maxItems": 1,
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)"
           },
           "language": {
             "type": "string",
@@ -4581,7 +4581,7 @@
               "RU",
               "EN"
             ],
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)"
           },
           "division": {
             "type": "string",
@@ -4589,14 +4589,14 @@
               "ADMINISTRATIVE",
               "MUNICIPAL"
             ],
-            "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589}\n@default 'ADMINISTRATIVE'",
+            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)\n@default 'ADMINISTRATIVE'",
             "default": "ADMINISTRATIVE"
           }
         },
         "required": [
           "query"
         ],
-        "description": "{@link https://dadata.ru/api/suggest/address/}\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107}"
+        "description": "[см. Dadata.ru](https://dadata.ru/api/suggest/address/)\n[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107)"
       },
       "AddressMetroItem": {
         "type": "object",
@@ -14459,6 +14459,47 @@
         ],
         "description": "ID города в службах доставки\n@see https://dadata.ru/api/delivery/"
       },
+      "DeliverySuggestionData": {
+        "type": "object",
+        "properties": {
+          "kladr_id": {
+            "type": "string",
+            "description": "КЛАДР-код города"
+          },
+          "fias_id": {
+            "type": "string",
+            "description": "ФИАС-код города"
+          },
+          "boxberry_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику Boxberry\n@see https://help.boxberry.ru/pages/viewpage.action?pageId=1703974"
+          },
+          "cdek_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику СДЭК\n@see https://passport.cdek.ru/clients/integrator.html"
+          },
+          "dpd_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику DPD\n@see https://www.dpd.ru/dpd/integration/integration.do2"
+          }
+        },
+        "required": [
+          "kladr_id",
+          "fias_id",
+          "boxberry_id",
+          "cdek_id",
+          "dpd_id"
+        ]
+      },
       "DeliverySuggestion": {
         "type": "object",
         "properties": {
@@ -14471,7 +14512,7 @@
             "description": "ФИАС-код запрошенного города"
           },
           "data": {
-            "$ref": "#/components/schemas/DeliverySuggestion",
+            "$ref": "#/components/schemas/DeliverySuggestionData",
             "description": "Подробные идентификаторы города в службах доставки"
           }
         },
