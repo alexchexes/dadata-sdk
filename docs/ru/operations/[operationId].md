@@ -4,7 +4,7 @@ title: vitepress-openapi
 
 <script setup lang="ts">
 import { useRoute } from 'vitepress'
-import { useTheme, locales } from 'vitepress-openapi/client'
+import { useTheme } from 'vitepress-openapi/client'
 
 useTheme({
   i18n: { 

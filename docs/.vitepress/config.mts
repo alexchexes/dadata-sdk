@@ -109,14 +109,17 @@ export default defineConfig({
             ],
           },
           {
-            text: 'By Tags',
+            text: 'OpenAPI spec',
             items: [
               {
-                text: 'Introduction',
+                text: 'OpenAPI spec',
                 link: '/en/introduction',
               },
-              ...sidebar.itemsByTags({ linkPrefix: '/en/tags/' }),
             ],
+          },
+          {
+            text: 'By Tags',
+            items: [...sidebar.itemsByTags({ linkPrefix: '/en/tags/' })],
           },
           {
             text: 'By Operations',
@@ -173,6 +176,9 @@ export default defineConfig({
                 link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
               },
             ],
+          },
+          {
+            items: [...sidebar.itemsByPaths({ linkPrefix: '/ru/operations/' })],
           },
         ],
 
