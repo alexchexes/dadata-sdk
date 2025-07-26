@@ -16,6 +16,7 @@ import spec from '../../../packages/api-spec/dadata.json';
 import locales from '../../locales';
 import vitepressOpenApiRu from '../../ru/vitepress-openapi.ru.json';
 import { jsDocLinks } from '../../utils/jsDocLinks';
+import './style.css';
 
 export default {
   extends: DefaultTheme,

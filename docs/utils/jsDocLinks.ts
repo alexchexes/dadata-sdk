@@ -11,6 +11,6 @@ export function jsDocLinks(md: markdownit) {
         (_, url, label) => `[${label || url}](${url})`,
       )
       // @see https://foo.com
-      .replace(/(?<!\\)@see\s+(https?:\/\/\S+)(?=[\s)]|$)/g, (_, url) => `see: [${url}](${url})`);
+      .replace(/(?<!\\)@see\s+(https?:\/\/\S+)(?=[\s)]|$)/g, (_, url) => `See [${url}](${url})`);
   });
 }

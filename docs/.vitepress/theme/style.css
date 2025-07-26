@@ -1,0 +1,13 @@
+.OASidebarItem-badge.OAMethodBadge--post {
+  display: none;
+}
+.OASidebarItem-badge.OAMethodBadge--get {
+  position: absolute;
+  left: -22px;
+  font-size: 9px;
+  padding: 0 2px;
+  opacity: 0.9;
+}
+.OASidebarItem {
+  padding: 0;
+}

@@ -182,6 +182,7 @@ export default defineConfig({
           },
           {
             text: 'Внешние ссылки',
+            collapsed: false,
             items: [
               { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
               {

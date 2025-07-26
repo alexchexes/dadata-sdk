@@ -189,7 +189,7 @@ const groupTypes = computed(() => {
     <h2 :id="groupType">{{ t(`${groupType}.label`) }}</h2>
 
     <template v-for="(operations, groupTag) in groups" :key="groupTag">
-      <h3 :id="`${groupType}.${groupTag}`">{{ t(`${groupType}.${groupTag}`) }}</h3>
+      <h3 :id="groupTag">{{ t(`${groupType}.${groupTag}`) }}</h3>
 
       <MarkDown
         :content="openApi.getTags().find((tagObj) => tagObj.name === groupTag)?.description"
