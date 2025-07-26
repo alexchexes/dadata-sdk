@@ -53,11 +53,20 @@
       }
     },
     {
+      "name": "iplocate",
+      "description": "Сервис определяет город по IP-адресу (в России). Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.\n\n- Поддерживает как IPv4, так и IPv6 адреса.\n- Возвращает детальную информацию о городе, в том числе почтовый индекс.\n\n**Алгоритм выбора IP-адреса из параметров запроса:**\n\n```\nЕСЛИ IP указан в параметре ip\nТО использовать его\nИНАЧЕ\n  ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For\n  ТО использовать его\n  ИНАЧЕ вернуть IP сокета соединения\n```\n\nМестоположение определяется только для российских адресов.\n"
+    },
+    {
       "name": "metro",
       "description": "Станции метро",
       "externalDocs": {
         "url": "https://dadata.ru/api/suggest/metro/"
       }
+    },
+    {
+      "name": "cars",
+      "x-summary": "Автомобили",
+      "description": "Сервисы DaData, связанные с автомобилями"
     }
   ],
   "externalDocs": {
@@ -1222,7 +1231,8 @@
       "post": {
         "tags": [
           "suggest",
-          "car_brand"
+          "car_brand",
+          "cars"
         ],
         "summary": "Подсказки по маркам автомобилей на русском и английском языках",
         "description": "Поиск выполняется по полям:\n- `name_ru` - марка на русском языке\n- `name` - марка на исходном языке\n",
@@ -2543,7 +2553,8 @@
       "post": {
         "tags": [
           "findById",
-          "car_brand"
+          "car_brand",
+          "cars"
         ],
         "summary": "Марка авто по ID",
         "description": "Находит марку автомобиля по внутреннему полю `id` (`ZAZ`, `FORD`, и т.д.). Получить такой ID можно из объекта в ответе API `findById/car_brand` или `suggest/car_brand`\n",
@@ -3038,79 +3049,6 @@
         }
       }
     },
-    "/findById/delivery": {
-      "servers": [
-        {
-          "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
-        }
-      ],
-      "post": {
-        "tags": [
-          "findById",
-          "delivery",
-          "address"
-        ],
-        "summary": "ID города в службах доставки",
-        "description": "Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.\nМетод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.\nПока поддерживаются службы доставки СДЭК, Boxberry и DPD\n",
-        "externalDocs": {
-          "url": "https://dadata.ru/api/delivery/"
-        },
-        "operationId": "findDelivery",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FindDeliveryPayload"
-              },
-              "examples": {
-                "simple_query": {
-                  "value": {
-                    "query": "3100400100000"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Запрос успешно обработан",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FindDeliveryResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "405": {
-            "$ref": "#/components/responses/MethodNotAllowed"
-          },
-          "413": {
-            "$ref": "#/components/responses/ContentTooLarge"
-          },
-          "429": {
-            "$ref": "#/components/responses/TooManyRequests"
-          },
-          "5XX": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
     "/clean/address": {
       "servers": [
         {
@@ -3570,7 +3508,8 @@
       "post": {
         "tags": [
           "clean",
-          "vehicle"
+          "vehicle",
+          "cars"
         ],
         "summary": "Стандартизация автомобилей",
         "description": "Распознает марки и модели автомобилей\n",
@@ -3903,7 +3842,6 @@
         }
       ],
       "summary": "Город по IP-адресу",
-      "description": "- Определяет город по IP-адресу в России. Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.\n- Поддерживает как IPv4, так и IPv6 адреса.\n- Возвращает детальную информацию о городе, в том числе почтовый индекс.\n\n**Алгоритм выбора IP-адреса из параметров запроса**\n```\nЕСЛИ IP указан в параметре ip\nТО использовать его\nИНАЧЕ\n  ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For\n  ТО использовать его\n  ИНАЧЕ вернуть IP сокета соединения\nМестоположение определяется только для российских адресов.\n```\n",
       "post": {
         "tags": [
           "other",
@@ -4245,6 +4183,79 @@
             "TokenAuth": []
           }
         ]
+      }
+    },
+    "/findById/delivery": {
+      "servers": [
+        {
+          "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
+        }
+      ],
+      "post": {
+        "tags": [
+          "findById",
+          "delivery",
+          "address"
+        ],
+        "summary": "ID города в службах доставки",
+        "description": "Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.\nМетод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.\nПока поддерживаются службы доставки СДЭК, Boxberry и DPD\n",
+        "externalDocs": {
+          "url": "https://dadata.ru/api/delivery/"
+        },
+        "operationId": "findDelivery",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindDeliveryPayload"
+              },
+              "examples": {
+                "simple_query": {
+                  "value": {
+                    "query": "3100400100000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Запрос успешно обработан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindDeliveryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          },
+          "413": {
+            "$ref": "#/components/responses/ContentTooLarge"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "5XX": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
       }
     },
     "/stat/daily": {
@@ -14565,109 +14576,6 @@
         ],
         "description": "Муниципальные образования (ОКТМО)\n@see https://dadata.ru/api/suggest/oktmo/"
       },
-      "FindDeliveryPayload": {
-        "type": "object",
-        "properties": {
-          "query": {
-            "type": "string",
-            "description": "КЛАДР-код города\n@example { \"query\": \"3100400100000\" }",
-            "examples": [
-              {
-                "query": "3100400100000"
-              }
-            ]
-          },
-          "count": {
-            "type": "number",
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
-            "default": 10,
-            "maximum": 20
-          }
-        },
-        "required": [
-          "query"
-        ],
-        "description": "ID города в службах доставки\n@see https://dadata.ru/api/delivery/"
-      },
-      "DeliverySuggestionData": {
-        "type": "object",
-        "properties": {
-          "kladr_id": {
-            "type": "string",
-            "description": "КЛАДР-код города"
-          },
-          "fias_id": {
-            "type": "string",
-            "description": "ФИАС-код города"
-          },
-          "boxberry_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Идентификатор города по справочнику Boxberry\n@see https://help.boxberry.ru/pages/viewpage.action?pageId=1703974"
-          },
-          "cdek_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Идентификатор города по справочнику СДЭК\n@see https://passport.cdek.ru/clients/integrator.html"
-          },
-          "dpd_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Идентификатор города по справочнику DPD\n@see https://www.dpd.ru/dpd/integration/integration.do2"
-          }
-        },
-        "required": [
-          "kladr_id",
-          "fias_id",
-          "boxberry_id",
-          "cdek_id",
-          "dpd_id"
-        ]
-      },
-      "DeliverySuggestion": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "КЛАДР-код запрошенного города"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "ФИАС-код запрошенного города"
-          },
-          "data": {
-            "$ref": "#/components/schemas/DeliverySuggestionData",
-            "description": "Подробные идентификаторы города в службах доставки"
-          }
-        },
-        "required": [
-          "value",
-          "unrestricted_value",
-          "data"
-        ],
-        "description": "@see https://dadata.ru/api/delivery/"
-      },
-      "FindDeliveryResponse": {
-        "type": "object",
-        "properties": {
-          "suggestions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DeliverySuggestion"
-            }
-          }
-        },
-        "required": [
-          "suggestions"
-        ],
-        "description": "Объект с массивом подсказок"
-      },
       "BaseCleanPayload": {
         "type": "array",
         "items": {
@@ -16830,6 +16738,109 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartyByEmailSuggestion"
+            }
+          }
+        },
+        "required": [
+          "suggestions"
+        ],
+        "description": "Объект с массивом подсказок"
+      },
+      "FindDeliveryPayload": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "КЛАДР-код города\n@example { \"query\": \"3100400100000\" }",
+            "examples": [
+              {
+                "query": "3100400100000"
+              }
+            ]
+          },
+          "count": {
+            "type": "number",
+            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "default": 10,
+            "maximum": 20
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "description": "ID города в службах доставки\n@see https://dadata.ru/api/delivery/"
+      },
+      "DeliverySuggestionData": {
+        "type": "object",
+        "properties": {
+          "kladr_id": {
+            "type": "string",
+            "description": "КЛАДР-код города"
+          },
+          "fias_id": {
+            "type": "string",
+            "description": "ФИАС-код города"
+          },
+          "boxberry_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику Boxberry\n@see https://help.boxberry.ru/pages/viewpage.action?pageId=1703974"
+          },
+          "cdek_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику СДЭК\n@see https://passport.cdek.ru/clients/integrator.html"
+          },
+          "dpd_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Идентификатор города по справочнику DPD\n@see https://www.dpd.ru/dpd/integration/integration.do2"
+          }
+        },
+        "required": [
+          "kladr_id",
+          "fias_id",
+          "boxberry_id",
+          "cdek_id",
+          "dpd_id"
+        ]
+      },
+      "DeliverySuggestion": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "КЛАДР-код запрошенного города"
+          },
+          "unrestricted_value": {
+            "type": "string",
+            "description": "ФИАС-код запрошенного города"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeliverySuggestionData",
+            "description": "Подробные идентификаторы города в службах доставки"
+          }
+        },
+        "required": [
+          "value",
+          "unrestricted_value",
+          "data"
+        ],
+        "description": "@see https://dadata.ru/api/delivery/"
+      },
+      "FindDeliveryResponse": {
+        "type": "object",
+        "properties": {
+          "suggestions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliverySuggestion"
             }
           }
         },

@@ -61,9 +61,33 @@ tags:
       - [Список типов стандартизации](https://dadata.ru/api/clean/)
     externalDocs: { url: https://dadata.ru/api/clean/ }
 
+  - name: iplocate
+    description: |
+      Сервис определяет город по IP-адресу (в России). Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.
+
+      - Поддерживает как IPv4, так и IPv6 адреса.
+      - Возвращает детальную информацию о городе, в том числе почтовый индекс.
+
+      **Алгоритм выбора IP-адреса из параметров запроса:**
+
+      ```
+      ЕСЛИ IP указан в параметре ip
+      ТО использовать его
+      ИНАЧЕ
+        ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For
+        ТО использовать его
+        ИНАЧЕ вернуть IP сокета соединения
+      ```
+
+      Местоположение определяется только для российских адресов.
+
   - name: metro
     description: Станции метро
     externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+
+  - name: cars
+    x-summary: Автомобили
+    description: Сервисы DaData, связанные с автомобилями
 
 components:
   responses:
@@ -677,7 +701,7 @@ paths:
   /suggest/car_brand:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
-      tags: [suggest, car_brand]
+      tags: [suggest, car_brand, cars]
       summary: Подсказки по маркам автомобилей на русском и английском языках
       description: |
         Поиск выполняется по полям:
@@ -1290,7 +1314,7 @@ paths:
   /findById/car_brand:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
-      tags: [findById, car_brand]
+      tags: [findById, car_brand, cars]
       summary: Марка авто по ID
       description: |
         Находит марку автомобиля по внутреннему полю `id` (`ZAZ`, `FORD`, и т.д.). Получить такой ID можно из объекта в ответе API `findById/car_brand` или `suggest/car_brand`
@@ -1511,40 +1535,6 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOktmoResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
-
-  /findById/delivery:
-    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
-    post:
-      tags: [findById, delivery, address]
-      summary: ID города в службах доставки
-      description: |
-        Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.
-        Метод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.
-        Пока поддерживаются службы доставки СДЭК, Boxberry и DPD
-      externalDocs: { url: https://dadata.ru/api/delivery/ }
-      operationId: findDelivery
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: './schemas/request.json#/definitions/FindDeliveryPayload' }
-            examples:
-              simple_query:
-                value: { query: '3100400100000' }
-      responses:
-        '200':
-          description: Запрос успешно обработан
-          content:
-            application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/FindDeliveryResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1776,7 +1766,7 @@ paths:
   /clean/vehicle:
     servers: [url: https://cleaner.dadata.ru/api/v1]
     post:
-      tags: [clean, vehicle]
+      tags: [clean, vehicle, cars]
       summary: Стандартизация автомобилей
       description: |
         Распознает марки и модели автомобилей
@@ -1937,21 +1927,6 @@ paths:
       - url: https://dadata.ru/api/iplocate/
       - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119
     summary: Город по IP-адресу
-    description: |
-      - Определяет город по IP-адресу в России. Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.
-      - Поддерживает как IPv4, так и IPv6 адреса.
-      - Возвращает детальную информацию о городе, в том числе почтовый индекс.
-
-      **Алгоритм выбора IP-адреса из параметров запроса**
-      ```
-      ЕСЛИ IP указан в параметре ip
-      ТО использовать его
-      ИНАЧЕ
-        ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For
-        ТО использовать его
-        ИНАЧЕ вернуть IP сокета соединения
-      Местоположение определяется только для российских адресов.
-      ```
     post:
       tags: [other, iplocate, address]
       summary: Город по IP-адресу (POST)
@@ -2108,6 +2083,40 @@ paths:
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
         - TokenAuth: []
+
+  /findById/delivery:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, delivery, address]
+      summary: ID города в службах доставки
+      description: |
+        Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.
+        Метод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.
+        Пока поддерживаются службы доставки СДЭК, Boxberry и DPD
+      externalDocs: { url: https://dadata.ru/api/delivery/ }
+      operationId: findDelivery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: './schemas/request.json#/definitions/FindDeliveryPayload' }
+            examples:
+              simple_query:
+                value: { query: '3100400100000' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/FindDeliveryResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '405': { $ref: '#/components/responses/MethodNotAllowed' }
+        '413': { $ref: '#/components/responses/ContentTooLarge' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '5XX': { $ref: '#/components/responses/InternalServerError' }
 
   /stat/daily:
     servers: [url: https://dadata.ru/api/v2]

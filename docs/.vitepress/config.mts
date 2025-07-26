@@ -117,14 +117,14 @@ export default defineConfig({
             ],
           },
           {
-            text: 'By Tags',
-            items: [...sidebar.itemsByTags({ linkPrefix: '/en/tags/' })],
-          },
-          {
             text: 'By Operations',
             items: [
               ...sidebar.generateSidebarGroups({ linkPrefix: '/en/operations/' }).map((group) => ({
                 ...group,
+                link:
+                  group.text && !['suggest', 'clean', 'findById'].includes(group.text)
+                    ? '/en/tags/' + group.text
+                    : undefined,
                 collapsed: true,
               })),
             ],
@@ -200,14 +200,14 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Теги',
-            items: [...sidebar.itemsByTags({ linkPrefix: '/ru/tags/' })],
-          },
-          {
             text: 'Группировка по тегам',
             items: [
               ...sidebar.generateSidebarGroups({ linkPrefix: '/ru/operations/' }).map((group) => ({
                 ...group,
+                link:
+                  group.text && !['suggest', 'clean', 'findById'].includes(group.text)
+                    ? '/ru/tags/' + group.text
+                    : undefined,
                 collapsed: true,
               })),
             ],
