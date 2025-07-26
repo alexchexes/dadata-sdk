@@ -4,7 +4,7 @@ import spec from '../../../packages/api-spec/dadata.json' with { type: 'json' };
 
 export default {
   paths() {
-    return usePaths({ spec })
+    return usePaths({ spec: spec as any })
       .getPathsByVerbs()
       .map((path) => {
         return {

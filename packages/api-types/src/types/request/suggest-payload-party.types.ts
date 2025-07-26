@@ -11,7 +11,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    * - `LEGAL` - юрлицо
    * - `INDIVIDUAL` - ИП
    *
-   * {@link https://dadata.ru/api/suggest/party/}
+   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}
    */
   type?: PartyType;
 
@@ -19,6 +19,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    * Фильтр по статусу организации. API принимает массив. Например:
    * - действующие: `["ACTIVE"]`
    * - ликвидируемые и ликвидированные: `["LIQUIDATING", "LIQUIDATED"]`
+   *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
    */
   status?: PartyStatus[];
@@ -32,6 +33,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
 
   /**
    * Фильтр по коду ОКВЭД. API принимает массив вида `["07.1", "07.10", "07.2", "07.21"]`
+   *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}
    */
   okved?: string[];
@@ -39,6 +41,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
   /**
    * Фильтр по региону (**двузначный** код).
    * API принимает массив вида `{ kladr_id: string }[]`
+   *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
    */
   locations?: KladrIdFilter[];
@@ -46,6 +49,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
   /**
    * Приоритет города при ранжировании.
    * API принимает массив вида `{ kladr_id: string }[]`
+   *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}
    */
   locations_boost?: KladrIdFilter[];

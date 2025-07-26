@@ -2152,7 +2152,7 @@
       "type": "object",
       "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressAdminSuggestion" } } },
       "required": ["suggestions"],
-      "description": "Объект с массивом подсказок"
+      "description": "Объект с массивом подсказок в административном делении"
     },
     "SuggestAddressMunicipalResponse": {
       "type": "object",
@@ -2160,13 +2160,14 @@
         "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressMunicipalSuggestion" } }
       },
       "required": ["suggestions"],
-      "description": "Объект с массивом подсказок"
+      "description": "Объект с массивом подсказок в муниципальном делении"
     },
     "SuggestAddressResponse": {
       "anyOf": [
         { "$ref": "#/definitions/SuggestAddressAdminResponse" },
         { "$ref": "#/definitions/SuggestAddressMunicipalResponse" }
-      ]
+      ],
+      "description": "Ответ содержит объект с массивом подсказок или в административном (по умолчанию)\nили в муниципальном (если передано `\"division\": \"MUNICIPAL\"`) делении"
     },
     "IpLocateAdminResponse": {
       "type": "object",

@@ -1,22 +1,15 @@
 <script lang="ts" setup>
-import { computed, ref, watch, type PropType } from 'vue';
-import InputText from './ui/InputText.vue';
+import type { RadiusFilter } from '@dadata-sdk/api-types';
+import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS } from '@dadata-sdk/vue';
+import { type PropType, computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import ButtonAdd from './ui/ButtonAdd.vue';
 import ButtonRemove from './ui/ButtonRemove.vue';
-import { DEFAULT_GEO_RADIUS, MAX_GEO_RADIUS } from '@dadata-sdk/vue';
-import type { RadiusFilter } from '@dadata-sdk/api-types';
-import { useI18n } from 'vue-i18n';
 import HelpHint from './ui/HelpHint.vue';
-const { t, locale } = useI18n();
-const props = defineProps<{
-  lang: 'en' | 'ru';
-}>();
+import InputText from './ui/InputText.vue';
 
-locale.value = props.lang;
-watch(
-  () => props.lang,
-  (v) => (locale.value = v),
-);
+const { t } = useI18n({ useScope: 'parent' });
 
 const model = defineModel({ type: Object as PropType<RadiusFilter>, required: false });
 

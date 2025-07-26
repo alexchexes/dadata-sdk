@@ -1,34 +1,28 @@
 <script lang="ts" setup>
-import { computed, ref, watch, type PropType } from 'vue';
-import ButtonAdd from './ui/ButtonAdd.vue';
-import ButtonRemove from './ui/ButtonRemove.vue';
-import InputText from './ui/InputText.vue';
-import SelectOptGroup from './ui/SelectOptGroup.vue';
+import type { LocationRestriction, SuggestType } from '@dadata-sdk/api-types';
 import {
+  FIAS_ID_RESTRICTION_TYPES,
   ISO_CODE_RESTRICTION_TYPES,
   KLADR_ID_RESTRICTION_TYPES,
-  FIAS_ID_RESTRICTION_TYPES,
   NAME_RESTRICTION_TYPES,
   TYPE_FULL_RESTRICTION_TYPES,
 } from '@dadata-sdk/vue';
 import type { VueDadataOptions } from '@dadata-sdk/vue';
-import type { SuggestType, LocationRestriction } from '@dadata-sdk/api-types';
-
+import { type PropType, computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import ButtonAdd from './ui/ButtonAdd.vue';
+import ButtonRemove from './ui/ButtonRemove.vue';
 import HelpHint from './ui/HelpHint.vue';
-const { t, locale } = useI18n();
+import InputText from './ui/InputText.vue';
+import SelectOptGroup from './ui/SelectOptGroup.vue';
+
+const { t } = useI18n({ useScope: 'parent' });
 
 const props = defineProps<{
-  lang: 'en' | 'ru';
   suggestType: SuggestType;
   helpLink: string;
 }>();
-
-locale.value = props.lang;
-watch(
-  () => props.lang,
-  (v) => (locale.value = v),
-);
 
 const locationsFilterModel = defineModel({
   type: [Object, Array, String, Number] as PropType<VueDadataOptions['locationsFilter']>,

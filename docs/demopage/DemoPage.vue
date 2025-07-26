@@ -1,18 +1,4 @@
 <script lang="ts" setup>
-import './demopage.css';
-
-import { computed, onMounted, ref, useTemplateRef, watch, type Ref } from 'vue';
-import AButton from './components/ui/AButton.vue';
-import CheckBox from './components/ui/CheckBox.vue';
-import InputText from './components/ui/InputText.vue';
-import LocationsFilter from './components/LocationsFilter.vue';
-import RadioGroup from './components/ui/RadioGroup.vue';
-import TogglesGroup from './components/ui/TogglesGroup.vue';
-import RadiusFilter from './components/RadiusFilter.vue';
-import SelectOptions from './components/ui/SelectOptions.vue';
-import LiveSnippet from './components/LiveSnippet.vue';
-import { VueDadata } from '@dadata-sdk/vue';
-import '@dadata-sdk/vue/dist/vue-dadata.css';
 import {
   BANK_STATUSES,
   BANK_TYPES,
@@ -31,30 +17,50 @@ import {
   PARTY_TYPES,
   SUGGEST_TYPES,
 } from '@dadata-sdk/api-types';
-import { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_OPTIONS, SHOW_ON_FOCUS_OPTIONS } from '@dadata-sdk/vue';
-import type { SuggestType, DeepPartial } from '@dadata-sdk/api-types';
-import type { DadataSuggestion, SuggestOptions, VueDadataOptions } from '@dadata-sdk/vue';
-import { ignorableWatch, useMediaQuery } from '@vueuse/core';
-import ButtonAdd from './components/ui/ButtonAdd.vue';
-import InputJson from './components/ui/InputJson.vue';
-import ButtonRemove from './components/ui/ButtonRemove.vue';
-import { useSyncUrlParams } from './composables/useSyncUrlParams';
-import OptionsBlock from './components/OptionsBlock.vue';
-import IconReset from './components/ui/IconReset.vue';
-import IconCross from './components/ui/IconCross.vue';
+import type { DeepPartial, SuggestType } from '@dadata-sdk/api-types';
 import { buildPayload } from '@dadata-sdk/vue';
-
+import { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_OPTIONS, SHOW_ON_FOCUS_OPTIONS } from '@dadata-sdk/vue';
+import { VueDadata } from '@dadata-sdk/vue';
+import type { DadataSuggestion, SuggestOptions, VueDadataOptions } from '@dadata-sdk/vue';
+import '@dadata-sdk/vue/dist/vue-dadata.css';
+import { ignorableWatch, useMediaQuery } from '@vueuse/core';
+import { type Ref, computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t, locale } = useI18n();
+
+import LiveSnippet from './components/LiveSnippet.vue';
+import LocationsFilter from './components/LocationsFilter.vue';
+import OptionsBlock from './components/OptionsBlock.vue';
+import RadiusFilter from './components/RadiusFilter.vue';
+import AButton from './components/ui/AButton.vue';
+import ButtonAdd from './components/ui/ButtonAdd.vue';
+import ButtonRemove from './components/ui/ButtonRemove.vue';
+import CheckBox from './components/ui/CheckBox.vue';
+import IconCross from './components/ui/IconCross.vue';
+import IconReset from './components/ui/IconReset.vue';
+import InputJson from './components/ui/InputJson.vue';
+import InputText from './components/ui/InputText.vue';
+import RadioGroup from './components/ui/RadioGroup.vue';
+import SelectOptions from './components/ui/SelectOptions.vue';
+import TogglesGroup from './components/ui/TogglesGroup.vue';
+import { useSyncUrlParams } from './composables/useSyncUrlParams';
+import './demopage.css';
+import demopageMessages from './locales';
+
 const { lang = 'en' } = defineProps<{
   lang?: 'en' | 'ru';
 }>();
 
-locale.value = lang;
 watch(
   () => lang,
   (v) => (locale.value = v),
 );
+
+const { t, locale } = useI18n({
+  messages: demopageMessages,
+  useScope: 'local',
+});
+
+locale.value = lang;
 
 const SUGGEST_TYPES_ORDER: SuggestType[] = [
   'address',
@@ -607,7 +613,6 @@ const boundTypesOptionsFrom = computed(() => {
                   'bank': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238',
                 }[options.suggestType]
               "
-              :lang="lang"
               :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
             />
           </template>
@@ -639,7 +644,7 @@ const boundTypesOptionsFrom = computed(() => {
           </template>
 
           <template v-if="options.suggestType === 'address'">
-            <RadiusFilter v-model="options.radiusFilter" :lang="lang" />
+            <RadiusFilter v-model="options.radiusFilter" />
 
             <RadioGroup
               v-model="options.division"
@@ -899,7 +904,13 @@ const boundTypesOptionsFrom = computed(() => {
         </div>
 
         <div v-if="showLiveSnippet">
-          <LiveSnippet :nonDefaultOptions :options :showToken="isTokenProvided" />
+          <LiveSnippet
+            :nonDefaultOptions
+            :options
+            :showToken="isTokenProvided"
+            :query
+            :suggestion
+          />
         </div>
 
         <pre

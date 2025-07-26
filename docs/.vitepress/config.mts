@@ -109,11 +109,10 @@ export default defineConfig({
             ],
           },
           {
-            text: 'OpenAPI spec',
             items: [
               {
                 text: 'OpenAPI spec',
-                link: '/en/introduction',
+                link: '/en/spec',
               },
             ],
           },
@@ -123,11 +122,25 @@ export default defineConfig({
           },
           {
             text: 'By Operations',
-            items: [...sidebar.generateSidebarGroups({ linkPrefix: '/en/operations/' })],
+            items: [
+              ...sidebar.generateSidebarGroups({ linkPrefix: '/en/operations/' }).map((group) => ({
+                ...group,
+                collapsed: true,
+              })),
+            ],
           },
           {
             text: 'By Paths',
-            items: [...sidebar.itemsByPaths({ linkPrefix: '/en/operations/' })],
+            items: [
+              ...sidebar.itemsByPaths({ linkPrefix: '/en/operations/' }).map((group) => ({
+                ...group,
+                items: group.items?.map((g) => ({
+                  ...g,
+                  collapsed: true,
+                })),
+                collapsed: true,
+              })),
+            ],
           },
           {
             text: 'One Page',
@@ -178,7 +191,45 @@ export default defineConfig({
             ],
           },
           {
-            items: [...sidebar.itemsByPaths({ linkPrefix: '/ru/operations/' })],
+            items: [
+              {
+                text: 'OpenAPI спецификация',
+                link: '/ru/spec',
+              },
+            ],
+          },
+          {
+            text: 'Теги',
+            items: [...sidebar.itemsByTags({ linkPrefix: '/ru/tags/' })],
+          },
+          {
+            text: 'Группировка по тегам',
+            items: [
+              ...sidebar.generateSidebarGroups({ linkPrefix: '/ru/operations/' }).map((group) => ({
+                ...group,
+                collapsed: true,
+              })),
+            ],
+          },
+          {
+            text: 'По URL',
+            items: [
+              ...sidebar.itemsByPaths({ linkPrefix: '/ru/operations/' }).map((group) => ({
+                ...group,
+                items: group.items?.map((g) => ({
+                  ...g,
+                  collapsed: true,
+                })),
+                collapsed: true,
+              })),
+            ],
+          },
+          {
+            text: 'Всё на одной странице',
+            items: [
+              { text: 'Одна страница', link: '/en/one-page' },
+              { text: 'Без меню', link: '/en/without-sidebar' },
+            ],
           },
         ],
 

@@ -1,32 +1,31 @@
 {
-  "openapi": "3.0.4",
+  "openapi": "3.1.1",
   "info": {
     "title": "DaData.ru API",
     "version": "0.1.0",
-    "description": "### English version below\n\nНеофициальная спецификация OpenAPI для сервисов DaData\nDaData — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.\n\n**Аутентификация**\n- Запросы к API подсказок и \"Поиск по коду\" требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`.\n- Запросы к API стандартизации, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`\n\n**Лимиты запросов**\nAPI типа \"Подсказки\" (`suggest`) и \"Поиск по коду\" (`findById`):\n- До **30 запросов в секунду** на один IP\n- До **60 новых соединений в минуту** на один IP\n- Суточные лимиты зависят от тарифного плана.\nAPI стандартизации:\n- До **20 запросов в секунду** на один IP\n- До **60 новых соединений в минуту** на один IP\n\n**Важно:** Данная спецификация не является официальной. Составлено по официальной документации DaData и анализу ответов API.\n\n---\n### English version\n\nUnofficial OpenAPI specification for Dadata.ru APIs.\nDadata provides various suggestion and lookup services for Russian addresses, companies, and other data.\n\n**Authentication:** All endpoints require an API key passed in the Authorization header.\n\n**Rate Limits:**\nAll `suggest` and `findById` APIs:\n- Maximum 30 requests per second per IP\n- Maximum 60 new connections per minute per IP\n- Daily limits vary by subscription plan\nStandartization (`clean`) API:\n- Maximum 20 requests per second per IP\n- Maximum 60 new connections per minute per IP\n\n**Note:** This is an unofficial specification based on official Dadata API documentation and reverse-engineering API responses.\n",
-    "termsOfService": "https://dadata.ru/offer/",
+    "description": "Неофициальная спецификация сервисов [Dadata.ru](https://dadata.ru).\nОписывает все известные эндпоинты «Подсказок», «Стандартизации» и других API, настолько подробно и точно, насколько позволяют официальные ресурсы.\nЕсли вы обнаружили ошибку, дайте знать, создав Issue [на GitHub](https://github.com/alexchexes/dadata-sdk)\n",
     "contact": {
-      "name": "Dadata DSK on GitHub (unofficial)",
-      "url": "https://github.com/alexchexes/dadata-sdk",
-      "email": "alexchexes@gmail.com"
+      "name": "Dadata SDK на GitHub (unofficial)",
+      "url": "https://github.com/alexchexes/dadata-sdk"
     },
+    "termsOfService": "https://dadata.ru/offer/",
     "license": {
-      "name": "DaData ToS",
+      "name": "Оферта «Дадаты»",
       "url": "https://dadata.ru/offer/"
     }
   },
   "servers": [
     {
       "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs",
-      "description": "Suggestions API server"
+      "description": "Сервисы «Подсказок» и «Поиск по коду»"
     },
     {
       "url": "https://cleaner.dadata.ru/api/v1",
-      "description": "Standartization API server"
+      "description": "Сервисы «Стандартизации»"
     },
     {
       "url": "https://dadata.ru/api/v2",
-      "description": "General API server (serves account-related endpoints)"
+      "description": "Эндпоинты, связанные с аккаунтом пользователя или самой «Дадатой»"
     }
   ],
   "security": [
@@ -37,9 +36,20 @@
   "tags": [
     {
       "name": "suggest",
-      "description": "Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.",
+      "description": "Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.\n\n- [Общая информация](https://dadata.ru/suggestions/)\n- [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)\n- [Список типов подсказок](https://dadata.ru/api/suggest/)\n",
       "externalDocs": {
         "url": "https://dadata.ru/api/suggest/"
+      }
+    },
+    {
+      "name": "findById",
+      "description": "Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и аналогичные сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.\n\nВ ряде случаев (например, для API «Организация по коду» `/findById/party`), получить максимально полную информацию можно используя именно «Поиск по коду».\n"
+    },
+    {
+      "name": "clean",
+      "description": "Сервисы стандартизации исправляют ошибки, приводят контакты к единому формату. Принимают данные строкой и отдаёт назад структурированный ответ. Отмечают мусорные сведения и те, что стоит проверить.\n\n- [Общая информация](https://dadata.ru/clean/)\n- [Список типов стандартизации](https://dadata.ru/api/clean/)\n",
+      "externalDocs": {
+        "url": "https://dadata.ru/api/clean/"
       }
     },
     {
@@ -51,8 +61,8 @@
     }
   ],
   "externalDocs": {
-    "url": "https://confluence.hflabs.ru/display/SGTDOC",
-    "description": "Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.\nСодержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api\n"
+    "url": "https://dadata.ru/api/",
+    "description": "Официальное описание API на сайте Dadata\n"
   },
   "paths": {
     "/suggest/address": {
@@ -61,13 +71,24 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/address/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107"
+        },
+        {
+          "url": "https://dadata.ru/suggestions/usage/address/"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
           "address"
         ],
         "summary": "Подсказки по адресам",
-        "description": "Ищет адреса по любой части адреса от региона до квартиры («самара авроры 7 12» → «443017, Самарская обл, г Самара, ул Авроры, д 7, кв 12»). Также ищет по почтовому индексу («105568» → «г Москва, ул Магнитогорская»).\n",
+        "description": "Ищет адреса по любой части адреса от региона до квартиры:\n`самара авроры 7 12` → `443017, Самарская обл, г Самара, ул Авроры, д 7, кв 12`.\nТакже ищет по почтовому индексу:\n`105568` → `г Москва, ул Магнитогорская`.\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/suggest/address/"
         },
@@ -80,7 +101,7 @@
                 "$ref": "#/components/schemas/SuggestAddressPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "москва хабар"
                   }
@@ -133,6 +154,17 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/fias/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953"
+        },
+        {
+          "url": "https://dadata.ru/suggestions/usage/fias/"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
@@ -152,7 +184,7 @@
                 "$ref": "#/components/schemas/SuggestFiasPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "москва хабар"
                   }
@@ -205,6 +237,17 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/party/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122"
+        },
+        {
+          "url": "https://dadata.ru/suggestions/usage/party/"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
@@ -224,7 +267,7 @@
                 "$ref": "#/components/schemas/SuggestPartyPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "сбербанк"
                   }
@@ -296,12 +339,12 @@
                 "$ref": "#/components/schemas/SuggestPartyByPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "онлайнер"
                   }
                 },
-                "only_liquidated": {
+                "Только ликвидированные": {
                   "value": {
                     "query": "лар",
                     "filters": [
@@ -311,7 +354,7 @@
                     ]
                   }
                 },
-                "only_individual": {
+                "Только ИП": {
                   "value": {
                     "query": "лар",
                     "filters": [
@@ -388,12 +431,12 @@
                 "$ref": "#/components/schemas/SuggestPartyKzPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "онлайн"
                   }
                 },
-                "only_foreign_branch": {
+                "Филиалы иностр. юрлиц": {
                   "value": {
                     "query": "хен",
                     "filters": [
@@ -451,6 +494,17 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/bank/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078"
+        },
+        {
+          "url": "https://dadata.ru/suggestions/usage/bank/"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
@@ -470,7 +524,7 @@
                 "$ref": "#/components/schemas/SuggestBankPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "сбербанк"
                   }
@@ -523,6 +577,14 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/name/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669115"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
@@ -542,7 +604,7 @@
                 "$ref": "#/components/schemas/SuggestFioPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "Викт"
                   }
@@ -595,6 +657,17 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/suggest/email/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=234782803"
+        },
+        {
+          "url": "https://dadata.ru/suggestions/usage/email/"
+        }
+      ],
       "post": {
         "tags": [
           "suggest",
@@ -614,7 +687,7 @@
                 "$ref": "#/components/schemas/SuggestEmailPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "anton@"
                   }
@@ -686,7 +759,7 @@
                 "$ref": "#/components/schemas/SuggestFmsUnitPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "772-053"
                   }
@@ -758,7 +831,7 @@
                 "$ref": "#/components/schemas/SuggestPostalUnitPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "дежнева 2а"
                   }
@@ -830,13 +903,13 @@
                 "$ref": "#/components/schemas/SuggestFnsUnitPayload"
               },
               "examples": {
-                "simple_query": {
+                "Пример": {
                   "value": {
                     "query": "нижнего"
                   }
                 },
-                "filter_region_code": {
-                  "description": "Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)",
+                "Фильтр по региону": {
+                  "description": "Фильтрация по полю `region_code` (первые 2 цифры КЛАДР-кода региона)",
                   "value": {
                     "query": "вор",
                     "filters": [
@@ -1680,6 +1753,14 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/find-address/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944"
+        }
+      ],
       "post": {
         "tags": [
           "findById",
@@ -1752,6 +1833,14 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/find-fias/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835965"
+        }
+      ],
       "post": {
         "tags": [
           "findById",
@@ -1822,6 +1911,14 @@
       "servers": [
         {
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
+        }
+      ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/find-party/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058"
         }
       ],
       "post": {
@@ -2062,6 +2159,14 @@
       "servers": [
         {
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
+        }
+      ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/find-bank/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560"
         }
       ],
       "post": {
@@ -2945,10 +3050,10 @@
           "delivery",
           "address"
         ],
-        "summary": "Идентификатор города в службах доставки",
+        "summary": "ID города в службах доставки",
         "description": "Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.\nМетод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.\nПока поддерживаются службы доставки СДЭК, Boxberry и DPD\n",
         "externalDocs": {
-          "url": "https://dadata.ru/api/suggest/delivery/"
+          "url": "https://dadata.ru/api/delivery/"
         },
         "operationId": "findDelivery",
         "requestBody": {
@@ -3622,6 +3727,14 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/geolocate/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=808583277"
+        }
+      ],
       "post": {
         "tags": [
           "other",
@@ -3781,6 +3894,14 @@
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
         }
       ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/iplocate/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119"
+        }
+      ],
       "summary": "Город по IP-адресу",
       "description": "- Определяет город по IP-адресу в России. Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.\n- Поддерживает как IPv4, так и IPv6 адреса.\n- Возвращает детальную информацию о городе, в том числе почтовый индекс.\n\n**Алгоритм выбора IP-адреса из параметров запроса**\n```\nЕСЛИ IP указан в параметре ip\nТО использовать его\nИНАЧЕ\n  ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For\n  ТО использовать его\n  ИНАЧЕ вернуть IP сокета соединения\nМестоположение определяется только для российских адресов.\n```\n",
       "post": {
@@ -3789,10 +3910,10 @@
           "iplocate",
           "address"
         ],
-        "summary": "POST-версия метода \"Город по IP-адресу\"",
-        "description": "Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`,\nили по IP сокета соединения.\n",
+        "summary": "Город по IP-адресу (POST)",
+        "description": "Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`, или по IP сокета соединения.",
         "externalDocs": {
-          "url": "https://dadata.ru/api/geolocate/"
+          "url": "https://dadata.ru/api/iplocate/"
         },
         "operationId": "ipLocate",
         "requestBody": {
@@ -3857,8 +3978,8 @@
           "iplocate",
           "address"
         ],
-        "summary": "GET-версия метода \"Город по IP-адресу\"",
-        "description": "Определяет город по IP-адресу, указанному в URL параметре, или в заголовке `X-Forwarded-For`,\nили по IP сокета соединения.\n",
+        "summary": "Город по IP-адресу (GET)",
+        "description": "Определяет город по IP-адресу, указанному в URL параметре, или в заголовке `X-Forwarded-For`, или по IP сокета соединения.",
         "parameters": [
           {
             "name": "ip",
@@ -3948,6 +4069,14 @@
       "servers": [
         {
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
+        }
+      ],
+      "x-externalDocs": [
+        {
+          "url": "https://dadata.ru/api/find-affiliated/"
+        },
+        {
+          "url": "https://confluence.hflabs.ru/pages/viewpage.action?pageId=978026645"
         }
       ],
       "post": {
@@ -4129,7 +4258,7 @@
           "account",
           "stats"
         ],
-        "summary": "Статистика использования сервисов «ДаДаты»",
+        "summary": "Статистика использования",
         "description": "Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:\n- стандартизация (`clean`)\n- компания по email (`company`)\n- поиск дублей (`merging`)\n- подсказки (`suggestions`)\n\nВ поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.\nВ поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/stat/"
@@ -4187,7 +4316,7 @@
           "account",
           "balance"
         ],
-        "summary": "Баланс пользователя «Дадаты»",
+        "summary": "Баланс пользователя",
         "description": "Возвращает текущий баланс счета в рублях с точностью до копеек\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/balance/"
@@ -4246,7 +4375,7 @@
           "dadata",
           "versions"
         ],
-        "summary": "Версии и даты справочников «ДаДаты»",
+        "summary": "Версии и даты справочников",
         "description": "Возвращает версии сервисов и даты актуальности справочников (ФИАС, ЕГРЮЛ, банки и другие).\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/version/"
@@ -4296,7 +4425,7 @@
   "components": {
     "responses": {
       "BadRequest": {
-        "description": "Некорректный запрос (невалидный JSON или XML)\n\nДля API стандартизации составных записей (clean/record):\n- Отсутствуют обязательные параметры structure или data.\n- В structure указан неподдерживаемый тип.\n- Количество полей в data более указанного в structure.\n",
+        "description": "Некорректный запрос (невалидный JSON или XML)\n\nДля API стандартизации составных записей (`clean/record`):\n- Отсутствуют обязательные параметры `structure` или `data`.\n- В `structure` указан неподдерживаемый тип.\n- Количество полей в `data` более указанного в `structure`.\n",
         "content": {
           "application/json": {
             "schema": {
@@ -4336,7 +4465,7 @@
         }
       },
       "MethodNotAllowed": {
-        "description": "Запрос сделан с не доступным для данного API HTTP-методом, например GET там, где разрешён только POST",
+        "description": "Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`",
         "content": {
           "application/json": {
             "schema": {
@@ -4381,13 +4510,13 @@
         "type": "apiKey",
         "in": "header",
         "name": "Authorization",
-        "description": "Full header format: `Authorization: Token <YOUR_API_KEY>`"
+        "description": "API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`"
       },
       "SecretKeyAuth": {
         "type": "apiKey",
         "in": "header",
         "name": "X-Secret",
-        "description": "Секретный ключ для API Стандартизации"
+        "description": "Секретный ключ"
       }
     },
     "schemas": {
@@ -5445,7 +5574,7 @@
         "required": [
           "suggestions"
         ],
-        "description": "Объект с массивом подсказок"
+        "description": "Объект с массивом подсказок в административном делении"
       },
       "AddressMunicipalData": {
         "type": "object",
@@ -6260,7 +6389,7 @@
         "required": [
           "suggestions"
         ],
-        "description": "Объект с массивом подсказок"
+        "description": "Объект с массивом подсказок в муниципальном делении"
       },
       "SuggestAddressResponse": {
         "anyOf": [
@@ -6270,7 +6399,8 @@
           {
             "$ref": "#/components/schemas/SuggestAddressMunicipalResponse"
           }
-        ]
+        ],
+        "description": "Ответ содержит объект с массивом подсказок или в административном (по умолчанию)\nили в муниципальном (если передано `\"division\": \"MUNICIPAL\"`) делении"
       },
       "ErrorResponse": {
         "type": "object",
@@ -7035,7 +7165,7 @@
               "LEGAL",
               "INDIVIDUAL"
             ],
-            "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+            "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}"
           },
           "status": {
             "type": "array",
@@ -7049,7 +7179,7 @@
                 "REORGANIZING"
               ]
             },
-            "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+            "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
           },
           "branch_type": {
             "anyOf": [
@@ -7078,21 +7208,21 @@
             "items": {
               "type": "string"
             },
-            "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+            "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
           },
           "locations": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/KladrIdFilter"
             },
-            "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+            "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
           },
           "locations_boost": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/KladrIdFilter"
             },
-            "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
+            "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
           }
         },
         "required": [

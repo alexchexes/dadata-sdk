@@ -1,58 +1,44 @@
 <script lang="ts" setup>
-import markdownit from 'markdown-it';
+import type { JSONSchema7 } from 'json-schema';
 import { computed } from 'vue';
 
+import MarkDown from '../components/MarkDown.vue';
+
 const props = defineProps<{
-  schema: Record<string, unknown>;
+  schema: JSONSchema7;
   definition: string;
   property: string;
 }>();
 
-const md = markdownit();
-
-// Remember the old renderer if overridden, or proxy to the default renderer.
-var defaultRender =
-  md.renderer.rules.link_open ||
-  function (tokens, idx, options, env, self) {
-    return self.renderToken(tokens, idx, options);
-  };
-
-md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-  tokens[idx].attrSet('target', '_blank');
-  return defaultRender(tokens, idx, options, env, self);
-};
-
-const propData = computed(
-  () => props.schema.definitions[props.definition].properties[props.property],
-);
-
-const description = computed<string | null>(() => {
-  const descr = propData.value.description
-    ?.replaceAll(/{\s*@link (https?:\/\/(.+?))\s*}/g, '[$2]($1)')
-    .replaceAll(/@see\s+(https?:\/\/(\S+?))(\s|\n|$)/g, 'see: [$2]($1)');
-  return descr ? md.render(descr) : null;
+const propData = computed<JSONSchema7>(() => {
+  const def = props.schema.definitions?.[props.definition];
+  if (def && typeof def === 'object') {
+    const _propData = def.properties?.[props.property];
+    return _propData && typeof _propData === 'object' ? _propData : {};
+  }
+  return {};
 });
 
 const getRefName = (refLink: string) => {
   return refLink.replace('#/definitions/', '');
 };
 
-const getRefType = (refLink) => {
+const getRefType = (refLink: string) => {
   const refName = getRefName(refLink);
-  const refObj = props.schema.definitions[refName];
+  const refObj = props.schema.definitions?.[refName];
   if (!refObj) {
     return [];
   }
-  return getTypes(refObj);
+  return getTypes(refObj as JSONSchema7);
 };
 
-const getTypes = (propertyData): any[] => {
+const getTypes = (propertyData: JSONSchema7): any[] => {
   let types = [];
 
   if (Array.isArray(propertyData.type)) {
     types = propertyData.type;
   } else if (propertyData.anyOf) {
-    types = propertyData.anyOf.map((pData) => getTypes(pData));
+    types = propertyData.anyOf.map((pData) => getTypes(pData as JSONSchema7));
   } else if (propertyData.$ref) {
     types = [`${getRefName(propertyData.$ref)} (${getRefType(propertyData.$ref)})`];
   } else {
@@ -72,6 +58,6 @@ const types = computed(() => getTypes(propData.value));
       <code class="text-(--vp-c-text-1)!">{{ types.join(' | ') }}</code>
     </p>
 
-    <div v-html="description" />
+    <MarkDown v-if="propData.description" :content="propData.description" />
   </div>
 </template>

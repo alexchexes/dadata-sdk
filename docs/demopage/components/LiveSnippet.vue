@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, type PropType } from 'vue';
+import type { DadataSuggestion, VueDadataOptions } from '@dadata-sdk/vue';
+import vueLang from '@shikijs/langs/vue';
+// <-- only Vue grammar
+import materialTheme from '@shikijs/themes/material-theme-ocean';
 import { watchThrottled } from '@vueuse/core';
-import type { VueDadataOptions } from '@dadata-sdk/vue';
-
 // == Temp: use fine-grained bundle technique until release of VitePress with
 // == this commit https://github.com/vuejs/vitepress/commit/801648a4c9d91e7f96302932ac9247d5bdd64ef7
 // import { codeToHtml } from 'shiki';
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
-import vueLang from '@shikijs/langs/vue'; // <-- only Vue grammar
-import materialTheme from '@shikijs/themes/material-theme-ocean'; // <-- only that theme
+import { type PropType, computed, onUnmounted, ref } from 'vue';
+
+// <-- only that theme
 
 let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | null = null;
 
@@ -25,6 +27,14 @@ const props = defineProps({
   showToken: {
     type: Boolean,
     default: false,
+  },
+  query: {
+    type: String,
+    default: '',
+  },
+  suggestion: {
+    type: Object as PropType<DadataSuggestion | undefined>,
+    default: undefined,
   },
 });
 
@@ -59,7 +69,20 @@ const code = computed(() => {
   });
   const separator = '\n  ';
 
-  return `<VueDadata${separator}${attrs.join(separator)}\n/>`;
+  const suggestionStr = JSON.stringify(props.suggestion);
+  const maxLen = 23;
+  const suggestionComment =
+    suggestionStr && suggestionStr.length > maxLen
+      ? suggestionStr.slice(0, maxLen) + '...'
+      : suggestionStr;
+
+  return `<script setup>
+// ...
+const query = ref(''); ${props.query ? `// ${props.query}` : ''}
+const suggestion = ref(undefined); // ${suggestionComment}
+<\/script>
+
+<VueDadata${separator}${attrs.join(separator)}\n/>`;
 });
 
 const highlighted = ref('');

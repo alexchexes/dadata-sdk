@@ -1,4 +1,5 @@
 ---
+outline: [1, 6]
 title: vitepress-openapi
 ---
 

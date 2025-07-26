@@ -1085,12 +1085,12 @@
         "type": {
           "type": "string",
           "enum": ["LEGAL", "INDIVIDUAL"],
-          "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+          "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}"
         },
         "status": {
           "type": "array",
           "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
-          "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+          "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
         },
         "branch_type": {
           "anyOf": [
@@ -1102,17 +1102,17 @@
         "okved": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "locations": {
           "type": "array",
           "items": { "$ref": "#/definitions/KladrIdFilter" },
-          "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+          "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
         },
         "locations_boost": {
           "type": "array",
           "items": { "$ref": "#/definitions/KladrIdFilter" },
-          "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
+          "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
         }
       },
       "required": ["query"],

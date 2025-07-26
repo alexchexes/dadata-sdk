@@ -1,15 +1,21 @@
 // import type { Theme } from 'vitepress';
 // OpenAPI spec
 import { inBrowser } from 'vitepress';
-import { locales, theme, useOpenapi, useTheme } from 'vitepress-openapi/client';
+import {
+  theme,
+  useOpenapi,
+  useTheme,
+  locales as vitepressOpenApiLocales,
+} from 'vitepress-openapi/client';
 import 'vitepress-openapi/dist/style.css';
 import DefaultTheme from 'vitepress/theme';
 import { watch } from 'vue';
 import { createI18n } from 'vue-i18n';
 
 import spec from '../../../packages/api-spec/dadata.json';
-import demopageMessages from '../../demopage/locales';
+import locales from '../../locales';
 import vitepressOpenApiRu from '../../ru/vitepress-openapi.ru.json';
+import { jsDocLinks } from '../../utils/jsDocLinks';
 
 export default {
   extends: DefaultTheme,
@@ -39,6 +45,9 @@ export default {
         // Set the default schema view.
         defaultView: 'schema', // schema or contentType
       },
+      jsonViewer: {
+        renderer: 'shiki',
+      },
       response: {
         responseCodeSelector: 'tabs',
         maxTabs: 10,
@@ -51,12 +60,15 @@ export default {
       },
       markdown: {
         externalLinksNewTab: true,
+        config: (md): undefined => {
+          md.use(jsDocLinks);
+        },
       },
       i18n: {
         locale: initialLocale,
         fallbackLocale: 'en',
         messages: {
-          en: locales.en,
+          en: vitepressOpenApiLocales.en,
           ru: vitepressOpenApiRu,
         },
         availableLocales: [
@@ -78,8 +90,9 @@ export default {
       legacy: false,
       locale: initialLocale,
       fallbackLocale: 'en',
-      messages: demopageMessages,
       missingWarn: false,
+      fallbackRoot: false,
+      messages: locales,
     });
     ctx.app.use(i18n);
   },

@@ -3,6 +3,7 @@ outline: [2, 3]
 ---
 
 <script setup lang="ts">
+import type { JSONSchema7 } from 'json-schema';
 import schema from '../component-schema.json' 
 import SchemaProperty from '../components/SchemaProperty.vue'
 </script>
@@ -51,177 +52,177 @@ const suggestion = ref(undefined);
 
 #### token
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="token" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="token" />
 
 #### suggestType
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="suggestType" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="suggestType" />
 
 #### httpCache
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="httpCache" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="httpCache" />
 
 #### url
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="url" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="url" />
 
 #### payload
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="payload" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="payload" />
 
 #### headers
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="headers" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="headers" />
 
 ### API request (`address`)
 
 #### count
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="count" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="count" />
 
 #### locationsBoost
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="locationsBoost" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="locationsBoost" />
 
 #### locationsFilter
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="locationsFilter" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="locationsFilter" />
 
 #### fromBound
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="fromBound" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="fromBound" />
 
 #### toBound
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="toBound" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="toBound" />
 
 #### restrictValue
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="restrictValue" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="restrictValue" />
 
 #### radiusFilter
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="radiusFilter" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="radiusFilter" />
 
 #### division
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="division" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="division" />
 
 #### language
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="language" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="language" />
 
 ### API request (other suggestions)
 
 #### entityType
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="entityType" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="entityType" />
 
 #### entityStatus
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="entityStatus" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="entityStatus" />
 
 #### branchType
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="branchType" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="branchType" />
 
 #### okved
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="okved" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="okved" />
 
 #### fioParts
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="fioParts" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="fioParts" />
 
 #### fioGender
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="fioGender" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="fioGender" />
 
 #### filters
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="filters" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="filters" />
 
 ### Component behavior options
 
 #### debounce
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="debounce" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="debounce" />
 
 #### minChars
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="minChars" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="minChars" />
 
 #### disabled
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="disabled" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="disabled" />
 
 #### placeholder
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="placeholder" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="placeholder" />
 
 #### inputName
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="inputName" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="inputName" />
 
 #### inputAttributes
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="inputAttributes" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="inputAttributes" />
 
 #### suggestionsHint
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="suggestionsHint" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="suggestionsHint" />
 
 #### noSuggestionsHint
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="noSuggestionsHint" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="noSuggestionsHint" />
 
 #### classes
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="classes" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="classes" />
 
 #### showOnFocus
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="showOnFocus" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="showOnFocus" />
 
 #### selectOnBlur
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="selectOnBlur" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="selectOnBlur" />
 
 #### selectOnEnter
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="selectOnEnter" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="selectOnEnter" />
 
 #### enrichOnSelect
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="enrichOnSelect" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="enrichOnSelect" />
 
 #### clearOnChange
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="clearOnChange" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="clearOnChange" />
 
 #### addSpace
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="addSpace" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="addSpace" />
 
 #### continueSelecting
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="continueSelecting" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="continueSelecting" />
 
 #### showClearButton
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="showClearButton" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="showClearButton" />
 
 #### focusOnMounted
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="focusOnMounted" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="focusOnMounted" />
 
 #### forceShow
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="forceShow" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="forceShow" />
 
 #### forceHide
 
-<SchemaProperty :schema="schema" definition="VueDadataOptionsDocs" property="forceHide" />
+<SchemaProperty :schema="schema as JSONSchema7" definition="VueDadataOptionsDocs" property="forceHide" />
 
 ## Emitted events
 

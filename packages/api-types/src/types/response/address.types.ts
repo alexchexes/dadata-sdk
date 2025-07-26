@@ -1108,9 +1108,15 @@ export interface AddressMunicipalSuggestion extends BaseAddressSuggestion<Addres
 // About Geolocate API (https://dadata.ru/api/geolocate/)
 // DaData page says that some fields are not filled in this API method, but at least in new versions - they are
 
+/** Объект с массивом подсказок в административном делении */
 export type SuggestAddressAdminResponse = SuggestionsResponse<AddressAdminSuggestion>;
+/** Объект с массивом подсказок в муниципальном делении */
 export type SuggestAddressMunicipalResponse = SuggestionsResponse<AddressMunicipalSuggestion>;
 
+/**
+ * Ответ содержит объект с массивом подсказок или в административном (по умолчанию)
+ * или в муниципальном (если передано `"division": "MUNICIPAL"`) делении
+ */
 export type SuggestAddressResponse = SuggestAddressAdminResponse | SuggestAddressMunicipalResponse;
 
 export type IpLocateAdminResponse = {

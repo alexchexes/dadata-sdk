@@ -1,83 +1,69 @@
-openapi: 3.0.4
+openapi: 3.1.1
 
 info:
   title: DaData.ru API
   version: 0.1.0
+
   description: |
-    ### English version below
+    Неофициальная спецификация сервисов [Dadata.ru](https://dadata.ru).
+    Описывает все известные эндпоинты «Подсказок», «Стандартизации» и других API, настолько подробно и точно, насколько позволяют официальные ресурсы.
+    Если вы обнаружили ошибку, дайте знать, создав Issue [на GitHub](https://github.com/alexchexes/dadata-sdk)
 
-    Неофициальная спецификация OpenAPI для сервисов DaData
-    DaData — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
-
-    **Аутентификация**
-    - Запросы к API подсказок и "Поиск по коду" требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`.
-    - Запросы к API стандартизации, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
-
-    **Лимиты запросов**
-    API типа "Подсказки" (`suggest`) и "Поиск по коду" (`findById`):
-    - До **30 запросов в секунду** на один IP
-    - До **60 новых соединений в минуту** на один IP
-    - Суточные лимиты зависят от тарифного плана.
-    API стандартизации:
-    - До **20 запросов в секунду** на один IP
-    - До **60 новых соединений в минуту** на один IP
-
-    **Важно:** Данная спецификация не является официальной. Составлено по официальной документации DaData и анализу ответов API.
-
-    ---
-    ### English version
-
-    Unofficial OpenAPI specification for Dadata.ru APIs.
-    Dadata provides various suggestion and lookup services for Russian addresses, companies, and other data.
-
-    **Authentication:** All endpoints require an API key passed in the Authorization header.
-
-    **Rate Limits:**
-    All `suggest` and `findById` APIs:
-    - Maximum 30 requests per second per IP
-    - Maximum 60 new connections per minute per IP
-    - Daily limits vary by subscription plan
-    Standartization (`clean`) API:
-    - Maximum 20 requests per second per IP
-    - Maximum 60 new connections per minute per IP
-
-    **Note:** This is an unofficial specification based on official Dadata API documentation and reverse-engineering API responses.
-  termsOfService: https://dadata.ru/offer/
   contact:
-    name: Dadata DSK on GitHub (unofficial)
+    name: Dadata SDK на GitHub (unofficial)
     url: https://github.com/alexchexes/dadata-sdk
-    email: alexchexes@gmail.com
+
+  termsOfService: https://dadata.ru/offer/
+
   license:
-    name: DaData ToS
+    name: Оферта «Дадаты»
     url: https://dadata.ru/offer/
+
+externalDocs:
+  url: https://dadata.ru/api/
+  description: |
+    Официальное описание API на сайте Dadata
 
 servers:
   - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
-    description: Suggestions API server
+    description: Сервисы «Подсказок» и «Поиск по коду»
 
   - url: https://cleaner.dadata.ru/api/v1
-    description: Standartization API server
+    description: Сервисы «Стандартизации»
 
   - url: https://dadata.ru/api/v2
-    description: General API server (serves account-related endpoints)
+    description: Эндпоинты, связанные с аккаунтом пользователя или самой «Дадатой»
 
 security:
   - TokenAuth: []
 
 tags:
   - name: suggest
-    description: Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+    description: |
+      Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+
+      - [Общая информация](https://dadata.ru/suggestions/)
+      - [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)
+      - [Список типов подсказок](https://dadata.ru/api/suggest/)
     externalDocs: { url: https://dadata.ru/api/suggest/ }
+
+  - name: findById
+    description: |
+      Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и аналогичные сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.
+
+      В ряде случаев (например, для API «Организация по коду» `/findById/party`), получить максимально полную информацию можно используя именно «Поиск по коду».
+
+  - name: clean
+    description: |
+      Сервисы стандартизации исправляют ошибки, приводят контакты к единому формату. Принимают данные строкой и отдаёт назад структурированный ответ. Отмечают мусорные сведения и те, что стоит проверить.
+
+      - [Общая информация](https://dadata.ru/clean/)
+      - [Список типов стандартизации](https://dadata.ru/api/clean/)
+    externalDocs: { url: https://dadata.ru/api/clean/ }
 
   - name: metro
     description: Станции метро
     externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
-
-externalDocs:
-  url: https://confluence.hflabs.ru/display/SGTDOC
-  description: |
-    Ресурс HFLabs (ДаДата) на Confluence, описывающий некоторые API «Подсказок», jQuery-плагин и коробочную версию.
-    Содержит дополнительную документацию и примеры, не представленные на https://dadata.ru/api
 
 components:
   responses:
@@ -85,10 +71,10 @@ components:
       description: |
         Некорректный запрос (невалидный JSON или XML)
 
-        Для API стандартизации составных записей (clean/record):
-        - Отсутствуют обязательные параметры structure или data.
-        - В structure указан неподдерживаемый тип.
-        - Количество полей в data более указанного в structure.
+        Для API стандартизации составных записей (`clean/record`):
+        - Отсутствуют обязательные параметры `structure` или `data`.
+        - В `structure` указан неподдерживаемый тип.
+        - Количество полей в `data` более указанного в `structure`.
       content:
         application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
@@ -114,7 +100,7 @@ components:
         application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
     MethodNotAllowed:
-      description: Запрос сделан с не доступным для данного API HTTP-методом, например GET там, где разрешён только POST
+      description: Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`
       content:
         application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
@@ -138,21 +124,28 @@ components:
       type: apiKey
       in: header
       name: Authorization
-      description: 'Full header format: `Authorization: Token <YOUR_API_KEY>`'
+      description: 'API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`'
     SecretKeyAuth:
       type: apiKey
       in: header
       name: X-Secret
-      description: Секретный ключ для API Стандартизации
+      description: Секретный ключ
 
 paths:
   /suggest/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/address/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107
+      - url: https://dadata.ru/suggestions/usage/address/
     post:
       tags: [suggest, address]
       summary: Подсказки по адресам
       description: |
-        Ищет адреса по любой части адреса от региона до квартиры («самара авроры 7 12» → «443017, Самарская обл, г Самара, ул Авроры, д 7, кв 12»). Также ищет по почтовому индексу («105568» → «г Москва, ул Магнитогорская»).
+        Ищет адреса по любой части адреса от региона до квартиры:
+        `самара авроры 7 12` → `443017, Самарская обл, г Самара, ул Авроры, д 7, кв 12`.
+        Также ищет по почтовому индексу:
+        `105568` → `г Москва, ул Магнитогорская`.
       externalDocs: { url: https://dadata.ru/api/suggest/address/ }
       operationId: suggestAddress
       requestBody:
@@ -161,7 +154,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestAddressPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'москва хабар' }
       responses:
         '200':
@@ -180,6 +173,10 @@ paths:
 
   /suggest/fias:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/fias/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953
+      - url: https://dadata.ru/suggestions/usage/fias/
     post:
       tags: [suggest, fias]
       summary: Подсказки по ФИАС
@@ -193,7 +190,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestFiasPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'москва хабар' }
       responses:
         '200':
@@ -212,6 +209,10 @@ paths:
 
   /suggest/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/party/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122
+      - url: https://dadata.ru/suggestions/usage/party/
     post:
       tags: [suggest, party]
       summary: Подсказки по организациям
@@ -230,7 +231,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestPartyPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'сбербанк' }
       responses:
         '200':
@@ -271,11 +272,11 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestPartyByPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'онлайнер' }
-              only_liquidated:
+              Только ликвидированные:
                 value: { 'query': 'лар', 'filters': [{ 'status': 'LIQUIDATED' }] }
-              only_individual:
+              Только ИП:
                 value: { 'query': 'лар', 'filters': [{ 'type': 'INDIVIDUAL' }] }
       responses:
         '200':
@@ -314,9 +315,9 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestPartyKzPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'онлайн' }
-              only_foreign_branch:
+              Филиалы иностр. юрлиц:
                 value: { 'query': 'хен', 'filters': [{ 'type': 'FOREIGN_BRANCH' }] }
       responses:
         '200':
@@ -335,6 +336,10 @@ paths:
 
   /suggest/bank:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/bank/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078
+      - url: https://dadata.ru/suggestions/usage/bank/
     post:
       tags: [suggest, bank]
       summary: Подсказки по банкам
@@ -354,7 +359,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestBankPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'сбербанк' }
       responses:
         '200':
@@ -373,6 +378,9 @@ paths:
 
   /suggest/fio:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/name/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669115
     post:
       tags: [suggest, fio]
       summary: Подсказки по ФИО
@@ -388,7 +396,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestFioPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'Викт' }
       responses:
         '200':
@@ -407,6 +415,10 @@ paths:
 
   /suggest/email:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/email/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=234782803
+      - url: https://dadata.ru/suggestions/usage/email/
     post:
       tags: [suggest, email]
       summary: Подсказки по email
@@ -422,7 +434,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestEmailPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'anton@' }
       responses:
         '200':
@@ -456,7 +468,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestFmsUnitPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: '772-053' }
       responses:
         '200':
@@ -490,7 +502,7 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestPostalUnitPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'дежнева 2а' }
       responses:
         '200':
@@ -525,10 +537,10 @@ paths:
           application/json:
             schema: { $ref: './schemas/request.json#/definitions/SuggestFnsUnitPayload' }
             examples:
-              simple_query:
+              Пример:
                 value: { query: 'нижнего' }
-              filter_region_code:
-                description: Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)
+              Фильтр по региону:
+                description: Фильтрация по полю `region_code` (первые 2 цифры КЛАДР-кода региона)
                 value: { query: 'вор', filters: [{ region_code: '36' }] }
       responses:
         '200':
@@ -916,6 +928,9 @@ paths:
 
   /findById/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-address/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944
     post:
       tags: [findById, address]
       summary: Адрес по коду ФИАС, ГАР, КЛАДР или кадастровому номеру
@@ -954,6 +969,9 @@ paths:
 
   /findById/fias:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-fias/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835965
     post:
       tags: [findById, fias]
       summary: Адрес в ФИАС по идентификатору
@@ -987,6 +1005,9 @@ paths:
 
   /findById/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-party/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058
     post:
       tags: [findById, party]
       summary: Организация по ИНН или ОГРН
@@ -1092,6 +1113,9 @@ paths:
 
   /findById/bank:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-bank/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560
     post:
       tags: [findById, bank]
       summary: Банк по БИК, SWIFT, ИНН или регистрационному номеру
@@ -1500,12 +1524,12 @@ paths:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
       tags: [findById, delivery, address]
-      summary: Идентификатор города в службах доставки
+      summary: ID города в службах доставки
       description: |
         Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.
         Метод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.
         Пока поддерживаются службы доставки СДЭК, Boxberry и DPD
-      externalDocs: { url: https://dadata.ru/api/suggest/delivery/ }
+      externalDocs: { url: https://dadata.ru/api/delivery/ }
       operationId: findDelivery
       requestBody:
         required: true
@@ -1837,6 +1861,9 @@ paths:
 
   /geolocate/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/geolocate/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=808583277
     post:
       tags: [other, geolocate, address]
       summary: Адрес по координатам
@@ -1906,6 +1933,9 @@ paths:
 
   /iplocate/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/iplocate/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119
     summary: Город по IP-адресу
     description: |
       - Определяет город по IP-адресу в России. Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.
@@ -1924,11 +1954,10 @@ paths:
       ```
     post:
       tags: [other, iplocate, address]
-      summary: POST-версия метода "Город по IP-адресу"
-      description: |
-        Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`,
-        или по IP сокета соединения.
-      externalDocs: { url: https://dadata.ru/api/geolocate/ }
+      summary: Город по IP-адресу (POST)
+      description: Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`, или по IP сокета соединения.
+      externalDocs:
+        url: https://dadata.ru/api/iplocate/
       operationId: ipLocate
       requestBody:
         required: true
@@ -1955,8 +1984,8 @@ paths:
         - TokenAuth: []
     get:
       tags: [other, iplocate, address]
-      summary: GET-версия метода "Город по IP-адресу"
-      description: |
+      summary: Город по IP-адресу (GET)
+      description:
         Определяет город по IP-адресу, указанному в URL параметре, или в заголовке `X-Forwarded-For`,
         или по IP сокета соединения.
       parameters:
@@ -2001,6 +2030,9 @@ paths:
 
   /findAffiliated/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-affiliated/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=978026645
     post:
       tags: [other, findAffiliated, party]
       summary: Поиск аффилированных компаний
@@ -2081,7 +2113,7 @@ paths:
     servers: [url: https://dadata.ru/api/v2]
     get:
       tags: [account, stats]
-      summary: Статистика использования сервисов «ДаДаты»
+      summary: Статистика использования
       description: |
         Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:
         - стандартизация (`clean`)
@@ -2114,7 +2146,7 @@ paths:
     servers: [url: https://dadata.ru/api/v2]
     get:
       tags: [account, balance]
-      summary: Баланс пользователя «Дадаты»
+      summary: Баланс пользователя
       description: |
         Возвращает текущий баланс счета в рублях с точностью до копеек
       externalDocs: { url: https://dadata.ru/api/balance/ }
@@ -2140,7 +2172,7 @@ paths:
     servers: [url: https://dadata.ru/api/v2]
     get:
       tags: [account, dadata, versions]
-      summary: Версии и даты справочников «ДаДаты»
+      summary: Версии и даты справочников
       description: |
         Возвращает версии сервисов и даты актуальности справочников (ФИАС, ЕГРЮЛ, банки и другие).
       externalDocs: { url: https://dadata.ru/api/version/ }
