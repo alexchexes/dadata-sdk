@@ -1,5 +1,4 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
@@ -11,7 +10,10 @@ hero:
       text: Плейграунд
       link: /ru/demo
     - theme: alt
-      text: Список API «Дадаты»
+      text: OpenAPI спецификация
+      link: /ru/api
+    - theme: alt
+      text: Список API
       link: /ru/api
     - theme: alt
       text: English

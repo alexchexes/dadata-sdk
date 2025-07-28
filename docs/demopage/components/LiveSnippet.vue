@@ -45,7 +45,17 @@ const displayedOptions = computed(() =>
 const sanitize = (str: string) => str.replace(/"/g, `'`);
 
 const code = computed(() => {
-  const attrs = ['v-model="query"', 'v-model:suggestion="suggestion"'];
+  const suggestionStr = JSON.stringify(props.suggestion);
+  const maxLen = 25;
+  const suggestionComment =
+    suggestionStr && suggestionStr.length > maxLen
+      ? suggestionStr.slice(0, maxLen) + '...'
+      : suggestionStr;
+
+  const attrs = [
+    `v-model="query${props.query ? `/* ${props.query.replace(/(\*+)(\/+)/g, '$1 $2')} */` : ''}"`,
+    `v-model:suggestion="suggestion${suggestionComment ? `/* ${suggestionComment} */` : ''}"`,
+  ];
 
   if (props.showToken) {
     attrs.push(`token="${sanitize(props.options.token)}"`);
@@ -69,20 +79,7 @@ const code = computed(() => {
   });
   const separator = '\n  ';
 
-  const suggestionStr = JSON.stringify(props.suggestion);
-  const maxLen = 23;
-  const suggestionComment =
-    suggestionStr && suggestionStr.length > maxLen
-      ? suggestionStr.slice(0, maxLen) + '...'
-      : suggestionStr;
-
-  return `<script setup>
-// ...
-const query = ref(''); ${props.query ? `// ${props.query}` : ''}
-const suggestion = ref(undefined); // ${suggestionComment}
-<\/script>
-
-<VueDadata${separator}${attrs.join(separator)}\n/>`;
+  return `<VueDadata${separator}${attrs.join(separator)}\n/>`;
 });
 
 const highlighted = ref('');

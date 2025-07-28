@@ -7,6 +7,8 @@ export interface MiniI18nOptions {
   fallbackLocale?: string;
   /** warn when falling back? */
   fallbackWarn?: boolean;
+  /** warn when key is missing? */
+  missingWarn?: boolean;
 }
 
 /**
@@ -17,6 +19,7 @@ export function createMiniI18n({
   messages,
   fallbackLocale,
   fallbackWarn = true,
+  missingWarn = true,
 }: MiniI18nOptions) {
   const dictPrimary = messages[locale];
   const dictFallback =
@@ -43,7 +46,9 @@ export function createMiniI18n({
     }
 
     if (text == null) {
-      warn(`message not found: ${key} (${locale})`);
+      if (missingWarn) {
+        warn(`message not found: ${key} (${locale})`);
+      }
       return key;
     }
 

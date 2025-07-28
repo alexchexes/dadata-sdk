@@ -2,7 +2,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
 
-import { getSpecSidebar } from '../utils/getSpecSidebar';
+import { getSidebar } from '../utils/getSidebar';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const vuePkg = resolve(root, '../../packages/vue-dadata');
@@ -40,7 +40,7 @@ export default defineConfig({
 
   // <meta name="description" ...>
   description:
-    'Full API contract in TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
+    'Full API specification in OpenAPI file, TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -80,39 +80,7 @@ export default defineConfig({
           { text: 'Demo', link: '/en/demo' },
         ],
 
-        sidebar: [
-          {
-            items: [
-              { text: 'Demo', link: '/en/demo' },
-              { text: 'Vue component', link: '/en/vue' },
-            ],
-          },
-          {
-            items: [{ text: 'Schema generator', link: '/en/schema-gen' }],
-          },
-          {
-            text: 'External links',
-            items: [
-              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
-              {
-                text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec/schemas',
-              },
-            ],
-          },
-          {
-            text: 'OpenAPI spec',
-            link: '/en/spec',
-            items: [
-              {
-                text: 'List of all API endpoints',
-                link: '/en/api',
-              },
-              ...getSpecSidebar('en'),
-            ],
-            collapsed: false,
-          },
-        ],
+        sidebar: [...getSidebar('en')],
       },
     },
     ru: {
@@ -122,7 +90,7 @@ export default defineConfig({
 
       // <meta name="description" ...>
       description:
-        'Неофициальный SDK для работы с API DaData.ru: Полное описание API в типах TypeScript, JSON-schema всех API «Дадаты», полнофункциональный компонент «подсказок» для Vue, и плейграунд чтобы тестировать подсказки в реальном времени.',
+        'Неофициальный SDK для работы с API DaData.ru: Полное описание API в виде OpenAPI спецификации, JSON-схем и типов TypeScript, полнофункциональный компонент «подсказок» для Vue 3, и плейграунд, чтобы тестировать подсказки в реальном времени',
 
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
@@ -133,80 +101,10 @@ export default defineConfig({
           { text: 'Демо', link: '/ru/demo' },
         ],
 
-        sidebar: [
-          {
-            items: [
-              { text: 'Демо', link: '/ru/demo' },
-              { text: 'Vue компонент', link: '/ru/vue' },
-            ],
-          },
-          {
-            items: [{ text: 'Генератор схем', link: '/ru/schema-gen' }],
-          },
-          {
-            text: 'Внешние ссылки',
-            collapsed: false,
-            items: [
-              {
-                text: 'GitHub репозиторий',
-                link: 'https://github.com/alexchexes/dadata-sdk',
-              },
-              {
-                text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec/schemas',
-              },
-              {
-                text: 'Ресурсы «Dadata»',
-                collapsed: true,
-                items: [
-                  {
-                    text: 'Официальный сайт',
-                    link: 'https://dadata.ru/',
-                  },
-                  {
-                    text: 'Ресурсы на Confluence',
-                    link: 'https://confluence.hflabs.ru/',
-                  },
-                  {
-                    text: 'Про API',
-                    link: 'https://dadata.ru/api/',
-                  },
-                  {
-                    text: 'Все API подсказок',
-                    link: 'https://dadata.ru/api/suggest/',
-                  },
-                  {
-                    text: 'Все API стандартизации',
-                    link: 'https://dadata.ru/api/clean/',
-                  },
-                  {
-                    text: 'Цены',
-                    link: 'https://dadata.ru/pricing/',
-                  },
-                  {
-                    text: 'Техподдержка',
-                    link: 'https://support.dadata.ru/',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            text: 'Описание API (OpenAPI)',
-            link: '/ru/spec',
-            items: [
-              {
-                text: 'Список сервисов',
-                link: '/ru/api',
-              },
-              ...getSpecSidebar('ru'),
-            ],
-            collapsed: false,
-          },
-        ],
+        sidebar: [...getSidebar('ru')],
 
         outline: {
-          label: 'Содержание',
+          label: 'Оглавление',
         },
       },
     },
