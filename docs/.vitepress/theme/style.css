@@ -11,3 +11,15 @@
 .OASidebarItem {
   padding: 0;
 }
+.OASidebarItem > :not([hidden]) ~ :not([hidden]) {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.VPHomeFeatures p.details > a {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+}
+.VPHomeFeatures p.details > a:hover {
+  text-decoration: none;
+}

@@ -3,7 +3,7 @@
   "info": {
     "title": "DaData.ru API",
     "version": "0.1.0",
-    "description": "Неофициальная спецификация сервисов [Dadata.ru](https://dadata.ru).\nОписывает все известные эндпоинты «Подсказок», «Стандартизации» и других API, настолько подробно и точно, насколько позволяют официальные ресурсы.\nЕсли вы обнаружили ошибку, дайте знать, создав Issue [на GitHub](https://github.com/alexchexes/dadata-sdk)\n",
+    "description": "[Dadata](https://dadata.ru) — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.\n\nДанная спецификация включает полный список публичных API «Дадаты» с детальным описанием формата запросов и ответов.\n\n_Спецификация не является официальным продуктом «ДаДаты»_.\n\n## Аутентификация\n\n- Запросы к API подсказок и «Поиск по коду» требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`. [Получить API-ключ](https://dadata.ru/profile/#info)\n- Запросы к API «Стандартизации», а также данным об аккаунте, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`\n  **Внимание!** Запросы к «Стандартизации» и данным аккаунта (любые запросы, где требуется заголовок `X-Secret`) недоступны из браузера.\n\nНекоторые сервисы являются платными. Для уточнения цен и условий ознакомьтесь с [соответствующим разделом](https://dadata.ru/pricing/) официального сайта.\n\n## Лимиты запросов\n\n### API «Подсказки» (`suggest`) и «Поиск по коду» (`findById`):\n\n- До **30 запросов в секунду** на один IP\n- До **60 новых соединений в минуту** на один IP\n- Суточные лимиты зависят от тарифного плана.\n\n### API стандартизации:\n\n- До **20 запросов в секунду** на один IP\n- До **60 новых соединений в минуту** на один IP\n\n## Важно знать\n\nДанная спецификация составлена на основании официального описания от DaData и анализа ответов API, но не является официальной.\nПри обнаружении расхождений с официальными ресурсами, имейте в виду:\n\n- В некоторых случаях, данный документ исправляет неточности официальной документации.\n- Но не исключены ошибки, отставание от официальных обновлений, или ограничения, связанные с противоречиями и неполнотой официальных ресурсов.\n\n## Если у вас есть вопросы:\n\n- По спецификации - откройте Issue и дискуссию [на GitHub](https://github.com/alexchexes/dadata-sdk)\n- Официальная поддержка «Дадаты»: [support.dadata.ru](https://support.dadata.ru/)\n",
     "contact": {
       "name": "Dadata SDK на GitHub (unofficial)",
       "url": "https://github.com/alexchexes/dadata-sdk"
@@ -17,11 +17,11 @@
   "servers": [
     {
       "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs",
-      "description": "Сервисы «Подсказок» и «Поиск по коду»"
+      "description": "Для сервисов «Подсказок» и «Поиск по коду»"
     },
     {
       "url": "https://cleaner.dadata.ru/api/v1",
-      "description": "Сервисы «Стандартизации»"
+      "description": "Для сервисов «Стандартизации»"
     },
     {
       "url": "https://dadata.ru/api/v2",
@@ -30,20 +30,20 @@
   ],
   "security": [
     {
-      "TokenAuth": []
+      "ApiKey": []
     }
   ],
   "tags": [
     {
       "name": "suggest",
-      "description": "Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.\n\n- [Общая информация](https://dadata.ru/suggestions/)\n- [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)\n- [Список типов подсказок](https://dadata.ru/api/suggest/)\n",
+      "description": "«Подсказки» выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.\n\n- [Общая информация](https://dadata.ru/suggestions/)\n- [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)\n- [Список типов подсказок](https://dadata.ru/api/suggest/)\n",
       "externalDocs": {
         "url": "https://dadata.ru/api/suggest/"
       }
     },
     {
       "name": "findById",
-      "description": "Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и соответствующие им сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.\n\nВ ряде случаев (например, для API «Организация по коду» `/findById/party`), получить максимально полную информацию можно используя именно «Поиск по коду».\n"
+      "description": "Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и соответствующие им сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.\n\nВ ряде случаев (например, при поиске организаций), получить максимально полную информацию можно используя именно «Поиск по коду».\n"
     },
     {
       "name": "clean",
@@ -57,13 +57,6 @@
       "description": "Сервис определяет город по IP-адресу (в России). Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.\n\n- Поддерживает как IPv4, так и IPv6 адреса.\n- Возвращает детальную информацию о городе, в том числе почтовый индекс.\n\n**Алгоритм выбора IP-адреса из параметров запроса:**\n\n```\nЕСЛИ IP указан в параметре ip\nТО использовать его\nИНАЧЕ\n  ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For\n  ТО использовать его\n  ИНАЧЕ вернуть IP сокета соединения\n```\n\nМестоположение определяется только для российских адресов.\n"
     },
     {
-      "name": "metro",
-      "description": "Станции метро",
-      "externalDocs": {
-        "url": "https://dadata.ru/api/suggest/metro/"
-      }
-    },
-    {
       "name": "cars",
       "x-summary": "Автомобили",
       "description": "Сервисы DaData, связанные с автомобилями"
@@ -71,7 +64,7 @@
   ],
   "externalDocs": {
     "url": "https://dadata.ru/api/",
-    "description": "Официальное описание API на сайте Dadata\n"
+    "description": "Официальное описание на сайте Dadata\n"
   },
   "paths": {
     "/suggest/address": {
@@ -2557,7 +2550,7 @@
           "cars"
         ],
         "summary": "Марка авто по ID",
-        "description": "Находит марку автомобиля по внутреннему полю `id` (`ZAZ`, `FORD`, и т.д.). Получить такой ID можно из объекта в ответе API `findById/car_brand` или `suggest/car_brand`\n",
+        "description": "Получает марку автомобиля по ID, ранее полученному из подсказок по маркам (`suggest/car_brand`) в поле `id`  (`ZAZ`, `FORD`, и т.д.).\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/suggest/car_brand/"
         },
@@ -3089,7 +3082,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddressClean"
+                  "$ref": "#/components/schemas/CleanAddressResponse"
                 }
               }
             }
@@ -3118,8 +3111,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3193,8 +3186,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3239,7 +3232,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmailClean"
+                  "$ref": "#/components/schemas/CleanEmailResponse"
                 }
               }
             }
@@ -3268,8 +3261,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3314,7 +3307,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PhoneClean"
+                  "$ref": "#/components/schemas/CleanPhoneResponse"
                 }
               }
             }
@@ -3343,8 +3336,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3389,7 +3382,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PassportClean"
+                  "$ref": "#/components/schemas/CleanPassportResponse"
                 }
               }
             }
@@ -3418,8 +3411,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3464,7 +3457,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DateClean"
+                  "$ref": "#/components/schemas/CleanDateResponse"
                 }
               }
             }
@@ -3493,8 +3486,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3540,7 +3533,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VehicleClean"
+                  "$ref": "#/components/schemas/CleanVehicleResponse"
                 }
               }
             }
@@ -3569,8 +3562,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3625,7 +3618,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CleanCombinedRecord"
+                  "$ref": "#/components/schemas/CleanCombinedResponse"
                 }
               }
             }
@@ -3654,8 +3647,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -3742,7 +3735,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -3822,7 +3815,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -3906,7 +3899,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       },
@@ -3998,7 +3991,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -4102,7 +4095,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -4180,7 +4173,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -4310,8 +4303,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -4368,8 +4361,8 @@
         },
         "security": [
           {
-            "TokenAuth": [],
-            "SecretKeyAuth": []
+            "ApiKey": [],
+            "SecretKey": []
           }
         ]
       }
@@ -4427,7 +4420,7 @@
         },
         "security": [
           {
-            "TokenAuth": []
+            "ApiKey": []
           }
         ]
       }
@@ -4517,13 +4510,13 @@
       }
     },
     "securitySchemes": {
-      "TokenAuth": {
+      "ApiKey": {
         "type": "apiKey",
         "in": "header",
         "name": "Authorization",
-        "description": "API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`"
+        "description": "API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`. [Получить ключ](https://dadata.ru/profile/#info)\n"
       },
-      "SecretKeyAuth": {
+      "SecretKey": {
         "type": "apiKey",
         "in": "header",
         "name": "X-Secret",
@@ -4685,26 +4678,26 @@
             "items": {
               "$ref": "#/components/schemas/KladrIdFilter"
             },
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795"
           },
           "from_bound": {
             "$ref": "#/components/schemas/Bound",
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
           },
           "to_bound": {
             "$ref": "#/components/schemas/Bound",
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
           },
           "locations": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LocationRestriction"
             },
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108"
           },
           "restrict_value": {
             "type": "boolean",
-            "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
+            "description": "- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода\n- @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value"
           },
           "locations_geo": {
             "type": "array",
@@ -4713,7 +4706,7 @@
             },
             "minItems": 1,
             "maxItems": 1,
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
           },
           "language": {
             "type": "string",
@@ -4721,7 +4714,7 @@
               "RU",
               "EN"
             ],
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)"
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726"
           },
           "division": {
             "type": "string",
@@ -4729,14 +4722,14 @@
               "ADMINISTRATIVE",
               "MUNICIPAL"
             ],
-            "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)\n@default 'ADMINISTRATIVE'",
-            "default": "ADMINISTRATIVE"
+            "default": "ADMINISTRATIVE",
+            "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'"
           }
         },
         "required": [
           "query"
         ],
-        "description": "[см. Dadata.ru](https://dadata.ru/api/suggest/address/)\n[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107)"
+        "description": "@see https://dadata.ru/api/suggest/address/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107"
       },
       "AddressMetroItem": {
         "type": "object",
@@ -5570,7 +5563,7 @@
           "unrestricted_value",
           "value"
         ],
-        "description": "Suggestion object returned from `suggest/address` API with default (`division=ADMINISTRATIVE`) division option"
+        "description": "Объект подсказки в административном делении (параметр `division`=`ADMINISTRATIVE`)"
       },
       "SuggestAddressAdminResponse": {
         "type": "object",
@@ -5579,7 +5572,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AddressAdminSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -6385,7 +6379,7 @@
           "unrestricted_value",
           "value"
         ],
-        "description": "Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option"
+        "description": "Объект подсказки в муниципальном делении (параметр `division`=`MUNICIPAL`)"
       },
       "SuggestAddressMunicipalResponse": {
         "type": "object",
@@ -6394,7 +6388,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AddressMunicipalSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -7147,7 +7142,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FiasSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -8559,7 +8555,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -8790,7 +8787,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartyBySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -9081,7 +9079,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartyKzSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -10237,7 +10236,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BankSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -10373,7 +10373,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FioSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -10471,7 +10472,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/EmailSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -10589,7 +10591,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FmsUnitSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -10789,7 +10792,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PostalUnitSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11014,7 +11018,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FnsUnitSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11159,7 +11164,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FtsUnitSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11256,7 +11262,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RegionCourtSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11427,7 +11434,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MetroSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11508,7 +11516,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CarBrandSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11599,7 +11608,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CountrySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11685,7 +11695,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CurrencySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11792,7 +11803,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MktuSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11894,7 +11906,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Okved2Suggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -11999,7 +12012,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Okpd2Suggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -12122,7 +12136,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OktmoSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -13900,7 +13915,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RichPartySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -14292,7 +14308,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BankByIdSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -15530,6 +15547,14 @@
         ],
         "description": "Address fields returned by the Standardization (\"clean\") API.\n\n@see https://dadata.ru/api/clean/address/"
       },
+      "CleanAddressResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AddressClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
       "FioClean": {
         "type": "object",
         "properties": {
@@ -15678,6 +15703,14 @@
           "qc"
         ],
         "description": "@see https://dadata.ru/api/clean/email/"
+      },
+      "CleanEmailResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EmailClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
       },
       "PhoneClean": {
         "type": "object",
@@ -15829,6 +15862,14 @@
         ],
         "description": "@see https://dadata.ru/api/clean/phone/\n@see https://dadata.ru/product/phone/"
       },
+      "CleanPhoneResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PhoneClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
       "PassportClean": {
         "type": "object",
         "properties": {
@@ -15878,6 +15919,14 @@
         ],
         "description": "Проверка паспорта по базе ФМС/МВД\n@see https://dadata.ru/api/clean/passport/"
       },
+      "CleanPassportResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PassportClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
       "DateClean": {
         "type": "object",
         "properties": {
@@ -15911,6 +15960,14 @@
           "qc"
         ],
         "description": "Стандартизация дат\n@see https://dadata.ru/api/clean/birthdate/"
+      },
+      "CleanDateResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/DateClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
       },
       "VehicleClean": {
         "type": "object",
@@ -15969,6 +16026,14 @@
         ],
         "description": "стандартизация марки и модели авто\n@see https://dadata.ru/api/clean/vehicle/"
       },
+      "CleanVehicleResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/VehicleClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
       "CleanCombinedPayload": {
         "type": "object",
         "properties": {
@@ -16007,7 +16072,7 @@
         ],
         "description": "Формат запроса для стандартизации составной записи с контактными данными, например:\n- ФИО + адрес + телефон + телефон\n- Дата рождения + паспорт\n- Адрес + email\n\nПример запроса:\n```\n{\n  structure: [ \"NAME\", \"ADDRESS\", \"PHONE\" ],\n  data: [\n    [\n        \"Федотов Алексей\",\n        \"Москва, Сухонская улица, 11 кв 89\",\n        \"8 916 823 3454\"\n    ]\n  ]\n}\n```\n\nИз чего состоит запрос в примере:\n- `structure` — структура записи, содержит четыре поля:\n  - `AS_IS` — оставить как есть (не стандартизировать),\n  - `NAME` — разобрать как ФИО,\n  - `ADDRESS` — разобрать как адрес,\n  - `PHONE` — разобрать как телефон.\n- `data` — составная запись из 4 полей (№, ФИО, адрес, телефон).\n\nТипы полей:\n- `ADDRESS` - Почтовый адрес\n- `PHONE` - Телефон\n- `PASSPORT` - Номер и серия паспорта\n- `NAME` - ФИО\n- `EMAIL` - Адрес электронной почты\n- `VEHICLE` - Марка и модель автомобиля\n- `AS_IS` - Скопировать поле в ответ «как есть»\n\nКоличество полей в `data` не должно быть больше указанного в `structure`.\n\nОграничения:\n- В запросе разрешено передавать только одну запись.\n- Максимальное количество полей в одной записи:\n  - 1 ФИО,\n  - 3 адреса,\n  - 3 телефона,\n  - 3 email,\n  - 1 дата рождения,\n  - 1 паспорт,\n  - 1 автомобиль\n\n@see https://dadata.ru/api/clean/record/"
       },
-      "CleanCombinedRecord": {
+      "CleanCombinedResponse": {
         "type": "object",
         "properties": {
           "structure": {
@@ -16061,7 +16126,7 @@
           "structure",
           "data"
         ],
-        "description": "Составная запись с контактными данными\nhttps://dadata.ru/api/clean/record/"
+        "description": "Составная запись с контактными данными\n@see https://dadata.ru/api/clean/record/"
       },
       "GeolocateAddressPayload": {
         "type": "object",
@@ -16153,50 +16218,25 @@
         ],
         "description": "https://dadata.ru/api/suggest/postal_unit/"
       },
-      "IpLocateAdminResponse": {
-        "type": "object",
-        "properties": {
-          "location": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AddressAdminData"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "location"
-        ]
-      },
-      "IpLocateMunicipalResponse": {
-        "type": "object",
-        "properties": {
-          "location": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AddressMunicipalData"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "location"
-        ]
-      },
       "IpLocateResponse": {
-        "anyOf": [
-          {
-            "$ref": "#/components/schemas/IpLocateAdminResponse"
-          },
-          {
-            "$ref": "#/components/schemas/IpLocateMunicipalResponse"
+        "type": "object",
+        "properties": {
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AddressAdminSuggestion"
+              },
+              {
+                "$ref": "#/components/schemas/AddressMunicipalSuggestion"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
+        },
+        "required": [
+          "location"
         ]
       },
       "IpLocatePayload": {
@@ -16547,7 +16587,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartyAffiliatedSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -16738,7 +16779,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PartyByEmailSuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [
@@ -16841,7 +16883,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DeliverySuggestion"
-            }
+            },
+            "description": "Массив подсказок или пустой массив"
           }
         },
         "required": [

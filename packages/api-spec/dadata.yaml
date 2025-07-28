@@ -5,9 +5,45 @@ info:
   version: 0.1.0
 
   description: |
-    Неофициальная спецификация сервисов [Dadata.ru](https://dadata.ru).
-    Описывает все известные эндпоинты «Подсказок», «Стандартизации» и других API, настолько подробно и точно, насколько позволяют официальные ресурсы.
-    Если вы обнаружили ошибку, дайте знать, создав Issue [на GitHub](https://github.com/alexchexes/dadata-sdk)
+    [Dadata](https://dadata.ru) — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
+
+    Данная спецификация включает полный список публичных API «Дадаты» с детальным описанием формата запросов и ответов.
+
+    _Спецификация не является официальным продуктом «ДаДаты»_.
+
+    ## Аутентификация
+
+    - Запросы к API подсказок и «Поиск по коду» требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`. [Получить API-ключ](https://dadata.ru/profile/#info)
+    - Запросы к API «Стандартизации», а также данным об аккаунте, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
+      **Внимание!** Запросы к «Стандартизации» и данным аккаунта (любые запросы, где требуется заголовок `X-Secret`) недоступны из браузера.
+
+    Некоторые сервисы являются платными. Для уточнения цен и условий ознакомьтесь с [соответствующим разделом](https://dadata.ru/pricing/) официального сайта.
+
+    ## Лимиты запросов
+
+    ### API «Подсказки» (`suggest`) и «Поиск по коду» (`findById`):
+
+    - До **30 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+    - Суточные лимиты зависят от тарифного плана.
+
+    ### API стандартизации:
+
+    - До **20 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+
+    ## Важно знать
+
+    Данная спецификация составлена на основании официального описания от DaData и анализа ответов API, но не является официальной.
+    При обнаружении расхождений с официальными ресурсами, имейте в виду:
+
+    - В некоторых случаях, данный документ исправляет неточности официальной документации.
+    - Но не исключены ошибки, отставание от официальных обновлений, или ограничения, связанные с противоречиями и неполнотой официальных ресурсов.
+
+    ## Если у вас есть вопросы:
+
+    - По спецификации - откройте Issue и дискуссию [на GitHub](https://github.com/alexchexes/dadata-sdk)
+    - Официальная поддержка «Дадаты»: [support.dadata.ru](https://support.dadata.ru/)
 
   contact:
     name: Dadata SDK на GitHub (unofficial)
@@ -22,25 +58,25 @@ info:
 externalDocs:
   url: https://dadata.ru/api/
   description: |
-    Официальное описание API на сайте Dadata
+    Официальное описание на сайте Dadata
 
 servers:
   - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
-    description: Сервисы «Подсказок» и «Поиск по коду»
+    description: Для сервисов «Подсказок» и «Поиск по коду»
 
   - url: https://cleaner.dadata.ru/api/v1
-    description: Сервисы «Стандартизации»
+    description: Для сервисов «Стандартизации»
 
   - url: https://dadata.ru/api/v2
     description: Эндпоинты, связанные с аккаунтом пользователя или самой «Дадатой»
 
 security:
-  - TokenAuth: []
+  - ApiKey: []
 
 tags:
   - name: suggest
     description: |
-      Подсказки выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+      «Подсказки» выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
 
       - [Общая информация](https://dadata.ru/suggestions/)
       - [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)
@@ -51,7 +87,7 @@ tags:
     description: |
       Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и соответствующие им сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.
 
-      В ряде случаев (например, для API «Организация по коду» `/findById/party`), получить максимально полную информацию можно используя именно «Поиск по коду».
+      В ряде случаев (например, при поиске организаций), получить максимально полную информацию можно используя именно «Поиск по коду».
 
   - name: clean
     description: |
@@ -80,10 +116,6 @@ tags:
       ```
 
       Местоположение определяется только для российских адресов.
-
-  - name: metro
-    description: Станции метро
-    externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
 
   - name: cars
     x-summary: Автомобили
@@ -144,12 +176,13 @@ components:
         application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
 
   securitySchemes:
-    TokenAuth:
+    ApiKey:
       type: apiKey
       in: header
       name: Authorization
-      description: 'API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`'
-    SecretKeyAuth:
+      description: |
+        API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`. [Получить ключ](https://dadata.ru/profile/#info)
+    SecretKey:
       type: apiKey
       in: header
       name: X-Secret
@@ -1317,7 +1350,7 @@ paths:
       tags: [findById, car_brand, cars]
       summary: Марка авто по ID
       description: |
-        Находит марку автомобиля по внутреннему полю `id` (`ZAZ`, `FORD`, и т.д.). Получить такой ID можно из объекта в ответе API `findById/car_brand` или `suggest/car_brand`
+        Получает марку автомобиля по ID, ранее полученному из подсказок по маркам (`suggest/car_brand`) в поле `id`  (`ZAZ`, `FORD`, и т.д.).
       externalDocs: { url: https://dadata.ru/api/suggest/car_brand/ }
       operationId: findCarBrand
       requestBody:
@@ -1570,7 +1603,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/AddressClean' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanAddressResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1579,8 +1612,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/name:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1614,8 +1647,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/email:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1642,7 +1675,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/EmailClean' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanEmailResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1651,8 +1684,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/phone:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1679,7 +1712,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/PhoneClean' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanPhoneResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1688,8 +1721,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/passport:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1718,7 +1751,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/PassportClean' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanPassportResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1727,8 +1760,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/birthdate:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1751,7 +1784,8 @@ paths:
         '200':
           description: Запрос успешно обработан
           content:
-            application/json: { schema: { $ref: './schemas/response.json#/definitions/DateClean' } }
+            application/json:
+              { schema: { $ref: './schemas/response.json#/definitions/CleanDateResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1760,8 +1794,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean/vehicle:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1785,7 +1819,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/VehicleClean' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanVehicleResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1794,8 +1828,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /clean:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1837,7 +1871,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: './schemas/response.json#/definitions/CleanCombinedRecord' } }
+              { schema: { $ref: './schemas/response.json#/definitions/CleanCombinedResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1846,8 +1880,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /geolocate/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1884,7 +1918,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
 
   /geolocate/postal_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1919,7 +1953,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
 
   /iplocate/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1956,7 +1990,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
     get:
       tags: [other, iplocate, address]
       summary: Город по IP-адресу (GET)
@@ -2001,7 +2035,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
 
   /findAffiliated/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -2048,7 +2082,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
 
   /findByEmail/company:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -2082,7 +2116,7 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []
 
   /findById/delivery:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -2148,8 +2182,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /profile/balance:
     servers: [url: https://dadata.ru/api/v2]
@@ -2174,8 +2208,8 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
-          SecretKeyAuth: []
+        - ApiKey: []
+          SecretKey: []
 
   /version:
     servers: [url: https://dadata.ru/api/v2]
@@ -2200,4 +2234,4 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
       security:
-        - TokenAuth: []
+        - ApiKey: []

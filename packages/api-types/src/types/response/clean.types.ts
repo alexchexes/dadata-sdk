@@ -9,9 +9,9 @@ export type CleanFieldType = 'ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL'
 
 /**
  * Составная запись с контактными данными
- * https://dadata.ru/api/clean/record/
+ * @see https://dadata.ru/api/clean/record/
  */
-export interface CleanCombinedRecord {
+export interface CleanCombinedResponse {
   /**
    * Порядок и тип данных в поле `data`.
    *

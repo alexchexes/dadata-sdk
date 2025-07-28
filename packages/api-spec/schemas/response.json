@@ -1219,6 +1219,12 @@
       ],
       "description": "Address fields returned by the Standardization (\"clean\") API.\n\n@see https://dadata.ru/api/clean/address/"
     },
+    "CleanAddressResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/AddressClean" },
+      "minItems": 1,
+      "maxItems": 1
+    },
     "FiasSuggestionData": {
       "type": "object",
       "properties": {
@@ -2133,7 +2139,7 @@
         "data": { "$ref": "#/definitions/AddressAdminData", "description": "Подробные поля адреса" }
       },
       "required": ["data", "unrestricted_value", "value"],
-      "description": "Suggestion object returned from `suggest/address` API with default (`division=ADMINISTRATIVE`) division option"
+      "description": "Объект подсказки в административном делении (параметр `division`=`ADMINISTRATIVE`)"
     },
     "AddressMunicipalSuggestion": {
       "type": "object",
@@ -2146,18 +2152,28 @@
         "data": { "$ref": "#/definitions/AddressMunicipalData", "description": "Подробные поля адреса" }
       },
       "required": ["data", "unrestricted_value", "value"],
-      "description": "Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option"
+      "description": "Объект подсказки в муниципальном делении (параметр `division`=`MUNICIPAL`)"
     },
     "SuggestAddressAdminResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressAdminSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/AddressAdminSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок в административном делении"
     },
     "SuggestAddressMunicipalResponse": {
       "type": "object",
       "properties": {
-        "suggestions": { "type": "array", "items": { "$ref": "#/definitions/AddressMunicipalSuggestion" } }
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/AddressMunicipalSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
       },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок в муниципальном делении"
@@ -2169,21 +2185,18 @@
       ],
       "description": "Ответ содержит объект с массивом подсказок или в административном (по умолчанию)\nили в муниципальном (если передано `\"division\": \"MUNICIPAL\"`) делении"
     },
-    "IpLocateAdminResponse": {
-      "type": "object",
-      "properties": { "location": { "anyOf": [{ "$ref": "#/definitions/AddressAdminData" }, { "type": "null" }] } },
-      "required": ["location"]
-    },
-    "IpLocateMunicipalResponse": {
-      "type": "object",
-      "properties": { "location": { "anyOf": [{ "$ref": "#/definitions/AddressMunicipalData" }, { "type": "null" }] } },
-      "required": ["location"]
-    },
     "IpLocateResponse": {
-      "anyOf": [
-        { "$ref": "#/definitions/IpLocateAdminResponse" },
-        { "$ref": "#/definitions/IpLocateMunicipalResponse" }
-      ]
+      "type": "object",
+      "properties": {
+        "location": {
+          "anyOf": [
+            { "$ref": "#/definitions/AddressAdminSuggestion" },
+            { "$ref": "#/definitions/AddressMunicipalSuggestion" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "required": ["location"]
     },
     "BankSuggestion": {
       "type": "object",
@@ -2458,13 +2471,25 @@
     },
     "SuggestBankResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/BankSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/BankSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
     "FindBankResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/BankByIdSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/BankByIdSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -2492,12 +2517,18 @@
     },
     "SuggestCarBrandResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CarBrandSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CarBrandSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
     "CleanFieldType": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
-    "CleanCombinedRecord": {
+    "CleanCombinedResponse": {
       "type": "object",
       "properties": {
         "structure": {
@@ -2526,7 +2557,7 @@
         }
       },
       "required": ["structure", "data"],
-      "description": "Составная запись с контактными данными\nhttps://dadata.ru/api/clean/record/"
+      "description": "Составная запись с контактными данными\n@see https://dadata.ru/api/clean/record/"
     },
     "PhoneClean": {
       "type": "object",
@@ -2708,7 +2739,13 @@
     },
     "SuggestCountryResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CountrySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CountrySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -2737,7 +2774,13 @@
     },
     "SuggestCurrencyResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/CurrencySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/CurrencySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -2758,6 +2801,12 @@
       },
       "required": ["source", "birthdate", "qc"],
       "description": "Стандартизация дат\n@see https://dadata.ru/api/clean/birthdate/"
+    },
+    "CleanDateResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/DateClean" },
+      "minItems": 1,
+      "maxItems": 1
     },
     "DeliverySuggestion": {
       "type": "object",
@@ -2794,7 +2843,13 @@
     },
     "FindDeliveryResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/DeliverySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/DeliverySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -2825,9 +2880,21 @@
     },
     "SuggestEmailResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/EmailSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/EmailSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
+    },
+    "CleanEmailResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EmailClean" },
+      "minItems": 1,
+      "maxItems": 1
     },
     "ErrorResponse": {
       "type": "object",
@@ -2861,7 +2928,13 @@
     },
     "SuggestFiasResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FiasSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FiasSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -2899,9 +2972,21 @@
     },
     "SuggestFioResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FioSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FioSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
+    },
+    "CleanFioResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/FioClean" },
+      "minItems": 1,
+      "maxItems": 1
     },
     "FmsUnitSuggestion": {
       "type": "object",
@@ -2936,7 +3021,13 @@
     "FmsUnitType": { "type": "string", "enum": ["0", "1", "2", "3"] },
     "SuggestFmsUnitResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FmsUnitSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FmsUnitSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3000,7 +3091,13 @@
     },
     "SuggestFnsUnitResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FnsUnitSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FnsUnitSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3033,7 +3130,13 @@
     },
     "SuggestFtsUnitResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/FtsUnitSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FtsUnitSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3080,7 +3183,13 @@
     },
     "SuggestMetroResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/MetroSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MetroSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3107,7 +3216,13 @@
     },
     "SuggestMktuResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/MktuSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MktuSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3133,7 +3248,13 @@
     },
     "SuggestOkpd2Response": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/Okpd2Suggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Okpd2Suggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3170,7 +3291,13 @@
     },
     "SuggestOktmoResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/OktmoSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/OktmoSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3199,7 +3326,13 @@
     },
     "SuggestOkved2Response": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/Okved2Suggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Okved2Suggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3290,7 +3423,13 @@
     "PartyByType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "SuggestPartyByResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyBySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PartyBySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -3403,7 +3542,13 @@
     },
     "SuggestPartyKzResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyKzSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PartyKzSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -4564,29 +4709,63 @@
     },
     "SuggestPartyResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PartySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
     "FindPartyResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/RichPartySuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RichPartySuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
     "FindPartyByEmailResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyByEmailSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PartyByEmailSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
     "FindAffiliatedResponse": {
       "type": "object",
       "properties": {
-        "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PartyAffiliatedSuggestion" } }
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PartyAffiliatedSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
       },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
+    },
+    "CleanPassportResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/PassportClean" },
+      "minItems": 1,
+      "maxItems": 1
+    },
+    "CleanPhoneResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/PhoneClean" },
+      "minItems": 1,
+      "maxItems": 1
     },
     "PostalUnitSuggestion": {
       "type": "object",
@@ -4643,7 +4822,13 @@
     },
     "SuggestPostalUnitResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/PostalUnitSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PostalUnitSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
@@ -4671,9 +4856,21 @@
     },
     "SuggestRegionCourtResponse": {
       "type": "object",
-      "properties": { "suggestions": { "type": "array", "items": { "$ref": "#/definitions/RegionCourtSuggestion" } } },
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/RegionCourtSuggestion" },
+          "description": "Массив подсказок или пустой массив"
+        }
+      },
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
+    },
+    "CleanVehicleResponse": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/VehicleClean" },
+      "minItems": 1,
+      "maxItems": 1
     }
   }
 }

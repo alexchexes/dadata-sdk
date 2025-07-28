@@ -10,7 +10,7 @@ export default {
         return {
           params: {
             operationId: path?.operationId,
-            pageTitle: `${path?.summary} - Dadata`,
+            pageTitle: `${path?.operationId} - Dadata`,
           },
         };
       });

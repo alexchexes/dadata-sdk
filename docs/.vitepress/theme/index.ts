@@ -1,5 +1,3 @@
-// import type { Theme } from 'vitepress';
-// OpenAPI spec
 import { inBrowser } from 'vitepress';
 import {
   theme,
@@ -14,7 +12,7 @@ import { createI18n } from 'vue-i18n';
 
 import spec from '../../../packages/api-spec/dadata.json';
 import locales from '../../locales';
-import vitepressOpenApiRu from '../../ru/vitepress-openapi.ru.json';
+import vitepressOpenApiLocalesRu from '../../ru/vitepress-openapi.locales.ru.json';
 import { jsDocLinks } from '../../utils/jsDocLinks';
 import './style.css';
 
@@ -49,6 +47,9 @@ export default {
       jsonViewer: {
         renderer: 'shiki',
       },
+      schemaViewer: {
+        deep: 2,
+      },
       response: {
         responseCodeSelector: 'tabs',
         maxTabs: 10,
@@ -62,7 +63,7 @@ export default {
       markdown: {
         externalLinksNewTab: true,
         config: (md): undefined => {
-          md.use(jsDocLinks);
+          md.use(jsDocLinks, initialLocale);
         },
       },
       i18n: {
@@ -70,7 +71,7 @@ export default {
         fallbackLocale: 'en',
         messages: {
           en: vitepressOpenApiLocales.en,
-          ru: vitepressOpenApiRu,
+          ru: vitepressOpenApiLocalesRu,
         },
         availableLocales: [
           { code: 'en', label: 'English' },
@@ -82,7 +83,14 @@ export default {
     // Update the OpenAPI UI whenever the route (and therefore locale) changes
     watch(
       () => router.route.path,
-      (p) => openapiTheme.setI18nConfig({ locale: resolveLocale(p) }),
+      (path) => {
+        openapiTheme.setI18nConfig({ locale: resolveLocale(path) });
+        openapiTheme.setMarkdownConfig({
+          config: (md): undefined => {
+            md.use(jsDocLinks, resolveLocale(path));
+          },
+        });
+      },
     );
 
     theme.enhanceApp(ctx);
@@ -97,4 +105,4 @@ export default {
     });
     ctx.app.use(i18n);
   },
-} /* satisfies Theme */;
+};

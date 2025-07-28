@@ -1,6 +1,5 @@
 ---
 outline: [1, 6]
-title: vitepress-openapi
 ---
 
 <script setup lang="ts">
@@ -17,4 +16,4 @@ const route = useRoute()
 const tag = route.data.params?.tag
 </script>
 
-<OASpec :tags="[tag]" hide-info hide-servers hide-paths-summary />
+<OASpec :tags="[tag]" hide-info hide-servers hide-paths-summary></OASpec>

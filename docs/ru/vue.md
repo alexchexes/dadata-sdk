@@ -4,7 +4,7 @@ outline: [2, 3]
 
 <script setup lang="ts">
 import type { JSONSchema7 } from 'json-schema';
-import schema from '../component-schema.json' 
+import schema from '../vue-component-schema.json' 
 import SchemaProperty from '../components/SchemaProperty.vue'
 </script>
 

@@ -1,5 +1,6 @@
 import type { Override, PickAndOverride } from '../../types/helpers.types';
 import type { SuggestionsResponse } from '../common.types';
+import type { CleanResponse } from './clean.types';
 
 export interface AddressMetroItem {
   /** название станции */
@@ -958,6 +959,8 @@ export interface AddressClean
     }
   > {}
 
+export type CleanAddressResponse = CleanResponse<AddressClean>;
+
 /**
  * Address fields returned by the API when using FIAS suggestions or FIAS-by-ID (findById/fias).
  * @see https://dadata.ru/api/suggest/fias/
@@ -1096,12 +1099,12 @@ export interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalDa
 }
 
 /**
- * Suggestion object returned from `suggest/address` API with default (`division=ADMINISTRATIVE`) division option
+ * Объект подсказки в административном делении (параметр `division`=`ADMINISTRATIVE`)
  */
 export interface AddressAdminSuggestion extends BaseAddressSuggestion<AddressAdminData> {}
 
 /**
- * Suggestion object returned from `suggest/address` API with `division=MUNICIPAL` option
+ * Объект подсказки в муниципальном делении (параметр `division`=`MUNICIPAL`)
  */
 export interface AddressMunicipalSuggestion extends BaseAddressSuggestion<AddressMunicipalData> {}
 
@@ -1119,11 +1122,6 @@ export type SuggestAddressMunicipalResponse = SuggestionsResponse<AddressMunicip
  */
 export type SuggestAddressResponse = SuggestAddressAdminResponse | SuggestAddressMunicipalResponse;
 
-export type IpLocateAdminResponse = {
-  location: AddressAdminData | null;
+export type IpLocateResponse = {
+  location: AddressAdminSuggestion | AddressMunicipalSuggestion | null;
 };
-export type IpLocateMunicipalResponse = {
-  location: AddressMunicipalData | null;
-};
-
-export type IpLocateResponse = IpLocateAdminResponse | IpLocateMunicipalResponse;

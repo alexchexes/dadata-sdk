@@ -360,7 +360,7 @@
             {
               "type": "array",
               "items": { "$ref": "#/definitions/KladrIdFilter" },
-              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
+              "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795"
             },
             {
               "type": "array",
@@ -375,43 +375,43 @@
             {
               "type": "array",
               "items": { "$ref": "#/definitions/KladrIdFilter" },
-              "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
+              "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
             }
           ],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795"
         },
         "from_bound": {
           "anyOf": [
             {
               "$ref": "#/definitions/Bound",
-              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+              "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
             },
             {
               "$ref": "#/definitions/BoundFias",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
             }
           ],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
         },
         "to_bound": {
           "anyOf": [
             {
               "$ref": "#/definitions/Bound",
-              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+              "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
             },
             {
               "$ref": "#/definitions/BoundFias",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
             }
           ],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
         },
         "locations": {
           "anyOf": [
             {
               "type": "array",
               "items": { "$ref": "#/definitions/LocationRestriction" },
-              "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
+              "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108"
             },
             {
               "type": "array",
@@ -426,41 +426,41 @@
             {
               "type": "array",
               "items": { "$ref": "#/definitions/KladrIdFilter" },
-              "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
+              "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
             }
           ],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108"
         },
         "restrict_value": {
           "anyOf": [
             {
               "type": "boolean",
-              "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
+              "description": "- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода\n- @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value"
             },
             {
               "type": "boolean",
               "description": "{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города}"
             }
           ],
-          "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
+          "description": "- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода\n- @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value"
         },
         "locations_geo": {
           "type": "array",
           "items": { "$ref": "#/definitions/RadiusFilter" },
           "minItems": 1,
           "maxItems": 1,
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
         },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726"
         },
         "division": {
           "type": "string",
           "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)\n@default 'ADMINISTRATIVE'",
-          "default": "ADMINISTRATIVE"
+          "default": "ADMINISTRATIVE",
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'"
         },
         "query": {
           "anyOf": [
@@ -495,7 +495,7 @@
             {
               "type": "string",
               "enum": ["LEGAL", "INDIVIDUAL"],
-              "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://dadata.ru/api/suggest/party/}"
+              "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}"
             }
           ],
           "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
@@ -513,7 +513,7 @@
                 "type": "string",
                 "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
               },
-              "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
+              "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
             }
           ],
           "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
@@ -593,7 +593,7 @@
         "okved": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+          "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         }
       },
       "description": "Union of all possible 'suggest' payload types where each property of each payload type is optional"

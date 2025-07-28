@@ -1,3 +1,5 @@
+import type { CleanResponse } from './clean.types';
+
 /**
  * Проверка паспорта по базе ФМС/МВД
  * @see https://dadata.ru/api/clean/passport/
@@ -29,3 +31,5 @@ export interface PassportClean {
    */
   qc: 0 | 1 | 2 | 10;
 }
+
+export type CleanPassportResponse = CleanResponse<PassportClean>;

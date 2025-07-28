@@ -1,9 +1,8 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
-import { useSidebar } from 'vitepress-openapi';
 
-import spec from '../../packages/api-spec/dadata.json';
+import { getSpecSidebar } from '../utils/getSpecSidebar';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const vuePkg = resolve(root, '../../packages/vue-dadata');
@@ -34,13 +33,6 @@ viteResolveAliases = {
     ? resolve(schemaGenPkg, 'dist/index.js')
     : resolve(schemaGenPkg, 'src/index.ts'),
 };
-
-// OpenAPI
-const sidebar = useSidebar({
-  spec: spec as any,
-  // Optionally, you can specify a link prefix for all generated sidebar items.
-  linkPrefix: '/operations/',
-});
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -82,16 +74,16 @@ export default defineConfig({
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Demo', link: '/en/demo' },
+          { text: 'OpenAPI spec', link: '/en/spec' },
+          { text: 'API endpoints', link: '/en/api' },
           { text: 'Vue', link: '/en/vue' },
-          { text: 'API endpoints', link: '/en/endpoints' },
+          { text: 'Demo', link: '/en/demo' },
         ],
 
         sidebar: [
           {
             items: [
               { text: 'Demo', link: '/en/demo' },
-              { text: 'API endpoints', link: '/en/endpoints' },
               { text: 'Vue component', link: '/en/vue' },
             ],
           },
@@ -104,50 +96,21 @@ export default defineConfig({
               { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
               {
                 text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
+                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec/schemas',
               },
             ],
           },
           {
+            text: 'OpenAPI spec',
+            link: '/en/spec',
             items: [
               {
-                text: 'OpenAPI spec',
-                link: '/en/spec',
+                text: 'List of all API endpoints',
+                link: '/en/api',
               },
+              ...getSpecSidebar('en'),
             ],
-          },
-          {
-            text: 'By Operations',
-            items: [
-              ...sidebar.generateSidebarGroups({ linkPrefix: '/en/operations/' }).map((group) => ({
-                ...group,
-                link:
-                  group.text && !['suggest', 'clean', 'findById'].includes(group.text)
-                    ? '/en/tags/' + group.text
-                    : undefined,
-                collapsed: true,
-              })),
-            ],
-          },
-          {
-            text: 'By Paths',
-            items: [
-              ...sidebar.itemsByPaths({ linkPrefix: '/en/operations/' }).map((group) => ({
-                ...group,
-                items: group.items?.map((g) => ({
-                  ...g,
-                  collapsed: true,
-                })),
-                collapsed: true,
-              })),
-            ],
-          },
-          {
-            text: 'One Page',
-            items: [
-              { text: 'One Page', link: '/en/one-page' },
-              { text: 'Without Sidebar', link: '/en/without-sidebar' },
-            ],
+            collapsed: false,
           },
         ],
       },
@@ -164,16 +127,16 @@ export default defineConfig({
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Демо', link: '/ru/demo' },
+          { text: 'OpenAPI', link: '/ru/spec' },
+          { text: 'Список API', link: '/ru/api' },
           { text: 'Vue', link: '/ru/vue' },
-          { text: 'Список API', link: '/ru/endpoints' },
+          { text: 'Демо', link: '/ru/demo' },
         ],
 
         sidebar: [
           {
             items: [
               { text: 'Демо', link: '/ru/demo' },
-              { text: 'Список API «Дадаты»', link: '/ru/endpoints' },
               { text: 'Vue компонент', link: '/ru/vue' },
             ],
           },
@@ -184,53 +147,61 @@ export default defineConfig({
             text: 'Внешние ссылки',
             collapsed: false,
             items: [
-              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
+              {
+                text: 'GitHub репозиторий',
+                link: 'https://github.com/alexchexes/dadata-sdk',
+              },
               {
                 text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
+                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec/schemas',
+              },
+              {
+                text: 'Ресурсы «Dadata»',
+                collapsed: true,
+                items: [
+                  {
+                    text: 'Официальный сайт',
+                    link: 'https://dadata.ru/',
+                  },
+                  {
+                    text: 'Ресурсы на Confluence',
+                    link: 'https://confluence.hflabs.ru/',
+                  },
+                  {
+                    text: 'Про API',
+                    link: 'https://dadata.ru/api/',
+                  },
+                  {
+                    text: 'Все API подсказок',
+                    link: 'https://dadata.ru/api/suggest/',
+                  },
+                  {
+                    text: 'Все API стандартизации',
+                    link: 'https://dadata.ru/api/clean/',
+                  },
+                  {
+                    text: 'Цены',
+                    link: 'https://dadata.ru/pricing/',
+                  },
+                  {
+                    text: 'Техподдержка',
+                    link: 'https://support.dadata.ru/',
+                  },
+                ],
               },
             ],
           },
           {
+            text: 'Описание API (OpenAPI)',
+            link: '/ru/spec',
             items: [
               {
-                text: 'OpenAPI спецификация',
-                link: '/ru/spec',
+                text: 'Список сервисов',
+                link: '/ru/api',
               },
+              ...getSpecSidebar('ru'),
             ],
-          },
-          {
-            text: 'Группировка по тегам',
-            items: [
-              ...sidebar.generateSidebarGroups({ linkPrefix: '/ru/operations/' }).map((group) => ({
-                ...group,
-                link:
-                  group.text && !['suggest', 'clean', 'findById'].includes(group.text)
-                    ? '/ru/tags/' + group.text
-                    : undefined,
-                collapsed: true,
-              })),
-            ],
-          },
-          {
-            text: 'По URL',
-            items: [
-              ...sidebar.itemsByPaths({ linkPrefix: '/ru/operations/' }).map((group) => ({
-                ...group,
-                items: group.items?.map((g) => ({
-                  ...g,
-                  collapsed: true,
-                })),
-                collapsed: true,
-              })),
-            ],
-          },
-          {
-            text: 'Всё на одной странице',
-            items: [
-              { text: 'Одна страница', link: '/en/one-page' },
-              { text: 'Без меню', link: '/en/without-sidebar' },
-            ],
+            collapsed: false,
           },
         ],
 
@@ -239,5 +210,15 @@ export default defineConfig({
         },
       },
     },
+  },
+  transformPageData(pageData) {
+    // params returned from [*].paths.js|ts are available here
+    const pageTitle = pageData.params?.pageTitle;
+
+    if (pageTitle) {
+      pageData.title = pageTitle;
+      pageData.frontmatter ??= {};
+      pageData.frontmatter.title = pageTitle;
+    }
   },
 });

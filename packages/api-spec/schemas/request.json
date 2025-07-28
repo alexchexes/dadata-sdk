@@ -601,46 +601,46 @@
         "locations_boost": {
           "type": "array",
           "items": { "$ref": "#/definitions/KladrIdFilter" },
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795"
         },
         "from_bound": {
           "$ref": "#/definitions/Bound",
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
         },
         "to_bound": {
           "$ref": "#/definitions/Bound",
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
         },
         "locations": {
           "type": "array",
           "items": { "$ref": "#/definitions/LocationRestriction" },
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108"
         },
         "restrict_value": {
           "type": "boolean",
-          "description": "- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521)\n- [см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода)\n- [см. confluence](https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value)"
+          "description": "- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода\n- @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value"
         },
         "locations_geo": {
           "type": "array",
           "items": { "$ref": "#/definitions/RadiusFilter" },
           "minItems": 1,
           "maxItems": 1,
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
         },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726)"
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726"
         },
         "division": {
           "type": "string",
           "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
-          "description": "[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589)\n@default 'ADMINISTRATIVE'",
-          "default": "ADMINISTRATIVE"
+          "default": "ADMINISTRATIVE",
+          "description": "@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'"
         }
       },
       "required": ["query"],
-      "description": "[см. Dadata.ru](https://dadata.ru/api/suggest/address/)\n[см. confluence](https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107)"
+      "description": "@see https://dadata.ru/api/suggest/address/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107"
     },
     "KladrIdFilter": { "type": "object", "properties": { "kladr_id": { "type": "string" } } },
     "LocationRestriction": {

@@ -1,6 +1,5 @@
 ---
 outline: [1, 6]
-title: vitepress-openapi
 ---
 
 <script setup lang="ts">
@@ -16,5 +15,7 @@ const route = useRoute()
 
 const tag = route.data.params?.tag
 </script>
+
+_If you're interested in the English version of this spec, let us know [on the GitHub](https://github.com/alexchexes/dadata-sdk)._
 
 <OASpec :tags="[tag]" hide-info hide-servers hide-paths-summary />
