@@ -15,7 +15,7 @@ import SchemaProperty from '../components/SchemaProperty.vue'
 ## Установка
 
 ```bash
-$ pnpm install git+https://github.com/rusproject/vue-dadata.git#rewritten
+$ pnpm install git+https://github.com/alexchexes/dadata-sdk.git#rewritten
 ```
 
 ## Использование
@@ -226,14 +226,14 @@ const suggestion = ref(undefined);
 
 ## События компонента
 
-| Event      | When emitted                                                                                                                                         | Event payload type                                                            |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| error      | In case of any error (usually only network errors occurs)                                                                                            | `unknown`                                                                     |
-| select     | Emitted when a suggestion is selected, either by clicking it in the dropdown, pressing "Enter", or automatically when `selectOnBlur=true` is enabled | `(suggestion: DadataSuggestion, selectType: string)`                          |
-| enriched   | After selected suggestion was enriched (if `enrichOnSelect=true`)                                                                                    | `(suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> \| null)` |
-| enrichFail | If attemp to enrich selected suggestion fails (if `enrichOnSelect` is `true`)                                                                        | `string` (suggestion.unrestricted_value)                                      |
-| focus      | Whenever input is focused                                                                                                                            | `FocusEvent`                                                                  |
-| blur       | Whenever input looses focus                                                                                                                          | `FocusEvent`                                                                  |
+| Событие       | Когда                                                                                          | Что в аргументе                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `@error`      | В случае любой ошибки                                                                          | `unknown`                                                                     |
+| `@select`     | Подсказка выбрана (по клику, по нажатию "Enter", или автоматически если `selectOnBlur`=`true`) | `(suggestion: DadataSuggestion, selectType: string)`                          |
+| `@enriched`   | Дополнительные данные об адресе получены (если `enrichOnSelect`=`true`)                        | `(suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> \| null)` |
+| `@enrichFail` | Не удалось получить дополнительные данные об адресе (если `enrichOnSelect`=`true`)             | `string` (suggestion.unrestricted_value)                                      |
+| `@focus`      | Поле ввода получило фокус                                                                      | `FocusEvent`                                                                  |
+| `@blur`       | Поле ввода потеряло фокус                                                                      | `FocusEvent`                                                                  |
 
 ## Слоты
 

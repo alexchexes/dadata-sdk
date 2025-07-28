@@ -9,6 +9,10 @@ import ButtonRemove from './ui/ButtonRemove.vue';
 import HelpHint from './ui/HelpHint.vue';
 import InputText from './ui/InputText.vue';
 
+defineProps<{
+  helpLink?: string;
+}>();
+
 const { t } = useI18n({ useScope: 'parent' });
 
 const model = defineModel({ type: Object as PropType<RadiusFilter>, required: false });
@@ -48,10 +52,7 @@ const isRadiusValid = computed(() => {
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
       {{ t('radiusFilter:') }}
-      <HelpHint
-        class="size-[1.4rem]"
-        helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
-      />
+      <HelpHint class="size-[1.4rem]" :helpLink="helpLink || ''" />
       <ButtonAdd v-if="!enabled" @click="enabled = true" />
       <ButtonRemove v-else outline @click="enabled = false" />
     </div>

@@ -35,6 +35,7 @@ import AButton from './components/ui/AButton.vue';
 import ButtonAdd from './components/ui/ButtonAdd.vue';
 import ButtonRemove from './components/ui/ButtonRemove.vue';
 import CheckBox from './components/ui/CheckBox.vue';
+import HelpHint from './components/ui/HelpHint.vue';
 import IconCross from './components/ui/IconCross.vue';
 import IconReset from './components/ui/IconReset.vue';
 import InputJson from './components/ui/InputJson.vue';
@@ -430,6 +431,8 @@ const boundTypesOptionsFrom = computed(() => {
     Object.entries(boundTypesOptions.value).filter(([, boundType]) => boundType !== 'flat'),
   );
 });
+
+const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`;
 </script>
 
 <template>
@@ -474,10 +477,12 @@ const boundTypesOptionsFrom = computed(() => {
               />
               <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
             </div>
+            <HelpHint :helpLink="propsLink('minChars')" />
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
             <span title=':debounce="..."'> {{ t('debounce') }}: </span>
+
             <div class="flex items-center gap-2">
               <ButtonRemove
                 outline
@@ -493,6 +498,7 @@ const boundTypesOptionsFrom = computed(() => {
               />
               <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
             </div>
+            <HelpHint :helpLink="propsLink('debounce')" />
           </div>
 
           <RadioGroup
@@ -501,6 +507,7 @@ const boundTypesOptionsFrom = computed(() => {
             :options="
               Object.fromEntries(SHOW_ON_FOCUS_OPTIONS.map((item) => [t(item.toString()), item]))
             "
+            :helpLink="propsLink('showOnFocus')"
           />
 
           <RadioGroup
@@ -509,32 +516,77 @@ const boundTypesOptionsFrom = computed(() => {
             :options="
               Object.fromEntries(CLEAR_ON_CHANGE_OPTIONS.map((item) => [t(item.toString()), item]))
             "
+            :helpLink="propsLink('clearOnChange')"
           />
 
-          <CheckBox v-model="options.selectOnBlur" :label="t('selectOnBlur')" />
-          <CheckBox v-model="options.selectOnEnter" :label="t('selectOnEnter')" />
-          <CheckBox v-model="options.enrichOnSelect" :label="t('enrichOnSelect')" />
-          <CheckBox v-model="options.addSpace" :label="t('addSpace')" />
-          <CheckBox v-model="options.continueSelecting" :label="t('continueSelecting')" />
-          <CheckBox v-model="options.showClearButton" :label="t('showClearButton')" />
-          <CheckBox v-model="options.forceShow" :label="t('forceShow')" />
-          <CheckBox v-model="options.forceHide" :label="t('forceHide')" />
-          <CheckBox :label="t('focusOnMounted')" checked disabled />
-          <CheckBox v-model="options.disabled" :label="t('disabled')" />
+          <CheckBox
+            v-model="options.selectOnBlur"
+            :label="t('selectOnBlur')"
+            :helpLink="propsLink('selectOnBlur')"
+          />
+          <CheckBox
+            v-model="options.selectOnEnter"
+            :label="t('selectOnEnter')"
+            :helpLink="propsLink('selectOnEnter')"
+          />
+          <CheckBox
+            v-model="options.enrichOnSelect"
+            :label="t('enrichOnSelect')"
+            :helpLink="propsLink('enrichOnSelect')"
+          />
+          <CheckBox
+            v-model="options.addSpace"
+            :label="t('addSpace')"
+            :helpLink="propsLink('addSpace')"
+          />
+          <CheckBox
+            v-model="options.continueSelecting"
+            :label="t('continueSelecting')"
+            :helpLink="propsLink('continueSelecting')"
+          />
+          <CheckBox
+            v-model="options.showClearButton"
+            :label="t('showClearButton')"
+            :helpLink="propsLink('showClearButton')"
+          />
+          <CheckBox
+            v-model="options.forceShow"
+            :label="t('forceShow')"
+            :helpLink="propsLink('forceShow')"
+          />
+          <CheckBox
+            v-model="options.forceHide"
+            :label="t('forceHide')"
+            :helpLink="propsLink('forceHide')"
+          />
+          <CheckBox
+            :label="t('focusOnMounted')"
+            checked
+            disabled
+            :helpLink="propsLink('focusOnMounted')"
+          />
+          <CheckBox
+            v-model="options.disabled"
+            :label="t('disabled')"
+            :helpLink="propsLink('disabled')"
+          />
           <InputText
             v-model="options.placeholder"
             :label="t('placeholder:')"
             :placeholder="t('Not specified')"
+            :helpLink="propsLink('placeholder')"
           />
           <InputText
             v-model="options.suggestionsHint"
             :label="t('suggestionsHint:')"
             :placeholder="t('Not specified')"
+            :helpLink="propsLink('suggestionsHint')"
           />
           <InputText
             v-model="options.noSuggestionsHint"
             :label="t('noSuggestionsHint:')"
             :placeholder="t('Not specified')"
+            :helpLink="propsLink('noSuggestionsHint')"
           />
         </OptionsBlock>
       </aside>
@@ -576,11 +628,7 @@ const boundTypesOptionsFrom = computed(() => {
             <div class="dev-item">
               <InputText
                 v-model="locationsBoostModel"
-                :helpLink="
-                  options.suggestType === 'address'
-                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795'
-                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529'
-                "
+                :helpLink="propsLink('locationsBoost')"
                 :label="t('locationsBoost:')"
                 :placeholder="t(`KLADR ID or IDs, e.g. '77, 46'`)"
               />
@@ -605,59 +653,8 @@ const boundTypesOptionsFrom = computed(() => {
 
             <LocationsFilter
               v-model="options.locationsFilter"
-              :helpLink="
-                {
-                  'address': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108',
-                  'fias': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974',
-                  'party': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123',
-                  'bank': 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238',
-                }[options.suggestType]
-              "
+              :helpLink="propsLink('locationsFilter')"
               :suggestType="options.suggestType || DEFAULT_OPTIONS.suggestType"
-            />
-          </template>
-
-          <!-- 'address' and 'fias' -->
-          <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
-            <div class="flex flex-wrap gap-3">
-              <SelectOptions
-                v-model="options.fromBound"
-                :helpLink="
-                  options.suggestType === 'address'
-                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017'
-                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521'
-                "
-                :label="t('fromBound:')"
-                :options="boundTypesOptionsFrom"
-              />
-              <SelectOptions
-                v-model="options.toBound"
-                :helpLink="
-                  options.suggestType === 'address'
-                    ? 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017'
-                    : 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521'
-                "
-                :label="t('toBound:')"
-                :options="boundTypesOptions"
-              />
-            </div>
-          </template>
-
-          <template v-if="options.suggestType === 'address'">
-            <RadiusFilter v-model="options.radiusFilter" />
-
-            <RadioGroup
-              v-model="options.division"
-              :label="t('division:')"
-              :options="Object.fromEntries(DIVISION_TYPES.map((item) => [t(item), item]))"
-              helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589"
-            />
-
-            <RadioGroup
-              v-model="options.language"
-              :label="t('language:')"
-              :options="Object.fromEntries(LANGUAGES.map((item) => [t(item), item]))"
-              helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726"
             />
           </template>
 
@@ -668,7 +665,44 @@ const boundTypesOptionsFrom = computed(() => {
             "
             v-model="options.restrictValue"
             :label="t('restrictValue')"
+            :helpLink="propsLink('restrictValue')"
           />
+
+          <!-- 'address' and 'fias' -->
+          <template v-if="options.suggestType === 'address' || options.suggestType === 'fias'">
+            <div class="flex flex-wrap gap-3">
+              <SelectOptions
+                v-model="options.fromBound"
+                :helpLink="propsLink('fromBound')"
+                :label="t('fromBound:')"
+                :options="boundTypesOptionsFrom"
+              />
+              <SelectOptions
+                v-model="options.toBound"
+                :helpLink="propsLink('toBound')"
+                :label="t('toBound:')"
+                :options="boundTypesOptions"
+              />
+            </div>
+          </template>
+
+          <template v-if="options.suggestType === 'address'">
+            <RadiusFilter v-model="options.radiusFilter" :helpLink="propsLink('radiusFilter')" />
+
+            <RadioGroup
+              v-model="options.division"
+              :label="t('division:')"
+              :options="Object.fromEntries(DIVISION_TYPES.map((item) => [t(item), item]))"
+              :helpLink="propsLink('division')"
+            />
+
+            <RadioGroup
+              v-model="options.language"
+              :label="t('language:')"
+              :options="Object.fromEntries(LANGUAGES.map((item) => [t(item), item]))"
+              :helpLink="propsLink('language')"
+            />
+          </template>
 
           <RadioGroup
             v-if="options.suggestType === 'party'"
@@ -682,7 +716,7 @@ const boundTypesOptionsFrom = computed(() => {
                 ]),
               )
             "
-            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337"
+            :helpLink="propsLink('entityType')"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_by'"
@@ -693,7 +727,7 @@ const boundTypesOptionsFrom = computed(() => {
                 PARTY_BY_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
               )
             "
-            helpLink="https://dadata.ru/api/suggest/party_by/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE"
+            :helpLink="propsLink('entityType')"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'party_kz'"
@@ -704,7 +738,7 @@ const boundTypesOptionsFrom = computed(() => {
                 PARTY_KZ_TYPES.map((item) => [t(`entityType.${item}`, item), item]),
               )
             "
-            helpLink="https://dadata.ru/api/suggest/party_kz/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE"
+            :helpLink="propsLink('entityType')"
           />
           <TogglesGroup
             v-else-if="options.suggestType === 'bank'"
@@ -713,7 +747,7 @@ const boundTypesOptionsFrom = computed(() => {
             :options="
               Object.fromEntries(BANK_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
             "
-            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122"
+            :helpLink="propsLink('entityType')"
           />
 
           <TogglesGroup
@@ -723,14 +757,7 @@ const boundTypesOptionsFrom = computed(() => {
               options.suggestType === 'bank'
             "
             v-model="options.entityStatus"
-            :helpLink="
-              {
-                party: 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335',
-                bank: 'https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120',
-                party_by:
-                  'https://dadata.ru/api/suggest/party_by/#:~:text=UTF%2D8.-,%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F,-%D0%A4%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82%20%D0%BF%D0%BE',
-              }[options.suggestType]
-            "
+            :helpLink="propsLink('entityStatus')"
             :label="t(`entityStatus.${options.suggestType}.label`, 'entityStatus:')"
             :options="
               Object.fromEntries(
@@ -758,7 +785,7 @@ const boundTypesOptionsFrom = computed(() => {
                 ]),
               )
             "
-            helpLink="https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
+            :helpLink="propsLink('branchType')"
           />
 
           <!-- 'fio' -->
@@ -922,21 +949,6 @@ const boundTypesOptionsFrom = computed(() => {
           v-if="showBuiltPayload"
           class="rounded-xl bg-(--vp-c-bg-alt) px-4 py-2 text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap"
         ><b>{{t('Final payload:')}} </b>{{ builtPayload }}</pre>
-
-        <!-- Current query string -->
-        <div :class="nowrapQuery && 'overflow-hidden text-ellipsis whitespace-nowrap'">
-          <span :class="!query && 'text-(--vp-c-text-3)'">
-            {{ t('Current query:') }}
-          </span>
-          <!-- a space -->
-          {{ ' ' }}
-          <b
-            :class="!query && 'text-(--vp-c-text-3) opacity-50'"
-            @click="noSelectionClick(() => (nowrapQuery = !nowrapQuery))"
-          >
-            {{ query || '—' }}
-          </b>
-        </div>
 
         <!-- Component Exposed API -->
         <div class="flex flex-wrap gap-1">

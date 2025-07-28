@@ -11,8 +11,8 @@
     "vue",
     "vue3"
   ],
-  "homepage": "https://github.com/rusproject/vue-dadata",
-  "repository": "https://github.com/rusproject/vue-dadata",
+  "homepage": "https://github.com/alexchexes/dadata-sdk",
+  "repository": "https://github.com/alexchexes/dadata-sdk",
   "license": "MIT",
   "author": "Alex Chexes <alexchexes@gmail.com>",
   "type": "module",

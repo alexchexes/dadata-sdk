@@ -15,7 +15,7 @@ Try [demo](/ru/demo) to understand how it works.
 ## Install
 
 ```bash
-$ pnpm install git+https://github.com/rusproject/vue-dadata.git#rewritten
+$ pnpm install git+https://github.com/alexchexes/dadata-sdk.git#rewritten
 ```
 
 ## Usage

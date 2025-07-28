@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { useData, useRoute } from 'vitepress'
+import { useRoute } from 'vitepress'
 import MarkDown from '../../components/MarkDown.vue';
 import { getDocsLinks } from '../../utils/getDocsLinks'
 const route = useRoute()
 const operationId = route.data.params?.operationId
-
-const { params } = useData()
-
-console.log('params.value: ', params.value);
-console.log('params.value?.title: ', params.value?.title);
-
 </script>
 
 <OAOperation :operationId="operationId" >
