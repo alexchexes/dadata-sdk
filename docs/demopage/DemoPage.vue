@@ -18,9 +18,14 @@ import {
   SUGGEST_TYPES,
 } from '@dadata-sdk/api-types';
 import type { DeepPartial, SuggestType } from '@dadata-sdk/api-types';
-import { buildPayload } from '@dadata-sdk/vue';
-import { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_OPTIONS, SHOW_ON_FOCUS_OPTIONS } from '@dadata-sdk/vue';
-import { VueDadata } from '@dadata-sdk/vue';
+import {
+  CLEAR_ON_CHANGE_OPTIONS,
+  DEFAULT_OPTIONS,
+  ObsoleteResponseError,
+  SHOW_ON_FOCUS_OPTIONS,
+  VueDadata,
+  buildPayload,
+} from '@dadata-sdk/vue';
 import type { DadataSuggestion, SuggestOptions, VueDadataOptions } from '@dadata-sdk/vue';
 import '@dadata-sdk/vue/dist/vue-dadata.css';
 import { ignorableWatch, useMediaQuery } from '@vueuse/core';
@@ -42,6 +47,7 @@ import InputJson from './components/ui/InputJson.vue';
 import InputText from './components/ui/InputText.vue';
 import RadioGroup from './components/ui/RadioGroup.vue';
 import SelectOptions from './components/ui/SelectOptions.vue';
+import TogglableButton from './components/ui/TogglableButton.vue';
 import TogglesGroup from './components/ui/TogglesGroup.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams';
 import './demopage.css';
@@ -95,14 +101,13 @@ const ORDERED_SUGGEST_TYPES: SuggestType[] = [
 // API Token
 const envToken = import.meta.env.VITE_APP_DADATA_API_KEY as string;
 
-const showLiveSnippet = ref(true); // @todo temp
+const showLiveSnippet = ref(true);
 const showAllOptions = ref(false);
 const showBuiltPayload = ref(false);
 
 const query = ref('');
 const suggestion = ref<DadataSuggestion | undefined>(undefined);
 
-const nowrapQuery = ref(true);
 const examplesShown = ref(false);
 
 const defaultOptions = computed<VueDadataOptions>(() => ({
@@ -312,14 +317,6 @@ const allGeneralOptionsDefault = computed(
       ),
 );
 
-/** Calls the given function only if the user has not selected any text. */
-const noSelectionClick = <T,>(fn: () => T): T | void => {
-  if (document.getSelection()?.type === 'Range') {
-    return;
-  }
-  return fn();
-};
-
 const resetAllOptions = () => {
   resetGeneralOptions();
   resetBehaviorOptions();
@@ -373,14 +370,14 @@ const handleEnrichFail = (unrestricted_value: string) => {
   console.warn('Failed to enrich suggestion:', unrestricted_value);
 };
 
-const shownError = ref<{ title: string; description?: string | null } | null>(null);
+const shownError = ref<{ title: string; description?: string | null; data: unknown } | null>(null);
 const showTokenError = ref(false);
 
 const handleError = (error: any) => {
   console.error('VueDadata error:', error);
 
   if (error && typeof error === 'object') {
-    if (error.status === 403) {
+    if (error.status === 403 && options.value.token === envToken) {
       showTokenError.value = true;
       return;
     }
@@ -388,6 +385,7 @@ const handleError = (error: any) => {
     shownError.value = {
       title: t('Something went wrong...'),
       description: error,
+      data: error.response?.data,
     };
   }
 };
@@ -433,6 +431,31 @@ const boundTypesOptionsFrom = computed(() => {
 });
 
 const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`;
+
+const setSuggestion = () => {
+  suggestion.value = {
+    value: 'г Москва',
+    unrestricted_value: '101000, г Москва',
+    data: {
+      code: 'example',
+      name: 'example',
+      region_code: 'example',
+    },
+  };
+};
+
+const manualUpdate = () => {
+  try {
+    vueDadataRef.value?.update();
+  } catch (error) {
+    if (!(error instanceof ObsoleteResponseError)) {
+      console.warn('Failed to update:', error);
+    }
+  }
+};
+
+const showMoreActions = ref(false);
+const showSuggestionsList = ref(false);
 </script>
 
 <template>
@@ -979,6 +1002,23 @@ const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`
             @mousedown.prevent="vueDadataRef?.hide()"
             >hide</AButton
           >
+
+          <TogglableButton
+            v-model="showMoreActions"
+            type="checkbox"
+            :value="true"
+            :label="t('more')"
+          />
+        </div>
+        <div class="flex flex-wrap gap-2" v-if="showMoreActions">
+          <div class="flex flex-wrap gap-1">
+            <AButton :disabled="!suggestion" @mousedown.prevent="suggestion = undefined">
+              {{ t('Clear v-model:suggestion') }}
+            </AButton>
+            <AButton @mousedown.prevent="setSuggestion">{{ t('Set v-model:suggestion') }} </AButton>
+            <AButton @mousedown.prevent="manualUpdate">update</AButton>
+          </div>
+          <CheckBox v-model="showSuggestionsList" :label="t(`Show 'suggestionsList' array`)" />
         </div>
 
         <h2 class="text-5xl leading-relaxed font-semibold">
@@ -992,7 +1032,7 @@ const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`
           class="text-slate-950"
           :focusOnMounted="true"
           :token="options.token"
-          v-bind="nonDefaultOptions"
+          v-bind="{ ...nonDefaultOptions }"
           @enriched="handleEnriched"
           @enrichFail="handleEnrichFail"
           @error="handleError"
@@ -1004,14 +1044,11 @@ const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`
           v-if="showTokenError || shownError"
           class="relative rounded-xl bg-(--vp-c-danger-soft) px-3 py-2 text-(--vp-c-danger-1)"
         >
-          <div class="font-bold">
-            <template v-if="showTokenError"> {{ t('Oops...') }} </template>
-            <template v-else>
-              {{ shownError?.title || 'Error' }}
-            </template>
-          </div>
-          <div>
-            <template v-if="showTokenError">
+          <template v-if="showTokenError">
+            <div class="font-bold">
+              {{ t('Oops...') }}
+            </div>
+            <div>
               {{
                 t(
                   'Looks like the API token used on this page has reached its limit. Obtain a new token from',
@@ -1019,18 +1056,28 @@ const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`
               }}
               <a
                 class="underline hover:no-underline"
-                href="https://dadata.ru/api/#:~:text=%D0%BA%D0%BE%D0%B3%D0%B4%D0%B0%20%D0%BF%D0%BE%D1%80%D0%B0%20%D0%BF%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D1%8F%D1%82%D1%8C.-,%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F,-%D0%B8%C2%A0%D0%BF%D0%BE%D0%BF%D1%80%D0%BE%D0%B1%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%20API"
+                href="https://dadata.ru/profile/#info"
                 rel="noopener"
                 target="_blank"
                 >Dadata.ru</a
               >
               {{ t('and paste it into') }} <i>'{{ t('General options') }}'</i> →
               <i>'{{ t('API token') }}'</i> {{ t('above') }}
-            </template>
-            <template v-else-if="shownError?.description">
+            </div>
+          </template>
+          <template v-else>
+            <div class="font-bold">
+              {{ shownError?.title || 'Error' }}
+            </div>
+            <div v-if="shownError?.description">
               {{ shownError.description }}
+            </div>
+            <template v-if="shownError?.data">
+              <div>{{ t('Received response:') }}</div>
+              <pre class="text-sm wrap-anywhere whitespace-pre-wrap">{{ shownError.data }}</pre>
             </template>
-          </div>
+          </template>
+
           <button
             class="absolute top-3 right-3 cursor-pointer hover:opacity-70"
             @click="
@@ -1042,20 +1089,41 @@ const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`
           </button>
         </div>
 
-        <div class="min-h-96 rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
-          <div class="flex justify-between">
-            <span>
-              {{ t('Current suggestion:') }}
-              <span v-if="!suggestion" class="text-(--vp-c-text-3) opacity-50">
-                — ({{ typeof suggestion }})</span
-              >
-            </span>
-            <AButton v-if="suggestion" @click="clearSuggestion">{{ t('Clear') }}</AButton>
+        <div class="flex gap-2 max-md:flex-col">
+          <div class="min-h-96 min-w-0 flex-1 rounded-xl bg-(--vp-c-bg-alt) px-4 py-2">
+            <div class="flex justify-between">
+              <span>
+                {{ t('Current suggestion:') }}
+                <span v-if="!suggestion" class="text-(--vp-c-text-3) opacity-50">
+                  — ({{ typeof suggestion }})</span
+                >
+              </span>
+              <AButton v-if="suggestion" @click="clearSuggestion">{{ t('Clear') }}</AButton>
+            </div>
+
+            <pre v-if="suggestion" class="text-[14px] wrap-anywhere whitespace-pre-wrap">{{
+              suggestion
+            }}</pre>
           </div>
 
-          <pre v-if="suggestion" class="text-[14px] [overflow-wrap:anywhere] whitespace-pre-wrap">{{
-            suggestion
-          }}</pre>
+          <div
+            class="min-h-96 min-w-0 flex-1 rounded-xl bg-(--vp-c-bg-alt) px-4 py-2"
+            v-if="showSuggestionsList"
+          >
+            <div class="flex justify-between">
+              <span>
+                {{ t('Suggestions list:') }}
+              </span>
+            </div>
+            [
+            <pre
+              v-for="(sug, idx) in vueDadataRef?.suggestionsList"
+              :key="idx"
+              class="mb-4 ml-3 max-h-52 overflow-auto text-[14px] wrap-anywhere whitespace-pre-wrap"
+              >{{ sug }}</pre
+            >
+            ]
+          </div>
         </div>
       </main>
     </div>

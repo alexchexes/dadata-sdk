@@ -360,11 +360,11 @@ If you're using `ref` to access the `<VueDadata />` instance, the following prop
 | `suggestionsList`   | `Ref<DadataSuggestion[], DadataSuggestion[]>` | Currently fetched list of suggestions.                                   |
 | `isDropdownVisible` | `ComputedRef<boolean>`                        | `true` when suggestions dropdown is visible.                             |
 | `isFocused`         | `ComputedRef<boolean>`                        | `true` when `<input>` element is focused.                                |
-| `focus()`           | `() => void`                                  | Focuses the `<input>` element.                                           |
-| `blur()`            | `() => void`                                  | Removes focus from the `<input>` element.                                |
 | `show()`            | `() => void`                                  | Shows suggestions dropdown if there are suggestions loaded               |
 | `hide()`            | `() => void`                                  | Hides suggestions dropdown                                               |
 | `clear()`           | `() => void`                                  | Clears query (`modelValue`), `suggestion` and `suggestionsList` v-models |
+| `focus()`           | `() => void`                                  | Focuses the `<input>` element.                                           |
+| `blur()`            | `() => void`                                  | Removes focus from the `<input>` element.                                |
 
 #### Example
 

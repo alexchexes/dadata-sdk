@@ -10,41 +10,48 @@ import SchemaProperty from '../components/SchemaProperty.vue'
 
 # Компонент DaData-подсказок для Vue 3.
 
-Попробуйте [демо](/ru/demo), чтобы ознакомиться с возможностями компонента.
+Попробуйте демо, чтобы ознакомиться с возможностями компонента:
+
+### [Демо](/ru/demo)
 
 ## Установка
+
+Пакет ещё не опубликован на `npm`.
+
+Чтобы установить напрямую из git-репозитория:
 
 ```bash
 $ pnpm install git+https://github.com/alexchexes/dadata-sdk.git#rewritten
 ```
 
+Либо склонируйте репо и подключите к своему проекту через локальную ссылку:
+
+```json
+{
+  "dependencies": {
+    "@dadata-sdk/vue": "link:..\\dadata-sdk\\packages\\vue-dadata"
+  }
+}
+```
+
 ## Использование
 
-```vue
-<script setup>
-import { ref } from 'vue';
-import { VueDadata } from 'vue-dadata';
-import 'vue-dadata/dist/vue-dadata.css';
-
-const token = import.meta.env.VITE_APP_DADATA_API_KEY;
-
-const query = ref('');
-const suggestion = ref(undefined);
-</script>
-
-<template>
-  <div>
-    <VueDadata v-model="query" v-model:suggestion="suggestion" :token="token" />
-  </div>
-</template>
-```
+<!-- @include: ../vue-usage-basic.md -->
 
 ## V-Models
 
-| name                 | Description                                | Type     |
-| -------------------- | ------------------------------------------ | -------- |
-| `v-model` (required) | v-model for query (input string)           | `string` |
-| `v-model:suggestion` | v-model for the selected suggestion object | `object` |
+### `v-model`
+
+- **Обязательный**
+- **Тип:** `string`
+
+_v‑model_ для текста запроса. Значение используется при вызовах API и синхронизировано с полем ввода (`<input>`) всё время, кроме как при навигации по подсказкам с клавиатуры (клавишами ↑↓) — в этот момент поле ввода отображает текст из «подсвеченной» в данный момент подсказки, а значение v-model сохраняет текст, который был в поле до начала навигации. После выбора подсказки или выхода (_Esc_, Клик вне элемента), поле снова синхронизировано со значением в данном v-model.
+
+### `v-model:suggestion`
+
+- **Тип:** `object | undefined`
+
+_v‑model_ для объекта выбранной в данный момент подсказки. Обеспечивает простой доступ к объекту, но работает в обе стороны — можно задать «начальную» подсказку при загрузке страницы без необходимости вызывать API. При установке непустого объекта извне, будет также обновлён v-model текста запроса.
 
 ## Пропсы
 
@@ -226,34 +233,47 @@ const suggestion = ref(undefined);
 
 ## События компонента
 
-| Событие       | Когда                                                                                          | Что в аргументе                                                               |
-| ------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `@error`      | В случае любой ошибки                                                                          | `unknown`                                                                     |
-| `@select`     | Подсказка выбрана (по клику, по нажатию "Enter", или автоматически если `selectOnBlur`=`true`) | `(suggestion: DadataSuggestion, selectType: string)`                          |
-| `@enriched`   | Дополнительные данные об адресе получены (если `enrichOnSelect`=`true`)                        | `(suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> \| null)` |
-| `@enrichFail` | Не удалось получить дополнительные данные об адресе (если `enrichOnSelect`=`true`)             | `string` (suggestion.unrestricted_value)                                      |
-| `@focus`      | Поле ввода получило фокус                                                                      | `FocusEvent`                                                                  |
-| `@blur`       | Поле ввода потеряло фокус                                                                      | `FocusEvent`                                                                  |
+| Событие       | Когда                                                                                          | Что передаётся                               |
+| ------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `@error`      | В случае любой ошибки                                                                          | `unknown`                                    |
+| `@select`     | Подсказка выбрана (по клику, по нажатию "Enter", или автоматически если `selectOnBlur`=`true`) | `(suggestion: object, selectType: string)`   |
+| `@enriched`   | Дополнительные данные об адресе получены (если `enrichOnSelect`=`true`)                        | `(suggestion: object, diff: object \| null)` |
+| `@enrichFail` | Не удалось получить дополнительные данные об адресе (если `enrichOnSelect`=`true`)             | `string` (_suggestion.unrestricted_value_)   |
+| `@focus`      | Поле ввода получило фокус                                                                      | `FocusEvent`                                 |
+| `@blur`       | Поле ввода потеряло фокус                                                                      | `FocusEvent`                                 |
 
 ## Слоты
 
+> _В пропсы каждого слота передаётся `mergedClasses` - объект со всеми используемыми компонентом CSS-классами в том же формате, что и объект для пропса [`classes`](#classes) на компоненте (`VueDadataClasses`)._
+
 ### inputWrapper
 
-Wraps the entire input area including the input field, clear button, and overlays. You can (and usually, should) bind at least `coreInputProps`, which adds event-handlers and sets `value` (which is not just `query`, but visible value when navigating with keyboard). `browserAutoProps` holds attributes like `autocomplete='off'` and a few similar to disable browser input features.
+Слот для замены основного видимого контейнера с полем ввода, включающего `<input>` и кнопку-«крестик».
+
+В пропсы слота передаются:
+
+- `coreInputProps` - рекомендуется забиндить на свой `input` полностью через `v-bind`. Включает базовые необходимые компоненту обработчики событий `input`, `keydown`, `focus`, `blur`, а также атрибут `disabled`, и `value`, который **не всегда соответствует тексту в `query`**, поскольку может содержать текущий видимый текст при навигации по подсказкам клавиатурой.
+- `browserAutoProps` - атрибуты для отключения функций браузера, мешающих взаимодействию: встроенных подсказок, автозаполнения, автокоррекции и проверки правописания.
+- `allInputProps` - включает всё, что включено в `coreInputProps` и `browserAutoProps`, а также дополнительно, атрибуты `type`, `class`, `name`, и `placeholder`.
+- `mergedClasses` - используемые компонентом CSS-классы.
+
+Пример использования:
 
 ```vue
 <template #inputWrapper="{ allInputProps, coreInputProps, browserAutoProps }">
   <!-- Your custom input/wrapper/anything -->
-  <div class="...">
-    <MyInput v-bind="coreInputProps" />
-    <MyOverlay>
-  </div>
+  <MyFancyInput
+    v-bind="{ ...coreInputProps, ...browserAutoProps }"
+    :placeholder="allInputProps.placeholder"
+  />
 </template>
 ```
 
+При желании, `<input>` можно заменить на `<textarea>`, забиндив на неё все пропсы аналогичным образом.
+
 ### input
 
-Replaces the `<input>` element itself. Useful for injecting your own input component. You can even replace it with `<textarea>` while preserving default styling:
+Заменяет только `<input>`, не трогая вышестоящий контейнер и оверлей с кнопкой-«крестиком». Пропсы слота те же, что для [`inputwrapper`](#inputwrapper). Пример:
 
 ```vue
 <template #input="{ allInputProps, coreInputProps, browserAutoProps }">
@@ -263,7 +283,7 @@ Replaces the `<input>` element itself. Useful for injecting your own input compo
 
 ### inputOverlay
 
-By default, en empty slot. It is just there so you can pass any custom content inside the input wrapper. Useful for loading indicators, icons, etc.
+Пустой слот, позволяющий добавить свои элементы внутри контейнера с `input`ом, например, индикатор загрузки, кнопки и подобное. Пропсов кроме `mergedClasses` нет. Пример:
 
 ```vue
 <template #inputOverlay>
@@ -273,44 +293,84 @@ By default, en empty slot. It is just there so you can pass any custom content i
 
 ### clearButtonIcon
 
-Overrides the built-in clear (×) button icon
+Заменяет иконку встроенной кнопки-«крестика» (×), не трогая сам элемент `<button>`. Пропсов кроме `mergedClasses` нет. Пример:
 
 ```vue
 <template #clearButtonIcon>
-  <svg><!----></svg>
+  <svg><!-- Custom "clear" icon --></svg>
 </template>
 ```
 
 ### hint
 
-Overrides hint section above the suggestions inside the dropdown list.
+Слот позволяет добавить собственные элементы, отображаемые над списком подсказок при их наличии, либо вместо списка при их отсутствии. Например, здесь можно добавить ссылку или кнопку, когда подсказок не найдено, или свой дизайн сообщения "Выберите вариант или продолжите ввод...".
 
-If you use this slot, it will overrides both `suggestionsHint` and `noSuggestionsHint` hints, even if you pass them as props.
+На контейнер добавлен `@mousedown.prevent`, чтобы исключить потерю фокуса и скрытие списка подсказок при кликах внутри контейнера.
 
-Also note that component logic is currently shows the dropdown (where hints reside) without suggestions only when `noSuggestionsHint` is provided via props.
-So if you use this slot to style hint when there's no suggestions, you apparently need to pass something to `noSuggestionsHint` prop to make it work. This will be refactored later.
+Чтобы контейнер оставался видимым, когда подсказки не найдены, необходимо передать `true` в пропс компонента `noSuggestionsHint`.
+
+Пропсы слота:
+
+- `suggestionsList` - текущий список подсказок
+- `suggestionsHint` - текст сообщения при наличии подсказок (дефолтное или из пропса `suggestionsHint` компонента)
+- `noSuggestionsHint` - текст сообщения при отсутствии подсказок (из пропса `noSuggestionsHint` компонента)
+- `mergedClasses` - используемые компонентом CSS-классы.
+
+Пример:
 
 ```vue
-<template #hint>
-  <div class="...">This is my fancy-styled hint...</div>
+<!-- <VueDadata :noSuggestionsHint="true" ...> -->
+
+<template #hint="{ suggestionsList, suggestionsHint, noSuggestionsHint }">
+  <!-- Стандартное сообщение если подсказки найдены -->
+  <template v-if="suggestionsList.length"> {{ suggestionsHint }} </template>
+
+  <!-- Свой блок если подсказок нет -->
+  <template v-else>
+    Ничего нет...
+    <button @click="reset">Сбросить фильтры?</button>
+  </template>
 </template>
 ```
 
 ### suggestions
 
-Overrides the entire suggestions list (everything inside the dropdown, but not the dropdown itself)
+Заменяет полностью список подсказок (не трогая сам контейнер выпадающего списка и [`hint`](#hint)).
+
+Пропсы слота:
+
+- `suggestionsList` - Массив из объектов подсказок
+- `navigatedIndex` - Индекс "подсвеченной" подсказки (при навигации клавиатурой)
+- `handleSuggestionClick` - Обработчик клика, который необходимо добавить на каждый элемент подсказки, чтобы функции компонента продолжали работать в полном объёме (используйте `@mousedown.prevent`)
+- `mergedClasses` - используемые компонентом CSS-классы.
+
+Пример:
 
 ```vue
 <template #suggestions="{ suggestionsList, navigatedIndex, handleSuggestionClick }">
-  <div v-for="(suggestion, index) in suggestionsList" :key="index">
-    <!-- Custom items rendering -->
+  <div
+    v-for="(suggestion, index) in suggestionsList"
+    :key="index"
+    @mousedown.prevent="handleSuggestionClick(index)"
+  >
+    {{ suggestion.value }}
   </div>
 </template>
 ```
 
 ### suggestionItem
 
-Replaces whole suggestion item element. If you use this, you will need to manually handle clicks with `@mousedown.prevent="handleSuggestionClick(index)"`.
+Заменяет каждый отдельный элемент списка подсказок (включая его контейнер).
+
+Пропсы слота:
+
+- `suggestion` - объект подсказки
+- `index` - индекс элемента в списке (с `0`)
+- `isNavigated` - является ли данный элемент "подсвеченным" (при навигации клавиатурой)
+- `handleSuggestionClick` - Обработчик клика, который необходимо добавить на ваш элемент подсказки, чтобы функции компонента продолжали работать в полном объёме (используйте `@mousedown.prevent`)
+- `mergedClasses` - используемые компонентом CSS-классы.
+
+Пример:
 
 ```vue
 <template #suggestionItem="{ suggestion, index, isNavigated, handleSuggestionClick }">
@@ -322,77 +382,69 @@ Replaces whole suggestion item element. If you use this, you will need to manual
 
 ### suggestionItemContent
 
-Replaces inner content of a suggestion item. Useful when you want to completely re-style suggestion without need to handle clicks automatically
+Заменяет внутренний контент каждого элемента в списке подсказок, не трогая его родительский контейнер. Пропсы те же, что для [`suggestionItem`](#suggestionitem), но без `handleSuggestionClick`.
 
 ```vue
-<template #suggestionItemContent="{ suggestion, isNavigated }">
+<template #suggestionItemContent="{ suggestion, index, isNavigated, mergedClasses }">
   {{ suggestion.value }}
 </template>
 ```
 
 ### suggestionItemTitle
 
-Overrides the main title (`value`) of a suggestion item
+Заменяет элемент с основным отображаемым текстом подсказки (`suggestion.value`). При использовании слота понадобится добавить собственную подсветку совпадений; чтобы получить размеченные части для подсветки можно использовать экспортируемую библиотекой функцию `highlightChunks`.
+
+Пропсы слота те же, что для [`suggestionItem`](#suggestionitem), но без `handleSuggestionClick`.
 
 ```vue
-<template #suggestionItemTitle="{ suggestion, isNavigated }">
-  <span class="...">{{ suggestion.value }}</span>
+<template #suggestionItemTitle="{ suggestion, index, isNavigated, mergedClasses }">
+  <!-- Show `unrestricted_value` instead of `value` (with custom `highlight`) -->
+  <span v-html="highlight(query, suggestion.unrestricted_value)" />
 </template>
 ```
 
 ### suggestionItemSubtitle
 
-Overrides a suggestion subtitle. By default, there are only subtitles for `party` and `bank` suggestions. Using this slot you can create your own subtitle for any type.
+Заменяет элемент для размещения дополнительного текста под основным текстом подсказки. Дефолтный контент слота отображается только в определённых случаях, например для подсказок по организациям или банкам, слот же позволяет выводить дополнительное инфо в любой момент.
+
+Пропсы те же, что для [`suggestionItem`](#suggestionitem), но без `handleSuggestionClick`.
 
 ```vue
-<template #suggestionItemSubtitle="{ suggestion, isNavigated }">
-  <div class="...">{{ suggestion.data.inn }}</div>
+<template #suggestionItemSubtitle="{ suggestion, index, isNavigated, mergedClasses }">
+  <div :class="mergedClasses.suggestionSubtitle">
+    Фед. округ: {{ (suggestion.data as AddressAdminData).federal_district }}
+  </div>
 </template>
 ```
 
-## Методы компонента
+## Методы и свойства компонента
 
-If you're using `ref` to access the `<VueDadata />` instance, the following properties and methods are exposed via `defineExpose()`:
+Следующие методы и свойства доступны через template-ref компонента (`<VueDadata ref='vueDadata' ... />`):
 
-| Name                | Type                                          | Description                                                              |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------ |
-| `inputRef`          | `ShallowRef<HTMLInputElement \| null>`        | Reference to the internal `<input>` element.                             |
-| `suggestionsList`   | `Ref<DadataSuggestion[], DadataSuggestion[]>` | Currently fetched list of suggestions.                                   |
-| `isDropdownVisible` | `ComputedRef<boolean>`                        | `true` when suggestions dropdown is visible.                             |
-| `isFocused`         | `ComputedRef<boolean>`                        | `true` when `<input>` element is focused.                                |
-| `focus()`           | `() => void`                                  | Focuses the `<input>` element.                                           |
-| `blur()`            | `() => void`                                  | Removes focus from the `<input>` element.                                |
-| `show()`            | `() => void`                                  | Shows suggestions dropdown if there are suggestions loaded               |
-| `hide()`            | `() => void`                                  | Hides suggestions dropdown                                               |
-| `clear()`           | `() => void`                                  | Clears query (`modelValue`), `suggestion` and `suggestionsList` v-models |
+| Name                | Type                                          | Description                                                                                                                                        |
+| ------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `inputRef`          | `ShallowRef<HTMLInputElement \| null>`        | `templateRef` элемента `<input>`                                                                                                                   |
+| `suggestionsList`   | `Ref<DadataSuggestion[], DadataSuggestion[]>` | Текущий список подсказок или пустой массив                                                                                                         |
+| `isDropdownVisible` | `ComputedRef<boolean>`                        | `true` когда список подсказок показан                                                                                                              |
+| `isFocused`         | `ComputedRef<boolean>`                        | `true` когда `<input>` имеет фокус                                                                                                                 |
+| `update()`          | `(options) => DadataSuggestion[]`             | Отправить запрос и обновить список подсказок. В аргументе можно передать опции, которые перезапишут опции, переданные, установленные через пропсы. |
+| `clear()`           | `() => void`                                  | Очистить текст запроса (`modelValue`), `v-model:suggestion` и `suggestionsList`                                                                    |
+| `show()`            | `() => void`                                  | Показать подсказки (если они в этот момент загружены)                                                                                              |
+| `hide()`            | `() => void`                                  | Скрыть подсказки                                                                                                                                   |
+| `focus()`           | `() => void`                                  | Передать фокус `<input>`                                                                                                                           |
+| `blur()`            | `() => void`                                  | Убрать фокус с `<input>`                                                                                                                           |
 
-#### Пример
+#### Пример использования методов
 
-```vue
-<template>
-  <VueDadata ref="vueDadataRef" ... />
-</template>
+<!-- @include: ../vue-usage-methods.md -->
 
-<script setup>
-import { useTemplateRef } from 'vue';
+## Внешние зависимости
 
-const vueDadataRef = useTemplateRef('vueDadataRef');
-
-onMounted(() => {
-  setTimeout(() => {
-    vueDadataRef.value?.focus(); // Autofocus the input with slight delay
-  }, 300);
-});
-</script>
-```
-
-## Зависимости
+#### Используется под капотом
 
 - [axios](https://github.com/axios/axios)
 - [@vueuse/core](https://vueuse.org/)
 
-#### Peer зависимости
+#### Ожидается у клиента (peer-deps)
 
-- [Vue](https://github.com/vuejs/vue)
-
-Based on [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)
+- [Vue 3](https://github.com/vuejs/vue)

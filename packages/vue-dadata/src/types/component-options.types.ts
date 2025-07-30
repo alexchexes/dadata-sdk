@@ -1,14 +1,15 @@
-import type { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_CLASSES, SHOW_ON_FOCUS_OPTIONS } from '../const';
 import type {
   BankStatus,
   BankType,
   BoundType,
+  BranchType,
   DivisionType,
   FioGenders,
   FioParts,
   KladrIdFilter,
   Language,
   LocationRestriction,
+  OneOrMany,
   PartyByStatus,
   PartyByType,
   PartyKzType,
@@ -26,11 +27,10 @@ import type {
   SuggestPostalUnitFilter,
   SuggestRegionCourtFilter,
   SuggestType,
-  OneOrMany,
-  BranchType,
 } from '@dadata-sdk/api-types';
-
 import type { InputHTMLAttributes } from 'vue';
+
+import type { CLEAR_ON_CHANGE_OPTIONS, DEFAULT_CLASSES, SHOW_ON_FOCUS_OPTIONS } from '../const';
 import type { OptionalSuggestPayload } from './suggest-options.types';
 
 export type ShowOnFocusOption = (typeof SHOW_ON_FOCUS_OPTIONS)[number];
@@ -274,7 +274,7 @@ export interface VueDadataOptions {
   placeholder?: string;
   /**
    * Value for the input's `name` attribute.
-   * Default `vue-dadata-input`
+   * Default `dadata-input`
    */
   inputName?: string;
   /**
@@ -361,11 +361,17 @@ export interface VueDadataOptions {
   /**
    * Text to show above the suggestions list
    */
-  suggestionsHint?: string | false;
+  suggestionsHint?: string;
   /**
-   * Text to show in place of suggestions when there's no suggestions
+   * Текст, отображаемый на месте подсказок, если ничего не найдено. Передайте
+   * `true`, если используете слот `#hint` для отображения своего элемента
+   * при отсутствии подсказок, чтобы контейнер оставался видимым.
+   *
+   * @locale EN
+   * Text to show in place of suggestions when there are no suggestions. Pass `true`
+   * if you use the `hint` slot for displaying a custom "no-suggestions" design to keep it visible.
    */
-  noSuggestionsHint?: string | false;
+  noSuggestionsHint?: string | boolean;
   /**
    * If `true`, input will be focused immediately when the component is mounted.
    * Default `false`

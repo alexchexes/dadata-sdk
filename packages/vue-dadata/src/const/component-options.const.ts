@@ -1,6 +1,8 @@
-import type { InternalVueDadataOptions } from '../types';
 import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from '@dadata-sdk/api-types';
-import type { SuggestType, OnlyPrimitives } from '@dadata-sdk/api-types';
+import type { OnlyPrimitives, SuggestType } from '@dadata-sdk/api-types';
+
+import type { InternalVueDadataOptions } from '../types';
+
 export const SHOW_ON_FOCUS_OPTIONS = ['no_selection', 'always', false] as const;
 export const CLEAR_ON_CHANGE_OPTIONS = ['significant', 'any', false] as const;
 
@@ -51,7 +53,7 @@ export const DEFAULT_OPTIONS = {
   enrichOnSelect: true,
   httpCache: true,
   suggestionsHint: 'Выберите вариант или продолжите ввод',
-  inputName: 'vue-dadata-input',
+  inputName: 'dadata-input',
   placeholder: '',
   showOnFocus: 'no_selection',
   debounce: 100,

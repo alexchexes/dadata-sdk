@@ -21,7 +21,7 @@ export interface PostalUnitSuggestionData {
   address_str: string;
   /** КЛАДР-код населённого пункта, в котором находится отделение */
   address_kladr_id: string;
-  /** Код проверки адреса (@todo уточнить, что это в данном случае) */
+  /** Код проверки адреса (TODO: уточнить, что это в данном случае) */
   address_qc: string;
   /** Широта */
   geo_lat: number | null;

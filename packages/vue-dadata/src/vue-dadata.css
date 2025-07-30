@@ -75,6 +75,9 @@ when user passes a class for suggestion item */
   font-size: 0.88rem;
   padding: 0.45rem 0.6rem 0.33rem;
 }
+.vue-dadata__dropdown-hint:empty {
+  display: none;
+}
 
 .vue-dadata__suggestion {
   background: none;

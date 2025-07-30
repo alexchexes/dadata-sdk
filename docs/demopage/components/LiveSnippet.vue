@@ -44,17 +44,19 @@ const displayedOptions = computed(() =>
 
 const sanitize = (str: string) => str.replace(/"/g, `'`);
 
+const ellipsis = (str: string, maxLen: number) =>
+  str && str.length > maxLen ? str.slice(0, maxLen) + '...' : str;
+
 const code = computed(() => {
   const suggestionStr = JSON.stringify(props.suggestion);
-  const maxLen = 25;
-  const suggestionComment =
-    suggestionStr && suggestionStr.length > maxLen
-      ? suggestionStr.slice(0, maxLen) + '...'
-      : suggestionStr;
+  const suggestionComment = suggestionStr ? `/* ${ellipsis(suggestionStr, 25)} */` : '';
+  const queryComment = props.query
+    ? `/* ${ellipsis(props.query.replace(/(\*+)(\/+)/g, '$1 $2'), 100)} */`
+    : '';
 
   const attrs = [
-    `v-model="query${props.query ? `/* ${props.query.replace(/(\*+)(\/+)/g, '$1 $2')} */` : ''}"`,
-    `v-model:suggestion="suggestion${suggestionComment ? `/* ${suggestionComment} */` : ''}"`,
+    `v-model="query${queryComment}"`,
+    `v-model:suggestion="suggestion${suggestionComment}"`,
   ];
 
   if (props.showToken) {

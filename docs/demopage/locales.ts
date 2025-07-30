@@ -16,6 +16,10 @@ export default {
     'Final payload:': 'Что будет отправлено в API:',
     'Current query:': 'Текущий запрос:',
     'Methods:': 'Методы:',
+    'more': 'ещё',
+    "Show 'suggestionsList' array": 'Показать массив с подсказками',
+    'Clear v-model:suggestion': 'Очистить v-model:suggestion',
+    'Set v-model:suggestion': 'Присвоить v-model:suggestion',
     'Try here:': 'Попробовать:',
     'Current suggestion:': 'Выбранная подсказка:',
     'Clear': 'Сбросить',
@@ -25,6 +29,7 @@ export default {
       'Похоже, API токен, используемый в этом демо, достиг суточного лимита. Получите новый токен на',
     'and paste it into': 'и вставьте его в',
     'above': 'выше',
+    'Received response:': 'Полученный ответ:',
 
     // --------------------------
     // Vue component options block
@@ -45,7 +50,7 @@ export default {
     'enrichOnSelect': 'Получать доп. данные',
     'addSpace': 'Добавлять пробел',
     'continueSelecting': 'Не убирать список',
-    'showClearButton': 'Отображать «крестик»',
+    'showClearButton': 'Показывать «крестик»',
     'forceShow': 'Всегда показывать список',
     'forceHide': 'Всегда скрывать список',
     'focusOnMounted': 'Фокус на поле при загрузке',
