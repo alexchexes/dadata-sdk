@@ -11,8 +11,8 @@ import { watch } from 'vue';
 import { createI18n } from 'vue-i18n';
 
 import spec from '../../../packages/api-spec/dadata.json';
-import locales from '../../locales';
-import vitepressOpenApiLocalesRu from '../../ru/vitepress-openapi.locales.ru.json';
+import vpOpenApiLocalesRu from '../../locale-vp-openapi.ru.json';
+import specLocales from '../../locales-spec';
 import { jsDocLinks } from '../../utils/jsDocLinks';
 import './style.css';
 
@@ -71,7 +71,7 @@ export default {
         fallbackLocale: 'en',
         messages: {
           en: vitepressOpenApiLocales.en,
-          ru: vitepressOpenApiLocalesRu,
+          ru: vpOpenApiLocalesRu,
         },
         availableLocales: [
           { code: 'en', label: 'English' },
@@ -101,7 +101,7 @@ export default {
       fallbackLocale: 'en',
       missingWarn: false,
       fallbackRoot: false,
-      messages: locales,
+      messages: specLocales,
     });
     ctx.app.use(i18n);
   },

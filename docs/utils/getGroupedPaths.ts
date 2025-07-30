@@ -2,7 +2,7 @@ import { titleCase } from 'scule';
 import { OpenApi } from 'vitepress-openapi';
 
 import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
-import messages from '../locales';
+import messages from '../locales-spec';
 import { createMiniI18n } from './miniI18n';
 
 const endpointTypes = ['suggest', 'findById', 'clean', 'other', 'account'];

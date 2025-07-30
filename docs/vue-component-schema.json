@@ -61,11 +61,7 @@
             {
               "type": "array",
               "items": {
-                "anyOf": [
-                  { "$ref": "#/definitions/KladrIdFilter" },
-                  { "type": "string" },
-                  { "type": "number" }
-                ]
+                "anyOf": [{ "$ref": "#/definitions/KladrIdFilter" }, { "type": "string" }, { "type": "number" }]
               }
             }
           ],
@@ -79,11 +75,7 @@
             {
               "type": "array",
               "items": {
-                "anyOf": [
-                  { "$ref": "#/definitions/LocationRestriction" },
-                  { "type": "string" },
-                  { "type": "number" }
-                ]
+                "anyOf": [{ "$ref": "#/definitions/LocationRestriction" }, { "type": "string" }, { "type": "number" }]
               }
             }
           ],
@@ -91,32 +83,12 @@
         },
         "fromBound": {
           "type": "string",
-          "enum": [
-            "country",
-            "region",
-            "area",
-            "city",
-            "settlement",
-            "planning_structure",
-            "street",
-            "house",
-            "flat"
-          ],
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
           "description": "Limits the type of address object from which DaData begins searching:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `from_bound` API parameter.\n\n- For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
         },
         "toBound": {
           "type": "string",
-          "enum": [
-            "country",
-            "region",
-            "area",
-            "city",
-            "settlement",
-            "planning_structure",
-            "street",
-            "house",
-            "flat"
-          ],
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
           "description": "Limits the type of address object to which DaData performs the search:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `to_bound` API parameter.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
         },
         "restrictValue": {
@@ -151,25 +123,13 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": [
-                    "LEGAL",
-                    "INDIVIDUAL",
-                    "INDIVIDUAL_JOINT_VENTURE",
-                    "BRANCH",
-                    "FOREIGN_BRANCH"
-                  ]
+                  "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
                 },
                 {
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "LEGAL",
-                      "INDIVIDUAL",
-                      "INDIVIDUAL_JOINT_VENTURE",
-                      "BRANCH",
-                      "FOREIGN_BRANCH"
-                    ]
+                    "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
                   }
                 }
               ]
@@ -178,31 +138,13 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": [
-                    "CBR",
-                    "BANK",
-                    "BANK_BRANCH",
-                    "NKO",
-                    "NKO_BRANCH",
-                    "RKC",
-                    "TREASURY",
-                    "OTHER"
-                  ]
+                  "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
                 },
                 {
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "CBR",
-                      "BANK",
-                      "BANK_BRANCH",
-                      "NKO",
-                      "NKO_BRANCH",
-                      "RKC",
-                      "TREASURY",
-                      "OTHER"
-                    ]
+                    "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
                   }
                 }
               ]
@@ -214,10 +156,7 @@
           "anyOf": [
             {
               "anyOf": [
-                {
-                  "type": "string",
-                  "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
-                },
+                { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
                 {
                   "type": "array",
                   "items": {
@@ -231,27 +170,13 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": [
-                    "ACTIVE",
-                    "BANKRUPT",
-                    "LIQUIDATED",
-                    "LIQUIDATING",
-                    "REORGANIZING",
-                    "SUSPENDED"
-                  ]
+                  "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
                 },
                 {
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "ACTIVE",
-                      "BANKRUPT",
-                      "LIQUIDATED",
-                      "LIQUIDATING",
-                      "REORGANIZING",
-                      "SUSPENDED"
-                    ]
+                    "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"]
                   }
                 }
               ]
@@ -259,10 +184,7 @@
             {
               "anyOf": [
                 { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
-                {
-                  "type": "array",
-                  "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] }
-                }
+                { "type": "array", "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] } }
               ]
             }
           ],
@@ -282,10 +204,7 @@
         "fioParts": {
           "anyOf": [
             { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
-            {
-              "type": "array",
-              "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] }
-            }
+            { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } }
           ],
           "description": "Filter by FIO parts (for `fio` suggestions, see {@link https://dadata.ru/api/suggest/name/}).\n\nExamples:\n- Names only: `['NAME']` or `NAME`\n- Names and patronymics: `['NAME', 'PATRONYMIC']`\n- Names and surnames: `['NAME', 'SURNAME']`"
         },
@@ -338,10 +257,7 @@
           "type": "boolean",
           "description": "Disables the input, suggestions, and all interactions.\nDefault `false`"
         },
-        "placeholder": {
-          "type": "string",
-          "description": "Text used for the input's `placeholder` attribute."
-        },
+        "placeholder": { "type": "string", "description": "Text used for the input's `placeholder` attribute." },
         "inputName": {
           "type": "string",
           "description": "Value for the input's `name` attribute.\nDefault `dadata-input`"
@@ -387,13 +303,10 @@
           "type": "boolean",
           "description": "If `true`, shows a clear (×) button in the input when not empty.\nDefault: `false`"
         },
-        "suggestionsHint": {
-          "type": "string",
-          "description": "Text to show above the suggestions list"
-        },
+        "suggestionsHint": { "type": "string", "description": "Text to show above the suggestions list" },
         "noSuggestionsHint": {
           "type": ["string", "boolean"],
-          "description": "Текст, отображаемый на месте подсказок, если ничего не найдено. Передайте\n`true`, если используете слот `#hint` для отображения своего элемента\nпри отсутствии подсказок, чтобы элемент оставался видимым.\n\n@locale EN\nText to show in place of suggestions when there are no suggestions. Pass `true`\nif you use the `hint` slot for displaying a custom \"no-suggestions\" design to keep it visible."
+          "description": "Текст, отображаемый на месте подсказок, если ничего не найдено. Передайте\n`true`, если используете слот `#hint` для отображения своего элемента\nпри отсутствии подсказок, чтобы контейнер оставался видимым.\n\n@locale EN\nText to show in place of suggestions when there are no suggestions. Pass `true`\nif you use the `hint` slot for displaying a custom \"no-suggestions\" design to keep it visible."
         },
         "focusOnMounted": {
           "type": "boolean",
@@ -572,16 +485,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "CBR",
-                  "BANK",
-                  "BANK_BRANCH",
-                  "NKO",
-                  "NKO_BRANCH",
-                  "RKC",
-                  "TREASURY",
-                  "OTHER"
-                ]
+                "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
               },
               "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
             },
@@ -697,66 +601,28 @@
       "properties": {
         "value": {
           "type": "string",
-          "enum": [
-            "country",
-            "region",
-            "area",
-            "city",
-            "settlement",
-            "planning_structure",
-            "street",
-            "house",
-            "flat"
-          ]
+          "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
         }
       },
       "required": ["value"]
     },
     "BoundType": {
       "type": "string",
-      "enum": [
-        "country",
-        "region",
-        "area",
-        "city",
-        "settlement",
-        "planning_structure",
-        "street",
-        "house",
-        "flat"
-      ]
+      "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
     },
     "BoundFias": {
       "type": "object",
       "properties": {
         "value": {
           "type": "string",
-          "enum": [
-            "region",
-            "area",
-            "city",
-            "settlement",
-            "planning_structure",
-            "street",
-            "house",
-            "flat"
-          ]
+          "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
         }
       },
       "required": ["value"]
     },
     "BoundTypeFias": {
       "type": "string",
-      "enum": [
-        "region",
-        "area",
-        "city",
-        "settlement",
-        "planning_structure",
-        "street",
-        "house",
-        "flat"
-      ]
+      "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"]
     },
     "LocationRestriction": {
       "type": "object",
@@ -818,14 +684,8 @@
     "RadiusFilter": {
       "type": "object",
       "properties": {
-        "lat": {
-          "type": "string",
-          "description": "Географическая широта, например: `'59.244634'`"
-        },
-        "lon": {
-          "type": "string",
-          "description": "Географическая долгота, например: `'39.913355'`"
-        },
+        "lat": { "type": "string", "description": "Географическая широта, например: `'59.244634'`" },
+        "lon": { "type": "string", "description": "Географическая долгота, например: `'39.913355'`" },
         "radius_meters": {
           "type": "number",
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
@@ -843,10 +703,7 @@
     },
     "PartyType": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] },
     "BankStatus": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
-    "PartyStatus": {
-      "type": "string",
-      "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"]
-    },
+    "PartyStatus": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
     "FioGenders": { "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"] },
     "FioParts": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
     "SuggestFmsUnitFilter": {
@@ -885,10 +742,7 @@
           "description": "ФИАС-код города (например, \"0c5b2444-70a0-4932-980c-b4dc0d3f02b5\" для Москвы)"
         },
         "city": { "type": "string", "description": "Название города (например, \"Москва\")" },
-        "line_id": {
-          "type": "string",
-          "description": "Номер линии метро (например, \"5\" для Кольцевой линии)"
-        },
+        "line_id": { "type": "string", "description": "Номер линии метро (например, \"5\" для Кольцевой линии)" },
         "is_closed": {
           "type": ["boolean", "null"],
           "enum": [true, null],
@@ -898,26 +752,18 @@
     },
     "SuggestMktuFilter": {
       "type": "object",
-      "properties": {
-        "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" }
-      }
+      "properties": { "class": { "type": "string", "description": "Класс МКТУ, например `\"25\"` или `\"03\"`" } }
     },
     "SuggestOkpd2Filter": {
       "type": "object",
       "properties": {
-        "razdel": {
-          "type": "string",
-          "description": "Код раздела классификатора ОКПД 2 (например `'S'`)"
-        }
+        "razdel": { "type": "string", "description": "Код раздела классификатора ОКПД 2 (например `'S'`)" }
       }
     },
     "SuggestOkved2Filter": {
       "type": "object",
       "properties": {
-        "razdel": {
-          "type": "string",
-          "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)"
-        }
+        "razdel": { "type": "string", "description": "Код раздела классификатора ОКВЭД 2 (например, `\"J\"`)" }
       }
     },
     "SuggestPartyByFilter": {
@@ -928,11 +774,7 @@
           "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING", "SUSPENDED"],
           "description": "Статус организации"
         },
-        "type": {
-          "type": "string",
-          "enum": ["LEGAL", "INDIVIDUAL"],
-          "description": "Тип организации"
-        }
+        "type": { "type": "string", "enum": ["LEGAL", "INDIVIDUAL"], "description": "Тип организации" }
       }
     },
     "PartyByStatus": {
@@ -961,10 +803,7 @@
           "type": "boolean",
           "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
         },
-        "type_code": {
-          "type": "string",
-          "description": "Фильтрация по типу отделения (например, `ГОПС`)"
-        },
+        "type_code": { "type": "string", "description": "Фильтрация по типу отделения (например, `ГОПС`)" },
         "address_kladr_id": {
           "type": "string",
           "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
@@ -984,13 +823,7 @@
     "PlainHeaders": {
       "type": "object",
       "additionalProperties": {
-        "anyOf": [
-          { "type": "string" },
-          { "type": "number" },
-          { "type": "boolean" },
-          { "type": "null" },
-          { "not": {} }
-        ]
+        "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }, { "type": "null" }, { "not": {} }]
       }
     },
     "VueDadataClasses": {
@@ -1011,10 +844,7 @@
       },
       "description": "@see DEFAULT_CLASSES"
     },
-    "ShowOnFocusOption": {
-      "type": ["string", "boolean"],
-      "enum": ["no_selection", "always", false]
-    },
+    "ShowOnFocusOption": { "type": ["string", "boolean"], "enum": ["no_selection", "always", false] },
     "ClearOnChangeOption": { "type": ["string", "boolean"], "enum": ["significant", "any", false] }
   }
 }

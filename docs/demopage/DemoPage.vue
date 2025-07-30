@@ -32,6 +32,7 @@ import { ignorableWatch, useMediaQuery } from '@vueuse/core';
 import { type Ref, computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import demopageLocales from '../locales-demopage';
 import LiveSnippet from './components/LiveSnippet.vue';
 import LocationsFilter from './components/LocationsFilter.vue';
 import OptionsBlock from './components/OptionsBlock.vue';
@@ -51,7 +52,6 @@ import TogglableButton from './components/ui/TogglableButton.vue';
 import TogglesGroup from './components/ui/TogglesGroup.vue';
 import { useSyncUrlParams } from './composables/useSyncUrlParams';
 import './demopage.css';
-import demopageMessages from './locales';
 
 const { lang = 'en' } = defineProps<{
   lang?: 'en' | 'ru';
@@ -63,7 +63,7 @@ watch(
 );
 
 const { t, locale } = useI18n({
-  messages: demopageMessages,
+  messages: demopageLocales,
   useScope: 'local',
 });
 

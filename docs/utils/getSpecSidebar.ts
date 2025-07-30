@@ -2,7 +2,7 @@ import type { DefaultTheme } from 'vitepress';
 import { useSidebar } from 'vitepress-openapi';
 
 import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
-import messages from '../locales';
+import messages from '../locales-spec';
 import { getGroupedPaths } from './getGroupedPaths';
 import { createMiniI18n } from './miniI18n';
 
