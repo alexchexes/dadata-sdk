@@ -74,7 +74,15 @@ const propsGroups = ref({
   <template v-for="(theProps, groupName) in propsGroups" :key="groupName">
     <h3 :id="`${groupName.toLowerCase()}props`">{{ t(groupName) }}</h3>
     <template v-for="(propName, idx) in theProps" :key="idx">
-      <h4 :id="propName.toLowerCase()">{{ propName }}</h4>
+      <h4 :id="propName.toLowerCase()">
+        {{ propName }}
+        <a
+          class="header-anchor"
+          :href="`#${propName.toLowerCase()}`"
+          :aria-label="`Permalink to &quot;${propName} {#${propName.toLowerCase()}}&quot;`"
+          >&ZeroWidthSpace;</a
+        >
+      </h4>
       <SchemaProperty
         :schema="schema as JSONSchema7"
         :property="propName"
