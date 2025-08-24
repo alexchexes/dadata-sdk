@@ -48,6 +48,33 @@ export interface AddressDivisions {
   administrative: AddressDivisionsAdministrative;
 }
 
+export type FiasAddressFiasLevel =
+  | '1' // prettier wrap
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '65'
+  | '7'
+  | '8';
+
+export type AddressFiasLevel =
+  | '0' // prettier wrap
+  | FiasAddressFiasLevel
+  | '75'
+  | '9'
+  | '-1';
+
+export type CleanAddressFiasLevel =
+  | '0' // prettier wrap
+  | FiasAddressFiasLevel
+  | '9'
+  | '90'
+  | '91'
+  | '-1';
+
+export type CapitalMarker = '0' | '1' | '2' | '3' | '4';
+
 /**
  * All possible fields for address objects returned by any Dadata API endpoint.
  *
@@ -384,28 +411,9 @@ interface AllAddressFields {
    * - 9 — квартира (подсказки: v21.4+)
    * - 65 — планировочная структура
    * - 75 — земельный участок (подсказки: v21.12+)
-   * - 90 — доп. территория
-   * - 91 — улица в доп. территории
-   * - -1 — иностранный или пустой.
-   *
-   * 90 и 91 только для Стандартизации
-   * * При типе поиска ФИАС доступны уровни 1, 3, 4, 5, 6, 7, 8, 65
+   * - -1 — иностранный или пустой
    */
-  fias_level:
-    | '0'
-    | '1'
-    | '3'
-    | '4'
-    | '5'
-    | '6'
-    | '7'
-    | '8'
-    | '9'
-    | '65'
-    | '75'
-    | '90'
-    | '91'
-    | '-1';
+  fias_level: AddressFiasLevel;
   /** КЛАДР-код адреса */
   kladr_id: null | string;
   /**
@@ -423,7 +431,7 @@ interface AllAddressFields {
    * - 4 — центральный район региона (Тюменская обл, Тюменский р-н)
    * - 0 — ничего из перечисленного (Московская обл, г Балашиха)
    */
-  capital_marker: '0' | '1' | '2' | '3' | '4';
+  capital_marker: CapitalMarker;
   /** Код ОКАТО */
   okato: null | string;
   /** Код ОКТМО */
@@ -847,7 +855,6 @@ export interface AddressClean
     | 'room_type_full'
     | 'room'
     | 'fias_id'
-    | 'fias_level'
     | 'kladr_id'
     | 'geoname_id'
     | 'capital_marker'
@@ -956,6 +963,24 @@ export interface AddressClean
        * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
        * Чаще всего вам нужен не он, а `fias_id` */
       fias_code: null | string;
+
+      /**
+       * Уровень детализации, до которого адрес найден в ФИАС:
+       * - 0 — страна
+       * - 1 — регион
+       * - 3 — район
+       * - 4 — город
+       * - 5 — район города
+       * - 6 — населенный пункт
+       * - 7 — улица
+       * - 8 — дом
+       * - 9 — квартира (подсказки: v21.4+)
+       * - 65 — планировочная структура
+       * - 90 — доп. территория
+       * - 91 — улица в доп. территории
+       * - -1 — иностранный или пустой.
+       */
+      fias_level: CleanAddressFiasLevel;
     }
   > {}
 
@@ -1021,7 +1046,6 @@ export interface FiasSuggestionData
     | 'building_type'
     | 'building'
     | 'fias_id'
-    | 'fias_level'
     | 'kladr_id'
     | 'capital_marker'
     | 'okato'
@@ -1038,6 +1062,20 @@ export interface FiasSuggestionData
     {
       /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
       fias_code: null | string;
+
+      /**
+       * Уровень детализации, до которого адрес найден в ФИАС:
+       * - 1 — регион
+       * - 3 — район
+       * - 4 — город
+       * - 5 — район города
+       * - 6 — населенный пункт
+       * - 65 — планировочная структура
+       * - 7 — улица
+       * - 8 — дом
+       */
+      fias_level: FiasAddressFiasLevel;
+
       /** КЛАДР-код района города */
       city_district_kladr_id: null | string;
     }
