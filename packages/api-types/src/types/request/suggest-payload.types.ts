@@ -44,3 +44,10 @@ export interface SuggestFtsUnitPayload extends BaseSuggestPayload {}
 
 /** @see https://dadata.ru/api/suggest/oktmo/ */
 export interface SuggestOktmoPayload extends BaseSuggestPayload {}
+
+/** @internal Not included in schemas, exists for consumer convenience. */
+export interface BaseSuggesion<T extends Record<string, unknown> = Record<string, unknown>> {
+  value: string;
+  unrestricted_value: string;
+  data: T;
+}
