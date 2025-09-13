@@ -46,7 +46,7 @@ export interface SuggestFtsUnitPayload extends BaseSuggestPayload {}
 export interface SuggestOktmoPayload extends BaseSuggestPayload {}
 
 /** @internal Not included in schemas, exists for consumer convenience. */
-export interface BaseSuggesion<T extends Record<string, unknown> = Record<string, unknown>> {
+export interface BaseSuggestion<T extends Record<string, unknown> = Record<string, unknown>> {
   value: string;
   unrestricted_value: string;
   data: T;
