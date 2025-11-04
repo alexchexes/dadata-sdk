@@ -3,4 +3,10 @@ packages:
   - docs
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
+  - core-js
   - esbuild
+  - protobufjs
+  - vue-demi
+overrides:
+  vitep-openapi: link:../vitep-openapi
+  vitepress-openapi: link:../vitepress-openapi

@@ -1,19 +1,20 @@
-import { ObsoleteResponseError } from '../api';
-import { computed, ref, toValue, watch } from 'vue';
-import { DEFAULT_OPTIONS, HandledKeys } from '../const';
-import { makeSuggestRequest } from '../api';
-import { deepDiff, mergeDefined } from '../utils';
 import { reactiveComputed, useDebounceFn } from '@vueuse/core';
-import type { DadataSuggestion } from '../types';
+import { computed, ref, toValue, watch } from 'vue';
 import type { MaybeRefOrGetter, Ref } from 'vue';
-import type {
-  SuggestOptions,
-  MergedSuggestOptions,
-  VueDadataOptions,
-  InternalVueDadataOptions,
-  SelectType,
-} from '../types';
+
 import type { VueDadataEmits } from '../VueDadata.vue';
+import { ObsoleteResponseError } from '../api';
+import { makeSuggestRequest } from '../api';
+import { DEFAULT_OPTIONS, HandledKeys } from '../const';
+import type { DadataSuggestion } from '../types';
+import type {
+  InternalVueDadataOptions,
+  MergedSuggestOptions,
+  SelectType,
+  SuggestOptions,
+  VueDadataOptions,
+} from '../types';
+import { deepDiff, mergeDefined } from '../utils';
 
 export function useSuggestions(
   queryModel: Ref<string>,
@@ -26,7 +27,7 @@ export function useSuggestions(
   // ===============================
 
   /**
-   * @todo We need to refactor this, as now re-compute this object each time when query changes,
+   * TODO: We need to refactor this, as now re-compute this object each time when query changes,
    * because userOptions contains modelValue prop. This is not right.
    * (and we can't re-use list of those options in both `fetchSuggestions` and `watch(userRequestOptions)`,
    * or watcher will be triggered each time)
@@ -72,9 +73,18 @@ export function useSuggestions(
 
   const isFocused = computed(() => _isFocused.value);
   const isDropdownVisible = computed(() => {
-    if (options.forceHide || options.disabled) return false;
-    if (options.forceShow) return true;
-    if (options.noSuggestionsHint && _shouldShowNoSuggestionsHint.value && minCharsReached.value) {
+    if (options.forceHide || options.disabled) {
+      return false;
+    }
+    if (options.forceShow) {
+      return true;
+    }
+    if (
+      options.noSuggestionsHint &&
+      _shouldShowNoSuggestionsHint.value &&
+      _isFocused.value &&
+      minCharsReached.value
+    ) {
       return true;
     }
     return Boolean(_isDropdownVisible.value && suggestionsList.value.length);
@@ -97,42 +107,58 @@ export function useSuggestions(
   // ===============================
 
   /**
-   * Calls the API and returns fetched suggestions.
-   * If request was cancelled (because of new request started faster than API responded), returns null.
-   * In case of error also returns null and emits `error` event
+   * Merges options, calls the API and returns suggestions or empty array
    */
   const fetchSuggestions = async (
     optionsOverrides: Partial<SuggestOptions> = {},
+  ): Promise<DadataSuggestion[]> => {
+    const finalOptions: MergedSuggestOptions = {
+      query: queryModel.value,
+      token: options.token,
+      url: options.url,
+      httpCache: options.httpCache,
+      count: options.count,
+      suggestType: options.suggestType,
+      fromBound: options.fromBound,
+      toBound: options.toBound,
+      locationsFilter: options.locationsFilter,
+      restrictValue: options.restrictValue,
+      locationsBoost: options.locationsBoost,
+      division: options.division,
+      radiusFilter: options.radiusFilter,
+      language: options.language,
+      entityType: options.entityType,
+      entityStatus: options.entityStatus,
+      branchType: options.branchType,
+      okved: options.okved,
+      fioParts: options.fioParts,
+      fioGender: options.fioGender,
+      filters: options.filters,
+      payload: options.payload,
+      headers: options.headers,
+      ...optionsOverrides,
+    };
+
+    // skip request if the query is empty (because consumers may call `update()` when query is '')
+    if (!finalOptions.query) {
+      return [];
+    }
+
+    return await makeSuggestRequest(finalOptions as SuggestOptions);
+  };
+
+  /**
+   * Calls `fetchSuggestions` which calls the API, and returns fetched suggestions
+   * or `null` if any error cathed (where it also emits `error` if the error is not something expected).
+   *
+   * Expected errors include cases when request was cancelled and http-lib throwed `CanceledError`,
+   * or the response to the request arrived AFTER a newer response to the request arrived.
+   */
+  const tryFetch = async (
+    optionsOverrides: Partial<SuggestOptions> = {},
   ): Promise<DadataSuggestion[] | null> => {
     try {
-      const finalOptions: MergedSuggestOptions = {
-        query: queryModel.value,
-        token: options.token,
-        url: options.url,
-        httpCache: options.httpCache,
-        count: options.count,
-        suggestType: options.suggestType,
-        fromBound: options.fromBound,
-        toBound: options.toBound,
-        locationsFilter: options.locationsFilter,
-        restrictValue: options.restrictValue,
-        locationsBoost: options.locationsBoost,
-        division: options.division,
-        radiusFilter: options.radiusFilter,
-        language: options.language,
-        entityType: options.entityType,
-        entityStatus: options.entityStatus,
-        branchType: options.branchType,
-        okved: options.okved,
-        fioParts: options.fioParts,
-        fioGender: options.fioGender,
-        filters: options.filters,
-        payload: options.payload,
-        headers: options.headers,
-        ...optionsOverrides,
-      };
-
-      return await makeSuggestRequest(finalOptions as SuggestOptions);
+      return await fetchSuggestions(optionsOverrides);
     } catch (error) {
       if (!(error instanceof ObsoleteResponseError)) {
         emit('error', error);
@@ -141,25 +167,38 @@ export function useSuggestions(
     }
   };
 
-  const debouncedFetchAndUpdateList = useDebounceFn(
-    async () => {
-      const suggestions = await fetchSuggestions(); // null means error
+  const setSuggestionsIfNotEmpty = (suggestions: DadataSuggestion[] | null): void => {
+    if (suggestions) {
+      suggestionsList.value = suggestions;
 
-      if (suggestions) {
-        suggestionsList.value = suggestions;
-
-        if (suggestions.length) {
-          _shouldShowNoSuggestionsHint.value = false;
-        } else {
-          _shouldShowNoSuggestionsHint.value = true;
-        }
+      if (suggestions.length) {
+        _shouldShowNoSuggestionsHint.value = false;
+      } else {
+        _shouldShowNoSuggestionsHint.value = true;
       }
-    },
+    }
+  };
+
+  const tryUpdateList = async (optionsOverrides: Partial<SuggestOptions> = {}): Promise<void> => {
+    const suggestions = await tryFetch(optionsOverrides);
+    setSuggestionsIfNotEmpty(suggestions);
+  };
+
+  const update = async (
+    optionsOverrides: Partial<SuggestOptions> = {},
+  ): Promise<DadataSuggestion[]> => {
+    const suggestions = await fetchSuggestions(optionsOverrides);
+    setSuggestionsIfNotEmpty(suggestions);
+    return suggestions;
+  };
+
+  const updateWithDebounce = useDebounceFn(
+    () => tryUpdateList(),
     () => options.debounce,
   );
 
   const enrichSuggestion = async (selectedSuggestion: DadataSuggestion) => {
-    const suggestions = await fetchSuggestions({
+    const suggestions = await tryFetch({
       query: selectedSuggestion.unrestricted_value,
       count: 1,
       restrictValue: false,
@@ -190,7 +229,7 @@ export function useSuggestions(
       // if clear-guard is active, disable it
       dontClearOnQueryChange = false;
     }
-    // if there's no clear-guard - check if conditions allow to reset suggestionModel and reset
+    // if there's no clear-guard - reset `suggestionModel` if conditions allow
     else if (
       options.clearOnChange === 'any' ||
       (options.clearOnChange === 'significant' &&
@@ -205,43 +244,46 @@ export function useSuggestions(
     }
 
     if (minCharsReached.value) {
-      debouncedFetchAndUpdateList();
+      updateWithDebounce();
     } else {
       suggestionsList.value = [];
-      hideDropdown();
+      hide();
     }
   });
 
-  // watch suggestionModel to allow set suggestion from outside (using v-model:suggestion)
+  // watch selected `suggestion` to be able update `query` when `suggestion` is set from outside
+  // (using v-model:suggestion)
   watch(suggestionModel, () => {
-    if (suggestionModel.value?.value && queryModel.value !== suggestionModel.value.value) {
-      // if there's no suggestions, no need to fetch them
-      // but if there is 'showOnFocus=always' option, then fetch because we need to show the list
-      if (!suggestionsList.value.length && options.showOnFocus !== 'always') {
-        dontFetchOnQueryChange = true;
-      }
-
-      dontClearOnQueryChange = true;
-      queryModel.value = suggestionModel.value.value;
+    // if it's empty we do nothing - no need to reset `query` or `suggestionsList` in that case.
+    // same when its `value` already matches current query.
+    if (!suggestionModel.value?.value || queryModel.value === suggestionModel.value.value) {
+      return;
     }
+
+    // Set the query to `value` field of the new suggestion object
+    // (with guards against fetching and `suggestionModel` reset when query changes)
+    // and reset suggestions list so we never show user list that don't match current query
+    dontFetchOnQueryChange = true;
+    dontClearOnQueryChange = true;
+    suggestionsList.value = [];
+    queryModel.value = suggestionModel.value.value;
   });
 
-  watch(optionsToWatch, async () => {
+  watch(optionsToWatch, () => {
     suggestionModel.value = undefined;
 
     if (queryModel.value.length < options.minChars) {
       return;
     }
 
-    await debouncedFetchAndUpdateList();
+    updateWithDebounce();
   });
 
   // ===============================
   // 🛠 Internal Utilities
   // ===============================
 
-  /** @internal */
-  const hideDropdown = () => {
+  const hide = () => {
     if (options.disabled) {
       return;
     }
@@ -250,14 +292,13 @@ export function useSuggestions(
     navigatedIndex.value = -1;
   };
 
-  /** @internal */
   const selectSuggestion = async (index: number, selectType: SelectType) => {
     if (options.disabled) {
       return;
     }
 
     if (index < 0 || index >= suggestionsList.value.length) {
-      // is this ever possible?
+      // TODO: is this ever possible ↑ ?
       return;
     }
 
@@ -280,7 +321,7 @@ export function useSuggestions(
     // POTENTIALLY: rename this prop with its current behavior to `hideOnSelect` and provide a method to re-fetch
     if (!options.continueSelecting) {
       dontFetchOnQueryChange = true;
-      hideDropdown();
+      hide();
     }
 
     if (options.addSpace) {
@@ -398,7 +439,7 @@ export function useSuggestions(
     // select match on blur in any case, not just when isDropdownVisible is true
     if (options.selectOnBlur && _isDropdownVisible.value) {
       if (suggestionsList.value.length) {
-        // @todo: we must use some matcher (like in official jquery plugin) instead always selecting first
+        // TODO: we must use some matcher (like in official jquery plugin) instead always selecting first
         selectSuggestion(0, 'blur');
       } else {
         suggestionModel.value = undefined;
@@ -427,14 +468,10 @@ export function useSuggestions(
   //  📤 Public API
   // ===============================
 
-  const setSuggestion = (suggestion: DadataSuggestion) => {
-    suggestionModel.value = suggestion;
-  };
-
   const clear = () => {
-    queryModel.value = '';
+    queryModel.value = ''; // this also clears the `suggestionsList`
     suggestionModel.value = undefined;
-    hideDropdown();
+    hide();
   };
 
   const show = () => {
@@ -448,16 +485,17 @@ export function useSuggestions(
     navigatedIndex,
     suggestionsList,
     canClear,
-    options, // reactive computed
+    options,
 
     handleInputChange,
     handleKeyPress,
     handleInputFocus,
     handleInputBlur,
     handleSuggestionClick,
-    setSuggestion,
+
+    update,
     clear,
     show,
-    hide: hideDropdown,
+    hide,
   };
 }

@@ -1,3 +1,5 @@
+import type { CleanResponse } from './clean.types';
+
 /**
  * стандартизация марки и модели авто
  * @see https://dadata.ru/api/clean/vehicle/
@@ -36,3 +38,5 @@ export interface VehicleClean {
    */
   qc: 0 | 1 | 2 | 3;
 }
+
+export type CleanVehicleResponse = CleanResponse<VehicleClean>;

@@ -1,27 +1,28 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
   name: 'DaData SDK'
-  text: 'Unofficial toolkit for Dadata.ru API'
-  tagline: Full API contract in TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.
+  text: 'Инструменты для работы с API DaData.ru'
+  tagline: Полное описание API в виде OpenAPI спецификации, JSON-схем и типов TypeScript, полнофункциональный компонент «подсказок» для Vue 3, и плейграунд, чтобы тестировать подсказки в реальном времени.
   actions:
     - theme: brand
-      text: Playground
-      link: /demo
+      text: Плейграунд
+      link: /ru/demo
     - theme: alt
-      text: All Dadata API endpoints
-      link: /endpoints
+      text: OpenAPI спецификация
+      link: /ru/api
     - theme: alt
-      text: In Russian
-      link: /ru
+      text: Список API
+      link: /ru/api
+    - theme: alt
+      text: English
+      link: /en
 
 features:
-  - title: Attention!
+  - title: Внимание!
     details:
-      This documentation site is in an early stage of development. It may change frequently, but we’ll do our best to make it as user-friendly as possible.
+      Эта документация находится на ранней стадии разработки. Сайт может часто меняться, но мы постараемся сделать его как можно более удобным.
       <br>
-      Click here to go to GitHub if you’d like to contribute.
-    link: https://github.com/alexchexes/dadata-sdk
+      <a href="https://github.com/alexchexes/dadata-sdk">Нажмите здесь</a>, чтобы перейти на GitHub, если хотите помочь.
 ---

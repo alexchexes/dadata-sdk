@@ -1,3 +1,5 @@
+import type { CleanResponse } from './clean.types';
+
 /**
  * @see https://dadata.ru/api/clean/phone/
  * @see https://dadata.ru/product/phone/
@@ -82,3 +84,5 @@ export interface PhoneClean {
    */
   qc_conflict: 0 | 2 | 3;
 }
+
+export type CleanPhoneResponse = CleanResponse<PhoneClean>;

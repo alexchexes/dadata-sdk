@@ -1,12 +1,12 @@
 import type {
+  BRANCH_TYPES,
+  FIO_GENDERS,
   PARTY_BY_STATUSES,
   PARTY_BY_TYPES,
   PARTY_KZ_STATUSES,
   PARTY_KZ_TYPES,
   PARTY_STATUSES,
   PARTY_TYPES,
-  FIO_GENDERS,
-  BRANCH_TYPES,
 } from '../constants';
 
 export type FioGenders = (typeof FIO_GENDERS)[number];
@@ -27,5 +27,6 @@ export type FmsUnitType = '0' | '1' | '2' | '3';
  * Объект с массивом подсказок
  */
 export type SuggestionsResponse<T> = {
+  /** Массив подсказок или пустой массив */
   suggestions: T[];
 };

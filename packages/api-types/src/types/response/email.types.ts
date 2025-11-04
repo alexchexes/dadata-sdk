@@ -1,4 +1,5 @@
 import type { SuggestionsResponse } from '../common.types';
+import type { CleanResponse } from './clean.types';
 
 /**
  * @see https://dadata.ru/api/clean/email/
@@ -67,3 +68,5 @@ export interface EmailSuggestionData {
 }
 
 export type SuggestEmailResponse = SuggestionsResponse<EmailSuggestion>;
+
+export type CleanEmailResponse = CleanResponse<EmailClean>;

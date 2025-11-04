@@ -2,7 +2,9 @@
 
 ### [README in Russian](ru/README.md)
 
-### [Docs website](docs/index.md) (not hosted yet)
+**[Docs website](docs/index.md) (not hosted yet)**
+
+## OpenAPI spec
 
 ## JSON-schema
 

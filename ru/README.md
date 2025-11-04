@@ -4,22 +4,30 @@
 
 ### [Docs website](../docs/ru/index.md) (not hosted yet)
 
+## OpenAPI спецификация API «Дадаты»
+
+Спецификация в формате [OpenAPI](https://www.openapis.org/) 3.1, описывающая все API эндпоинты «Дадаты»:
+
+- https://github.com/alexchexes/dadata-sdk/blob/openapi-vitepress/packages/api-spec/dadata.json
+
 ## JSON-схемы
 
-Полное описание контракта API «Дадаты» в формате JSON-schema:
+JSON-schema всех объектов, используемых в запросах и ответах API «Дадаты»:
 
 - [Request.json](packages/api-types/json-schema/request.json)
 - [Response.json](packages/api-types/json-schema/response.json)
 
-Аккуратно сгенерировано из типов TypeScript (см. ниже ↓).
+Аккуратно сгенерировано из [типов TypeScript](#типы-typescript).
+
+Пригодно для генерации моделей на любых языках программирования. _[Пример утилиты для генерации PHP-классов](https://github.com/alexchexes/php-schema2class)_.
 
 ## Типы TypeScript
 
 `@dadata-sdk/api-types`
 
-Библиотека типов TypeScript, подробно документирующая все API Дадаты (типы для запросов и ответов для всех API) с полной экспортируемостью и подробной JSDoc документацией.
+Библиотека типов TypeScript с описанием всех объектов, используемых в запросах и ответах API «Дадаты» с подробной JSDoc документацией для каждого поля.
 
-_Начать помогли эти библиотеки:_
+_Начать работу помогли эти пакеты:_
 
 > - _[DefinitelyTyped/dadata-api](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/dadata-api)_
 > - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata)_
@@ -29,21 +37,34 @@ _Начать помогли эти библиотеки:_
 
 `@dadata-sdk/vue`
 
-Компонент подсказок [DaData.ru](https://dadata.ru) для Vue 3, поддерживающий адреса, организации (РФ / КЗ / РБ), банки и все остальные API.
+Компонент подсказок [DaData.ru](https://dadata.ru) для Vue 3, поддерживающий адреса, организации (РФ / КЗ / РБ), банки и все остальные типы подсказок Дадаты.
 
-### [Документация](../docs/ru/vue.md)     [Демо](../docs/ru/demo.md)
+### [Документация](../docs/ru/vue.md)   |   [Демо](../docs/ru/demo.md)
 
-**Vue 2** не поддерживается. Возможно, вам пригодится одна из старых версий [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata).
+**Vue 2** не поддерживается. Если вы не можете [обновиться до Vue 3](https://v3-migration.vuejs.org/), возможно, вам пригодится одна из старых версий этого пакета: [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata).
 
-_На чёт основано / вдохновлено:_
+_Спасибо авторам этих пакетов за вдохновление и идеи:_
 
 > - _[ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata) by Ivan Monastyrev_
-> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata) (отдельные идеи и приёмы)_
-> - _[hflabs/suggestions-jquery](https://github.com/hflabs/suggestions-jquery) (официальный jQuery-плагин)_
+> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata) by Vitaly Baev_
+> - _[официальный jQuery-плагин](https://github.com/hflabs/suggestions-jquery)_
 
 ## Утилиты
 
 `@dadata-sdk/schema-gen` — [Генератор JSON-схем из TypeScript](../docs/ru/schema-gen.md)
+
+## TODO:
+
+### Функционал:
+
+- Возможность предоставить собственный http-кеш, а также забрать кеш сделанных на клиенте запросов
+
+### Разработка:
+
+- E2E-тесты (mock API)
+- Интеграционные тесты с вызовами реального API и AJV валидацией ответов
+- Выделить типизированную API-обёртку в отдельный субпакет
+- Рефакторинг SFC демо-страницы `demopage.vue`
 
 ## Лицензия
 

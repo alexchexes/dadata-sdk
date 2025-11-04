@@ -1,18 +1,19 @@
 <script lang="ts" setup>
-import { computed, onMounted, useTemplateRef, type InputHTMLAttributes, type PropType } from 'vue';
-import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from './const';
-import { highlightHtml } from './utils';
-import { matchWords, mergeDefined } from './utils';
-import { useSuggestions } from './composables/useSuggestions';
-import IconCross from './IconCross.vue';
-import type { SelectType, VueDadataClasses, VueDadataOptions, DadataSuggestion } from './types';
 import type {
   BankSuggestion,
+  DeepPartial,
   PartyBySuggestion,
   PartyKzSuggestion,
   PartySuggestion,
-  DeepPartial,
 } from '@dadata-sdk/api-types';
+import { type InputHTMLAttributes, type PropType, computed, onMounted, useTemplateRef } from 'vue';
+
+import IconCross from './IconCross.vue';
+import { useSuggestions } from './composables/useSuggestions';
+import { DEFAULT_CLASSES, DEFAULT_OPTIONS } from './const';
+import type { DadataSuggestion, SelectType, VueDadataClasses, VueDadataOptions } from './types';
+import { highlightHtml } from './utils';
+import { highlightChunks, mergeDefined } from './utils';
 
 const props = withDefaults(defineProps<VueDadataOptions>(), {
   // although we merge defaults in the composable, we also need to set them here
@@ -29,17 +30,17 @@ const suggestionModel = defineModel('suggestion', {
 
 const emit = defineEmits<{
   /** emitted in case of any error (usually only network errors occurs) */
-  'error': [error: unknown];
+  error: [error: unknown];
   /** emitted after suggestion is selected, whether by clicking on a suggestion in the dropdown, by pressing "Enter" or by auto-selecting when `selectOnBlur=true` */
-  'select': [suggestion: DadataSuggestion, selectType: SelectType];
+  select: [suggestion: DadataSuggestion, selectType: SelectType];
   /** emitted after selected suggestion was enriched in case `enrichOnSelect` props is `true` */
-  'enriched': [suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> | null];
+  enriched: [suggestion: DadataSuggestion, diff: DeepPartial<DadataSuggestion> | null];
   /** emitted if attemp to enrich selected suggestion failed (in case `enrichOnSelect` props is `true`) */
-  'enrichFail': [unrestricted_value: string];
+  enrichFail: [unrestricted_value: string];
   /** emitted whenever input is focused */
-  'focus': [event: FocusEvent];
+  focus: [event: FocusEvent];
   /** emitted whenever input looses focus */
-  'blur': [event: FocusEvent];
+  blur: [event: FocusEvent];
 }>();
 export type VueDadataEmits = typeof emit;
 
@@ -59,7 +60,8 @@ const {
   handleInputFocus,
   handleInputBlur,
   handleSuggestionClick,
-  setSuggestion,
+
+  update,
   clear,
   show,
   hide,
@@ -117,19 +119,10 @@ const allInputProps = computed<InputHTMLAttributes>(
     }) satisfies InputHTMLAttributes,
 );
 
-const suggestionsHintShown = computed(
-  () => suggestionsList.value.length && options.suggestionsHint,
-);
-const noSuggestionsHintShown = computed(
-  () => !suggestionsList.value.length && options.noSuggestionsHint,
-);
-
-const hintShown = computed(() => suggestionsHintShown.value || noSuggestionsHintShown.value);
-
 const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
   let subtitle = '';
 
-  // // @todo For `address` we need to show history_values
+  // // TODO: For `address` we need to show history_values
   // // only if query part doesn't match `value` but matches one of `history_values`.
   // // If we show in all cases when history_values is present, we have odd notes like
   // // like "бывш. Ленинград" for "г Санкт-Петербург"
@@ -140,14 +133,14 @@ const prepareSubtitleHtml = (suggestion: DadataSuggestion): string => {
   //   }
   // }
 
-  // @todo For `party` we need to show additional info based on what was is matches to the query.
+  // TODO: For `party` we need to show additional info based on what was is matches to the query.
   // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
   if (options.suggestType === 'party') {
     const partySuggestion = suggestion as PartySuggestion;
     subtitle = `${partySuggestion.data.inn} ${partySuggestion.data.address?.value}`;
   }
 
-  // @todo For `party` we need to show additional info based on what was is matches to the query.
+  // TODO: For `party` we need to show additional info based on what was is matches to the query.
   // Default should be `inn` but if 'party' was found by ogrn, then show ogrn, etc
   else if (options.suggestType === 'bank') {
     const bankSuggestion = suggestion as BankSuggestion;
@@ -169,28 +162,34 @@ defineExpose({
   suggestionsList,
   isDropdownVisible,
   isFocused,
-  focus: () => inputRef.value?.focus(),
-  blur: () => inputRef.value?.blur(),
-  setSuggestion,
+  update,
   clear,
   show,
   hide,
+  blur: () => inputRef.value?.blur(),
+  focus: () => inputRef.value?.focus(),
 });
 </script>
 
 <template>
   <div :class="mergedClasses.container">
-    <!-- Slot for the whole input wrapper. User can pass his custom input here -->
-    <slot name="inputWrapper" :allInputProps :browserAutoProps :coreInputProps>
+    <!-- Slot for the whole input wrapper -->
+    <slot
+      name="inputWrapper"
+      v-bind="{ allInputProps, browserAutoProps, coreInputProps, mergedClasses }"
+    >
       <!-- Input wrapper -->
       <div :class="mergedClasses.inputWrapper">
-        <!-- Slot for the input only, preserve the wrapper. User can pass his custom input here as well -->
-        <slot name="input" :allInputProps :browserAutoProps :coreInputProps>
+        <!-- Slot for the input only, preserve the wrapper -->
+        <slot
+          name="input"
+          v-bind="{ allInputProps, browserAutoProps, coreInputProps, mergedClasses }"
+        >
           <input ref="inputRef" v-bind="allInputProps" />
         </slot>
 
         <!-- Slot for loaders, custom clear buttons, etc -->
-        <slot name="inputOverlay"></slot>
+        <slot name="inputOverlay" v-bind="{ mergedClasses }"></slot>
 
         <!-- Build-in clear button -->
         <button
@@ -208,25 +207,54 @@ defineExpose({
 
     <!-- The dropdown -->
     <div v-if="isDropdownVisible" :class="mergedClasses.dropdown">
-      <!-- Hint/slot -->
-      <slot name="hint">
-        <div v-if="hintShown" :class="mergedClasses.hint" @mousedown.prevent>
-          <template v-if="suggestionsHintShown"> {{ options.suggestionsHint }} </template>
-          <template v-else-if="noSuggestionsHintShown"> {{ options.noSuggestionsHint }} </template>
-        </div>
-      </slot>
+      <!-- Hint. We render it unconditionally (with :empty hidden in CSS) to make customization via slots easier -->
+      <div :class="mergedClasses.hint" @mousedown.prevent>
+        <slot
+          name="hint"
+          v-bind="{
+            suggestionsList,
+            suggestionsHint: options.suggestionsHint,
+            noSuggestionsHint: options.noSuggestionsHint,
+            mergedClasses,
+          }"
+        >
+          <!-- "Select an option or keep typing..." -->
+          <template v-if="suggestionsList.length && options.suggestionsHint">
+            {{ options.suggestionsHint }}
+          </template>
+
+          <!-- Nothing found -->
+          <template
+            v-else-if="
+              !suggestionsList.length &&
+              options.noSuggestionsHint &&
+              options.noSuggestionsHint !== true
+            "
+          >
+            {{ options.noSuggestionsHint }}
+          </template>
+        </slot>
+      </div>
 
       <!-- All suggestions items / slot -->
-      <slot name="suggestions" :handleSuggestionClick :navigatedIndex :suggestionsList>
+      <slot
+        name="suggestions"
+        v-bind="{ suggestionsList, navigatedIndex, handleSuggestionClick, mergedClasses }"
+      >
+        <!-- TODO: Replace direct iteration on `suggestionsList` with dedicated `suggestionsUI` array -->
+
         <!-- Suggestion item -->
         <template v-for="(suggestion, index) in suggestionsList" :key="index">
           <!-- Slot for the whole suggestionItem element (you need to attach click handler by yourself) -->
           <slot
             name="suggestionItem"
-            :handleSuggestionClick
-            :index
-            :isNavigated="index === navigatedIndex"
-            :suggestion
+            v-bind="{
+              suggestion,
+              index,
+              isNavigated: index === navigatedIndex,
+              handleSuggestionClick,
+              mergedClasses,
+            }"
           >
             <button
               :class="[
@@ -238,14 +266,22 @@ defineExpose({
               <!-- Slot only for contents (no need to handle clicks) -->
               <slot
                 name="suggestionItemContent"
-                :isNavigated="index === navigatedIndex"
-                :suggestion
+                v-bind="{
+                  suggestion,
+                  index,
+                  isNavigated: index === navigatedIndex,
+                  mergedClasses,
+                }"
               >
                 <!-- Slot for only title (value) of the suggestion -->
                 <slot
                   name="suggestionItemTitle"
-                  :isNavigated="index === navigatedIndex"
-                  :suggestion
+                  v-bind="{
+                    suggestion,
+                    index,
+                    isNavigated: index === navigatedIndex,
+                    mergedClasses,
+                  }"
                 >
                   <!-- Suggestion title (value) -->
                   <span
@@ -260,7 +296,7 @@ defineExpose({
                   >
                     <!-- title highlight chunks -->
                     <template
-                      v-for="(chunk, key) in matchWords(suggestion.value, queryModel)"
+                      v-for="(chunk, key) in highlightChunks(suggestion.value, queryModel)"
                       :key="key"
                     >
                       <mark v-if="chunk.match" :class="mergedClasses.highlightedText">{{
@@ -275,10 +311,15 @@ defineExpose({
                 <!-- Slot for only subtitle of the suggestion (for certain suggestions types) -->
                 <slot
                   name="suggestionItemSubtitle"
-                  :isNavigated="index === navigatedIndex"
-                  :suggestion
+                  v-bind="{
+                    suggestion,
+                    index,
+                    isNavigated: index === navigatedIndex,
+                    mergedClasses,
+                  }"
                 >
-                  <!-- Suggestion subtitle -->
+                  <!-- Suggestion subtitle. We render it unconditionally and hide :empty with CSS,
+                   though TODO: after introducing `suggestionsUI`, we should change this. -->
                   <div
                     :class="mergedClasses.suggestionSubtitle"
                     v-html="prepareSubtitleHtml(suggestion)"

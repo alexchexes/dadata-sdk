@@ -1,4 +1,5 @@
 import type { FioGenders, SuggestionsResponse } from '../common.types';
+import type { CleanResponse } from './clean.types';
 
 /**
  * @see https://dadata.ru/api/clean/name/
@@ -80,3 +81,5 @@ export interface FioSuggestion {
 }
 
 export type SuggestFioResponse = SuggestionsResponse<FioSuggestion>;
+
+export type CleanFioResponse = CleanResponse<FioClean>;

@@ -1,3 +1,5 @@
+import type { CleanResponse } from './clean.types';
+
 /**
  * Стандартизация дат
  * @see https://dadata.ru/api/clean/birthdate/
@@ -25,3 +27,5 @@ export interface DateClean {
    */
   qc: 0 | 1 | 2;
 }
+
+export type CleanDateResponse = CleanResponse<DateClean>;

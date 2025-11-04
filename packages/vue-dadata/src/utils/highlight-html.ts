@@ -1,4 +1,4 @@
-import { matchWords } from './match-words';
+import { highlightChunks } from './highlight-chunks';
 
 export function highlightHtml(
   text: string,
@@ -7,7 +7,7 @@ export function highlightHtml(
 ): string {
   const { tagName = 'mark', className = '' } = options;
 
-  return matchWords(text, query)
+  return highlightChunks(text, query)
     .map((chunk) =>
       chunk.match ? `<${tagName} class="${className}">${chunk.text}</${tagName}>` : chunk.text,
     )

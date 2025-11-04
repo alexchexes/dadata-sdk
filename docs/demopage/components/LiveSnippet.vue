@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, type PropType } from 'vue';
+import type { DadataSuggestion, VueDadataOptions } from '@dadata-sdk/vue';
+import vueLang from '@shikijs/langs/vue';
+// <-- only Vue grammar
+import materialTheme from '@shikijs/themes/material-theme-ocean';
 import { watchThrottled } from '@vueuse/core';
-import type { VueDadataOptions } from '@dadata-sdk/vue';
-
 // == Temp: use fine-grained bundle technique until release of VitePress with
 // == this commit https://github.com/vuejs/vitepress/commit/801648a4c9d91e7f96302932ac9247d5bdd64ef7
 // import { codeToHtml } from 'shiki';
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
-import vueLang from '@shikijs/langs/vue'; // <-- only Vue grammar
-import materialTheme from '@shikijs/themes/material-theme-ocean'; // <-- only that theme
+import { type PropType, computed, onUnmounted, ref } from 'vue';
+
+// <-- only that theme
 
 let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | null = null;
 
@@ -26,6 +28,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  query: {
+    type: String,
+    default: '',
+  },
+  suggestion: {
+    type: Object as PropType<DadataSuggestion | undefined>,
+    default: undefined,
+  },
 });
 
 const displayedOptions = computed(() =>
@@ -34,8 +44,20 @@ const displayedOptions = computed(() =>
 
 const sanitize = (str: string) => str.replace(/"/g, `'`);
 
+const ellipsis = (str: string, maxLen: number) =>
+  str && str.length > maxLen ? str.slice(0, maxLen) + '...' : str;
+
 const code = computed(() => {
-  const attrs = ['v-model="query"', 'v-model:suggestion="suggestion"'];
+  const suggestionStr = JSON.stringify(props.suggestion);
+  const suggestionComment = suggestionStr ? `/* ${ellipsis(suggestionStr, 25)} */` : '';
+  const queryComment = props.query
+    ? `/* ${ellipsis(props.query.replace(/(\*+)(\/+)/g, '$1 $2'), 100)} */`
+    : '';
+
+  const attrs = [
+    `v-model="query${queryComment}"`,
+    `v-model:suggestion="suggestion${suggestionComment}"`,
+  ];
 
   if (props.showToken) {
     attrs.push(`token="${sanitize(props.options.token)}"`);

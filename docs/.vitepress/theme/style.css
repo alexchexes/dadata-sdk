@@ -1,0 +1,25 @@
+.OASidebarItem-badge.OAMethodBadge--post {
+  display: none;
+}
+.OASidebarItem-badge.OAMethodBadge--get {
+  position: absolute;
+  left: -22px;
+  font-size: 9px;
+  padding: 0 2px;
+  opacity: 0.9;
+}
+.OASidebarItem {
+  padding: 0;
+}
+.OASidebarItem > :not([hidden]) ~ :not([hidden]) {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.VPHomeFeatures p.details > a {
+  color: var(--vp-c-brand-1);
+  text-decoration: underline;
+}
+.VPHomeFeatures p.details > a:hover {
+  text-decoration: none;
+}

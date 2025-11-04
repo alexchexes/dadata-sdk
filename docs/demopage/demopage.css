@@ -27,11 +27,11 @@
 
   input:focus-visible,
   textarea:focus-visible {
-    @apply ring-1 ring-gray-600 outline-none;
+    @apply outline-none ring-1 ring-gray-600;
   }
 
   select:focus-visible {
-    @apply ring-1 ring-gray-600 outline-none;
+    @apply outline-none ring-1 ring-gray-600;
   }
 
   label:hover {

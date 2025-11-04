@@ -3,27 +3,63 @@ type Chunk = {
   match: boolean;
 };
 
+/** A simple LRU cache for highlightChunks results */
+const CACHE_LIMIT = 200;
+const cache = new Map<string, Chunk[]>();
+
+function getCached(key: string): Chunk[] | undefined {
+  const value = cache.get(key);
+  if (value) {
+    // refresh entry for LRU behaviour
+    cache.delete(key);
+    cache.set(key, value);
+  }
+  return value;
+}
+
+function setCached(key: string, value: Chunk[]): void {
+  if (cache.size >= CACHE_LIMIT) {
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey !== undefined) cache.delete(oldestKey);
+  }
+  cache.set(key, value);
+}
+
 /**
- * Returns an array of chunks:
- * [
- *   { text: "...", match: true|false },
- *   ...
- * ]
+ * Break a piece of display text into an ordered array of highlightable chunks
+ * based on a (possibly multi‑word) search query.
  *
- * Features:
- *   - Case-insensitive matching
- *   - 'е' <-> 'ё' equivalence (two-way)
- *   - Splits query by whitespace/punctuation
- *   - OR logic across tokens (any token match => highlight)
- *   - Merges overlapping matches to produce continuous highlight chunks
+ * The function is designed for fast, case‑insensitive UI highlighting of Cyrillic
+ * or Latin text.  It normalises «е» / «ё» pairs, tokenises the query (splitting
+ * on punctuation, whitespace and letter‑digit boundaries) and performs an
+ * OR‑style search for every token inside the text.
+ *
+ * All token occurrences are recorded, overlapping intervals are merged, and the
+ * result is converted into a sequence like
+ * `[ { text: "…", match: false }, { text: "…", match: true }, … ]`
+ * so that callers can wrap the `match: true` segments (e.g. with `<mark>`).
+ *
+ * To avoid needless recomputation, results for identical `(text, query)` pairs
+ * are cached in‑memory (LRU behaviour, up to `CACHE_LIMIT` entries).
+ *
+ * @param text   Arbitrary display string that may contain letters and digits.
+ * @param query  Raw user search query.
+ * @returns      Array of `{ text, match }` objects ready for rendering.
  */
-export function matchWords(text: string, query: string): Chunk[] {
-  // Quick fallback if either is empty
+export function highlightChunks(text: string, query: string): Chunk[] {
+  const cacheKey = text + '\u0001' + query;
+  const cached = getCached(cacheKey);
+  if (cached) {
+    return cached;
+  }
+  // Quick fallback if either is empty, caching is unnecessary
   if (!text || !text.trim()) {
-    return [{ text, match: false }];
+    const result = [{ text, match: false }];
+    return result;
   }
   if (!query || !query.trim()) {
-    return [{ text, match: false }];
+    const result = [{ text, match: false }];
+    return result;
   }
 
   // 1) Normalize text so 'ё' and 'е' are treated equally + lowercased
@@ -38,14 +74,18 @@ export function matchWords(text: string, query: string): Chunk[] {
 
   // 4) If no intervals found, return the whole text as one chunk
   if (intervals.length === 0) {
-    return [{ text, match: false }];
+    const result = [{ text, match: false }];
+    setCached(cacheKey, result);
+    return result;
   }
 
   // 5) Merge overlapping intervals
   const merged = mergeIntervals(intervals);
 
   // 6) Build final chunks from merged intervals
-  return buildChunks(text, merged);
+  const chunks = buildChunks(text, merged);
+  setCached(cacheKey, chunks);
+  return chunks;
 }
 
 /** Lowercase & unify ё→е */

@@ -4,7 +4,7 @@ sidebar: false
 ---
 
 <script setup>
-import DemoPage from './demopage/DemoPage.vue'
+import DemoPage from '../demopage/DemoPage.vue'
 </script>
 
 ::: raw

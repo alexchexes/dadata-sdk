@@ -11,8 +11,8 @@
     "vue",
     "vue3"
   ],
-  "homepage": "https://github.com/rusproject/vue-dadata",
-  "repository": "https://github.com/rusproject/vue-dadata",
+  "homepage": "https://github.com/alexchexes/dadata-sdk",
+  "repository": "https://github.com/alexchexes/dadata-sdk",
   "license": "MIT",
   "author": "Alex Chexes <alexchexes@gmail.com>",
   "type": "module",
@@ -66,7 +66,7 @@
     "vue-tsc": "^2.2.10"
   },
   "peerDependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.18"
   },
   "engines": {
     "node": ">=22"

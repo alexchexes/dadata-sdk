@@ -1,6 +1,8 @@
-import { defineConfig } from 'vitepress';
-import { resolve, dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitepress';
+
+import { getSidebar } from '../utils/getSidebar';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const vuePkg = resolve(root, '../../packages/vue-dadata');
@@ -38,7 +40,7 @@ export default defineConfig({
 
   // <meta name="description" ...>
   description:
-    'Full API contract in TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
+    'Full API specification in OpenAPI file, TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -67,39 +69,18 @@ export default defineConfig({
     root: {
       label: 'English',
       lang: 'en',
-      link: '/',
+      link: '/en',
 
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Home', link: '/' },
-          { text: 'Demo', link: '/demo' },
-          { text: 'Vue', link: '/vue' },
-          { text: 'API endpoints', link: '/endpoints' },
+          { text: 'OpenAPI spec', link: '/en/spec' },
+          { text: 'API endpoints', link: '/en/api' },
+          { text: 'Vue', link: '/en/vue' },
+          { text: 'Demo', link: '/en/demo' },
         ],
 
-        sidebar: [
-          {
-            items: [
-              { text: 'Demo', link: '/demo' },
-              { text: 'API endpoints', link: '/endpoints' },
-              { text: 'Vue component', link: '/vue' },
-            ],
-          },
-          {
-            items: [{ text: 'Schema generator', link: '/schema-gen' }],
-          },
-          {
-            text: 'External links',
-            items: [
-              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
-              {
-                text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
-              },
-            ],
-          },
-        ],
+        sidebar: [...getSidebar('en')],
       },
     },
     ru: {
@@ -109,44 +90,33 @@ export default defineConfig({
 
       // <meta name="description" ...>
       description:
-        'Неофициальный SDK для работы с API DaData.ru: Полное описание API в типах TypeScript, JSON-schema всех API «Дадаты», полнофункциональный компонент «подсказок» для Vue, и плейграунд чтобы тестировать подсказки в реальном времени.',
+        'Неофициальный SDK для работы с API DaData.ru: Полное описание API в виде OpenAPI спецификации, JSON-схем и типов TypeScript, полнофункциональный компонент «подсказок» для Vue 3, и плейграунд, чтобы тестировать подсказки в реальном времени',
 
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-          { text: 'Главная', link: '/ru/' },
-          { text: 'Демо', link: '/ru/demo' },
+          { text: 'OpenAPI', link: '/ru/spec' },
+          { text: 'Список API', link: '/ru/api' },
           { text: 'Vue', link: '/ru/vue' },
-          { text: 'Список API', link: '/ru/endpoints' },
+          { text: 'Демо', link: '/ru/demo' },
         ],
 
-        sidebar: [
-          {
-            items: [
-              { text: 'Демо', link: '/ru/demo' },
-              { text: 'Список API «Дадаты»', link: '/ru/endpoints' },
-              { text: 'Vue компонент', link: '/ru/vue' },
-            ],
-          },
-          {
-            items: [{ text: 'Генератор схем', link: '/ru/schema-gen' }],
-          },
-          {
-            text: 'Внешние ссылки',
-            items: [
-              { text: 'GitHub Repo', link: 'https://github.com/alexchexes/dadata-sdk' },
-              {
-                text: 'JSON-schema',
-                link: 'https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types/json-schema',
-              },
-            ],
-          },
-        ],
+        sidebar: [...getSidebar('ru')],
 
         outline: {
-          label: 'Содержание',
+          label: 'Оглавление',
         },
       },
     },
+  },
+  transformPageData(pageData) {
+    // params returned from [*].paths.js|ts are available here
+    const pageTitle = pageData.params?.pageTitle;
+
+    if (pageTitle) {
+      pageData.title = pageTitle;
+      pageData.frontmatter ??= {};
+      pageData.frontmatter.title = pageTitle;
+    }
   },
 });
