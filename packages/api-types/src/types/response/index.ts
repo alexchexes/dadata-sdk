@@ -25,5 +25,5 @@ export * from './party.types';
 export * from './passport.types';
 export * from './phone.types';
 export * from './postal_unit.types';
-export * from './region_court.types';
+export * from './court.types';
 export * from './vehicle.types';

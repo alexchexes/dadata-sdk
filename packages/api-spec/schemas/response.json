@@ -4878,7 +4878,7 @@
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
-    "RegionCourtSuggestion": {
+    "CourtSuggestion": {
       "type": "object",
       "properties": {
         "value": {
@@ -4886,26 +4886,49 @@
           "description": "Название суда одной строкой (как показывается в списке подсказок)"
         },
         "unrestricted_value": { "type": "string", "description": "То же, что и value" },
-        "data": { "$ref": "#/definitions/RegionCourtSuggestionData", "description": "Подробности о судебном участке" }
+        "data": { "$ref": "#/definitions/CourtSuggestionData", "description": "Подробности о судебном участке" }
       },
       "required": ["value", "unrestricted_value", "data"],
-      "description": "@see https://dadata.ru/api/suggest/region_court/"
+      "description": "@see https://dadata.ru/api/suggest/court/"
     },
-    "RegionCourtSuggestionData": {
+    "CourtSuggestionData": {
       "type": "object",
       "properties": {
-        "code": { "type": "string", "description": "Код суда" },
+        "code": { "type": "string", "description": "Код суда (уникальный), например `52RS0001`" },
         "name": { "type": "string", "description": "Полное название суда" },
-        "region_code": { "type": "string", "description": "Код региона (первые 2 цифры КЛАДР-кода)" }
+        "inn": {
+          "type": ["string", "null"],
+          "description": "ИНН суда\n\nЮрлицами являются и ИНН имеют все суды, **кроме**:\n- Мировой суд (MS)\n- Районный, городской, межрайонный суд (RS)\n- Гарнизонный военный суд (GV)"
+        },
+        "court_type": {
+          "type": "string",
+          "enum": ["AV", "AJ", "VS", "GV", "KV", "KJ", "OS", "OV", "RS", "AA", "AO", "AI", "AS", "MS"],
+          "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд\nТип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
+        },
+        "court_type_name": { "type": "string", "description": "Наименование типа суда" },
+        "address": { "type": "string", "description": "Адрес суда" },
+        "legal_address": {
+          "type": ["string", "null"],
+          "description": "Юридический адрес суда. Только у судов, которые являются юрлицами"
+        },
+        "website": {
+          "type": ["string", "null"],
+          "description": "Сайт суда, например: `http://dzerzhinsky.svd.sudrf.ru`"
+        }
       },
-      "required": ["code", "name", "region_code"]
+      "required": ["code", "name", "inn", "court_type", "court_type_name", "address", "legal_address", "website"]
     },
-    "SuggestRegionCourtResponse": {
+    "CourtTypeCode": {
+      "type": "string",
+      "enum": ["AV", "AJ", "VS", "GV", "KV", "KJ", "OS", "OV", "RS", "AA", "AO", "AI", "AS", "MS"],
+      "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
+    },
+    "SuggestCourtResponse": {
       "type": "object",
       "properties": {
         "suggestions": {
           "type": "array",
-          "items": { "$ref": "#/definitions/RegionCourtSuggestion" },
+          "items": { "$ref": "#/definitions/CourtSuggestion" },
           "description": "Массив подсказок или пустой массив"
         }
       },

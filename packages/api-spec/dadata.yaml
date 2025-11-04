@@ -650,36 +650,36 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
 
-  /suggest/region_court:
+  /suggest/court:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
-      tags: [suggest, region_court]
-      summary: Подсказки по мировым судам России
+      tags: [suggest, court]
+      summary: Подсказки по судам России
       description: |
         Поиск выполняется по полям:
-        - `code` - код таможни
-        - `name` - полное наименование
-      externalDocs: { url: https://dadata.ru/api/suggest/region_court/ }
-      operationId: suggestRegionCourt
+        - `code` - Код суда (уникальный)
+        - `name` - Полное название суда
+        - `address` - Адрес суда
+        - `legal_address` - Юридический адрес суда. Только у судов, которые являются юрлицами
+      externalDocs: { url: https://dadata.ru/api/suggest/court/ }
+      operationId: suggestCourt
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: './schemas/request.json#/definitions/SuggestRegionCourtPayload' }
+            schema: { $ref: './schemas/request.json#/definitions/SuggestCourtPayload' }
             examples:
               simple_query:
-                value: { query: 'нижний' }
-              filter_region_code:
-                description: Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)
-                value: { query: 'ленинск', filters: [{ region_code: '58' }] }
+                value: { query: 'ленинск' }
+              filter_court_type:
+                description: Фильтрация работает по полю `court_type` (двухбуквенный тип суда)
+                value: { query: 'ленинск', filters: [{ court_type: 'MS' }] }
       responses:
         '200':
           description: Запрос успешно обработан
           content:
             application/json:
-              {
-                schema: { $ref: './schemas/response.json#/definitions/SuggestRegionCourtResponse' },
-              }
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestCourtResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1309,21 +1309,24 @@ paths:
         '429': { $ref: '#/components/responses/TooManyRequests' }
         '5XX': { $ref: '#/components/responses/InternalServerError' }
 
-  /findById/region_court:
+  /findById/court:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
     post:
-      tags: [findById, region_court]
-      summary: Мировой суд по коду
+      tags: [findById, court]
+      summary: Суд по коду
       description: |
-        Находит запись в справочнике мировых судов России по коду суда
-        Источник данных: [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)
-      externalDocs: { url: https://dadata.ru/api/suggest/region_court/ }
-      operationId: findRegionCourt
+        Находит запись в справочнике судов России по коду суда
+        Источники данных:
+          - [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)
+          - [Федеральные арбитражные суды](https://arbitr.ru/)
+          - Сайты судов
+      externalDocs: { url: https://dadata.ru/api/suggest/court/ }
+      operationId: findCourt
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: './schemas/request.json#/definitions/FindRegionCourtPayload' }
+            schema: { $ref: './schemas/request.json#/definitions/FindCourtPayload' }
             examples:
               simple_query:
                 value: { query: '52MS0022' }
@@ -1332,9 +1335,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              {
-                schema: { $ref: './schemas/response.json#/definitions/SuggestRegionCourtResponse' },
-              }
+              { schema: { $ref: './schemas/response.json#/definitions/SuggestCourtResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }

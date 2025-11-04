@@ -16,6 +16,7 @@ import type {
   PartyStatus,
   PartyType,
   RadiusFilter,
+  SuggestCourtFilter,
   SuggestFmsUnitFilter,
   SuggestFnsUnitFilter,
   SuggestMetroFilter,
@@ -25,7 +26,6 @@ import type {
   SuggestPartyByFilter,
   SuggestPartyKzFilter,
   SuggestPostalUnitFilter,
-  SuggestRegionCourtFilter,
   SuggestType,
 } from '@dadata-sdk/api-types';
 import type { InputHTMLAttributes } from 'vue';
@@ -232,7 +232,7 @@ export interface VueDadataOptions {
   fioGender?: FioGenders;
   /**
    * Filters for APIs that don't have dedicated options props,
-   * like `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `region_court`.
+   * like `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `court`.
    *
    * To set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`.
    */
@@ -246,7 +246,7 @@ export interface VueDadataOptions {
     | SuggestPartyByFilter
     | SuggestPartyKzFilter
     | SuggestPostalUnitFilter
-    | SuggestRegionCourtFilter
+    | SuggestCourtFilter
   >;
 
   // ***************************

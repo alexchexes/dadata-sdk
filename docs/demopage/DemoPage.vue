@@ -82,7 +82,7 @@ const SUGGEST_TYPES_ORDER: SuggestType[] = [
   'postal_unit',
   'fns_unit',
   'fts_unit',
-  'region_court',
+  'court',
   'metro',
   'car_brand',
   'mktu',
@@ -840,7 +840,7 @@ const showSuggestionsList = ref(false);
                 `okpd2`,
                 `okved2`,
                 `postal_unit`,
-                `region_court`,
+                `court`,
               ].includes(options.suggestType as string)
             "
             v-model="options.filters"

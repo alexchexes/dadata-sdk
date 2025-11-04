@@ -1,9 +1,12 @@
-import type { RawAxiosRequestHeaders } from 'axios';
 import type {
+  DistributivePartial,
+  MergeAll,
+  OneOrMany,
   SuggestAddressPayload,
   SuggestBankPayload,
   SuggestCarBrandPayload,
   SuggestCountryPayload,
+  SuggestCourtPayload,
   SuggestCurrencyPayload,
   SuggestEmailPayload,
   SuggestFiasPayload,
@@ -20,12 +23,10 @@ import type {
   SuggestPartyKzPayload,
   SuggestPartyPayload,
   SuggestPostalUnitPayload,
-  SuggestRegionCourtPayload,
   SuggestType,
-  DistributivePartial,
-  MergeAll,
-  OneOrMany,
 } from '@dadata-sdk/api-types';
+import type { RawAxiosRequestHeaders } from 'axios';
+
 import type { SuggestAddressOptions } from './suggest-options-address.types';
 import type { SuggestBankOptions } from './suggest-options-bank.types';
 import type { SuggestFiasOptions } from './suggest-options-fias.types';
@@ -76,7 +77,7 @@ export type SuggestOptions =
   | SuggestCarBrandOptions
   | SuggestFnsUnitOptions
   | SuggestFtsUnitOptions
-  | SuggestRegionCourtOptions
+  | SuggestCourtOptions
   | SuggestMetroOptions
   | SuggestMktuOptions
   | SuggestCurrencyOptions
@@ -112,7 +113,7 @@ export type MergedSuggestOptions = MergeAll<
     SuggestCarBrandOptions,
     SuggestFnsUnitOptions,
     SuggestFtsUnitOptions,
-    SuggestRegionCourtOptions,
+    SuggestCourtOptions,
     SuggestMetroOptions,
     SuggestMktuOptions,
     SuggestCurrencyOptions,
@@ -136,7 +137,7 @@ export type SuggestEmailOptions = BaseOptionsWithType<'email'>;
 export type SuggestCountryOptions = BaseOptionsWithType<'country'>;
 export type SuggestCarBrandOptions = BaseOptionsWithType<'car_brand'>;
 export type SuggestFtsUnitOptions = BaseOptionsWithType<'fts_unit'>;
-export type SuggestRegionCourtOptions = BaseOptionsWithType<'region_court'>;
+export type SuggestCourtOptions = BaseOptionsWithType<'court'>;
 export type SuggestCurrencyOptions = BaseOptionsWithType<'currency'>;
 export type SuggestOktmoOptions = BaseOptionsWithType<'oktmo'>;
 
@@ -172,7 +173,7 @@ export type SuggestPayload =
   | SuggestPartyKzPayload
   | SuggestPartyPayload
   | SuggestPostalUnitPayload
-  | SuggestRegionCourtPayload;
+  | SuggestCourtPayload;
 
 /** Union of all possible 'suggest' payload types where each property of each payload type is optional */
 export type OptionalSuggestPayload = DistributivePartial<SuggestPayload>;

@@ -1,5 +1,4 @@
 // payload types for every /findById endpoint
-
 import type { BranchType, PartyStatus, PartyType } from '../common.types';
 import type { DivisionType, Language } from './suggest-payload-address.types';
 
@@ -197,10 +196,10 @@ export interface FindFtsUnitPayload extends BaseFindByIdPayload {
 }
 
 /**
- * Мировые суды
- * @see https://dadata.ru/api/suggest/region_court/
+ * Суды
+ * @see https://dadata.ru/api/suggest/court/
  */
-export interface FindRegionCourtPayload extends BaseFindByIdPayload {
+export interface FindCourtPayload extends BaseFindByIdPayload {
   /**
    * Код суда
    * @example { "query": "52MS0022" }

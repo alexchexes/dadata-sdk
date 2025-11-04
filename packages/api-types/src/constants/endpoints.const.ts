@@ -22,7 +22,7 @@ export const SUGGEST_TYPES = [
 
   'fns_unit', // https://dadata.ru/api/suggest/fns_unit/
   'fts_unit', // https://dadata.ru/api/suggest/fts_unit/
-  'region_court', // https://dadata.ru/api/suggest/region_court/
+  'court', // https://dadata.ru/api/suggest/court/
   'metro', // https://dadata.ru/api/suggest/metro/
   'mktu', // https://dadata.ru/api/suggest/mktu/
   'currency', // https://dadata.ru/api/suggest/currency/

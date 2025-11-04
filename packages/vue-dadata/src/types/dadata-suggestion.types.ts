@@ -5,6 +5,7 @@ import type {
   BankSuggestion,
   CarBrandSuggestion,
   CountrySuggestion,
+  CourtSuggestion,
   CurrencySuggestion,
   EmailSuggestion,
   FiasSuggestion,
@@ -17,12 +18,11 @@ import type {
   Okpd2Suggestion,
   OktmoSuggestion,
   Okved2Suggestion,
-  RichPartySuggestion,
   PartyBySuggestion,
   PartyKzSuggestion,
   PartySuggestion,
   PostalUnitSuggestion,
-  RegionCourtSuggestion,
+  RichPartySuggestion,
 } from '@dadata-sdk/api-types';
 
 export type DadataSuggestion =
@@ -49,4 +49,4 @@ export type DadataSuggestion =
   | PartyKzSuggestion
   | PartySuggestion
   | PostalUnitSuggestion
-  | RegionCourtSuggestion;
+  | CourtSuggestion;

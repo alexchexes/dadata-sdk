@@ -20,5 +20,5 @@ export * from './suggest-payload-party_by.types';
 export * from './suggest-payload-party_kz.types';
 export * from './suggest-payload-party.types';
 export * from './suggest-payload-postal_unit.types';
-export * from './suggest-payload-region_court.types';
+export * from './suggest-payload-court.types';
 export * from './suggest-payload.types';

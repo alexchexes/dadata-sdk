@@ -88,7 +88,7 @@ export default {
 
       'fns_unit': 'Налоговые',
       'fts_unit': 'Таможни',
-      'region_court': 'Суды',
+      'court': 'Суды',
       'metro': 'Станции метро',
       'mktu': 'МКТУ',
       'currency': 'Валюты',

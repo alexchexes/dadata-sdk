@@ -23,7 +23,7 @@
             "car_brand",
             "fns_unit",
             "fts_unit",
-            "region_court",
+            "court",
             "metro",
             "mktu",
             "currency",
@@ -224,7 +224,7 @@
             { "$ref": "#/definitions/SuggestPartyByFilter" },
             { "$ref": "#/definitions/SuggestPartyKzFilter" },
             { "$ref": "#/definitions/SuggestPostalUnitFilter" },
-            { "$ref": "#/definitions/SuggestRegionCourtFilter" },
+            { "$ref": "#/definitions/SuggestCourtFilter" },
             {
               "type": "array",
               "items": {
@@ -238,12 +238,12 @@
                   { "$ref": "#/definitions/SuggestPartyByFilter" },
                   { "$ref": "#/definitions/SuggestPartyKzFilter" },
                   { "$ref": "#/definitions/SuggestPostalUnitFilter" },
-                  { "$ref": "#/definitions/SuggestRegionCourtFilter" }
+                  { "$ref": "#/definitions/SuggestCourtFilter" }
                 ]
               }
             }
           ],
-          "description": "Filters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `region_court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
+          "description": "Filters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
         },
         "debounce": {
           "type": "number",
@@ -340,7 +340,7 @@
         "car_brand",
         "fns_unit",
         "fts_unit",
-        "region_court",
+        "court",
         "metro",
         "mktu",
         "currency",
@@ -574,8 +574,8 @@
             },
             {
               "type": "array",
-              "items": { "$ref": "#/definitions/SuggestRegionCourtFilter" },
-              "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+              "items": { "$ref": "#/definitions/SuggestCourtFilter" },
+              "description": "Фильтрация работает по полю `court_type` (двухбуквенный тип суда):"
             }
           ],
           "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
@@ -810,12 +810,12 @@
         }
       }
     },
-    "SuggestRegionCourtFilter": {
+    "SuggestCourtFilter": {
       "type": "object",
       "properties": {
-        "region_code": {
+        "court_type": {
           "type": "string",
-          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
+          "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
         }
       }
     },

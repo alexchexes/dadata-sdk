@@ -53,7 +53,7 @@
         "car_brand",
         "fns_unit",
         "fts_unit",
-        "region_court",
+        "court",
         "metro",
         "mktu",
         "currency",
@@ -312,7 +312,7 @@
       "required": ["query"],
       "description": "Таможни\n@see https://dadata.ru/api/suggest/fts_unit/"
     },
-    "FindRegionCourtPayload": {
+    "FindCourtPayload": {
       "type": "object",
       "properties": {
         "query": {
@@ -328,7 +328,7 @@
         }
       },
       "required": ["query"],
-      "description": "Мировые суды\n@see https://dadata.ru/api/suggest/region_court/"
+      "description": "Суды\n@see https://dadata.ru/api/suggest/court/"
     },
     "FindCarBrandPayload": {
       "type": "object",
@@ -1157,7 +1157,7 @@
         }
       }
     },
-    "SuggestRegionCourtPayload": {
+    "SuggestCourtPayload": {
       "type": "object",
       "properties": {
         "query": { "type": "string", "description": "Query string\n@maxLength 300", "maxLength": 300 },
@@ -1170,19 +1170,19 @@
         },
         "filters": {
           "type": "array",
-          "items": { "$ref": "#/definitions/SuggestRegionCourtFilter" },
-          "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+          "items": { "$ref": "#/definitions/SuggestCourtFilter" },
+          "description": "Фильтрация работает по полю `court_type` (двухбуквенный тип суда):"
         }
       },
       "required": ["query"],
-      "description": "@see https://dadata.ru/api/suggest/region_court/"
+      "description": "@see https://dadata.ru/api/suggest/court/"
     },
-    "SuggestRegionCourtFilter": {
+    "SuggestCourtFilter": {
       "type": "object",
       "properties": {
-        "region_code": {
+        "court_type": {
           "type": "string",
-          "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
+          "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
         }
       }
     },

@@ -23,7 +23,7 @@ const directoryTypes = [
   'postal_unit',
   'fns_unit',
   'fts_unit',
-  'region_court',
+  'court',
   'metro',
   'cars',
   'country',

@@ -1035,7 +1035,7 @@
         }
       }
     },
-    "/suggest/region_court": {
+    "/suggest/court": {
       "servers": [
         {
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
@@ -1044,34 +1044,34 @@
       "post": {
         "tags": [
           "suggest",
-          "region_court"
+          "court"
         ],
-        "summary": "Подсказки по мировым судам России",
-        "description": "Поиск выполняется по полям:\n- `code` - код таможни\n- `name` - полное наименование\n",
+        "summary": "Подсказки по судам России",
+        "description": "Поиск выполняется по полям:\n- `code` - Код суда (уникальный)\n- `name` - Полное название суда\n- `address` - Адрес суда\n- `legal_address` - Юридический адрес суда. Только у судов, которые являются юрлицами\n",
         "externalDocs": {
-          "url": "https://dadata.ru/api/suggest/region_court/"
+          "url": "https://dadata.ru/api/suggest/court/"
         },
-        "operationId": "suggestRegionCourt",
+        "operationId": "suggestCourt",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SuggestRegionCourtPayload"
+                "$ref": "#/components/schemas/SuggestCourtPayload"
               },
               "examples": {
                 "simple_query": {
                   "value": {
-                    "query": "нижний"
+                    "query": "ленинск"
                   }
                 },
-                "filter_region_code": {
-                  "description": "Фильтрация по полю region_code (первые 2 цифры КЛАДР-кода региона)",
+                "filter_court_type": {
+                  "description": "Фильтрация работает по полю `court_type` (двухбуквенный тип суда)",
                   "value": {
                     "query": "ленинск",
                     "filters": [
                       {
-                        "region_code": "58"
+                        "court_type": "MS"
                       }
                     ]
                   }
@@ -1086,7 +1086,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuggestRegionCourtResponse"
+                  "$ref": "#/components/schemas/SuggestCourtResponse"
                 }
               }
             }
@@ -2465,7 +2465,7 @@
         }
       }
     },
-    "/findById/region_court": {
+    "/findById/court": {
       "servers": [
         {
           "url": "https://suggestions.dadata.ru/suggestions/api/4_1/rs"
@@ -2474,20 +2474,20 @@
       "post": {
         "tags": [
           "findById",
-          "region_court"
+          "court"
         ],
-        "summary": "Мировой суд по коду",
-        "description": "Находит запись в справочнике мировых судов России по коду суда\nИсточник данных: [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)\n",
+        "summary": "Суд по коду",
+        "description": "Находит запись в справочнике судов России по коду суда\nИсточники данных:\n  - [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)\n  - [Федеральные арбитражные суды](https://arbitr.ru/)\n  - Сайты судов\n",
         "externalDocs": {
-          "url": "https://dadata.ru/api/suggest/region_court/"
+          "url": "https://dadata.ru/api/suggest/court/"
         },
-        "operationId": "findRegionCourt",
+        "operationId": "findCourt",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FindRegionCourtPayload"
+                "$ref": "#/components/schemas/FindCourtPayload"
               },
               "examples": {
                 "simple_query": {
@@ -2505,7 +2505,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuggestRegionCourtResponse"
+                  "$ref": "#/components/schemas/SuggestCourtResponse"
                 }
               }
             }
@@ -11139,16 +11139,16 @@
         ],
         "description": "Объект с массивом подсказок"
       },
-      "SuggestRegionCourtFilter": {
+      "SuggestCourtFilter": {
         "type": "object",
         "properties": {
-          "region_code": {
+          "court_type": {
             "type": "string",
-            "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) мирового суда"
+            "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
           }
         }
       },
-      "SuggestRegionCourtPayload": {
+      "SuggestCourtPayload": {
         "type": "object",
         "properties": {
           "query": {
@@ -11166,39 +11166,89 @@
           "filters": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SuggestRegionCourtFilter"
+              "$ref": "#/components/schemas/SuggestCourtFilter"
             },
-            "description": "Фильтрация мировых судов\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
+            "description": "Фильтрация работает по полю `court_type` (двухбуквенный тип суда):"
           }
         },
         "required": [
           "query"
         ],
-        "description": "@see https://dadata.ru/api/suggest/region_court/"
+        "description": "@see https://dadata.ru/api/suggest/court/"
       },
-      "RegionCourtSuggestionData": {
+      "CourtSuggestionData": {
         "type": "object",
         "properties": {
           "code": {
             "type": "string",
-            "description": "Код суда"
+            "description": "Код суда (уникальный), например `52RS0001`"
           },
           "name": {
             "type": "string",
             "description": "Полное название суда"
           },
-          "region_code": {
+          "inn": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ИНН суда\n\nЮрлицами являются и ИНН имеют все суды, **кроме**:\n- Мировой суд (MS)\n- Районный, городской, межрайонный суд (RS)\n- Гарнизонный военный суд (GV)"
+          },
+          "court_type": {
             "type": "string",
-            "description": "Код региона (первые 2 цифры КЛАДР-кода)"
+            "enum": [
+              "AV",
+              "AJ",
+              "VS",
+              "GV",
+              "KV",
+              "KJ",
+              "OS",
+              "OV",
+              "RS",
+              "AA",
+              "AO",
+              "AI",
+              "AS",
+              "MS"
+            ],
+            "description": "Тип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд\nТип суда\n\n- `AV` — Апелляционный военный суд\n- `AJ` — Апелляционный суд общей юрисдикции\n- `VS` — Верховный Суд Российской Федерации\n- `GV` — Гарнизонный военный суд\n- `KV` — Кассационный военный суд\n- `KJ` — Кассационный суд общей юрисдикции\n- `OS` — Областной и равный ему суд\n- `OV` — Окружной (флотский) военный суд\n- `RS` — Районный, городской, межрайонный суд\n- `AA` — Арбитражный апелляционный суд\n- `AO` — Арбитражный суд округа\n- `AI` — Суд по интеллектуальным правам\n- `AS` — Арбитражный суд области\n- `MS` — Мировой суд"
+          },
+          "court_type_name": {
+            "type": "string",
+            "description": "Наименование типа суда"
+          },
+          "address": {
+            "type": "string",
+            "description": "Адрес суда"
+          },
+          "legal_address": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Юридический адрес суда. Только у судов, которые являются юрлицами"
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Сайт суда, например: `http://dzerzhinsky.svd.sudrf.ru`"
           }
         },
         "required": [
           "code",
           "name",
-          "region_code"
+          "inn",
+          "court_type",
+          "court_type_name",
+          "address",
+          "legal_address",
+          "website"
         ]
       },
-      "RegionCourtSuggestion": {
+      "CourtSuggestion": {
         "type": "object",
         "properties": {
           "value": {
@@ -11210,7 +11260,7 @@
             "description": "То же, что и value"
           },
           "data": {
-            "$ref": "#/components/schemas/RegionCourtSuggestionData",
+            "$ref": "#/components/schemas/CourtSuggestionData",
             "description": "Подробности о судебном участке"
           }
         },
@@ -11219,15 +11269,15 @@
           "unrestricted_value",
           "data"
         ],
-        "description": "@see https://dadata.ru/api/suggest/region_court/"
+        "description": "@see https://dadata.ru/api/suggest/court/"
       },
-      "SuggestRegionCourtResponse": {
+      "SuggestCourtResponse": {
         "type": "object",
         "properties": {
           "suggestions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/RegionCourtSuggestion"
+              "$ref": "#/components/schemas/CourtSuggestion"
             },
             "description": "Массив подсказок или пустой массив"
           }
@@ -14361,7 +14411,7 @@
         ],
         "description": "Таможни\n@see https://dadata.ru/api/suggest/fts_unit/"
       },
-      "FindRegionCourtPayload": {
+      "FindCourtPayload": {
         "type": "object",
         "properties": {
           "query": {
@@ -14383,7 +14433,7 @@
         "required": [
           "query"
         ],
-        "description": "Мировые суды\n@see https://dadata.ru/api/suggest/region_court/"
+        "description": "Суды\n@see https://dadata.ru/api/suggest/court/"
       },
       "FindCarBrandPayload": {
         "type": "object",
