@@ -5161,14 +5161,14 @@
               "null",
               "string"
             ],
-            "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
           },
           "room_type_full": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Тип комнаты\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
           },
           "room": {
             "type": [
@@ -5964,14 +5964,14 @@
               "null",
               "string"
             ],
-            "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
           },
           "room_type_full": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Тип комнаты\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
           },
           "room": {
             "type": [
@@ -7713,14 +7713,14 @@
               "null",
               "string"
             ],
-            "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
           },
           "room_type_full": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Тип комнаты\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
           },
           "room": {
             "type": [
@@ -8271,8 +8271,11 @@
             "description": "КПП"
           },
           "kpp_largest": {
-            "type": "null",
-            "description": "Не заполняется"
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "КПП крупнейшего налогоплательщика"
           },
           "ogrn": {
             "type": "string",
@@ -9600,14 +9603,14 @@
               "null",
               "string"
             ],
-            "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
           },
           "room_type_full": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Тип комнаты\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
           },
           "room": {
             "type": [
@@ -13682,8 +13685,11 @@
             "description": "КПП"
           },
           "kpp_largest": {
-            "type": "null",
-            "description": "Не заполняется"
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "КПП крупнейшего налогоплательщика"
           },
           "ogrn": {
             "type": "string",
@@ -15251,14 +15257,14 @@
               "null",
               "string"
             ],
-            "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
           },
           "room_type_full": {
             "type": [
               "null",
               "string"
             ],
-            "description": "Тип комнаты\n* (подсказки: v22.8+)"
+            "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
           },
           "room": {
             "type": [
@@ -16326,8 +16332,11 @@
             "description": "КПП"
           },
           "kpp_largest": {
-            "type": "null",
-            "description": "Не заполняется"
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "КПП крупнейшего налогоплательщика"
           },
           "ogrn": {
             "type": "string",

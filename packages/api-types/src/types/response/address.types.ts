@@ -371,12 +371,12 @@ interface AllAddressFields {
    */
   room_fias_id?: null | string;
   /**
-   * Тип комнаты (сокращенный)
+   * Тип комнаты (сокращенный), "ком"
    * * (подсказки: v22.8+)
    */
   room_type?: null | string;
   /**
-   * Тип комнаты
+   * Тип комнаты, например, "комната"
    * * (подсказки: v22.8+)
    */
   room_type_full?: null | string;

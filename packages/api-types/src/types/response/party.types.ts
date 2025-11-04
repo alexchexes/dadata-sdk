@@ -214,8 +214,8 @@ export interface PartySuggestionData {
   inn: string;
   /** КПП */
   kpp?: string;
-  /** Не заполняется */
-  kpp_largest?: null;
+  /** КПП крупнейшего налогоплательщика */
+  kpp_largest?: string | null;
   /**
    * ОГРН (13 цифр)
    * Для представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП.

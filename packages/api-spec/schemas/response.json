@@ -323,8 +323,14 @@
         "flat_type_full": { "type": ["null", "string"], "description": "Тип квартиры/помещения полностью" },
         "flat": { "type": ["null", "string"], "description": "Квартира/помещение" },
         "room_fias_id": { "type": ["null", "string"], "description": "ФИАС-код комнаты\n* (подсказки: v22.8+)" },
-        "room_type": { "type": ["null", "string"], "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)" },
-        "room_type_full": { "type": ["null", "string"], "description": "Тип комнаты\n* (подсказки: v22.8+)" },
+        "room_type": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
+        },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
@@ -666,8 +672,14 @@
         "flat_type_full": { "type": ["null", "string"], "description": "Тип квартиры/помещения полностью" },
         "flat": { "type": ["null", "string"], "description": "Квартира/помещение" },
         "room_fias_id": { "type": ["null", "string"], "description": "ФИАС-код комнаты\n* (подсказки: v22.8+)" },
-        "room_type": { "type": ["null", "string"], "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)" },
-        "room_type_full": { "type": ["null", "string"], "description": "Тип комнаты\n* (подсказки: v22.8+)" },
+        "room_type": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
+        },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
@@ -1067,8 +1079,14 @@
         "flat_type_full": { "type": ["null", "string"], "description": "Тип квартиры/помещения полностью" },
         "flat": { "type": ["null", "string"], "description": "Квартира/помещение" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
-        "room_type": { "type": ["null", "string"], "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)" },
-        "room_type_full": { "type": ["null", "string"], "description": "Тип комнаты\n* (подсказки: v22.8+)" },
+        "room_type": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
+        },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "fias_id": {
           "type": "string",
@@ -1572,8 +1590,14 @@
         "flat_type_full": { "type": ["null", "string"], "description": "Тип квартиры/помещения полностью" },
         "flat": { "type": ["null", "string"], "description": "Квартира/помещение" },
         "room_fias_id": { "type": ["null", "string"], "description": "ФИАС-код комнаты\n* (подсказки: v22.8+)" },
-        "room_type": { "type": ["null", "string"], "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)" },
-        "room_type_full": { "type": ["null", "string"], "description": "Тип комнаты\n* (подсказки: v22.8+)" },
+        "room_type": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
+        },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
@@ -1922,8 +1946,14 @@
         "flat_type_full": { "type": ["null", "string"], "description": "Тип квартиры/помещения полностью" },
         "flat": { "type": ["null", "string"], "description": "Квартира/помещение" },
         "room_fias_id": { "type": ["null", "string"], "description": "ФИАС-код комнаты\n* (подсказки: v22.8+)" },
-        "room_type": { "type": ["null", "string"], "description": "Тип комнаты (сокращенный)\n* (подсказки: v22.8+)" },
-        "room_type_full": { "type": ["null", "string"], "description": "Тип комнаты\n* (подсказки: v22.8+)" },
+        "room_type": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты (сокращенный), \"ком\"\n* (подсказки: v22.8+)"
+        },
+        "room_type_full": {
+          "type": ["null", "string"],
+          "description": "Тип комнаты, например, \"комната\"\n* (подсказки: v22.8+)"
+        },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
@@ -3589,7 +3619,7 @@
       "properties": {
         "inn": { "type": "string", "description": "ИНН" },
         "kpp": { "type": "string", "description": "КПП" },
-        "kpp_largest": { "type": "null", "description": "Не заполняется" },
+        "kpp_largest": { "type": ["string", "null"], "description": "КПП крупнейшего налогоплательщика" },
         "ogrn": {
           "type": "string",
           "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
@@ -3912,7 +3942,7 @@
         },
         "inn": { "type": "string", "description": "ИНН" },
         "kpp": { "type": "string", "description": "КПП" },
-        "kpp_largest": { "type": "null", "description": "Не заполняется" },
+        "kpp_largest": { "type": ["string", "null"], "description": "КПП крупнейшего налогоплательщика" },
         "ogrn": {
           "type": "string",
           "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
@@ -4509,7 +4539,7 @@
         },
         "inn": { "type": "string", "description": "ИНН" },
         "kpp": { "type": "string", "description": "КПП" },
-        "kpp_largest": { "type": "null", "description": "Не заполняется" },
+        "kpp_largest": { "type": ["string", "null"], "description": "КПП крупнейшего налогоплательщика" },
         "ogrn": {
           "type": "string",
           "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
