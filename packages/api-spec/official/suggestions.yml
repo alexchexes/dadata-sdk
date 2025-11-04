@@ -1,0 +1,2877 @@
+openapi: 3.0.1
+info:
+    title: Dadata Suggestions API
+    version: v4.1
+servers:
+    - url: https://suggestions.dadata.ru/suggestions
+      description: Main suggestions server.
+paths:
+    /api/4_1/rs/suggest/{name}:
+        post:
+            operationId: suggestOutward
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestOutwardRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseObject"
+    /api/4_1/rs/suggest/party:
+        post:
+            operationId: suggestParty
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestPartyRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseParty"
+    /api/4_1/rs/suggest/fio:
+        post:
+            operationId: suggestFio
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestFioRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseFio"
+    /api/4_1/rs/suggest/fias:
+        post:
+            operationId: suggestFias
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestFiasRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseFiasAddress"
+    /api/4_1/rs/suggest/email:
+        post:
+            operationId: suggestEmail
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseEmail"
+    /api/4_1/rs/suggest/bank:
+        post:
+            operationId: suggestBank
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestBankRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseBankParty"
+    /api/4_1/rs/suggest/address:
+        post:
+            operationId: suggestAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestAddressRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseAddress"
+    /api/4_1/rs/iplocate/address:
+        post:
+            operationId: ipLocateAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/IpLocateAddressRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/DetectAddressResponse"
+    /api/4_1/rs/geolocate/{name}:
+        post:
+            operationId: geoLocateOutward
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/GeoLocateOutwardRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseObject"
+    /api/4_1/rs/geolocate/address:
+        post:
+            operationId: geoLocateAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/GeoLocateAddressRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseAddress"
+    /api/4_1/rs/findById/{name}:
+        post:
+            operationId: findByIdOutward
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseObject"
+    /api/4_1/rs/findById/party:
+        post:
+            operationId: findByIdParty
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/FindPartyByIdRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseParty"
+    /api/4_1/rs/findById/fias:
+        post:
+            operationId: findByIdFias
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/FindFiasByIdRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseFiasAddress"
+    /api/4_1/rs/findById/bank:
+        post:
+            operationId: findByIdBank
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/FindBankByIdRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseBankParty"
+    /api/4_1/rs/findById/address:
+        post:
+            operationId: findByIdAddress
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/FindAddressByIdRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseAddress"
+    /api/4_1/rs/findByEmail/company:
+        post:
+            operationId: findByEmailCompany
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SuggestRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseCompanyWithEmail"
+    /api/4_1/rs/findAffiliated/party:
+        post:
+            operationId: findAffiliatedParty
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/FindAffiliatedPartyRequest"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SuggestResponseParty"
+components:
+    schemas:
+        Address:
+            type: object
+            properties:
+                area:
+                    type: string
+                    nullable: true
+                area_fias_id:
+                    type: string
+                    nullable: true
+                area_kladr_id:
+                    type: string
+                    nullable: true
+                area_type:
+                    type: string
+                    nullable: true
+                area_type_full:
+                    type: string
+                    nullable: true
+                area_with_type:
+                    type: string
+                    nullable: true
+                beltway_distance:
+                    type: string
+                    nullable: true
+                beltway_hit:
+                    type: string
+                    nullable: true
+                block:
+                    type: string
+                    nullable: true
+                block_type:
+                    type: string
+                    nullable: true
+                block_type_full:
+                    type: string
+                    nullable: true
+                capital_marker:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                city_area:
+                    type: string
+                    nullable: true
+                city_district:
+                    type: string
+                    nullable: true
+                city_district_fias_id:
+                    type: string
+                    nullable: true
+                city_district_kladr_id:
+                    type: string
+                    nullable: true
+                city_district_type:
+                    type: string
+                    nullable: true
+                city_district_type_full:
+                    type: string
+                    nullable: true
+                city_district_with_type:
+                    type: string
+                    nullable: true
+                city_fias_id:
+                    type: string
+                    nullable: true
+                city_kladr_id:
+                    type: string
+                    nullable: true
+                city_type:
+                    type: string
+                    nullable: true
+                city_type_full:
+                    type: string
+                    nullable: true
+                city_with_type:
+                    type: string
+                    nullable: true
+                country:
+                    type: string
+                    nullable: true
+                country_iso_code:
+                    type: string
+                    nullable: true
+                custom:
+                    type: array
+                    nullable: true
+                    items:
+                        type: object
+                divisions:
+                    $ref: "#/components/schemas/AddressDivisions"
+                entrance:
+                    type: string
+                    nullable: true
+                federal_district:
+                    type: string
+                    nullable: true
+                fias_actuality_state:
+                    type: string
+                    nullable: true
+                fias_code:
+                    type: string
+                    nullable: true
+                fias_id:
+                    type: string
+                    nullable: true
+                fias_level:
+                    type: string
+                    nullable: true
+                flat:
+                    type: string
+                    nullable: true
+                flat_area:
+                    type: string
+                    nullable: true
+                flat_cadnum:
+                    type: string
+                    nullable: true
+                flat_fias_id:
+                    type: string
+                    nullable: true
+                flat_price:
+                    type: string
+                    nullable: true
+                flat_type:
+                    type: string
+                    nullable: true
+                flat_type_full:
+                    type: string
+                    nullable: true
+                floor:
+                    type: string
+                    nullable: true
+                geo_lat:
+                    type: string
+                    nullable: true
+                geo_lon:
+                    type: string
+                    nullable: true
+                geoname_id:
+                    type: string
+                    nullable: true
+                history_values:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                house:
+                    type: string
+                    nullable: true
+                house_cadnum:
+                    type: string
+                    nullable: true
+                house_fias_id:
+                    type: string
+                    nullable: true
+                house_flat_count:
+                    type: string
+                    nullable: true
+                house_kladr_id:
+                    type: string
+                    nullable: true
+                house_type:
+                    type: string
+                    nullable: true
+                house_type_full:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                metro:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/Metro"
+                okato:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                postal_box:
+                    type: string
+                    nullable: true
+                postal_code:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                qc_complete:
+                    type: string
+                    nullable: true
+                qc_geo:
+                    type: string
+                    nullable: true
+                qc_house:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                region_fias_id:
+                    type: string
+                    nullable: true
+                region_iso_code:
+                    type: string
+                    nullable: true
+                region_kladr_id:
+                    type: string
+                    nullable: true
+                region_type:
+                    type: string
+                    nullable: true
+                region_type_full:
+                    type: string
+                    nullable: true
+                region_with_type:
+                    type: string
+                    nullable: true
+                room:
+                    type: string
+                    nullable: true
+                room_cadnum:
+                    type: string
+                    nullable: true
+                room_fias_id:
+                    type: string
+                    nullable: true
+                room_type:
+                    type: string
+                    nullable: true
+                room_type_full:
+                    type: string
+                    nullable: true
+                settlement:
+                    type: string
+                    nullable: true
+                settlement_fias_id:
+                    type: string
+                    nullable: true
+                settlement_kladr_id:
+                    type: string
+                    nullable: true
+                settlement_type:
+                    type: string
+                    nullable: true
+                settlement_type_full:
+                    type: string
+                    nullable: true
+                settlement_with_type:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                square_meter_price:
+                    type: string
+                    nullable: true
+                stead:
+                    type: string
+                    nullable: true
+                stead_cadnum:
+                    type: string
+                    nullable: true
+                stead_fias_id:
+                    type: string
+                    nullable: true
+                stead_type:
+                    type: string
+                    nullable: true
+                stead_type_full:
+                    type: string
+                    nullable: true
+                street:
+                    type: string
+                    nullable: true
+                street_fias_id:
+                    type: string
+                    nullable: true
+                street_kladr_id:
+                    type: string
+                    nullable: true
+                street_type:
+                    type: string
+                    nullable: true
+                street_type_full:
+                    type: string
+                    nullable: true
+                street_with_type:
+                    type: string
+                    nullable: true
+                sub_area:
+                    type: string
+                    nullable: true
+                sub_area_fias_id:
+                    type: string
+                    nullable: true
+                sub_area_kladr_id:
+                    type: string
+                    nullable: true
+                sub_area_type:
+                    type: string
+                    nullable: true
+                sub_area_type_full:
+                    type: string
+                    nullable: true
+                sub_area_with_type:
+                    type: string
+                    nullable: true
+                tax_office:
+                    type: string
+                    nullable: true
+                tax_office_legal:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+                unparsed_parts:
+                    type: string
+                    nullable: true
+        AddressDivisions:
+            type: object
+            properties:
+                administrative:
+                    $ref: "#/components/schemas/AdministrativeDivision"
+                municipal:
+                    $ref: "#/components/schemas/MunicipalDivision"
+        AddressPart:
+            type: object
+            properties:
+                fias_id:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                name_with_type:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                type_full:
+                    type: string
+                    nullable: true
+        AdministrativeDivision:
+            type: object
+            properties:
+                area:
+                    $ref: "#/components/schemas/AddressPart"
+                city:
+                    $ref: "#/components/schemas/AddressPart"
+                city_district:
+                    $ref: "#/components/schemas/AddressPart"
+                planning_structure:
+                    $ref: "#/components/schemas/AddressPart"
+                settlement:
+                    $ref: "#/components/schemas/AddressPart"
+        BankName:
+            type: object
+            properties:
+                full_value:
+                    type: string
+                    nullable: true
+                payment:
+                    type: string
+                    nullable: true
+                short_value:
+                    type: string
+                    nullable: true
+        BankOpf:
+            type: object
+            properties:
+                full_value:
+                    type: string
+                    nullable: true
+                short_value:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - BANK
+                        - NKO
+                        - BANK_BRANCH
+                        - NKO_BRANCH
+                        - RKC
+                        - CBR
+                        - TREASURY
+                        - OTHER
+        BankParty:
+            required:
+                - name
+                - opf
+                - state
+            type: object
+            properties:
+                address:
+                    $ref: "#/components/schemas/SuggestionAddress"
+                bic:
+                    type: string
+                    nullable: true
+                cbr:
+                    $ref: "#/components/schemas/BankParty"
+                correspondent_account:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                kpp:
+                    type: string
+                    nullable: true
+                name:
+                    $ref: "#/components/schemas/BankName"
+                okpo:
+                    type: string
+                    nullable: true
+                opf:
+                    $ref: "#/components/schemas/BankOpf"
+                payment_city:
+                    type: string
+                    nullable: true
+                phones:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionPhone"
+                registration_number:
+                    type: string
+                    nullable: true
+                rkc:
+                    $ref: "#/components/schemas/BankParty"
+                state:
+                    $ref: "#/components/schemas/BankState"
+                swift:
+                    type: string
+                    nullable: true
+                treasury_accounts:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+        BankState:
+            required:
+                - status
+            type: object
+            properties:
+                actuality_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                code:
+                    type: string
+                    nullable: true
+                liquidation_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                registration_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                status:
+                    type: string
+                    enum:
+                        - ACTIVE
+                        - LIQUIDATING
+                        - LIQUIDATED
+        Bound:
+            required:
+                - value
+            type: object
+            properties:
+                include:
+                    type: boolean
+                    nullable: true
+                    default: true
+                value:
+                    type: string
+        Company:
+            type: object
+            properties:
+                city:
+                    type: string
+                    nullable: true
+                domain:
+                    type: string
+                    nullable: true
+                employee_count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                income:
+                    type: number
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                ogrn:
+                    type: string
+                    nullable: true
+                okved:
+                    type: string
+                    nullable: true
+                okved_name:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+        CompanyWithEmail:
+            type: object
+            properties:
+                company:
+                    $ref: "#/components/schemas/Company"
+                email:
+                    $ref: "#/components/schemas/Email"
+        DecimalFounderShare:
+            required:
+                - type
+                - value
+            type: object
+            allOf:
+                - $ref: "#/components/schemas/FounderShare"
+                - type: object
+                  properties:
+                      value:
+                          type: number
+                          nullable: true
+        DetectAddressResponse:
+            type: object
+            properties:
+                location:
+                    $ref: "#/components/schemas/SuggestionAddress"
+        Email:
+            type: object
+            properties:
+                domain:
+                    type: string
+                    nullable: true
+                local:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+        FiasAddress:
+            type: object
+            properties:
+                area:
+                    type: string
+                    nullable: true
+                area_fias_id:
+                    type: string
+                    nullable: true
+                area_kladr_id:
+                    type: string
+                    nullable: true
+                area_type:
+                    type: string
+                    nullable: true
+                area_type_full:
+                    type: string
+                    nullable: true
+                area_with_type:
+                    type: string
+                    nullable: true
+                block:
+                    type: string
+                    nullable: true
+                building:
+                    type: string
+                    nullable: true
+                building_type:
+                    type: string
+                    nullable: true
+                cadastral_number:
+                    type: string
+                    nullable: true
+                capital_marker:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                city_district:
+                    type: string
+                    nullable: true
+                city_district_fias_id:
+                    type: string
+                    nullable: true
+                city_district_kladr_id:
+                    type: string
+                    nullable: true
+                city_district_type:
+                    type: string
+                    nullable: true
+                city_district_type_full:
+                    type: string
+                    nullable: true
+                city_district_with_type:
+                    type: string
+                    nullable: true
+                city_fias_id:
+                    type: string
+                    nullable: true
+                city_kladr_id:
+                    type: string
+                    nullable: true
+                city_type:
+                    type: string
+                    nullable: true
+                city_type_full:
+                    type: string
+                    nullable: true
+                city_with_type:
+                    type: string
+                    nullable: true
+                fias_actuality_state:
+                    type: string
+                    nullable: true
+                fias_code:
+                    type: string
+                    nullable: true
+                fias_id:
+                    type: string
+                    nullable: true
+                fias_level:
+                    type: string
+                    nullable: true
+                history_values:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                house:
+                    type: string
+                    nullable: true
+                house_fias_id:
+                    type: string
+                    nullable: true
+                house_kladr_id:
+                    type: string
+                    nullable: true
+                house_type:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                okato:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                planning_structure:
+                    type: string
+                    nullable: true
+                planning_structure_fias_id:
+                    type: string
+                    nullable: true
+                planning_structure_kladr_id:
+                    type: string
+                    nullable: true
+                planning_structure_type:
+                    type: string
+                    nullable: true
+                planning_structure_type_full:
+                    type: string
+                    nullable: true
+                planning_structure_with_type:
+                    type: string
+                    nullable: true
+                postal_code:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                region_fias_id:
+                    type: string
+                    nullable: true
+                region_kladr_id:
+                    type: string
+                    nullable: true
+                region_type:
+                    type: string
+                    nullable: true
+                region_type_full:
+                    type: string
+                    nullable: true
+                region_with_type:
+                    type: string
+                    nullable: true
+                settlement:
+                    type: string
+                    nullable: true
+                settlement_fias_id:
+                    type: string
+                    nullable: true
+                settlement_kladr_id:
+                    type: string
+                    nullable: true
+                settlement_type:
+                    type: string
+                    nullable: true
+                settlement_type_full:
+                    type: string
+                    nullable: true
+                settlement_with_type:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                street:
+                    type: string
+                    nullable: true
+                street_fias_id:
+                    type: string
+                    nullable: true
+                street_kladr_id:
+                    type: string
+                    nullable: true
+                street_type:
+                    type: string
+                    nullable: true
+                street_type_full:
+                    type: string
+                    nullable: true
+                street_with_type:
+                    type: string
+                    nullable: true
+                tax_office:
+                    type: string
+                    nullable: true
+                tax_office_legal:
+                    type: string
+                    nullable: true
+        FindAddressByIdRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                division:
+                    type: string
+                    nullable: true
+                    enum:
+                        - ADMINISTRATIVE
+                        - MUNICIPAL
+                from_bound:
+                    $ref: "#/components/schemas/Bound"
+                language:
+                    type: string
+                    nullable: true
+                    enum:
+                        - RU
+                        - EN
+                query:
+                    type: string
+                to_bound:
+                    $ref: "#/components/schemas/Bound"
+        FindAffiliatedPartyRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                query:
+                    type: string
+                scope:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - MANAGERS
+                            - FOUNDERS
+        FindBankByIdRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                kpp:
+                    type: string
+                    nullable: true
+                query:
+                    type: string
+        FindFiasByIdRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                from_bound:
+                    $ref: "#/components/schemas/Bound"
+                query:
+                    type: string
+                to_bound:
+                    $ref: "#/components/schemas/Bound"
+        FindPartyByIdRequest:
+            required:
+                - query
+            type: object
+            properties:
+                branch_type:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - MAIN
+                            - BRANCH
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                kpp:
+                    type: string
+                    nullable: true
+                query:
+                    type: string
+                status:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - ACTIVE
+                            - LIQUIDATING
+                            - LIQUIDATED
+                            - REORGANIZING
+                            - BANKRUPT
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - LEGAL
+                        - INDIVIDUAL
+        Fio:
+            type: object
+            properties:
+                gender:
+                    type: string
+                    nullable: true
+                    enum:
+                        - UNKNOWN
+                        - MALE
+                        - FEMALE
+                name:
+                    type: string
+                    nullable: true
+                patronymic:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                surname:
+                    type: string
+                    nullable: true
+        FounderLegalParty:
+            type: object
+            properties:
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                name:
+                    type: string
+                    nullable: true
+                ogrn:
+                    type: string
+                    nullable: true
+                share:
+                    oneOf:
+                        - $ref: "#/components/schemas/DecimalFounderShare"
+                        - $ref: "#/components/schemas/FractionFounderShare"
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - PHYSICAL
+                        - LEGAL
+        FounderParty:
+            type: object
+            properties:
+                hid:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                share:
+                    oneOf:
+                        - $ref: "#/components/schemas/DecimalFounderShare"
+                        - $ref: "#/components/schemas/FractionFounderShare"
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - PHYSICAL
+                        - LEGAL
+            discriminator:
+                propertyName: type
+        FounderPhysicalParty:
+            type: object
+            properties:
+                fio:
+                    $ref: "#/components/schemas/Fio"
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                share:
+                    oneOf:
+                        - $ref: "#/components/schemas/DecimalFounderShare"
+                        - $ref: "#/components/schemas/FractionFounderShare"
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - PHYSICAL
+                        - LEGAL
+        FounderShare:
+            required:
+                - type
+            type: object
+            properties:
+                type:
+                    type: string
+                    enum:
+                        - PERCENT
+                        - DECIMAL
+                        - FRACTION
+            discriminator:
+                propertyName: type
+        FractionFounderShare:
+            required:
+                - type
+            type: object
+            allOf:
+                - $ref: "#/components/schemas/FounderShare"
+                - type: object
+                  properties:
+                      numerator:
+                          type: integer
+                          format: int64
+                          nullable: true
+                      denominator:
+                          type: integer
+                          format: int64
+                          nullable: true
+        GeoLocateAddressRequest:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                division:
+                    type: string
+                    nullable: true
+                    enum:
+                        - ADMINISTRATIVE
+                        - MUNICIPAL
+                language:
+                    type: string
+                    nullable: true
+                    enum:
+                        - RU
+                        - EN
+                lat:
+                    type: number
+                    format: double
+                    nullable: true
+                lon:
+                    type: number
+                    format: double
+                    nullable: true
+                radius_meters:
+                    type: number
+                    format: double
+                    nullable: true
+        GeoLocateOutwardRequest:
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                filters:
+                    type: array
+                    nullable: true
+                    items:
+                        type: object
+                        additionalProperties:
+                            type: string
+                lat:
+                    type: number
+                    format: double
+                    nullable: true
+                lon:
+                    type: number
+                    format: double
+                    nullable: true
+                radius_meters:
+                    type: number
+                    format: double
+                    nullable: true
+        IndividualParty:
+            required:
+                - name
+                - state
+                - type
+            type: object
+            properties:
+                address:
+                    $ref: "#/components/schemas/PartyAddress"
+                authorities:
+                    $ref: "#/components/schemas/PartyAuthorities"
+                citizenship:
+                    $ref: "#/components/schemas/PartyCountry"
+                documents:
+                    $ref: "#/components/schemas/PartyDocuments"
+                emails:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionEmail"
+                employee_count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                finance:
+                    $ref: "#/components/schemas/PartyFinance"
+                fio:
+                    $ref: "#/components/schemas/Fio"
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                licenses:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyLicense"
+                name:
+                    $ref: "#/components/schemas/PartyName"
+                ogrn:
+                    type: string
+                    nullable: true
+                ogrn_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                okato:
+                    type: string
+                    nullable: true
+                okfs:
+                    type: string
+                    nullable: true
+                okogu:
+                    type: string
+                    nullable: true
+                okpo:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                okved:
+                    type: string
+                    nullable: true
+                okved_type:
+                    type: string
+                    nullable: true
+                okveds:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyOkved"
+                opf:
+                    $ref: "#/components/schemas/PartyOpf"
+                phones:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionPartyPhone"
+                qc:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                state:
+                    $ref: "#/components/schemas/PartyState"
+                type:
+                    type: string
+                    enum:
+                        - LEGAL
+                        - INDIVIDUAL
+        IpLocateAddressRequest:
+            type: object
+            properties:
+                division:
+                    type: string
+                    nullable: true
+                    enum:
+                        - ADMINISTRATIVE
+                        - MUNICIPAL
+                ip:
+                    type: string
+                    nullable: true
+                language:
+                    type: string
+                    nullable: true
+                    enum:
+                        - RU
+                        - EN
+        LegalParty:
+            required:
+                - name
+                - state
+                - type
+            type: object
+            properties:
+                address:
+                    $ref: "#/components/schemas/PartyAddress"
+                authorities:
+                    $ref: "#/components/schemas/PartyAuthorities"
+                branch_count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                branch_type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - MAIN
+                        - BRANCH
+                capital:
+                    $ref: "#/components/schemas/PartyCapital"
+                documents:
+                    $ref: "#/components/schemas/PartyDocuments"
+                emails:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionEmail"
+                employee_count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                finance:
+                    $ref: "#/components/schemas/PartyFinance"
+                founders:
+                    type: array
+                    nullable: true
+                    items:
+                        anyOf:
+                            - $ref: "#/components/schemas/FounderLegalParty"
+                            - $ref: "#/components/schemas/FounderPhysicalParty"
+                        oneOf:
+                            - $ref: "#/components/schemas/FounderParty"
+                            - $ref: "#/components/schemas/FounderLegalParty"
+                            - $ref: "#/components/schemas/FounderPhysicalParty"
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                invalid:
+                    type: boolean
+                    nullable: true
+                kpp:
+                    type: string
+                    nullable: true
+                kpp_largest:
+                    type: string
+                    nullable: true
+                licenses:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyLicense"
+                management:
+                    $ref: "#/components/schemas/PartyManagement"
+                managers:
+                    type: array
+                    nullable: true
+                    items:
+                        anyOf:
+                            - $ref: "#/components/schemas/ManagerLegalParty"
+                            - $ref: "#/components/schemas/ManagerPhysicalParty"
+                        oneOf:
+                            - $ref: "#/components/schemas/ManagerParty"
+                            - $ref: "#/components/schemas/ManagerLegalParty"
+                            - $ref: "#/components/schemas/ManagerPhysicalParty"
+                name:
+                    $ref: "#/components/schemas/PartyName"
+                ogrn:
+                    type: string
+                    nullable: true
+                ogrn_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                okato:
+                    type: string
+                    nullable: true
+                okfs:
+                    type: string
+                    nullable: true
+                okogu:
+                    type: string
+                    nullable: true
+                okpo:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                okved:
+                    type: string
+                    nullable: true
+                okved_type:
+                    type: string
+                    nullable: true
+                okveds:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyOkved"
+                opf:
+                    $ref: "#/components/schemas/PartyOpf"
+                phones:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionPartyPhone"
+                predecessors:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyReference"
+                qc:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                state:
+                    $ref: "#/components/schemas/PartyState"
+                successors:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyReference"
+                type:
+                    type: string
+                    enum:
+                        - LEGAL
+                        - INDIVIDUAL
+        LocationAddress:
+            type: object
+            properties:
+                area:
+                    type: string
+                    nullable: true
+                area_fias_id:
+                    type: string
+                    nullable: true
+                area_type_full:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                city_district:
+                    type: string
+                    nullable: true
+                city_district_fias_id:
+                    type: string
+                    nullable: true
+                city_district_type_full:
+                    type: string
+                    nullable: true
+                city_fias_id:
+                    type: string
+                    nullable: true
+                city_type_full:
+                    type: string
+                    nullable: true
+                country:
+                    type: string
+                    nullable: true
+                country_iso_code:
+                    type: string
+                    nullable: true
+                fias_id:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                postal_code:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                region_fias_id:
+                    type: string
+                    nullable: true
+                region_iso_code:
+                    type: string
+                    nullable: true
+                region_type_full:
+                    type: string
+                    nullable: true
+                settlement:
+                    type: string
+                    nullable: true
+                settlement_fias_id:
+                    type: string
+                    nullable: true
+                settlement_type_full:
+                    type: string
+                    nullable: true
+                street:
+                    type: string
+                    nullable: true
+                street_fias_id:
+                    type: string
+                    nullable: true
+                street_type_full:
+                    type: string
+                    nullable: true
+                sub_area:
+                    type: string
+                    nullable: true
+                sub_area_fias_id:
+                    type: string
+                    nullable: true
+                sub_area_type_full:
+                    type: string
+                    nullable: true
+        LocationCode:
+            type: object
+            properties:
+                kladr_id:
+                    type: string
+                    nullable: true
+        LocationFias:
+            type: object
+            properties:
+                area:
+                    type: string
+                    nullable: true
+                area_fias_id:
+                    type: string
+                    nullable: true
+                area_type_full:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                city_district:
+                    type: string
+                    nullable: true
+                city_district_fias_id:
+                    type: string
+                    nullable: true
+                city_district_type_full:
+                    type: string
+                    nullable: true
+                city_fias_id:
+                    type: string
+                    nullable: true
+                city_type_full:
+                    type: string
+                    nullable: true
+                fias_id:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                planning_structure:
+                    type: string
+                    nullable: true
+                planning_structure_fias_id:
+                    type: string
+                    nullable: true
+                planning_structure_type_full:
+                    type: string
+                    nullable: true
+                postal_code:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                region_fias_id:
+                    type: string
+                    nullable: true
+                region_iso_code:
+                    type: string
+                    nullable: true
+                region_type_full:
+                    type: string
+                    nullable: true
+                settlement:
+                    type: string
+                    nullable: true
+                settlement_fias_id:
+                    type: string
+                    nullable: true
+                settlement_type_full:
+                    type: string
+                    nullable: true
+                street:
+                    type: string
+                    nullable: true
+                street_fias_id:
+                    type: string
+                    nullable: true
+                street_type_full:
+                    type: string
+                    nullable: true
+        LocationGeo:
+            type: object
+            properties:
+                lat:
+                    type: number
+                    format: double
+                    nullable: true
+                lon:
+                    type: number
+                    format: double
+                    nullable: true
+                radius_meters:
+                    type: number
+                    format: double
+                    nullable: true
+        ManagerLegalParty:
+            type: object
+            properties:
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                name:
+                    type: string
+                    nullable: true
+                ogrn:
+                    type: string
+                    nullable: true
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - EMPLOYEE
+                        - FOREIGNER
+                        - LEGAL
+        ManagerParty:
+            type: object
+            properties:
+                hid:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - EMPLOYEE
+                        - FOREIGNER
+                        - LEGAL
+            discriminator:
+                propertyName: type
+        ManagerPhysicalParty:
+            type: object
+            properties:
+                fio:
+                    $ref: "#/components/schemas/Fio"
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                post:
+                    type: string
+                    nullable: true
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - EMPLOYEE
+                        - FOREIGNER
+                        - LEGAL
+        Metro:
+            type: object
+            properties:
+                distance:
+                    type: number
+                    format: double
+                    nullable: true
+                line:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+        MunicipalDivision:
+            type: object
+            properties:
+                area:
+                    $ref: "#/components/schemas/AddressPart"
+                city:
+                    $ref: "#/components/schemas/AddressPart"
+                planning_structure:
+                    $ref: "#/components/schemas/AddressPart"
+                settlement:
+                    $ref: "#/components/schemas/AddressPart"
+                sub_area:
+                    $ref: "#/components/schemas/AddressPart"
+        Party:
+            required:
+                - name
+                - state
+                - type
+            type: object
+            properties:
+                address:
+                    $ref: "#/components/schemas/PartyAddress"
+                authorities:
+                    $ref: "#/components/schemas/PartyAuthorities"
+                documents:
+                    $ref: "#/components/schemas/PartyDocuments"
+                emails:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionEmail"
+                employee_count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                finance:
+                    $ref: "#/components/schemas/PartyFinance"
+                hid:
+                    type: string
+                    nullable: true
+                inn:
+                    type: string
+                    nullable: true
+                licenses:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyLicense"
+                name:
+                    $ref: "#/components/schemas/PartyName"
+                ogrn:
+                    type: string
+                    nullable: true
+                ogrn_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                okato:
+                    type: string
+                    nullable: true
+                okfs:
+                    type: string
+                    nullable: true
+                okogu:
+                    type: string
+                    nullable: true
+                okpo:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                okved:
+                    type: string
+                    nullable: true
+                okved_type:
+                    type: string
+                    nullable: true
+                okveds:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/PartyOkved"
+                opf:
+                    $ref: "#/components/schemas/PartyOpf"
+                phones:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionPartyPhone"
+                qc:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                state:
+                    $ref: "#/components/schemas/PartyState"
+                type:
+                    type: string
+                    enum:
+                        - LEGAL
+                        - INDIVIDUAL
+        PartyAddress:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/Address"
+                invalidity:
+                    $ref: "#/components/schemas/PartyInvalidity"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        PartyAuthorities:
+            type: object
+            properties:
+                fts_registration:
+                    $ref: "#/components/schemas/PartyAuthority"
+                fts_report:
+                    $ref: "#/components/schemas/PartyAuthority"
+                pf:
+                    $ref: "#/components/schemas/PartyAuthority"
+                sif:
+                    $ref: "#/components/schemas/PartyAuthority"
+        PartyAuthority:
+            type: object
+            properties:
+                address:
+                    type: string
+                    nullable: true
+                code:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - FEDERAL_TAX_SERVICE
+                        - PENSION_FUND
+                        - SOCIAL_INSURANCE_FUND
+        PartyCapital:
+            type: object
+            properties:
+                type:
+                    type: string
+                    nullable: true
+                value:
+                    type: number
+                    nullable: true
+        PartyCodeUnit:
+            type: object
+            properties:
+                alpha3:
+                    type: string
+                    nullable: true
+                numeric:
+                    type: integer
+                    format: int32
+                    nullable: true
+        PartyCountry:
+            required:
+                - code
+                - name
+            type: object
+            properties:
+                code:
+                    $ref: "#/components/schemas/PartyCodeUnit"
+                name:
+                    $ref: "#/components/schemas/PartyNameUnit"
+        PartyCourtDecision:
+            required:
+                - courtName
+                - number
+            type: object
+            properties:
+                court_name:
+                    type: string
+                date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                number:
+                    type: string
+        PartyDocument:
+            required:
+                - type
+            type: object
+            properties:
+                issue_authority:
+                    type: string
+                    nullable: true
+                issue_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                series:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    enum:
+                        - FTS_REGISTRATION
+                        - FTS_REPORT
+                        - PF_REGISTRATION
+                        - SIF_REGISTRATION
+                        - SMB
+        PartyDocuments:
+            type: object
+            properties:
+                fts_registration:
+                    $ref: "#/components/schemas/PartyDocument"
+                fts_report:
+                    $ref: "#/components/schemas/PartyDocument"
+                pf_registration:
+                    $ref: "#/components/schemas/PartyDocument"
+                sif_registration:
+                    $ref: "#/components/schemas/PartyDocument"
+                smb:
+                    $ref: "#/components/schemas/PartySmbDocument"
+        PartyFinance:
+            type: object
+            properties:
+                debt:
+                    type: number
+                    nullable: true
+                expense:
+                    type: number
+                    nullable: true
+                income:
+                    type: number
+                    nullable: true
+                penalty:
+                    type: number
+                    nullable: true
+                revenue:
+                    type: number
+                    nullable: true
+                tax_system:
+                    type: string
+                    nullable: true
+                    enum:
+                        - ESHN
+                        - ENVD
+                        - SRP
+                        - USN
+                        - AUSN
+                        - USN_ENVD
+                        - ENVD_ESHN
+                year:
+                    type: integer
+                    format: int32
+                    nullable: true
+        PartyInvalidity:
+            required:
+                - code
+            type: object
+            properties:
+                code:
+                    type: string
+                    enum:
+                        - PARTY
+                        - FTS
+                        - COURT
+                        - OTHER
+                decision:
+                    $ref: "#/components/schemas/PartyCourtDecision"
+        PartyLicense:
+            type: object
+            properties:
+                activities:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                addresses:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                issue_authority:
+                    type: string
+                    nullable: true
+                issue_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                series:
+                    type: string
+                    nullable: true
+                suspend_authority:
+                    type: string
+                    nullable: true
+                suspend_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                valid_from:
+                    type: integer
+                    format: int64
+                    nullable: true
+                valid_to:
+                    type: integer
+                    format: int64
+                    nullable: true
+        PartyManagement:
+            type: object
+            properties:
+                disqualified:
+                    type: boolean
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                post:
+                    type: string
+                    nullable: true
+                start_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+        PartyName:
+            type: object
+            properties:
+                full_value:
+                    type: string
+                    nullable: true
+                full_with_opf:
+                    type: string
+                    nullable: true
+                latin:
+                    type: string
+                    nullable: true
+                short_value:
+                    type: string
+                    nullable: true
+                short_with_opf:
+                    type: string
+                    nullable: true
+        PartyNameUnit:
+            type: object
+            properties:
+                full_value:
+                    type: string
+                    nullable: true
+                short_value:
+                    type: string
+                    nullable: true
+        PartyOkved:
+            type: object
+            properties:
+                code:
+                    type: string
+                    nullable: true
+                main:
+                    type: boolean
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+        PartyOpf:
+            type: object
+            properties:
+                code:
+                    type: string
+                    nullable: true
+                full_value:
+                    type: string
+                    nullable: true
+                short_value:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+        PartyPhone:
+            type: object
+            properties:
+                city:
+                    type: string
+                    nullable: true
+                city_code:
+                    type: string
+                    nullable: true
+                contact:
+                    $ref: "#/components/schemas/PartyPhoneContact"
+                country:
+                    type: string
+                    nullable: true
+                country_code:
+                    type: string
+                    nullable: true
+                extension:
+                    type: string
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                provider:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                qc_conflict:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+        PartyPhoneContact:
+            type: object
+            properties:
+                name:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - MANAGING_PARTY
+                        - TRUSTED_EMPLOYEE
+                        - TRUSTED_FOREIGNER
+        PartyReference:
+            type: object
+            properties:
+                inn:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                ogrn:
+                    type: string
+                    nullable: true
+        PartySmbDocument:
+            required:
+                - category
+                - type
+            type: object
+            properties:
+                category:
+                    type: string
+                    enum:
+                        - MICRO
+                        - SMALL
+                        - MEDIUM
+                issue_authority:
+                    type: string
+                    nullable: true
+                issue_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                series:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    enum:
+                        - FTS_REGISTRATION
+                        - FTS_REPORT
+                        - PF_REGISTRATION
+                        - SIF_REGISTRATION
+                        - SMB
+        PartyState:
+            required:
+                - status
+            type: object
+            properties:
+                actuality_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                code:
+                    type: string
+                    nullable: true
+                liquidation_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                registration_date:
+                    type: integer
+                    format: int64
+                    nullable: true
+                status:
+                    type: string
+                    enum:
+                        - ACTIVE
+                        - LIQUIDATING
+                        - LIQUIDATED
+                        - REORGANIZING
+                        - BANKRUPT
+        Phone:
+            type: object
+            properties:
+                city:
+                    type: string
+                    nullable: true
+                city_code:
+                    type: string
+                    nullable: true
+                country:
+                    type: string
+                    nullable: true
+                country_code:
+                    type: string
+                    nullable: true
+                extension:
+                    type: string
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                provider:
+                    type: string
+                    nullable: true
+                qc:
+                    type: string
+                    nullable: true
+                qc_conflict:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                source:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+        SuggestAddressRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                division:
+                    type: string
+                    nullable: true
+                    enum:
+                        - ADMINISTRATIVE
+                        - MUNICIPAL
+                from_bound:
+                    $ref: "#/components/schemas/Bound"
+                language:
+                    type: string
+                    nullable: true
+                    enum:
+                        - RU
+                        - EN
+                locations:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationAddress"
+                locations_boost:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                locations_geo:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationGeo"
+                query:
+                    type: string
+                restrict_value:
+                    type: boolean
+                    nullable: true
+                    default: false
+                to_bound:
+                    $ref: "#/components/schemas/Bound"
+        SuggestBankRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                locations:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                locations_boost:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                query:
+                    type: string
+                status:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - ACTIVE
+                            - LIQUIDATING
+                            - LIQUIDATED
+                            - REORGANIZING
+                            - BANKRUPT
+                type:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - BANK
+                            - NKO
+                            - BANK_BRANCH
+                            - NKO_BRANCH
+                            - RKC
+                            - CBR
+                            - TREASURY
+                            - OTHER
+        SuggestFiasRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                from_bound:
+                    $ref: "#/components/schemas/Bound"
+                locations:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationFias"
+                locations_boost:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                query:
+                    type: string
+                restrict_value:
+                    type: boolean
+                    nullable: true
+                    default: false
+                to_bound:
+                    $ref: "#/components/schemas/Bound"
+        SuggestFioRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                gender:
+                    type: string
+                    nullable: true
+                    enum:
+                        - UNKNOWN
+                        - MALE
+                        - FEMALE
+                    default: UNKNOWN
+                parts:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - SURNAME
+                            - NAME
+                            - PATRONYMIC
+                query:
+                    type: string
+        SuggestOutwardRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                filters:
+                    type: array
+                    nullable: true
+                    items:
+                        type: object
+                        additionalProperties:
+                            type: string
+                query:
+                    type: string
+        SuggestPartyRequest:
+            required:
+                - query
+            type: object
+            properties:
+                branch_type:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - MAIN
+                            - BRANCH
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                locations:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                locations_boost:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/LocationCode"
+                okved:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                query:
+                    type: string
+                status:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - ACTIVE
+                            - LIQUIDATING
+                            - LIQUIDATED
+                            - REORGANIZING
+                            - BANKRUPT
+                type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - LEGAL
+                        - INDIVIDUAL
+        SuggestRequest:
+            required:
+                - query
+            type: object
+            properties:
+                count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 10
+                query:
+                    type: string
+        SuggestResponseAddress:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionAddress"
+        SuggestResponseBankParty:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionBankParty"
+        SuggestResponseCompanyWithEmail:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionCompanyWithEmail"
+        SuggestResponseEmail:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionEmail"
+        SuggestResponseFiasAddress:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionFiasAddress"
+        SuggestResponseFio:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionFio"
+        SuggestResponseObject:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionObject"
+        SuggestResponseParty:
+            type: object
+            properties:
+                suggestions:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/SuggestionParty"
+        SuggestionAddress:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/Address"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionBankParty:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/BankParty"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionCompanyWithEmail:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/CompanyWithEmail"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionEmail:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/Email"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionFiasAddress:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/FiasAddress"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionFio:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/Fio"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionObject:
+            type: object
+            properties:
+                data:
+                    type: object
+                    nullable: true
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionParty:
+            type: object
+            properties:
+                data:
+                    anyOf:
+                        - $ref: "#/components/schemas/LegalParty"
+                        - $ref: "#/components/schemas/IndividualParty"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionPartyPhone:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/PartyPhone"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true
+        SuggestionPhone:
+            type: object
+            properties:
+                data:
+                    $ref: "#/components/schemas/Phone"
+                unrestricted_value:
+                    type: string
+                    nullable: true
+                value:
+                    type: string
+                    nullable: true

@@ -1,0 +1,636 @@
+openapi: 3.0.1
+info:
+    title: Dadata Cleaner API
+    version: v1
+servers:
+    - url: https://cleaner.dadata.ru
+      description: Main cleaner server.
+paths:
+    /api/v1/clean/{type}:
+        post:
+            operationId: cleanSimple
+            parameters:
+                - name: type
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      enum:
+                          - NAME
+                          - ADDRESS
+                          - PHONE
+                          - AS_IS
+                          - BIRTHDATE
+                          - EMAIL
+                          - VEHICLE
+                          - PASSPORT
+                          - SIMPLE_PARTY_NAME
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: string
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    anyOf:
+                                        - $ref: "#/components/schemas/Address"
+                                        - $ref: "#/components/schemas/AsIs"
+                                        - $ref: "#/components/schemas/Birthdate"
+                                        - $ref: "#/components/schemas/Email"
+                                        - $ref: "#/components/schemas/Name"
+                                        - $ref: "#/components/schemas/Passport"
+                                        - $ref: "#/components/schemas/Phone"
+                                        - $ref: "#/components/schemas/Vehicle"
+    /api/v1/clean:
+        post:
+            operationId: cleanRecord
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/RecordString"
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/RecordEntity"
+components:
+    schemas:
+        Address:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                result:
+                    type: string
+                    nullable: true
+                postal_code:
+                    type: string
+                    nullable: true
+                country:
+                    type: string
+                    nullable: true
+                country_iso_code:
+                    type: string
+                    nullable: true
+                federal_district:
+                    type: string
+                    nullable: true
+                region_fias_id:
+                    type: string
+                    nullable: true
+                region_kladr_id:
+                    type: string
+                    nullable: true
+                region_iso_code:
+                    type: string
+                    nullable: true
+                region_with_type:
+                    type: string
+                    nullable: true
+                region_type:
+                    type: string
+                    nullable: true
+                region_type_full:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                area_fias_id:
+                    type: string
+                    nullable: true
+                area_kladr_id:
+                    type: string
+                    nullable: true
+                area_with_type:
+                    type: string
+                    nullable: true
+                area_type:
+                    type: string
+                    nullable: true
+                area_type_full:
+                    type: string
+                    nullable: true
+                area:
+                    type: string
+                    nullable: true
+                city_fias_id:
+                    type: string
+                    nullable: true
+                city_kladr_id:
+                    type: string
+                    nullable: true
+                city_with_type:
+                    type: string
+                    nullable: true
+                city_type:
+                    type: string
+                    nullable: true
+                city_type_full:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                city_area:
+                    type: string
+                    nullable: true
+                city_district_fias_id:
+                    type: string
+                    nullable: true
+                city_district_kladr_id:
+                    type: string
+                    nullable: true
+                city_district_with_type:
+                    type: string
+                    nullable: true
+                city_district_type:
+                    type: string
+                    nullable: true
+                city_district_type_full:
+                    type: string
+                    nullable: true
+                city_district:
+                    type: string
+                    nullable: true
+                settlement_fias_id:
+                    type: string
+                    nullable: true
+                settlement_kladr_id:
+                    type: string
+                    nullable: true
+                settlement_with_type:
+                    type: string
+                    nullable: true
+                settlement_type:
+                    type: string
+                    nullable: true
+                settlement_type_full:
+                    type: string
+                    nullable: true
+                settlement:
+                    type: string
+                    nullable: true
+                street_fias_id:
+                    type: string
+                    nullable: true
+                street_kladr_id:
+                    type: string
+                    nullable: true
+                street_with_type:
+                    type: string
+                    nullable: true
+                street_type:
+                    type: string
+                    nullable: true
+                street_type_full:
+                    type: string
+                    nullable: true
+                street:
+                    type: string
+                    nullable: true
+                stead_fias_id:
+                    type: string
+                    nullable: true
+                stead_kladr_id:
+                    type: string
+                    nullable: true
+                stead_cadnum:
+                    type: string
+                    nullable: true
+                stead_type:
+                    type: string
+                    nullable: true
+                stead_type_full:
+                    type: string
+                    nullable: true
+                stead:
+                    type: string
+                    nullable: true
+                house_fias_id:
+                    type: string
+                    nullable: true
+                house_kladr_id:
+                    type: string
+                    nullable: true
+                house_cadnum:
+                    type: string
+                    nullable: true
+                house_type:
+                    type: string
+                    nullable: true
+                house_type_full:
+                    type: string
+                    nullable: true
+                house:
+                    type: string
+                    nullable: true
+                house_flat_count:
+                    type: string
+                    nullable: true
+                block_type:
+                    type: string
+                    nullable: true
+                block_type_full:
+                    type: string
+                    nullable: true
+                block:
+                    type: string
+                    nullable: true
+                entrance:
+                    type: string
+                    nullable: true
+                floor:
+                    type: string
+                    nullable: true
+                flat_fias_id:
+                    type: string
+                    nullable: true
+                flat_cadnum:
+                    type: string
+                    nullable: true
+                flat_type:
+                    type: string
+                    nullable: true
+                flat_type_full:
+                    type: string
+                    nullable: true
+                flat:
+                    type: string
+                    nullable: true
+                flat_area:
+                    type: string
+                    nullable: true
+                square_meter_price:
+                    type: string
+                    nullable: true
+                flat_price:
+                    type: string
+                    nullable: true
+                postal_box:
+                    type: string
+                    nullable: true
+                room_type:
+                    type: string
+                    nullable: true
+                room_type_full:
+                    type: string
+                    nullable: true
+                room:
+                    type: string
+                    nullable: true
+                fias_id:
+                    type: string
+                    nullable: true
+                fias_code:
+                    type: string
+                    nullable: true
+                fias_level:
+                    type: string
+                    nullable: true
+                fias_actuality_state:
+                    type: string
+                    nullable: true
+                kladr_id:
+                    type: string
+                    nullable: true
+                geoname_id:
+                    type: string
+                    nullable: true
+                capital_marker:
+                    type: string
+                    nullable: true
+                okato:
+                    type: string
+                    nullable: true
+                oktmo:
+                    type: string
+                    nullable: true
+                tax_office:
+                    type: string
+                    nullable: true
+                tax_office_legal:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+                geo_lat:
+                    type: string
+                    nullable: true
+                geo_lon:
+                    type: string
+                    nullable: true
+                beltway_hit:
+                    type: string
+                    nullable: true
+                beltway_distance:
+                    type: string
+                    nullable: true
+                qc_geo:
+                    type: integer
+                    format: int32
+                    nullable: true
+                qc_complete:
+                    type: integer
+                    format: int32
+                    nullable: true
+                qc_house:
+                    type: integer
+                    format: int32
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+                unparsed_parts:
+                    type: string
+                    nullable: true
+                metro:
+                    type: array
+                    nullable: true
+                    items:
+                        $ref: "#/components/schemas/Metro"
+                divisions:
+                    $ref: "#/components/schemas/AddressDivisions"
+        AddressDivisions:
+            type: object
+            properties:
+                administrative:
+                    $ref: "#/components/schemas/AdministrativeDivision"
+        AddressPart:
+            type: object
+            properties:
+                fiasId:
+                    type: string
+                    nullable: true
+                kladrId:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                typeFull:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                nameWithType:
+                    type: string
+                    nullable: true
+        AdministrativeDivision:
+            type: object
+            properties:
+                area:
+                    $ref: "#/components/schemas/AddressPart"
+                city:
+                    $ref: "#/components/schemas/AddressPart"
+                cityDistrict:
+                    $ref: "#/components/schemas/AddressPart"
+                settlement:
+                    $ref: "#/components/schemas/AddressPart"
+                planningStructure:
+                    $ref: "#/components/schemas/AddressPart"
+        AsIs:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+        Birthdate:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                birthdate:
+                    type: string
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+        Email:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                email:
+                    type: string
+                    nullable: true
+                local:
+                    type: string
+                    nullable: true
+                domain:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+        Metro:
+            type: object
+            properties:
+                distance:
+                    type: number
+                    format: double
+                    nullable: true
+                line:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+        Name:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                result:
+                    type: string
+                    nullable: true
+                result_genitive:
+                    type: string
+                    nullable: true
+                result_dative:
+                    type: string
+                    nullable: true
+                result_ablative:
+                    type: string
+                    nullable: true
+                surname:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                    nullable: true
+                patronymic:
+                    type: string
+                    nullable: true
+                gender:
+                    type: string
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+        Passport:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                series:
+                    type: string
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+        Phone:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                    nullable: true
+                phone:
+                    type: string
+                    nullable: true
+                country_code:
+                    type: string
+                    nullable: true
+                city_code:
+                    type: string
+                    nullable: true
+                number:
+                    type: string
+                    nullable: true
+                extension:
+                    type: string
+                    nullable: true
+                provider:
+                    type: string
+                    nullable: true
+                country:
+                    type: string
+                    nullable: true
+                region:
+                    type: string
+                    nullable: true
+                city:
+                    type: string
+                    nullable: true
+                timezone:
+                    type: string
+                    nullable: true
+                qc_conflict:
+                    type: integer
+                    format: int32
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true
+        RecordEntity:
+            type: object
+            properties:
+                structure:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - NAME
+                            - ADDRESS
+                            - PHONE
+                            - AS_IS
+                            - BIRTHDATE
+                            - EMAIL
+                            - VEHICLE
+                            - PASSPORT
+                            - SIMPLE_PARTY_NAME
+                data:
+                    type: array
+                    nullable: true
+                    items:
+                        type: array
+                        items:
+                            anyOf:
+                                - $ref: "#/components/schemas/Address"
+                                - $ref: "#/components/schemas/AsIs"
+                                - $ref: "#/components/schemas/Birthdate"
+                                - $ref: "#/components/schemas/Email"
+                                - $ref: "#/components/schemas/Name"
+                                - $ref: "#/components/schemas/Passport"
+                                - $ref: "#/components/schemas/Phone"
+                                - $ref: "#/components/schemas/Vehicle"
+        RecordString:
+            type: object
+            properties:
+                structure:
+                    type: array
+                    nullable: true
+                    items:
+                        type: string
+                        enum:
+                            - NAME
+                            - ADDRESS
+                            - PHONE
+                            - AS_IS
+                            - BIRTHDATE
+                            - EMAIL
+                            - VEHICLE
+                            - PASSPORT
+                            - SIMPLE_PARTY_NAME
+                data:
+                    type: array
+                    nullable: true
+                    items:
+                        type: array
+                        items:
+                            type: string
+        Vehicle:
+            type: object
+            properties:
+                source:
+                    type: string
+                    nullable: true
+                result:
+                    type: string
+                    nullable: true
+                brand:
+                    type: string
+                    nullable: true
+                model:
+                    type: string
+                    nullable: true
+                qc:
+                    type: integer
+                    format: int32
+                    nullable: true

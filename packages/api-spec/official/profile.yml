@@ -1,0 +1,95 @@
+openapi: 3.0.1
+info:
+    title: Dadata Profile API
+    version: v2
+servers:
+    - url: https://dadata.ru
+      description: Main profile server.
+paths:
+    /api/v2/profile/balance:
+        get:
+            operationId: get_balance
+            description: Возвращает баланс пользователя.
+            parameters: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/GetBalanceOut"
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+
+    /api/v2/stat/daily:
+        get:
+            operationId: get_daily_stats
+            description: Возвращает статистику использования сервисов за сегодня.
+            parameters: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+
+    /api/v2/version:
+        get:
+            operationId: get_versions
+            description: Возвращает версии сервисов и даты актуальности справочников.
+            parameters: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: true
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+
+components:
+    schemas:
+        GetBalanceOut:
+            type: object
+            properties:
+                balance:
+                    type: number
+            required:
+                - balance
+        Error:
+            type: object
+            properties:
+                code:
+                    type: string
+            required:
+                - code
