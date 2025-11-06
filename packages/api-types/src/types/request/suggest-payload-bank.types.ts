@@ -5,6 +5,8 @@ export type BankType = (typeof BANK_TYPES)[number];
 export type BankStatus = (typeof BANK_STATUSES)[number];
 
 /**
+ * Параметры запроса к API "Подсказки по банкам"
+ *
  * @see https://dadata.ru/api/suggest/bank/
  * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078
  */

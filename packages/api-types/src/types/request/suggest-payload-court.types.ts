@@ -1,6 +1,9 @@
+import type { CourtTypeCode } from '../common.types';
 import type { BaseSuggestPayload } from './suggest-payload.types';
 
 /**
+ * Параметры запроса к API "Подсказки по судам"
+ *
  * @see https://dadata.ru/api/suggest/court/
  */
 export interface SuggestCourtPayload extends BaseSuggestPayload {
@@ -10,6 +13,7 @@ export interface SuggestCourtPayload extends BaseSuggestPayload {
   filters?: SuggestCourtFilter[];
 }
 
+/** Объект для передачи фильтров API "Подсказки по судам" */
 export interface SuggestCourtFilter {
   /**
    * Тип суда
@@ -29,5 +33,5 @@ export interface SuggestCourtFilter {
    * - `AS` — Арбитражный суд области
    * - `MS` — Мировой суд
    */
-  court_type?: string;
+  court_type?: CourtTypeCode;
 }

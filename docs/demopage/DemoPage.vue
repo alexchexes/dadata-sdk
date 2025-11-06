@@ -436,10 +436,10 @@ const setSuggestion = () => {
   suggestion.value = {
     value: 'г Москва',
     unrestricted_value: '101000, г Москва',
+    // @ts-expect-error Это просто пример, а не реальный объект одного из типов подсказок
     data: {
       code: 'example',
       name: 'example',
-      region_code: 'example',
     },
   };
 };
