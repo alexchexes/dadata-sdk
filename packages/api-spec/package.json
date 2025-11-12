@@ -1,6 +1,6 @@
 {
-  "name": "dadata-api-spec",
-  "version": "0.0.0",
+  "name": "@dadata-sdk/api-spec",
+  "version": "0.0.1",
   "private": false,
   "license": "MIT",
   "description": "JSON schemas for Dadata API",
