@@ -1,0 +1,18 @@
+{
+  "name": "dadata-api-spec",
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "description": "JSON schemas for Dadata API",
+  "files": [
+    "dadata.json",
+    "schemas/request.json",
+    "schemas/response.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexchexes/dadata-sdk",
+    "directory": "packages/api-spec"
+  }
+}
