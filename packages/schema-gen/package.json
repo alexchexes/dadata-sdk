@@ -12,10 +12,10 @@
     ".": "./dist/index.js"
   },
   "scripts": {
+    "prepare": "pnpm build",
     "build": "tsc -p tsconfig.json",
     "cli": "tsx src/cli.js",
-    "schema-gen": "pnpm cli",
-    "prepare": "pnpm run build"
+    "schema-gen": "pnpm cli"
   },
   "dependencies": {
     "chalk": "^5.4.1",

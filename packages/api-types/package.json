@@ -19,6 +19,7 @@
     "./schema/*": "./json-schema/*"
   },
   "scripts": {
+    "prepare": "pnpm build",
     "clean": "rimraf dist",
     "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema && pnpm run gen:spec",
     "build:types": "tsc -p tsconfig.types.json && node -e \"require('fs').copyFileSync('src/index.d.ts','dist/index.d.ts')\"",
