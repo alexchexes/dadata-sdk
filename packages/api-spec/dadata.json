@@ -5216,7 +5216,10 @@
             "description": "Абонентский ящик"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "fias_level": {
@@ -6019,7 +6022,10 @@
             "description": "Абонентский ящик"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "fias_level": {
@@ -7011,7 +7017,10 @@
             "description": "Строение"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "kladr_id": {
@@ -7792,7 +7801,10 @@
             "description": "Абонентский ящик"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "fias_level": {
@@ -9682,7 +9694,10 @@
             "description": "Абонентский ящик"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "fias_level": {
@@ -15396,7 +15411,10 @@
             "description": "Комната\n* (подсказки: v22.8+)"
           },
           "fias_id": {
-            "type": "string",
+            "type": [
+              "null",
+              "string"
+            ],
             "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
           },
           "kladr_id": {

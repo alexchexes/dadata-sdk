@@ -334,7 +334,7 @@
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "fias_level": {
@@ -683,7 +683,7 @@
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "fias_level": {
@@ -1089,7 +1089,7 @@
         },
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "kladr_id": { "type": ["null", "string"], "description": "КЛАДР-код адреса" },
@@ -1381,7 +1381,7 @@
         "building_type": { "type": ["null", "string"], "description": "Тип строения" },
         "building": { "type": ["null", "string"], "description": "Строение" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "kladr_id": { "type": ["null", "string"], "description": "КЛАДР-код адреса" },
@@ -1601,7 +1601,7 @@
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "fias_level": {
@@ -1957,7 +1957,7 @@
         "room": { "type": ["null", "string"], "description": "Комната\n* (подсказки: v22.8+)" },
         "postal_box": { "type": ["null", "string"], "description": "Абонентский ящик" },
         "fias_id": {
-          "type": "string",
+          "type": ["null", "string"],
           "description": "ФИАС-код (он же код ГАР - object GUID) адреса для России.\n\nИдентификатор OpenStreetMap для Беларуси, Казахстана и Узбекистана.\n\nДля остальных стран — идентификатор объекта в базе GeoNames.\n\nв ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов\nADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов."
         },
         "fias_level": {

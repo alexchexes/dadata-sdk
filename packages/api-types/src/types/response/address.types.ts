@@ -397,7 +397,7 @@ interface AllAddressFields {
    * в ФИАС: Код ФИАС:HOUSE.HOUSEGUID для домов
    * ADDROBJ.AOGUID для улиц, н/п и вышестоящих объектов.
    */
-  fias_id: string;
+  fias_id: null | string;
   /**
    * Уровень детализации, до которого адрес найден в ФИАС:
    * - 0 — страна
