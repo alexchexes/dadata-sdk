@@ -4826,6 +4826,132 @@
           "distance"
         ]
       },
+      "AddressDivisionsAdministrativeItem": {
+        "type": "object",
+        "properties": {
+          "fias_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ФИАС-код"
+          },
+          "kladr_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "КЛАДР-код"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Тип (сокращенный), например \"р-н\""
+          },
+          "type_full": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Тип (полный), например \"район\""
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Название, например \"Академический\""
+          },
+          "name_with_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Название с типом, например \"р-н Академический\""
+          }
+        },
+        "required": [
+          "fias_id",
+          "kladr_id",
+          "type",
+          "type_full",
+          "name",
+          "name_with_type"
+        ]
+      },
+      "AddressDivisionsAdministrative": {
+        "type": "object",
+        "properties": {
+          "area": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "city_district": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "settlement": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "planning_structure": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          }
+        }
+      },
+      "AddressDivisions": {
+        "type": "object",
+        "properties": {
+          "administrative": {
+            "$ref": "#/components/schemas/AddressDivisionsAdministrative",
+            "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
+          },
+          "municipal": {
+            "type": "null",
+            "description": "Поле отсутствует в новых версиях API, в старых не заполнялось."
+          }
+        },
+        "required": [
+          "administrative"
+        ]
+      },
       "AddressAdminData": {
         "type": "object",
         "properties": {
@@ -5475,7 +5601,14 @@
             "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
           },
           "divisions": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisions"
+              }
+            ],
             "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
           },
           "city_district_fias_id": {
@@ -6288,7 +6421,14 @@
             "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
           },
           "divisions": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisions"
+              }
+            ],
             "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
           },
           "sub_area_fias_id": {
@@ -8059,7 +8199,14 @@
             "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
           },
           "divisions": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisions"
+              }
+            ],
             "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
           },
           "city_district_fias_id": {
@@ -9948,7 +10095,14 @@
             "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
           },
           "divisions": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisions"
+              }
+            ],
             "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
           },
           "city_district_fias_id": {
@@ -14751,135 +14905,6 @@
           [
             "форд фокус"
           ]
-        ]
-      },
-      "AddressDivisionsAdministrativeItem": {
-        "type": "object",
-        "properties": {
-          "fias_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "ФИАС-код"
-          },
-          "kladr_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "КЛАДР-код"
-          },
-          "type": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Тип (сокращенный), например \"р-н\""
-          },
-          "type_full": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Тип (полный), например \"район\""
-          },
-          "name": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Название, например \"Академический\""
-          },
-          "name_with_type": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "Название с типом, например \"р-н Академический\""
-          }
-        },
-        "required": [
-          "fias_id",
-          "kladr_id",
-          "type",
-          "type_full",
-          "name",
-          "name_with_type"
-        ]
-      },
-      "AddressDivisionsAdministrative": {
-        "type": "object",
-        "properties": {
-          "area": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
-              }
-            ]
-          },
-          "city": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
-              }
-            ]
-          },
-          "city_district": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
-              }
-            ]
-          },
-          "settlement": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
-              }
-            ]
-          },
-          "planning_structure": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
-              }
-            ]
-          }
-        },
-        "required": [
-          "area",
-          "city",
-          "city_district",
-          "settlement",
-          "planning_structure"
-        ]
-      },
-      "AddressDivisions": {
-        "type": "object",
-        "properties": {
-          "administrative": {
-            "$ref": "#/components/schemas/AddressDivisionsAdministrative",
-            "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
-          }
-        },
-        "required": [
-          "administrative"
         ]
       },
       "CleanAddressFiasLevel": {

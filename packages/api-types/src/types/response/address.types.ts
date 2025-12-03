@@ -32,7 +32,7 @@ export type AddressDivisionsAdministrative = {
     | 'city'
     | 'city_district'
     | 'settlement'
-    | 'planning_structure']: null | AddressDivisionsAdministrativeItem;
+    | 'planning_structure']?: null | AddressDivisionsAdministrativeItem;
 };
 
 export interface AddressDivisions {
@@ -46,6 +46,8 @@ export interface AddressDivisions {
    * - `planning_structure` — планировочная структура.
    */
   administrative: AddressDivisionsAdministrative;
+  /** Поле отсутствует в новых версиях API, в старых не заполнялось. */
+  municipal?: null;
 }
 
 export type FiasAddressFiasLevel =
@@ -648,7 +650,7 @@ interface AllAddressFields {
    * (только для стандартизации)
    * * Поле существует начиная с v22.3+
    */
-  divisions?: null;
+  divisions?: null | AddressDivisions;
   /**
    * Зарезервировано, не возвращается ни в одном из API
    * (подсказки: v23.5+)

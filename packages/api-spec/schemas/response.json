@@ -189,8 +189,7 @@
         "planning_structure": {
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }]
         }
-      },
-      "required": ["area", "city", "city_district", "settlement", "planning_structure"]
+      }
     },
     "AddressDivisions": {
       "type": "object",
@@ -198,7 +197,8 @@
         "administrative": {
           "$ref": "#/definitions/AddressDivisionsAdministrative",
           "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
-        }
+        },
+        "municipal": { "type": "null", "description": "Поле отсутствует в новых версиях API, в старых не заполнялось." }
       },
       "required": ["administrative"]
     },
@@ -462,7 +462,7 @@
           "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
         },
         "divisions": {
-          "type": "null",
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisions" }],
           "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
         },
         "city_district_fias_id": {
@@ -811,7 +811,7 @@
           "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
         },
         "divisions": {
-          "type": "null",
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisions" }],
           "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
         },
         "sub_area_fias_id": {
@@ -1717,7 +1717,7 @@
           "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
         },
         "divisions": {
-          "type": "null",
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisions" }],
           "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
         },
         "city_district_fias_id": {
@@ -2065,7 +2065,7 @@
           "description": "Нераспознанная часть адреса. (заполняется только для стандартизации)"
         },
         "divisions": {
-          "type": "null",
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisions" }],
           "description": "Поля адреса в административном делении\n(только для стандартизации)\n* Поле существует начиная с v22.3+"
         },
         "city_district_fias_id": {
