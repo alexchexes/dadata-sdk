@@ -65,6 +65,7 @@ export type AddressFiasLevel =
   | FiasAddressFiasLevel
   | '75'
   | '9'
+  | '90'
   | '-1';
 
 export type CleanAddressFiasLevel =
@@ -411,6 +412,7 @@ interface AllAddressFields {
    * - 7 — улица
    * - 8 — дом
    * - 9 — квартира (подсказки: v21.4+)
+   * - 90 — доп. территория (подсказки: только в старых версиях API)
    * - 65 — планировочная структура
    * - 75 — земельный участок (подсказки: v21.12+)
    * - -1 — иностранный или пустой
