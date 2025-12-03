@@ -417,7 +417,7 @@ interface AllAddressFields {
    * - 75 — земельный участок (подсказки: v21.12+)
    * - -1 — иностранный или пустой
    */
-  fias_level: AddressFiasLevel;
+  fias_level: null | AddressFiasLevel;
   /** КЛАДР-код адреса */
   kladr_id: null | string;
   /**
@@ -435,7 +435,7 @@ interface AllAddressFields {
    * - 4 — центральный район региона (Тюменская обл, Тюменский р-н)
    * - 0 — ничего из перечисленного (Московская обл, г Балашиха)
    */
-  capital_marker: CapitalMarker;
+  capital_marker: null | CapitalMarker;
   /** Код ОКАТО */
   okato: null | string;
   /** Код ОКТМО */
@@ -484,7 +484,7 @@ interface AllAddressFields {
    * - 51 — переподчинен
    * - 99 — удален
    */
-  fias_actuality_state: string;
+  fias_actuality_state: null | string;
   /**
    * Административный округ (только для Москвы)
    *
@@ -626,17 +626,17 @@ interface AllAddressFields {
    * Код пригодности к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete}
    * * Только в Стандартизации и подсказках по банкам в сведениях об адресе
    */
-  qc_complete: null;
+  qc_complete: null | string;
   /**
    * Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house}
    * * Только в Стандартизации и подсказках по банкам в сведениях об адресе
    */
-  qc_house: null;
+  qc_house: null | string;
   /**
    * Код проверки адреса {@link https://dadata.ru/api/clean/address/#qc}
    * * Только в Стандартизации и подсказках по банкам и организациям в сведениях об адресе
    */
-  qc: null;
+  qc: null | string;
   /**
    * - В стандартизации: Исходный адрес одной строкой
    * - В подсказках по организациям — адрес как в ЕГРЮЛ
@@ -644,7 +644,7 @@ interface AllAddressFields {
    *
    * В остальных случаях — `null`
    */
-  source: null;
+  source: null | string;
   /** Нераспознанная часть адреса. (заполняется только для стандартизации) */
   unparsed_parts: null;
   /**
