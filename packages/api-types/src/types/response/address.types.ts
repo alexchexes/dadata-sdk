@@ -961,7 +961,7 @@ export interface AddressClean
       qc: 0 | 1 | 2 | 3;
 
       /** Компоненты адреса в административном/муниципальном делении. */
-      divisions: AddressDivisions;
+      divisions: null | AddressDivisions;
 
       /**
        * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
