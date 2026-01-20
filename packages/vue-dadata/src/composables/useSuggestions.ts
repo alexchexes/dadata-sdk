@@ -101,6 +101,7 @@ export function useSuggestions(
   // ===  Watchers guards ===
   let dontFetchOnQueryChange = false;
   let dontClearOnQueryChange = false;
+  let dontSyncQueryOnSuggestionChange = false;
 
   // ===============================
   // 🔍 Suggestion Fetching
@@ -167,7 +168,7 @@ export function useSuggestions(
     }
   };
 
-  const setSuggestionsIfNotEmpty = (suggestions: DadataSuggestion[] | null): void => {
+  const setSuggestionsIfNotNull = (suggestions: DadataSuggestion[] | null): void => {
     if (suggestions) {
       suggestionsList.value = suggestions;
 
@@ -181,14 +182,14 @@ export function useSuggestions(
 
   const tryUpdateList = async (optionsOverrides: Partial<SuggestOptions> = {}): Promise<void> => {
     const suggestions = await tryFetch(optionsOverrides);
-    setSuggestionsIfNotEmpty(suggestions);
+    setSuggestionsIfNotNull(suggestions);
   };
 
   const update = async (
     optionsOverrides: Partial<SuggestOptions> = {},
   ): Promise<DadataSuggestion[]> => {
     const suggestions = await fetchSuggestions(optionsOverrides);
-    setSuggestionsIfNotEmpty(suggestions);
+    setSuggestionsIfNotNull(suggestions);
     return suggestions;
   };
 
@@ -204,12 +205,14 @@ export function useSuggestions(
       restrictValue: false,
     });
 
+    const prev = suggestionModel.value;
     if (
       suggestions?.length &&
+      prev &&
       suggestions[0].unrestricted_value === selectedSuggestion.unrestricted_value
     ) {
       suggestionModel.value = suggestions[0];
-      emit('enriched', suggestions[0], deepDiff(suggestionModel.value, suggestions[0]));
+      emit('enriched', suggestions[0], deepDiff(prev, suggestions[0]));
       return true;
     } else {
       emit('enrichFail', selectedSuggestion.unrestricted_value);
@@ -254,8 +257,13 @@ export function useSuggestions(
   // watch selected `suggestion` to be able update `query` when `suggestion` is set from outside
   // (using v-model:suggestion)
   watch(suggestionModel, () => {
-    // if it's empty we do nothing - no need to reset `query` or `suggestionsList` in that case.
-    // same when its `value` already matches current query.
+    if (dontSyncQueryOnSuggestionChange) {
+      dontSyncQueryOnSuggestionChange = false;
+      return;
+    }
+
+    // Don't reset query/suggestionsList if new `suggestionModel` is empty
+    // or if `value` already matches current query
     if (!suggestionModel.value?.value || queryModel.value === suggestionModel.value.value) {
       return;
     }
@@ -304,10 +312,22 @@ export function useSuggestions(
 
     const selectedSuggestion = suggestionsList.value[index];
 
+    const willSuggestionChange = !Object.is(suggestionModel.value, selectedSuggestion);
+
+    if (willSuggestionChange) {
+      dontSyncQueryOnSuggestionChange = true;
+    }
+
     suggestionModel.value = selectedSuggestion;
     emit('select', selectedSuggestion, selectType);
 
-    dontClearOnQueryChange = true;
+    const nextQuery = options.addSpace ? selectedSuggestion.value + ' ' : selectedSuggestion.value;
+
+    const willChangeQuery = queryModel.value !== nextQuery;
+
+    if (willChangeQuery) {
+      dontClearOnQueryChange = true;
+    }
 
     // The 'continueSelecting' option needs further refinement. Currently, it:
     // 1) Conflicts with 'enrichOnSelect'. Each request cancels the previous one, but when
@@ -320,15 +340,13 @@ export function useSuggestions(
     //    have no way to disable it manually. This means the entire logic needs to be rethought and refactored.
     // POTENTIALLY: rename this prop with its current behavior to `hideOnSelect` and provide a method to re-fetch
     if (!options.continueSelecting) {
-      dontFetchOnQueryChange = true;
+      if (willChangeQuery) {
+        dontFetchOnQueryChange = true;
+      }
       hide();
     }
 
-    if (options.addSpace) {
-      queryModel.value = selectedSuggestion.value + ' ';
-    } else {
-      queryModel.value = selectedSuggestion.value;
-    }
+    queryModel.value = nextQuery;
 
     if (
       options.enrichOnSelect &&
