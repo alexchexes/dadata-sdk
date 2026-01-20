@@ -202,7 +202,6 @@ export function useSuggestions(
     const suggestions = await tryFetch({
       query: selectedSuggestion.unrestricted_value,
       count: 1,
-      restrictValue: false,
     });
 
     const prev = suggestionModel.value;
@@ -329,7 +328,7 @@ export function useSuggestions(
       dontClearOnQueryChange = true;
     }
 
-    // The 'continueSelecting' option needs further refinement. Currently, it:
+    // TODO: The 'continueSelecting' option needs further refinement. Currently, it:
     // 1) Conflicts with 'enrichOnSelect'. Each request cancels the previous one, but when
     //    'continueSelecting' is enabled, two consecutive requests are made: one to enrich,
     //    and then another triggered by the updated queryModel. This second request cancels the first.
@@ -348,11 +347,7 @@ export function useSuggestions(
 
     queryModel.value = nextQuery;
 
-    if (
-      options.enrichOnSelect &&
-      (options.suggestType === 'address' || options.suggestType === 'fias') &&
-      (options.count !== 1 || options.restrictValue) // with count=1 it's already "enriched", until restrictValue is true
-    ) {
+    if (options.enrichOnSelect && options.suggestType === 'address' && options.count !== 1) {
       enrichSuggestion(selectedSuggestion);
     }
   };
