@@ -48,6 +48,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     socialLinks: [{ icon: 'github', link: 'https://github.com/alexchexes/dadata-sdk' }],
     langMenuLabel: 'Change language | Выбрать язык',
+    logo: '/favicon.svg',
   },
 
   cleanUrls: true,
