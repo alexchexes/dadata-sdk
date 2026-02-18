@@ -38,6 +38,8 @@ viteResolveAliases = {
 export default defineConfig({
   title: 'DaData SDK',
 
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+
   // <meta name="description" ...>
   description:
     'Full API specification in OpenAPI file, TypeScript and JSON-schema, full-featured "suggestions" component for Vue, playground to test "suggestions" API, and more.',
