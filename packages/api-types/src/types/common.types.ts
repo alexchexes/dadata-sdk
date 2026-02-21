@@ -46,3 +46,12 @@ export type CourtTypeCode =
   | 'AI'
   | 'AS'
   | 'MS';
+
+export type CleanFieldType =
+  | 'AS_IS'
+  | 'ADDRESS'
+  | 'PHONE'
+  | 'PASSPORT'
+  | 'NAME'
+  | 'EMAIL'
+  | 'VEHICLE';

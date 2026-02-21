@@ -1,11 +1,10 @@
+import type { CleanFieldType } from '../common.types';
 import type { AddressClean } from './address.types';
 import type { EmailClean } from './email.types';
 import type { FioClean } from './fio.types';
 import type { PassportClean } from './passport.types';
 import type { PhoneClean } from './phone.types';
 import type { VehicleClean } from './vehicle.types';
-
-export type CleanFieldType = 'ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL' | 'VEHICLE';
 
 /**
  * Составная запись с контактными данными

@@ -1,3 +1,5 @@
+import type { CleanFieldType } from '../common.types';
+
 /**
  * Формат запроса ко всем эндпоинтам API стандартизации (`clean`) «Дадаты»,
  * кроме стандартизации составной записи {@link https://dadata.ru/api/clean/record/}
@@ -74,7 +76,7 @@ export interface CleanCombinedPayload {
    * то поле `structure` должно иметь вид `[ "NAME", "ADDRESS", "PHONE" ]`,
    * а в массиве в поле `data` - исходные имя, адрес и телефон в том же порядке
    */
-  structure: ('ADDRESS' | 'PHONE' | 'PASSPORT' | 'NAME' | 'EMAIL' | 'VEHICLE' | 'AS_IS')[];
+  structure: CleanFieldType[];
 
   /**
    * Массив из одного элемента, тоже массива, элементы которого (строки) - это составные

@@ -2568,13 +2568,12 @@
       "required": ["suggestions"],
       "description": "Объект с массивом подсказок"
     },
-    "CleanFieldType": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
     "CleanCombinedResponse": {
       "type": "object",
       "properties": {
         "structure": {
           "type": "array",
-          "items": { "type": "string", "enum": ["ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
+          "items": { "type": "string", "enum": ["AS_IS", "ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"] },
           "description": "Порядок и тип данных в поле `data`.\n\nНапример, если в поле `data` три объекта - имя, адрес и телефон,\nто в поле `structure` будет `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`, соответственно."
         },
         "data": {
@@ -2599,6 +2598,10 @@
       },
       "required": ["structure", "data"],
       "description": "Составная запись с контактными данными\n@see https://dadata.ru/api/clean/record/"
+    },
+    "CleanFieldType": {
+      "type": "string",
+      "enum": ["AS_IS", "ADDRESS", "PHONE", "PASSPORT", "NAME", "EMAIL", "VEHICLE"]
     },
     "PhoneClean": {
       "type": "object",

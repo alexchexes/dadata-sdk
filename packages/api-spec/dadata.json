@@ -16354,13 +16354,13 @@
             "items": {
               "type": "string",
               "enum": [
+                "AS_IS",
                 "ADDRESS",
                 "PHONE",
                 "PASSPORT",
                 "NAME",
                 "EMAIL",
-                "VEHICLE",
-                "AS_IS"
+                "VEHICLE"
               ]
             },
             "description": "Поле `structure` определяет тип данных в поле `data`.\n\nНапример, если нужно стандартизировать одновременно имя, адрес и телефон,\nто поле `structure` должно иметь вид `[ \"NAME\", \"ADDRESS\", \"PHONE\" ]`,\nа в массиве в поле `data` - исходные имя, адрес и телефон в том же порядке"
@@ -16392,6 +16392,7 @@
             "items": {
               "type": "string",
               "enum": [
+                "AS_IS",
                 "ADDRESS",
                 "PHONE",
                 "PASSPORT",
