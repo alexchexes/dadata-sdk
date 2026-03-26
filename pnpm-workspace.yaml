@@ -7,6 +7,3 @@ onlyBuiltDependencies:
   - esbuild
   - protobufjs
   - vue-demi
-overrides:
-  vitep-openapi: link:../vitep-openapi
-  vitepress-openapi: link:../vitepress-openapi

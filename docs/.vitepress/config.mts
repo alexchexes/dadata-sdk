@@ -8,8 +8,13 @@ const root = dirname(fileURLToPath(import.meta.url));
 const vuePkg = resolve(root, '../../packages/vue-dadata');
 const typesPkg = resolve(root, '../../packages/api-types');
 const schemaGenPkg = resolve(root, '../../packages/schema-gen');
+const [githubOwner, githubRepoName] = process.env.GITHUB_REPOSITORY?.split('/') ?? [];
 
 const isProd = process.env.NODE_ENV === 'production';
+const siteBase =
+  githubRepoName && githubRepoName !== `${githubOwner}.github.io`
+    ? `/${githubRepoName}/`
+    : '/';
 
 let viteResolveAliases = {};
 
@@ -38,7 +43,10 @@ viteResolveAliases = {
 export default defineConfig({
   title: 'DaData SDK',
 
-  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  // GitHub project pages are served from /<repo>/ while user pages use /.
+  base: siteBase,
+
+  head: [['link', { rel: 'icon', href: `${siteBase}favicon.ico` }]],
 
   // <meta name="description" ...>
   description:
