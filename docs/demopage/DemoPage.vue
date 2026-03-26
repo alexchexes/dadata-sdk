@@ -29,6 +29,7 @@ import {
 import type { DadataSuggestion, SuggestOptions, VueDadataOptions } from '@dadata-sdk/vue';
 import '@dadata-sdk/vue/dist/vue-dadata.css';
 import { ignorableWatch, useMediaQuery } from '@vueuse/core';
+import { withBase } from 'vitepress';
 import { type Ref, computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -430,7 +431,7 @@ const boundTypesOptionsFrom = computed(() => {
   );
 });
 
-const propsLink = (propName: string) => `/${lang}/vue#${propName.toLowerCase()}`;
+const propsLink = (propName: string) => withBase(`/${lang}/vue#${propName.toLowerCase()}`);
 
 const setSuggestion = () => {
   suggestion.value = {

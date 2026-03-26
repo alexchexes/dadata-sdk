@@ -16,6 +16,18 @@ import specLocales from '../../locales-spec';
 import { jsDocLinks } from '../../utils/jsDocLinks';
 import './style.css';
 
+const openApiMessages = {
+  en: {
+    ...vitepressOpenApiLocales.en,
+    'const:': 'const:',
+  },
+  ru: {
+    // Inherit upstream English keys so untranslated additions do not warn during SSR.
+    ...vitepressOpenApiLocales.en,
+    ...vpOpenApiLocalesRu,
+  },
+} as const;
+
 export default {
   extends: DefaultTheme,
 
@@ -32,7 +44,7 @@ export default {
     const { router } = ctx;
 
     // Helper to map a path to our two supported locales
-    const resolveLocale = (path: string) => (/^\/en(\/|$)/.test(path) ? 'en' : 'ru');
+    const resolveLocale = (path: string) => (/^\/(?:[^\/]+\/)?en(\/|$)/.test(path) ? 'en' : 'ru');
 
     const initialLocale = inBrowser
       ? resolveLocale(window.location.pathname)
@@ -69,10 +81,7 @@ export default {
       i18n: {
         locale: initialLocale,
         fallbackLocale: 'en',
-        messages: {
-          en: vitepressOpenApiLocales.en,
-          ru: vpOpenApiLocalesRu,
-        },
+        messages: openApiMessages,
         availableLocales: [
           { code: 'en', label: 'English' },
           { code: 'ru', label: 'Русский' },

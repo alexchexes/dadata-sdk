@@ -47,9 +47,11 @@
   "or": "или",
   "Enum": "Enum",
   "Copy endpoint": "Скопировать путь",
+  "Click to set in playground": "Нажмите, чтобы подставить в песочницу",
   "Custom Server": "Свой сервер",
   "Enter a custom server URL": "Введите URL сервера",
   "Select a server": "Выбрать сервер...",
+  "Select an example": "Выбрать пример",
   "Playground": "Песочница",
   "Collapse all": "Свернуть всё",
   "Expand all": "Развернуть всё",
@@ -71,5 +73,6 @@
   "Min Properties": "Мин. свойств",
   "Multiple of": "Кратность",
   "Pattern": "Шаблон",
-  "Unique Items": "Уникальные элементы"
+  "Unique Items": "Уникальные элементы",
+  "const:": "const:"
 }
