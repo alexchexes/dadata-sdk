@@ -40,6 +40,8 @@ jobs:
       - name: Build docs site
         env:
           NODE_ENV: production
+          # Embedded into the static demo bundle. Use a throw-away/public-safe token.
+          VITE_APP_DADATA_API_KEY: ${{ secrets.DADATA_DEMO_TOKEN }}
         run: pnpm build
 
       - name: Configure GitHub Pages
