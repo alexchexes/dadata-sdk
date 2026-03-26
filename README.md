@@ -1,54 +1,59 @@
 # Dadata SDK
 
-### [README in Russian](ru/README.md)
+### [English README](en/README.md)
 
-**[Docs website](docs/index.md) (not hosted yet)**
+Неофициальный набор инструментов для работы с API DaData.
 
-## OpenAPI spec
+**Документация:** https://alexchexes.github.io/dadata-sdk/
+**English docs:** https://alexchexes.github.io/dadata-sdk/en/
 
-## JSON-schema
+## Статус
 
-Full Dadata API contract described as JSON Schema:
+Проект был начат в 2025 году, до публикации официальных OpenAPI-схем DaData. Пакеты всё также полезны на практике, но OpenAPI документация и часть контрактов требуют синхронизации с актуальным API. Если вы хотите помочь, откройте issue или PR.
 
-- [Request.json](packages/api-types/json-schema/request.json)
-- [Response.json](packages/api-types/json-schema/response.json)
+## Пакеты
 
-Carefully generated from the TypeScript types (see below ↓).
+- [`packages/api-spec`](packages/api-spec) (`@dadata-sdk/api-spec`) - OpenAPI и JSON Schema, покрывающая практически весь публичный API ДаДаты.
+- [`packages/api-types`](packages/api-types) (`@dadata-sdk/api-types`) - TypeScript-типы, константы и модели запросов/ответов для API DaData
+- [`packages/vue-dadata`](packages/vue-dadata) (`@dadata-sdk/vue`) - Vue 3.5+ компонент подсказок DaData
+- [`packages/schema-gen`](packages/schema-gen) (`@dadata-sdk/schema-gen`) - инструмент для генерации JSON Schema из типов TypeScript (используя [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator)).
 
-## TypeScript types
+## OpenAPI и JSON Schema
 
-`@dadata-sdk/api-types`
+Готовые OpenAPI и JSON схемы лежат в [`packages/api-spec`](packages/api-spec):
 
-Hand-crafted, fully exported, JSDoc-documented TypeScript types library for all request and response models for each Dadata API endpoint.
+- [dadata.json](packages/api-spec/dadata.json)
+- [schemas/request.json](packages/api-spec/schemas/request.json)
+- [schemas/response.json](packages/api-spec/schemas/response.json)
 
-_Thanks for the kickstart to:_
+Просмотреть спецификацию можно здесь: https://alexchexes.github.io/dadata-sdk/ru/spec
 
-> - _[DefinitelyTyped/dadata-api](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/dadata-api)_
-> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata)_
-> - _[ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)_
+**Перечень всех API Дадаты, со ссылками к OpenAPI: https://alexchexes.github.io/dadata-sdk/ru/api**
 
-## Vue component
+## TypeScript-типы
 
-`@dadata-sdk/vue`
+Пакет `@dadata-sdk/api-types` содержит TypeScript-контракты запросов и ответов всех публичных эндпоинтов API ДаДаты, а также константы.
 
-[DaData.ru](https://dadata.ru) suggestion component for Vue 3 — addresses, organizations (RU / KZ / BY), banks, and every other `suggest` API endpoint (all of them!).
+## Vue-компонент
 
-### [Documentation](docs/vue.md) &nbsp;&nbsp;&nbsp; [Demo](docs/demo.md)
+`@dadata-sdk/vue` - компонент DaData-подсказок для Vue 3.5+. Поддерживает все основные `suggest`-эндпоинты, но наиболее широкая поддержка для адресов, организаций, банков. Компонент полностью типизирован. Доступен широкий набор слотов для точечной или полной кастомизации.
 
-**Vue 2** is not supported, though you can check the old versions of [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata).
+- Документация: https://alexchexes.github.io/dadata-sdk/ru/vue
+- Демо: https://alexchexes.github.io/dadata-sdk/ru/demo
 
-_Based on / inspired by:_
+**Vue 2** не поддерживается. Если нужен старый стек, посмотрите на ранние версии [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata).
 
-> - _[ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata) by Ivan Monastyrev._
-> - _[vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata) (some techniques and ideas)_
-> - _[hflabs/suggestions-jquery](https://github.com/hflabs/suggestions-jquery) (official jQuery plugin)_
+## Благодарности
 
-## Utils
+Отдельное спасибо этим проектам за идеи и базу, от которой можно было оттолкнуться:
 
-`@dadata-sdk/schema-gen` - [TypeScript to JSON-schema generator](docs/schema-gen.md)
+- [DefinitelyTyped/dadata-api](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/dadata-api)
+- [vitalybaev/react-dadata](https://github.com/vitalybaev/react-dadata)
+- [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)
+- [hflabs/suggestions-jquery](https://github.com/hflabs/suggestions-jquery)
 
-## License
+## Лицензия
 
 MIT
 
-DaData is a trademark of HFLabs.
+DaData - товарный знак HFLabs.

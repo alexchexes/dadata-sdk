@@ -14,22 +14,18 @@ Try the demo playground to understand how it works.
 
 ## Install {#installation}
 
-This package is not published on `npm` yet.
-
-To install it from the GitHub repo, try:
-
 ```bash
-pnpm install git+https://github.com/alexchexes/dadata-sdk.git#rewritten
+npm install @dadata-sdk/vue
 ```
 
-Or clone the repo and connect it via a local link in your `package.json`:
+```bash
+pnpm add @dadata-sdk/vue
+```
 
-```json
-{
-  "dependencies": {
-    "@dadata-sdk/vue": "link:..\\dadata-sdk\\packages\\vue-dadata"
-  }
-}
+Or install from the latest commit on GitHub:
+
+```bash
+pnpm add @dadata-sdk/vue@github:alexchexes/dadata-sdk#rewritten&path:/packages/vue-dadata
 ```
 
 ## Usage {#usage}

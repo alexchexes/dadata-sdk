@@ -2,8 +2,20 @@
   "name": "@dadata-sdk/api-spec",
   "version": "0.1.0",
   "private": false,
+  "description": "Bundled OpenAPI and JSON Schema artifacts for the DaData API.",
+  "keywords": [
+    "dadata",
+    "openapi",
+    "json-schema",
+    "schema",
+    "api"
+  ],
+  "homepage": "https://alexchexes.github.io/dadata-sdk/en/spec",
+  "bugs": {
+    "url": "https://github.com/alexchexes/dadata-sdk/issues"
+  },
+  "author": "Alex Chexes <alexchexes@gmail.com>",
   "license": "MIT",
-  "description": "JSON schemas for Dadata API",
   "files": [
     "dadata.json",
     "schemas/request.json",
@@ -14,5 +26,8 @@
     "type": "git",
     "url": "https://github.com/alexchexes/dadata-sdk",
     "directory": "packages/api-spec"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

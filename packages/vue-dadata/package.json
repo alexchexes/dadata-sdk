@@ -1,18 +1,26 @@
 {
   "name": "@dadata-sdk/vue",
   "version": "0.1.0",
-  "description": "Dadata suggestions Vue component, fully typed.",
+  "description": "Unofficial Vue 3.5+ component for the DaData suggestions API.",
   "keywords": [
-    "address suggestions",
     "dadata",
-    "postal address",
-    "ts",
-    "typescript",
+    "suggestions",
+    "autocomplete",
+    "address",
     "vue",
-    "vue3"
+    "vue3",
+    "typescript",
+    "postal address"
   ],
-  "homepage": "https://github.com/alexchexes/dadata-sdk",
-  "repository": "https://github.com/alexchexes/dadata-sdk",
+  "homepage": "https://alexchexes.github.io/dadata-sdk/en/vue",
+  "bugs": {
+    "url": "https://github.com/alexchexes/dadata-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexchexes/dadata-sdk",
+    "directory": "packages/vue-dadata"
+  },
   "license": "MIT",
   "author": "Alex Chexes <alexchexes@gmail.com>",
   "type": "module",
@@ -71,5 +79,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

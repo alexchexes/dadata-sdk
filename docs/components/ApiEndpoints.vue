@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress';
 import { OpenApi } from 'vitepress-openapi';
 import { useI18n } from 'vue-i18n';
 
@@ -14,6 +15,10 @@ locale.value = lang;
 
 const openApi = OpenApi({ spec: spec as any });
 const groupedPaths = getGroupedPaths(lang);
+
+function getOperationHref(operationId: string, pathTag?: string) {
+  return withBase(pathTag ? `/${lang}/tags/${pathTag}` : `/${lang}/api/${operationId}`);
+}
 </script>
 
 <template>
@@ -39,13 +44,7 @@ const groupedPaths = getGroupedPaths(lang);
             <tr>
               <td>
                 <b>
-                  <a
-                    :href="
-                      pathUi.pathTag
-                        ? `/${lang}/tags/${pathUi.pathTag}`
-                        : `/${lang}/api/${operationId}`
-                    "
-                  >
+                  <a :href="getOperationHref(operationId, pathUi.pathTag)">
                     {{ pathUi.label }}
                   </a>
                 </b>

@@ -14,22 +14,20 @@ import ComponentSchema from '../components/ComponentSchema.vue'
 
 ## Установка {#installation}
 
-Пакет ещё не опубликован на `npm`.
-
-Чтобы установить напрямую из git-репозитория:
-
 ```bash
-pnpm install git+https://github.com/alexchexes/dadata-sdk.git#rewritten
+npm i @dadata-sdk/vue
 ```
 
-Либо склонируйте репо и подключите к своему проекту через локальную ссылку:
+Или
 
-```json
-{
-  "dependencies": {
-    "@dadata-sdk/vue": "link:..\\dadata-sdk\\packages\\vue-dadata"
-  }
-}
+```bash
+pnpm i @dadata-sdk/vue
+```
+
+Или напрямую из последнего коммита на GitHub:
+
+```bash
+pnpm add @dadata-sdk/vue@github:alexchexes/dadata-sdk#rewritten&path:/packages/vue-dadata
 ```
 
 ## Использование {#usage}

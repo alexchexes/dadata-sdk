@@ -12,9 +12,7 @@ const [githubOwner, githubRepoName] = process.env.GITHUB_REPOSITORY?.split('/') 
 
 const isProd = process.env.NODE_ENV === 'production';
 const siteBase =
-  githubRepoName && githubRepoName !== `${githubOwner}.github.io`
-    ? `/${githubRepoName}/`
-    : '/';
+  githubRepoName && githubRepoName !== `${githubOwner}.github.io` ? `/${githubRepoName}/` : '/';
 
 let viteResolveAliases = {};
 
@@ -78,23 +76,6 @@ export default defineConfig({
 
   locales: {
     root: {
-      label: 'English',
-      lang: 'en',
-      link: '/en',
-
-      themeConfig: {
-        // https://vitepress.dev/reference/default-theme-config
-        nav: [
-          { text: 'OpenAPI spec', link: '/en/spec' },
-          { text: 'API endpoints', link: '/en/api' },
-          { text: 'Vue', link: '/en/vue' },
-          { text: 'Demo', link: '/en/demo' },
-        ],
-
-        sidebar: [...getSidebar('en')],
-      },
-    },
-    ru: {
       label: 'Русский',
       lang: 'ru', // will be added  as `lang` attribute on `html` tag
       link: '/ru/',
@@ -117,6 +98,23 @@ export default defineConfig({
         outline: {
           label: 'Оглавление',
         },
+      },
+    },
+    en: {
+      label: 'English',
+      lang: 'en',
+      link: '/en',
+
+      themeConfig: {
+        // https://vitepress.dev/reference/default-theme-config
+        nav: [
+          { text: 'OpenAPI spec', link: '/en/spec' },
+          { text: 'API endpoints', link: '/en/api' },
+          { text: 'Vue', link: '/en/vue' },
+          { text: 'Demo', link: '/en/demo' },
+        ],
+
+        sidebar: [...getSidebar('en')],
       },
     },
   },

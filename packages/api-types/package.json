@@ -1,22 +1,40 @@
 {
   "name": "@dadata-sdk/api-types",
   "version": "0.1.0",
-  "description": "Typed contract + JSON Schema for every Dadata endpoint",
+  "description": "TypeScript request and response contracts for the DaData API.",
+  "keywords": [
+    "dadata",
+    "typescript",
+    "types",
+    "api",
+    "openapi",
+    "json-schema"
+  ],
+  "homepage": "https://alexchexes.github.io/dadata-sdk/en/spec",
+  "bugs": {
+    "url": "https://github.com/alexchexes/dadata-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexchexes/dadata-sdk",
+    "directory": "packages/api-types"
+  },
+  "license": "MIT",
+  "author": "Alex Chexes <alexchexes@gmail.com>",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "json-schema"
+    "README.md"
   ],
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./schema/*": "./json-schema/*"
+    }
   },
   "scripts": {
     "prepare": "pnpm build",
@@ -35,5 +53,8 @@
     "rimraf": "^6.0.1",
     "tsx": "^4.19.4",
     "@dadata-sdk/schema-gen": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
