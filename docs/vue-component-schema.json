@@ -5,7 +5,10 @@
     "VueDadataOptionsDocs": {
       "type": "object",
       "properties": {
-        "token": { "type": "string", "description": "Your DaData API key (token)." },
+        "token": {
+          "type": "string",
+          "description": "Ваш API-ключ (token) DaData.\n\n@locale EN\nYour DaData API key (token)."
+        },
         "suggestType": {
           "type": "string",
           "enum": [
@@ -31,27 +34,27 @@
             "okpd2",
             "oktmo"
           ],
-          "description": "Type of suggestions (Dadata suggest API endpoint):\n- `address` - Normal addresses {@link https://dadata.ru/api/suggest/address/}\n- `fias` - FIAS addresses (discouraged by Dadata) {@link https://dadata.ru/api/suggest/fias/}\n- `party` - Legal entities {@link https://dadata.ru/api/suggest/party/}\n- `bank` - Finance organizations {@link https://dadata.ru/api/suggest/bank/}\n- `fio` - Names, surnames, patronymics {@link https://dadata.ru/api/suggest/name/}\n- `email` - Email address {@link https://dadata.ru/api/suggest/email/}\n\nDefault `address`"
+          "description": "Тип подсказок, то есть используемый эндпоинт suggest API DaData:\n- `address` - обычные адреса {@link https://dadata.ru/api/suggest/address/}\n- `fias` - адреса строго по ФИАС (не рекомендовано) {@link https://dadata.ru/api/suggest/fias/}\n- `party` - организации {@link https://dadata.ru/api/suggest/party/}\n- `bank` - банки {@link https://dadata.ru/api/suggest/bank/}\n- `fio` - имена, фамилии, отчества {@link https://dadata.ru/api/suggest/name/}\n- `email` - email-адреса {@link https://dadata.ru/api/suggest/email/}\n\nПо умолчанию `address`\n\n@locale EN\nType of suggestions (Dadata suggest API endpoint):\n- `address` - Normal addresses {@link https://dadata.ru/api/suggest/address/}\n- `fias` - FIAS addresses (discouraged by Dadata) {@link https://dadata.ru/api/suggest/fias/}\n- `party` - Legal entities {@link https://dadata.ru/api/suggest/party/}\n- `bank` - Finance organizations {@link https://dadata.ru/api/suggest/bank/}\n- `fio` - Names, surnames, patronymics {@link https://dadata.ru/api/suggest/name/}\n- `email` - Email address {@link https://dadata.ru/api/suggest/email/}\n\nDefault `address`"
         },
         "url": {
           "type": "string",
-          "description": "Custom API URL.\nUseful when proxying requests to the DaData API.\n\nNote: the endpoint (i.e. `suggestType`) is not appended automatically.\nYou must provide the full URL, e.g. `https://example.com/suggest_api/address`.\n\nDefault: The final URL is built from the base DaData suggest API (`.../api/4_1/rs/suggest/`) + `suggestType`."
+          "description": "Пользовательский URL API.\nПолезно, если вы проксируете запросы к DaData.\n\nВажно: эндпоинт (то есть `suggestType`) в настоящий момент не добавляется автоматически.\nНужно передать полный URL вашего эндпоинта, например `https://my-api-proxy.example.com/suggest/address`.\n\nЕсли не передано, итоговый URL собирается из базового suggest API DaData (`.../api/4_1/rs/suggest/`) + `suggestType`.\n\n@locale EN\nCustom API URL.\nUseful when proxying requests to the DaData API.\n\nNote: currently the endpoint (i.e. `suggestType`) is not appended automatically.\nYou must provide the full URL, e.g. `https://my-api-proxy.example.com/suggest/address`.\n\nDefault: The final URL is built from the base DaData suggest API (`.../api/4_1/rs/suggest/`) + `suggestType`."
         },
         "httpCache": {
           "type": "boolean",
-          "description": "If `false`, HTTP requests will not be cached.\nDefault `true`"
+          "description": "Если `false`, HTTP-запросы не будут кэшироваться.\nПо умолчанию `true`\n\n@locale EN\nIf `false`, HTTP requests will not be cached.\nDefault `true`"
         },
         "payload": {
           "$ref": "#/definitions/OptionalSuggestPayload",
-          "description": "Custom payload for the API request.\nAny fields specified here will be added to the final request payload, or override existing values if already set."
+          "description": "Пользовательский payload для API-запроса.\nПоля, указанные здесь, будут добавлены в итоговый payload, переопределяя существующие значения.\n\n@locale EN\nCustom payload for the API request.\nAny fields specified here will be added to the final request payload, or override existing values if already set."
         },
         "headers": {
           "$ref": "#/definitions/PlainHeaders",
-          "description": "Custom headers for the API request.\nAny headers specified here will be added to the final request headers, or override existing values if already set."
+          "description": "Пользовательские HTTP-заголовки для API-запроса.\nЗаголовки, указанные здесь, будут добавлены в итоговые headers переопределяя существующие значения.\n\n@locale EN\nCustom headers for the API request.\nAny headers specified here will be added to the final request headers, or override existing values if already set."
         },
         "count": {
           "type": "number",
-          "description": "Maximum number of suggestion items to fetch from the DaData API.\nMax: `20`, Default: `10`"
+          "description": "Максимальное количество подсказок, запрашиваемых у API DaData.\nМакс: `20`, по умолчанию: `10`\n\n@locale EN\nMaximum number of suggestion items to fetch from the DaData API.\nMax: `20`, Default: `10`"
         },
         "locationsBoost": {
           "anyOf": [
@@ -65,7 +68,7 @@
               }
             }
           ],
-          "description": "`kladr_id` or an array of `kladr_id`s for the region/city to be prioritized in suggestions.\nCorresponds to the `locations_boost` API parameter.\n\nExamples:\n- `55` — Omsk region\n- `63000001` — Samara city\n- `6300000100000` — Samara city (full KLADR code)\n- `[50, 77]` — Moscow and Moscow-City regions\n- `{kladr_id: '02'}` or `[{kladr_id: '02'}, ...]` — native DaData API format\n\n- 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}\n\nMax: `10` items"
+          "description": "`kladr_id` или массив `kladr_id` региона/города, который нужно приоритизировать в подсказках.\nСоответствует параметру API `locations_boost`.\n\nПримеры:\n- `55` — Омская область\n- `63000001` — город Самара\n- `6300000100000` — город Самара (полный код КЛАДР)\n- `[50, 77]` — Московская область и Москва\n- `{kladr_id: '02'}` или `[{kladr_id: '02'}, ...]` — нативный формат API DaData\n\n- 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}\n\nМакс: `10` элементов\n\n@locale EN\n`kladr_id` or an array of `kladr_id`s for the region/city to be prioritized in suggestions.\nCorresponds to the `locations_boost` API parameter.\n\nExamples:\n- `55` — Omsk region\n- `63000001` — Samara city\n- `6300000100000` — Samara city (full KLADR code)\n- `[50, 77]` — Moscow and Moscow-City regions\n- `{kladr_id: '02'}` or `[{kladr_id: '02'}, ...]` — native DaData API format\n\n- 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795}\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529}\n\nMax: `10` items"
         },
         "locationsFilter": {
           "anyOf": [
@@ -79,36 +82,37 @@
               }
             }
           ],
-          "description": "Restricts the search to specific locations (API `locations` parameter).\nMax: `10` items\n\nFor example (when `suggestType=address`), to search only in Voronezh city and in Rostov region:\n`:locationsFilter=\"[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]\"`\n\n- For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}\n- For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}\n\nFor `party` and `bank`, the only supported filter is `kladr_id`.\n- For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}\n- For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
+          "description": "Ограничивает поиск конкретными локациями (параметр API `locations`).\nМакс: `10` элементов\n\nНапример, при `suggestType=address`, чтобы искать только по городу Воронежу и Ростовской области:\n`:locationsFilter=\"[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]\"`\n\n- Для `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}\n- Для `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}\n\nДля `party` и `bank` поддерживается только фильтр `kladr_id`.\n- Для `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}\n- Для `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}\n\n@locale EN\nRestricts the search to specific locations (API `locations` parameter).\nMax: `10` items\n\nFor example (when `suggestType=address`), to search only in Voronezh city and in Rostov region:\n`:locationsFilter=\"[{'region':'Воронежская','city':'Воронеж'},{'region':'Ростовская'}]\"`\n\n- For `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108}\n- For `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974}\n\nFor `party` and `bank`, the only supported filter is `kladr_id`.\n- For `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}\n- For `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
         },
         "fromBound": {
           "type": "string",
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
-          "description": "Limits the type of address object from which DaData begins searching:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `from_bound` API parameter.\n\n- For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
+          "description": "Ограничивает тип адресного объекта, с которого DaData начинает поиск:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house`\n\nСоответствует параметру API `from_bound`.\n\n- Для `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- Для `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n\n@locale EN\nLimits the type of address object from which DaData begins searching:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house`\n\nCorresponds to the `from_bound` API parameter.\n\n- For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
         },
         "toBound": {
           "type": "string",
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
-          "description": "Limits the type of address object to which DaData performs the search:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `to_bound` API parameter.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+          "description": "Ограничивает тип адресного объекта, до которого DaData выполняет поиск:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nСоответствует параметру API `to_bound`.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n@locale EN\nLimits the type of address object to which DaData performs the search:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `to_bound` API parameter.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
         },
         "restrictValue": {
           "type": "boolean",
-          "description": "Used with `locationsFilter`. If `true`, the displayed suggestion (i.e., `value` field)\nwill exclude address parts up to the restricted level.\n\nFor example, if the filter specifies a `region`, that region will be omitted in the result;\nif it specifies a `city`, both the region and city will be omitted.\n\nCorresponds to the `restrict_value` API parameter.\n\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
+          "description": "Используется вместе с `locationsFilter`. Если `true`, отображаемая подсказка\n(то есть поле `value`) будет без частей адреса до уровня ограничения.\n\nНапример, если в фильтре указать `region`, этот регион не попадет в результат;\nесли указать `city`, из результата будут исключены и регион, и город.\n\nСоответствует параметру API `restrict_value`.\n\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}\n\n@locale EN\nUsed with `locationsFilter`. If `true`, the displayed suggestion (i.e., `value` field)\nwill exclude address parts up to the restricted level.\n\nFor example, if the filter specifies a `region`, that region will be omitted in the result;\nif it specifies a `city`, both the region and city will be omitted.\n\nCorresponds to the `restrict_value` API parameter.\n\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода}\n- {@link https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value}"
         },
         "radiusFilter": {
           "$ref": "#/definitions/RadiusFilter",
-          "description": "Restrict the search to a specific radius around a latitude/longitude point.\nCorresponds to the `locations_geo` API parameter.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
+          "description": "Ограничивает поиск заданным радиусом вокруг точки с широтой и долготой.\nПример: `{lat: '59.244634', lon: '39.913355', radius_meters: 200}`\n\nСоответствует параметру API `locations_geo`.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806\n\n@locale EN\nRestrict the search to a specific radius around a latitude/longitude point.\nExample: `{lat: '59.244634', lon: '39.913355', radius_meters: 200}`\n\nCorresponds to the `locations_geo` API parameter.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
         },
         "division": {
           "type": "string",
           "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
-          "description": "Type of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`. Affects set of fields inside `suggestion.data`\n@default 'ADMINISTRATIVE'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589",
+          "description": "Тип территориального деления:\n- `ADMINISTRATIVE` (административное): `Московская обл, г Одинцово, село Никольское`\n- `MUNICIPAL` (муниципальное): `Московская обл, г.о. Одинцовский, село Никольское`\n\nТакже влияет на набор полей внутри `suggestion.data`.\n\nПо умолчанию: `'ADMINISTRATIVE'`\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n\n@locale EN\nType of territorial division: `ADMINISTRATIVE` or `MUNICIPAL`:\n- `ADMINISTRATIVE`: `Московская обл, г Одинцово, село Никольское`\n- `MUNICIPAL`: `Московская обл, г.о. Одинцовский, село Никольское`\n\nAlso affects set of fields inside `suggestion.data`\n@default 'ADMINISTRATIVE'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589",
           "default": "ADMINISTRATIVE"
         },
         "language": {
           "type": "string",
           "enum": ["RU", "EN"],
-          "description": "Display language for address suggestions.\n`RU` or `EN`. The `EN` version mostly provides transliteration.\n\nDefault: `RU`.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
+          "description": "Язык в возвращаемых подсказках по адресам. `RU` или `EN`.\n\n`EN` - почти всегда простая транслитерация латиницей,\nоднако для некоторых городов, например, `\"Moscow\"` - поля будут содержать реальный перевод,\nпричём переведён будет также тип города - `\"city\"` (тогда как для других это обычно `\"gorod\"`).\n\nПо умолчанию: `RU`.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}\n\n@locale EN\nDisplay language for address suggestions. `RU` or `EN`.\n\n`EN` is almost always simple transliteration to latin script,\nhowever, for some cities, like `\"Moscow\"`, fields will be translated to English,\nincluding the city type (`\"city\"`, while for others it's often `\"gorod\"`).\n\nDefault: `RU`.\n\n@default 'RU'.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}",
+          "default": "'RU'.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726}"
         },
         "entityType": {
           "anyOf": [
@@ -150,7 +154,7 @@
               ]
             }
           ],
-          "description": "Organization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).\n\nfor `party`: `LEGAL` or `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}\n- for `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}\n\n- for `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- for `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}"
+          "description": "Тип организации или банка (для подсказок `party`, `party_by`, `party_kz` и `bank`).\n\n- для `party`: `LEGAL` или `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}\n- для `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}\n\n- для `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- для `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}\n\n@locale EN\nOrganization or bank type (for `party`, `party_by`, `party_kz`, and `bank` suggestions).\n\nfor `party`: `LEGAL` or `INDIVIDUAL`, {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}\n- for `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}\n\n- for `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- for `party_kz`: {@link https://dadata.ru/api/suggest/party_kz/}"
         },
         "entityStatus": {
           "anyOf": [
@@ -188,30 +192,30 @@
               ]
             }
           ],
-          "description": "Organization or bank status  (for `party`, `party_by` and `bank` suggestions)\n- `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`\n- `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}\n- `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+          "description": "Статус организации или банка (для подсказок `party`, `party_by` и `bank`)\n- `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`\n- `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}\n- `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}\n\n@locale EN\nOrganization or bank status  (for `party`, `party_by` and `bank` suggestions)\n- `'ACTIVE' | 'LIQUIDATING' | 'LIQUIDATED' | etc`\n- `party`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}\n- `party_by`: {@link https://dadata.ru/api/suggest/party_by/}\n- `bank`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
         },
         "branchType": {
           "anyOf": [
             { "type": "string", "enum": ["MAIN", "BRANCH"] },
             { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
           ],
-          "description": "Branch type filter (for `party` suggestions)\n- `MAIN` - to search only for head offices\n- `BRANCH` - search only for branches\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
+          "description": "Фильтр по типу филиала (для подсказок `party`)\n- `MAIN` - искать только головные организации\n- `BRANCH` - искать только филиалы\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095\n\n@locale EN\nBranch type filter (for `party` suggestions)\n- `MAIN` - to search only for head offices\n- `BRANCH` - search only for branches\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918095"
         },
         "okved": {
           "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }],
-          "description": "OKVED code filter (for `party` suggestions). Max: `10` items\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
+          "description": "Фильтр по коду ОКВЭД (для подсказок `party`). Макс: `10` элементов\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}\n\n@locale EN\nOKVED code filter (for `party` suggestions). Max: `10` items\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "fioParts": {
           "anyOf": [
             { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
             { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } }
           ],
-          "description": "Filter by FIO parts (for `fio` suggestions, see {@link https://dadata.ru/api/suggest/name/}).\n\nExamples:\n- Names only: `['NAME']` or `NAME`\n- Names and patronymics: `['NAME', 'PATRONYMIC']`\n- Names and surnames: `['NAME', 'SURNAME']`"
+          "description": "Фильтр по частям ФИО (для подсказок `fio`, см. {@link https://dadata.ru/api/suggest/name/}).\n\nПримеры:\n- Только имена: `['NAME']` или `NAME`\n- Имена и отчества: `['NAME', 'PATRONYMIC']`\n- Имена и фамилии: `['NAME', 'SURNAME']`\n\n@locale EN\nFilter by FIO parts (for `fio` suggestions, see {@link https://dadata.ru/api/suggest/name/}).\n\nExamples:\n- Names only: `['NAME']` or `NAME`\n- Names and patronymics: `['NAME', 'PATRONYMIC']`\n- Names and surnames: `['NAME', 'SURNAME']`"
         },
         "fioGender": {
           "type": "string",
           "enum": ["MALE", "FEMALE", "UNKNOWN"],
-          "description": "Filter by gender (for `fio` suggestions).\n- `UNKNOWN` / `MALE` / `FEMALE`"
+          "description": "Фильтр по полу (для подсказок `fio`).\n- `UNKNOWN` / `MALE` / `FEMALE`\n\n@locale EN\nFilter by gender (for `fio` suggestions).\n- `UNKNOWN` / `MALE` / `FEMALE`"
         },
         "filters": {
           "anyOf": [
@@ -243,28 +247,31 @@
               }
             }
           ],
-          "description": "Filters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
+          "description": "Фильтры для API, у которых нет отдельных props-опций,\nнапример `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `court`.\n\nЧтобы задать `filters` для `party_by` и `party_kz`, используйте `entityStatus`\nи `entityType`, как и для обычного `party`.\n\n@locale EN\nFilters for APIs that don't have dedicated options props,\nlike `fms_unit`, `fns_unit`, `metro`, `mktu`, `okpd2`, `okved2`, `postal_unit`, `court`.\n\nTo set `filters` for `party_by` and `party_kz` use `entityStatus` and `entityType` options, just like for normal `party`."
         },
         "debounce": {
           "type": "number",
-          "description": "Delay (in ms) after the user changes the query before triggering a request.\nDefault `100`"
+          "description": "Задержка (в мс) после изменения ввода (`query`) перед отправкой запроса.\n\nРаботает по принципу debounce: если ввод продолжает изменяться,\nзапрос не будет отправлен до тех пор, пока с последнего изменения\nне прошло это количество миллисекунд.\n\nПо умолчанию `100`\n\n@locale EN\nDelay (in ms) after changing the input (`query`) before sending the request.\n\nWorks on the principle of debounce: if the input continues to change,\nthe request will not be sent until this number of milliseconds has passed\nsince the last change.\n\nDefault `100`"
         },
         "minChars": {
           "type": "number",
-          "description": "Minimum length of text in the input after which suggestions are triggered.\nDefault `1`"
+          "description": "Минимальная длина ввода (`query`), начиная с которой подсказки начинают работать.\nПо умолчанию `1`\n\n@locale EN\nMinimum length of input after which suggestions are triggered.\nDefault `1`"
         },
         "disabled": {
           "type": "boolean",
-          "description": "Disables the input, suggestions, and all interactions.\nDefault `false`"
+          "description": "Задаёт атрибут `disabled` у поля ввода, отключает подсказки и все взаимодействия.\nПо умолчанию `false`\n\n@locale EN\nSets the `disabled` attribute on the input element, disables suggestions and all interactions.\nDefault `false`"
         },
-        "placeholder": { "type": "string", "description": "Text used for the input's `placeholder` attribute." },
+        "placeholder": {
+          "type": "string",
+          "description": "Текст для атрибута `placeholder` у поля ввода.\n\n@locale EN\nText used for the input's `placeholder` attribute."
+        },
         "inputName": {
           "type": "string",
-          "description": "Value for the input's `name` attribute.\nDefault `dadata-input`"
+          "description": "Значение атрибута `name` у поля ввода.\nПо умолчанию `dadata-input`\n\n@locale EN\nValue for the input's `name` attribute.\nDefault `dadata-input`"
         },
         "classes": {
           "$ref": "#/definitions/VueDadataClasses",
-          "description": "Custom CSS classes names for component elements.\nDefaults: @see DEFAULT_CLASSES"
+          "description": "Пользовательские имена CSS-классов для элементов компонента.\nЗначения по умолчанию: {@link DEFAULT_CLASSES}\n\n@locale EN\nCustom CSS classes names for component elements.\nDefaults: {@link DEFAULT_CLASSES}"
         },
         "inputAttributes": {
           "description": "@see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#instance_properties"
@@ -272,53 +279,56 @@
         "showOnFocus": {
           "type": ["string", "boolean"],
           "enum": ["no_selection", "always", false],
-          "description": "Controls when to show the dropdown with suggestions list on input focus.\n\n- `false`: Never show dropdown on focus\n- `'always'`: Always show dropdown on focus (if input and suggestions list is not empty).\n- `'no_selection'`: Show dropdown on focus when there's no selected suggestion\n\nDefault: `'no_selection'`"
+          "description": "Управляет тем, в каких случаях при фокусе на поле ввода должен быть показан список подсказок.\n\n- `false`: никогда не показывать список по фокусу\n- `'always'`: всегда показывать список по фокусу, если поле ввода не пустое и список подсказок не пуст\n- `'no_selection'`: показывать список по фокусу, если сейчас нет выбранной подсказки\n\nПо умолчанию: `'no_selection'`\n\n@locale EN\nControls when to show the dropdown with suggestions list on input focus.\n\n- `false`: Never show dropdown on focus\n- `'always'`: Always show dropdown on focus (if input and suggestions list is not empty).\n- `'no_selection'`: Show dropdown on focus when there's no selected suggestion\n\nDefault: `'no_selection'`"
         },
         "selectOnBlur": {
           "type": "boolean",
-          "description": "If `true`, the first suggestion will be auto-selected after input lost focus.\nDefault: `false`"
+          "description": "Если `true`, при потере полем ввода фокуса будет автоматически \"выбрана\" первая подсказка.\nПо умолчанию: `false`\n\n@locale EN\nIf `true`, the first suggestion will be auto-selected after input lost focus.\nDefault: `false`"
         },
         "selectOnEnter": {
           "type": "boolean",
-          "description": "If `true`, pressing Enter selects the first suggestion (if list is open).\nDefault: `true`"
+          "description": "Если `true`, нажатие Enter выбирает первую подсказку, если список открыт.\nПо умолчанию: `true`\n\n@locale EN\nIf `true`, pressing Enter selects the first suggestion (if list is open).\nDefault: `true`"
         },
         "enrichOnSelect": {
           "type": "boolean",
-          "description": "Whether to send an additional request after a suggestion is selected to enrich it with\ndata like `geo_lat`, `geo_lon`, `city_district` (and full `value` when `restrictValue` is used).\n\nSet to `false` if you want to save API usage and don’t need that data.\nDefault: `true`"
+          "description": "Нужно ли отправлять дополнительный запрос после выбора подсказки, чтобы дополнить ее\nданными вроде `geo_lat`, `geo_lon`, `city_district` (а также получить полный `value`,\nесли используется `restrictValue`).\n\nПоставьте `false`, если хотите сэкономить запросы к API и эти данные вам не нужны.\nПо умолчанию: `true`\n\n@locale EN\nWhether to send an additional request after a suggestion is selected to enrich it with\ndata like `geo_lat`, `geo_lon`, `city_district` (and full `value` when `restrictValue` is used).\n\nSet to `false` if you want to save API usage and don’t need that data.\nDefault: `true`"
         },
         "clearOnChange": {
           "type": ["string", "boolean"],
           "enum": ["significant", "any", false],
-          "description": "Determines whether the suggestion (i.e., `v-model:suggestion`) is cleared when the input changes after a suggestion is selected.\n\n- `false`: The suggestion is never cleared when the input changes.\n- `'any'`: The suggestion is cleared whenever input value is changed.\n- `'significant'`: The suggestion is cleared only if the new input, after being normalized (e.g., trimmed and case-normalized), differs from the previous value.\n\nDefault: `'significant'`"
+          "description": "Определяет, удалять ли объект выбранной подсказки из `v-model:suggestion`\nпри изменении текста ввода (`query`).\n\n- `false`: выбранная подсказка никогда не очищается при изменении query\n- `'any'`: подсказка очищается при любом изменении query\n- `'significant'`: подсказка очищается только если новое значение query после нормализации\n  (`trim`, case-folding) отличается от предыдущего\n\nПо умолчанию: `'significant'`\n\n@locale EN\nDetermines whether the suggestion (i.e., `v-model:suggestion`) is cleared when the input changes after a suggestion is selected.\n\n- `false`: The suggestion is never cleared when the input changes.\n- `'any'`: The suggestion is cleared whenever input value is changed.\n- `'significant'`: The suggestion is cleared only if the new input, after being normalized (i.e., trimmed and case-normalized), differs from the previous value.\n\nDefault: `'significant'`"
         },
         "addSpace": {
           "type": "boolean",
-          "description": "If `true`, adds a space to the input after a suggestion is selected. This way, for example,\nuser can select street and then type house number without adding a space by himself.\nDefault `true`"
+          "description": "Если `true`, после выбора подсказки в input будет добавлен пробел. Например,\nпользователь сможет выбрать улицу и сразу продолжить вводить номер дома.\nПо умолчанию `true`\n\n@locale EN\nIf `true`, adds a space to the input after a suggestion is selected. This way, for example,\nuser can select street and then type house number without adding a space by himself.\nDefault `true`"
         },
         "continueSelecting": {
           "type": "boolean",
-          "description": "If `true`, the suggestions list will remain visible after selecting a suggestion.\nDefault: `false`"
+          "description": "Если `true`, список подсказок останется видимым после выбора подсказки.\nПо умолчанию: `false`\n\n@locale EN\nIf `true`, the suggestions list will remain visible after selecting a suggestion.\nDefault: `false`"
         },
         "showClearButton": {
           "type": "boolean",
-          "description": "If `true`, shows a clear (×) button in the input when not empty.\nDefault: `false`"
+          "description": "Если `true`, в непустом поле ввода будет показываться кнопка очистки (×).\nПо умолчанию: `false`\n\n@locale EN\nIf `true`, shows a clear (×) button in the input when not empty.\nDefault: `false`"
         },
-        "suggestionsHint": { "type": "string", "description": "Text to show above the suggestions list" },
+        "suggestionsHint": {
+          "type": "string",
+          "description": "Текст, который отображается над списком подсказок.\n\n@locale EN\nText to show above the suggestions list"
+        },
         "noSuggestionsHint": {
           "type": ["string", "boolean"],
-          "description": "Текст, отображаемый на месте подсказок, если ничего не найдено. Передайте\n`true`, если используете слот `#hint` для отображения своего элемента\nпри отсутствии подсказок, чтобы контейнер оставался видимым.\n\n@locale EN\nText to show in place of suggestions when there are no suggestions. Pass `true`\nif you use the `hint` slot for displaying a custom \"no-suggestions\" design to keep it visible."
+          "description": "Текст, отображаемый на месте подсказок, когда ничего не найдено.\n\nЕсли используете слот `#hint`, передайте `true` для отображения своего элемента\nпри отсутствии подсказок, чтобы контейнер оставался видимым.\n\n@locale EN\nText to show in place of suggestions when there are no suggestions. Pass `true`\nif you use the `hint` slot for displaying a custom \"no-suggestions\" design to keep it visible."
         },
         "focusOnMounted": {
           "type": "boolean",
-          "description": "If `true`, input will be focused immediately when the component is mounted.\nDefault `false`"
+          "description": "Если `true`, input сразу получит фокус после загрузки компонента (хук `onMounted`).\nПо умолчанию `false`\n\n@locale EN\nIf `true`, input will be focused immediately when the component is mounted.\nDefault `false`"
         },
         "forceShow": {
           "type": "boolean",
-          "description": "Forces the suggestions list to always remain visible.\nUseful during development (e.g., when styling elements).\nDefault: `false`"
+          "description": "Принудительно держит список подсказок видимым.\nПолезно во время разработки, при настройке стилей, и т.д.\nПо умолчанию: `false`\n\n@locale EN\nForces the suggestions list to always remain visible.\nUseful during development (e.g., when styling elements).\nDefault: `false`"
         },
         "forceHide": {
           "type": "boolean",
-          "description": "Forces the suggestions list to always remain hidden.\nUseful when creating custom UI using `v-model:suggestionsList`\nDefault: `false`"
+          "description": "Принудительно держит список подсказок скрытым.\nПо умолчанию: `false`\n\n@locale EN\nForces the suggestions list to always remain hidden.\nDefault: `false`"
         }
       },
       "required": ["token"]

@@ -87,6 +87,7 @@ const propsGroups = ref({
         :schema="schema as JSONSchema7"
         :property="propName"
         definition="VueDadataOptionsDocs"
+        :lang="lang"
       />
     </template>
   </template>

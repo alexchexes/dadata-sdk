@@ -8,6 +8,7 @@ const props = defineProps<{
   schema: JSONSchema7;
   definition: string;
   property: string;
+  lang?: 'en' | 'ru';
 }>();
 
 const propData = computed<JSONSchema7>(() => {
@@ -50,6 +51,53 @@ const getTypes = (propertyData: JSONSchema7): any[] => {
 };
 
 const types = computed(() => getTypes(propData.value));
+
+const LOCALE_TAG_RE = /^@locale\s+([a-z-]+)\s*$/i;
+
+const splitLocalizedDescription = (description: string) => {
+  const sections: Partial<Record<'default' | 'en' | 'ru', string>> = {};
+  let currentSection: 'default' | 'en' | 'ru' = 'default';
+  let chunk: string[] = [];
+
+  const flush = () => {
+    const text = chunk.join('\n').trim();
+    if (text) {
+      sections[currentSection] = text;
+    }
+    chunk = [];
+  };
+
+  description
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .forEach((line) => {
+      const localeMatch = line.match(LOCALE_TAG_RE);
+
+      if (localeMatch) {
+        flush();
+        currentSection = localeMatch[1].toLowerCase() === 'ru' ? 'ru' : 'en';
+        return;
+      }
+
+      chunk.push(line);
+    });
+
+  flush();
+  return sections;
+};
+
+const localizedDescription = computed(() => {
+  const description = propData.value.description;
+
+  if (!description) {
+    return '';
+  }
+
+  const sections = splitLocalizedDescription(description);
+  const locale = props.lang ?? 'en';
+
+  return sections[locale] || sections.default || description;
+});
 </script>
 
 <template>
@@ -58,6 +106,6 @@ const types = computed(() => getTypes(propData.value));
       <code class="text-(--vp-c-text-1)!">{{ types.join(' | ') }}</code>
     </p>
 
-    <MarkDown v-if="propData.description" :content="propData.description" />
+    <MarkDown v-if="localizedDescription" :content="localizedDescription" />
   </div>
 </template>
