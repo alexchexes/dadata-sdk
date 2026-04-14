@@ -5,7 +5,6 @@ import {
   useTheme,
   locales as vitepressOpenApiLocales,
 } from 'vitepress-openapi/client';
-import 'vitepress-openapi/dist/style.css';
 import DefaultTheme from 'vitepress/theme';
 import { watch } from 'vue';
 import { createI18n } from 'vue-i18n';

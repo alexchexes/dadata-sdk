@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import VueDevTools from 'vite-plugin-vue-devtools';
 import { defineConfig } from 'vitepress';
 
 import { getSidebar } from '../utils/getSidebar';
@@ -60,6 +61,7 @@ export default defineConfig({
   cleanUrls: true,
 
   vite: {
+    plugins: isProd ? [] : [VueDevTools()],
     resolve: {
       alias: viteResolveAliases,
     },

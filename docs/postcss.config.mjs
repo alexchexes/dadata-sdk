@@ -1,6 +1,12 @@
 import tailwindPostcss from '@tailwindcss/postcss';
 import { postcssIsolateStyles } from 'vitepress';
 
+const VITEPRESS_BASE_STYLES =
+  /[\\/]vitepress[\\/]dist[\\/]client[\\/]theme-default[\\/]styles[\\/]base\.css$/;
+// Match the resolved CSS file path, not the package import specifier.
+const VITEPRESS_OPENAPI_STYLES =
+  /[\\/]vitepress-openapi[\\/]dist[\\/]vitepress-openapi\.css$/;
+
 export default {
   plugins: [
     // Add tailwind
@@ -8,10 +14,13 @@ export default {
     // Make `::: raw` sections be isolated...
     postcssIsolateStyles({
       includeFiles: [
-        // ...from the Vitepress styles...
-        /base\.css/,
-        // ...and from vitepress-openapi plugin styles
-        /vitepress-openapi\.css/,
+        // Scope the isolation narrowly to VitePress's own base stylesheet.
+        // A broad /base.css/ match also catches Tailwind's generated base layer,
+        // which turns Tailwind's reset vars into unlayered rules that override
+        // utilities like shadow/ring on the page.
+        VITEPRESS_BASE_STYLES,
+        // ...and the vitepress-openapi plugin styles.
+        VITEPRESS_OPENAPI_STYLES,
       ],
 
       // patch postcssIsolateStyles until vitepress with the https://github.com/vuejs/vitepress/pull/4830 is released

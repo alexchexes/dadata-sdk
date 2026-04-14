@@ -1,3 +1,5 @@
+@import 'vitepress-openapi/dist/style.css' layer(vitepress-openapi);
+
 .OASidebarItem-badge.OAMethodBadge--post {
   display: none;
 }
