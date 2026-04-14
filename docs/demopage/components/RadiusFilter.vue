@@ -9,8 +9,9 @@ import ButtonRemove from './ui/ButtonRemove.vue';
 import HelpHint from './ui/HelpHint.vue';
 import InputText from './ui/InputText.vue';
 
-defineProps<{
+const props = defineProps<{
   helpLink?: string;
+  helpTooltip?: boolean;
 }>();
 
 const { t } = useI18n({ useScope: 'parent' });
@@ -52,7 +53,11 @@ const isRadiusValid = computed(() => {
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
       {{ t('radiusFilter:') }}
-      <HelpHint class="size-[1.4rem]" :helpLink="helpLink || ''" />
+      <HelpHint
+        class="size-[1.4rem]"
+        :helpLink="props.helpLink || ''"
+        :tooltip="props.helpTooltip"
+      />
       <ButtonAdd v-if="!enabled" @click="enabled = true" />
       <ButtonRemove v-else outline @click="enabled = false" />
     </div>

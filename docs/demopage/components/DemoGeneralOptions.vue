@@ -52,6 +52,18 @@ const removeCustomHeaders = () => {
     @resetClick="emit('resetClick')"
   >
     <div class="flex flex-col gap-4">
+      <div class="flex flex-wrap gap-1">
+        <RadioGroup
+          v-model="options.suggestType"
+          :options="
+            Object.fromEntries(
+              props.orderedSuggestTypes.map((item) => [t(`suggestTypes.${item}`, item), item]),
+            )
+          "
+          buttonClass="px-3 py-1.5"
+        />
+      </div>
+
       <div class="flex flex-wrap gap-2">
         <InputText
           v-model.trim="token"
@@ -67,18 +79,6 @@ const removeCustomHeaders = () => {
           class="grow"
           :placeholder="BASE_SUGGEST_URL + options.suggestType"
           label="API URL:"
-        />
-      </div>
-
-      <div class="flex flex-wrap gap-1">
-        <RadioGroup
-          v-model="options.suggestType"
-          :options="
-            Object.fromEntries(
-              props.orderedSuggestTypes.map((item) => [t(`suggestTypes.${item}`, item), item]),
-            )
-          "
-          buttonClass="px-3 py-1.5"
         />
       </div>
 

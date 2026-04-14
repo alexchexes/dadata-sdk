@@ -36,7 +36,7 @@ export default {
     // --------------------------
 
     'Vue component options': 'Поведение компонента',
-    'minChars': 'Мин. символов',
+    'minChars': 'Мин. длина',
     'debounce': 'Задержка, мс',
     'showOnFocus': 'Показать подсказки при фокусе...',
     'no_selection': 'если не выбрана',
@@ -64,7 +64,7 @@ export default {
     // General options block
     // --------------------------
 
-    'General options': 'Основные настройки',
+    'General options': 'Основное',
     'API token:': 'API токен:',
     'API token': 'API токен',
     suggestTypes: {

@@ -12,6 +12,7 @@ const props = defineProps<{
   right?: boolean;
   class?: TwMergeArgument;
   helpLink?: string;
+  helpTooltip?: boolean;
 }>();
 
 const model = defineModel({ type: Boolean });
@@ -30,14 +31,14 @@ const model = defineModel({ type: Boolean });
     "
   >
     <span v-if="right" class="flex items-center gap-1">
-      {{ label }} <HelpHint v-if="helpLink" :helpLink />
+      {{ label }} <HelpHint v-if="helpLink" :helpLink :tooltip="props.helpTooltip" />
     </span>
 
     <input v-if="checked" class="accent-accent" :disabled checked type="checkbox" />
     <input v-else v-model="model" class="accent-accent" :disabled type="checkbox" />
 
     <span v-if="!right" class="flex items-center gap-1">
-      {{ label }} <HelpHint v-if="helpLink" :helpLink />
+      {{ label }} <HelpHint v-if="helpLink" :helpLink :tooltip="props.helpTooltip" />
     </span>
   </label>
 </template>

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { computed, type PropType } from 'vue';
 import { twMerge } from 'tailwind-merge';
-import TogglableButton from './TogglableButton.vue';
+import { type PropType, computed } from 'vue';
+
 import HelpHint from './HelpHint.vue';
+import TogglableButton from './TogglableButton.vue';
+
 type TwMergeArgument = Parameters<typeof twMerge>[0];
 
 const props = defineProps({
@@ -22,6 +24,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  helpTooltip: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const model = defineModel({ type: null });
@@ -37,9 +43,9 @@ const optionsObject = computed(() =>
 
 <template>
   <div class="flex flex-col gap-1">
-    <div v-if="label">
+    <div v-if="label" class="inline-flex items-center gap-1">
       {{ label }}
-      <HelpHint v-if="helpLink" :helpLink />
+      <HelpHint v-if="helpLink" :helpLink :tooltip="props.helpTooltip" />
     </div>
 
     <div class="flex flex-wrap gap-x-1.5 gap-y-2">

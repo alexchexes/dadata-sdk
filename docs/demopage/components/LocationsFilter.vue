@@ -22,6 +22,7 @@ const { t } = useI18n({ useScope: 'parent' });
 const props = defineProps<{
   suggestType: SuggestType;
   helpLink: string;
+  helpTooltip?: boolean;
 }>();
 
 const locationsFilterModel = defineModel({
@@ -238,10 +239,9 @@ const getEnterRestrictionPlaceholder = (restrKey: string) => {
 <template>
   <div class="flex flex-col gap-1.5">
     <div class="flex items-center gap-2">
-      <div>
+      <div class="inline-flex items-center gap-1">
         {{ t('locationsFilter:') }}
-
-        <HelpHint :helpLink />
+        <HelpHint :helpLink :tooltip="props.helpTooltip" />
       </div>
 
       <!-- Enable Locations Filter -->

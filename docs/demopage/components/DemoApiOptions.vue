@@ -124,6 +124,7 @@ const entityStatusOptions = computed(() => {
         <InputText
           v-model="locationsBoost"
           :helpLink="props.helpLink('locationsBoost')"
+          helpTooltip
           :label="t('locationsBoost:')"
           :placeholder="t(`KLADR ID or IDs, e.g. '77, 46'`)"
         />
@@ -148,6 +149,7 @@ const entityStatusOptions = computed(() => {
       <LocationsFilter
         v-model="options.locationsFilter"
         :helpLink="props.helpLink('locationsFilter')"
+        helpTooltip
         :suggestType="suggestType"
       />
     </template>
@@ -157,6 +159,7 @@ const entityStatusOptions = computed(() => {
       v-model="options.restrictValue"
       :label="t('restrictValue')"
       :helpLink="props.helpLink('restrictValue')"
+      helpTooltip
     />
 
     <template v-if="showBoundTypes">
@@ -164,12 +167,14 @@ const entityStatusOptions = computed(() => {
         <SelectOptions
           v-model="options.fromBound"
           :helpLink="props.helpLink('fromBound')"
+          helpTooltip
           :label="t('fromBound:')"
           :options="props.boundTypesOptionsFrom"
         />
         <SelectOptions
           v-model="options.toBound"
           :helpLink="props.helpLink('toBound')"
+          helpTooltip
           :label="t('toBound:')"
           :options="props.boundTypesOptions"
         />
@@ -177,13 +182,18 @@ const entityStatusOptions = computed(() => {
     </template>
 
     <template v-if="showAddressOnlyOptions">
-      <RadiusFilter v-model="options.radiusFilter" :helpLink="props.helpLink('radiusFilter')" />
+      <RadiusFilter
+        v-model="options.radiusFilter"
+        :helpLink="props.helpLink('radiusFilter')"
+        helpTooltip
+      />
 
       <RadioGroup
         v-model="options.division"
         :label="t('division:')"
         :options="Object.fromEntries(DIVISION_TYPES.map((item) => [t(item), item]))"
         :helpLink="props.helpLink('division')"
+        helpTooltip
       />
 
       <RadioGroup
@@ -191,6 +201,7 @@ const entityStatusOptions = computed(() => {
         :label="t('language:')"
         :options="Object.fromEntries(LANGUAGES.map((item) => [t(item), item]))"
         :helpLink="props.helpLink('language')"
+        helpTooltip
       />
     </template>
 
@@ -207,6 +218,7 @@ const entityStatusOptions = computed(() => {
         )
       "
       :helpLink="props.helpLink('entityType')"
+      helpTooltip
     />
     <TogglesGroup
       v-else-if="suggestType === 'party_by'"
@@ -216,6 +228,7 @@ const entityStatusOptions = computed(() => {
         Object.fromEntries(PARTY_BY_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
       "
       :helpLink="props.helpLink('entityType')"
+      helpTooltip
     />
     <TogglesGroup
       v-else-if="suggestType === 'party_kz'"
@@ -225,6 +238,7 @@ const entityStatusOptions = computed(() => {
         Object.fromEntries(PARTY_KZ_TYPES.map((item) => [t(`entityType.${item}`, item), item]))
       "
       :helpLink="props.helpLink('entityType')"
+      helpTooltip
     />
     <TogglesGroup
       v-else-if="suggestType === 'bank'"
@@ -232,6 +246,7 @@ const entityStatusOptions = computed(() => {
       :label="t('entityType.label-bank', 'entityType:')"
       :options="Object.fromEntries(BANK_TYPES.map((item) => [t(`entityType.${item}`, item), item]))"
       :helpLink="props.helpLink('entityType')"
+      helpTooltip
     />
 
     <TogglesGroup
@@ -240,6 +255,7 @@ const entityStatusOptions = computed(() => {
       :helpLink="props.helpLink('entityStatus')"
       :label="t(`entityStatus.${suggestType}.label`, 'entityStatus:')"
       :options="entityStatusOptions"
+      helpTooltip
     />
 
     <RadioGroup
@@ -255,6 +271,7 @@ const entityStatusOptions = computed(() => {
         )
       "
       :helpLink="props.helpLink('branchType')"
+      helpTooltip
     />
 
     <template v-if="suggestType === 'fio'">

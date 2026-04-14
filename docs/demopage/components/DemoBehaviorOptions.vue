@@ -52,7 +52,7 @@ const { t } = useI18n({ useScope: 'parent' });
         />
         <ButtonAdd outline @click="options.minChars = (options.minChars || 0) + 1" />
       </div>
-      <HelpHint :helpLink="props.helpLink('minChars')" />
+      <HelpHint :helpLink="props.helpLink('minChars')" tooltip />
     </div>
 
     <div class="flex flex-wrap items-center gap-2">
@@ -73,7 +73,7 @@ const { t } = useI18n({ useScope: 'parent' });
         />
         <ButtonAdd outline @click="options.debounce = (options.debounce || 0) + 50" />
       </div>
-      <HelpHint :helpLink="props.helpLink('debounce')" />
+      <HelpHint :helpLink="props.helpLink('debounce')" tooltip />
     </div>
 
     <RadioGroup
@@ -81,6 +81,7 @@ const { t } = useI18n({ useScope: 'parent' });
       :label="t('showOnFocus')"
       :options="Object.fromEntries(SHOW_ON_FOCUS_OPTIONS.map((item) => [t(item.toString()), item]))"
       :helpLink="props.helpLink('showOnFocus')"
+      helpTooltip
     />
 
     <RadioGroup
@@ -90,76 +91,90 @@ const { t } = useI18n({ useScope: 'parent' });
         Object.fromEntries(CLEAR_ON_CHANGE_OPTIONS.map((item) => [t(item.toString()), item]))
       "
       :helpLink="props.helpLink('clearOnChange')"
+      helpTooltip
     />
 
     <CheckBox
       v-model="options.selectOnBlur"
       :label="t('selectOnBlur')"
       :helpLink="props.helpLink('selectOnBlur')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.selectOnEnter"
       :label="t('selectOnEnter')"
       :helpLink="props.helpLink('selectOnEnter')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.enrichOnSelect"
       :label="t('enrichOnSelect')"
       :helpLink="props.helpLink('enrichOnSelect')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.addSpace"
       :label="t('addSpace')"
       :helpLink="props.helpLink('addSpace')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.continueSelecting"
       :label="t('continueSelecting')"
       :helpLink="props.helpLink('continueSelecting')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.showClearButton"
       :label="t('showClearButton')"
       :helpLink="props.helpLink('showClearButton')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.forceShow"
       :label="t('forceShow')"
       :helpLink="props.helpLink('forceShow')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.forceHide"
       :label="t('forceHide')"
       :helpLink="props.helpLink('forceHide')"
+      helpTooltip
     />
     <CheckBox
       :label="t('focusOnMounted')"
       checked
       disabled
       :helpLink="props.helpLink('focusOnMounted')"
+      helpTooltip
     />
     <CheckBox
       v-model="options.disabled"
       :label="t('disabled')"
       :helpLink="props.helpLink('disabled')"
+      helpTooltip
     />
     <InputText
       v-model="options.placeholder"
       :label="t('placeholder:')"
       :placeholder="t('Not specified')"
       :helpLink="props.helpLink('placeholder')"
+      helpTooltip
     />
     <InputText
       v-model="options.suggestionsHint"
       :label="t('suggestionsHint:')"
       :placeholder="t('Not specified')"
       :helpLink="props.helpLink('suggestionsHint')"
+      helpTooltip
     />
     <InputText
       v-model="options.noSuggestionsHint"
       :label="t('noSuggestionsHint:')"
       :placeholder="t('Not specified')"
       :helpLink="props.helpLink('noSuggestionsHint')"
+      helpTooltip
     />
   </OptionsBlock>
 </template>

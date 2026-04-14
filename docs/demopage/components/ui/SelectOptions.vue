@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
+
 import HelpHint from './HelpHint.vue';
 
 const props = defineProps({
@@ -19,6 +20,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  helpTooltip: {
+    type: Boolean,
+    default: false,
+  },
 });
 const model = defineModel({ type: null });
 
@@ -31,9 +36,9 @@ const optionsObject = computed(() =>
 
 <template>
   <label class="flex flex-col gap-1">
-    <div v-if="label">
+    <div v-if="label" class="inline-flex items-center gap-1">
       {{ label }}
-      <HelpHint v-if="helpLink" :helpLink />
+      <HelpHint v-if="helpLink" :helpLink :tooltip="props.helpTooltip" />
     </div>
 
     <select v-model="model" class="rounded-lg border bg-white dark:bg-(--vp-input-bg-color)">

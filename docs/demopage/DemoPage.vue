@@ -171,7 +171,7 @@ const handleError = (error: any) => {
 };
 
 const handleSelect = (selectedSuggestion: DadataSuggestion, type: string) => {
-  console.log(type, JSON.parse(JSON.stringify(selectedSuggestion)));
+  console.info(type, JSON.parse(JSON.stringify(selectedSuggestion)));
 };
 </script>
 
