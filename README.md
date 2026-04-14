@@ -4,8 +4,8 @@
 
 Неофициальный набор инструментов для работы с API DaData.
 
-**Документация:** https://alexchexes.github.io/dadata-sdk/
-**English docs:** https://alexchexes.github.io/dadata-sdk/en/
+- **Документация:** https://alexchexes.github.io/dadata-sdk/
+- **English docs:** https://alexchexes.github.io/dadata-sdk/en/
 
 ## Статус
 
