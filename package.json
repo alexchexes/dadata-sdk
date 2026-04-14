@@ -11,6 +11,8 @@
     "build": "pnpm -r build && pnpm docs:gen-vue-schema && pnpm docs:build",
     "test": "pnpm -r test",
     "lint": "eslint \"**/*.{ts,tsx,vue}\"",
+    "gen:api-artifacts": "pnpm --filter @dadata-sdk/api-types gen:schema && pnpm --filter @dadata-sdk/api-types gen:spec",
+    "verify:generated": "node ./scripts/verify-generated.mjs",
     "dev": "pnpm docs:dev",
     "docs:dev": "rm -rf docs/.vitepress/cache && pnpm vitepress dev docs --host",
     "docs:build": "vitepress build docs",

@@ -52,6 +52,23 @@ These projects were especially useful as references and starting points:
 - [ikloster03/vue-dadata](https://github.com/ikloster03/vue-dadata)
 - [hflabs/suggestions-jquery](https://github.com/hflabs/suggestions-jquery)
 
+## Development
+
+Monorepo structure and the current development flow:
+
+- `packages/api-types` — source TypeScript contracts, constants, and request/response models.
+- `packages/schema-gen` — internal JSON Schema generator built on top of TypeScript types.
+- `packages/api-spec` — the manually maintained OpenAPI base plus generated API artifacts.
+- `packages/vue-dadata` — the Vue component and its types; part of the prop documentation is derived from those types through an intermediate JSON Schema.
+- `docs` — the VitePress documentation site and demo pages.
+- root-level scripts — workspace orchestration for build, generation, and verification.
+
+Some files related to API contracts and documentation are generated automatically and committed to the repository. These files must stay in sync with their source definitions. The following commands help catch cases where TypeScript contracts, the manually maintained OpenAPI base, Vue component types, or generation logic changed, but the corresponding generated files were not updated:
+
+- `pnpm gen:api-artifacts` — regenerate JSON Schema and bundled OpenAPI artifacts.
+- `pnpm docs:gen-vue-schema` — regenerate the JSON Schema used to render Vue component prop documentation.
+- `pnpm verify:generated` — regenerate those artifacts and fail if the committed generated files are out of date.
+
 ## License
 
 MIT
