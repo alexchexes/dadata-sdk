@@ -13,6 +13,7 @@
     "lint": "eslint \"**/*.{ts,tsx,vue}\"",
     "gen:api-artifacts": "pnpm --filter @dadata-sdk/api-types gen:schema && pnpm --filter @dadata-sdk/api-types gen:spec",
     "check:official-upstream": "node ./scripts/check-official-upstream.mjs",
+    "compare:official": "tsx ./scripts/compare-official.ts",
     "verify:generated": "node ./scripts/verify-generated.mjs",
     "dev": "pnpm docs:dev",
     "docs:dev": "rm -rf docs/.vitepress/cache && pnpm vitepress dev docs --host",
@@ -51,13 +52,15 @@
     "shiki": "^3.8.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
+    "tsx": "^4.19.4",
     "typescript": "~5.8.3",
     "vite": "^5.4.19",
     "vite-plugin-vue-devtools": "^7.7.6",
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4",
     "vue": "^3.5.18",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^2.2.10",
+    "yaml": "^2.8.3"
   },
   "engines": {
     "node": ">=22"
