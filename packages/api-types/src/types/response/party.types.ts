@@ -7,7 +7,7 @@ import type {
 } from '../common.types';
 import type { Override } from '../helpers.types';
 import type { PartySuggestionAddressData } from './address.types';
-import type { EmailSuggestionData } from './email.types';
+import type { PartyByEmailEmailData } from './email.types';
 
 /**
  * Generic suggestion object returned from 'suggest/party' or 'findById/party' APIs
@@ -787,7 +787,7 @@ export interface PartyByEmailCompanyInfo {
  */
 export interface PartyByEmailSuggestionData {
   /** Подробности об имейл-адресе из запроса */
-  email: EmailSuggestionData;
+  email: PartyByEmailEmailData;
   /** Подробности об организации, если найдена (если нет - `null`) */
   company: PartyByEmailCompanyInfo | null;
 }

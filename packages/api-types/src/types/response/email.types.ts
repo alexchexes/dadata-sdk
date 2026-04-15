@@ -2,6 +2,15 @@ import type { SuggestionsResponse } from '../common.types';
 import type { CleanResponse } from './clean.types';
 
 /**
+ * Тип адреса
+ * - PERSONAL — личный (`@mail.ru`, `@yandex.ru`)
+ * - CORPORATE — корпоративный (`@myshop.ru`)
+ * - ROLE — «ролевой» (`info@`, `support@`)
+ * - DISPOSABLE — одноразовый (`@temp-mail.ru`)
+ */
+type EmailType = 'PERSONAL' | 'CORPORATE' | 'ROLE' | 'DISPOSABLE';
+
+/**
  * @see https://dadata.ru/api/clean/email/
  */
 export interface EmailClean {
@@ -13,14 +22,9 @@ export interface EmailClean {
   local: string | null;
   /** Домен (то, что после «собачки») */
   domain: string | null;
-  /**
-   * Тип адреса
-   * - PERSONAL — личный (`@mail.ru`, `@yandex.ru`)
-   * - CORPORATE — корпоративный (`@myshop.ru`)
-   * - ROLE — «ролевой» (`info@`, `support@`)
-   * - DISPOSABLE — одноразовый (`@temp-mail.ru`)
-   */
-  type: null | 'PERSONAL' | 'CORPORATE' | 'ROLE' | 'DISPOSABLE';
+
+  type: null | EmailType;
+
   /**
    * Код проверки. Подходит ли email для маркетинговой рассылки:
    * | Код | Нужно проверить вручную? | Описание |
@@ -50,21 +54,34 @@ export interface EmailSuggestion {
  * @see https://dadata.ru/api/suggest/email/
  */
 export interface EmailSuggestionData {
-  /**
-   * Локальная часть адреса (то, что до «собачки»)
-   */
+  /** Локальная часть адреса (то, что до «собачки») */
   local: string | null;
-  /**
-   * Домен (то, что после «собачки»)
-   */
+  /** Домен (то, что после «собачки») */
   domain: string | null;
-
-  /** Тип адреса. Корпоративный/личный/etc (только для Стандартизации) */
+  /** Тип адреса. Корпоративный/личный/etc (только для "Команий по email" и "Стандартизации") */
   type: null;
   /** Код проверки. Подходит ли email для маркетинговой рассылки (только для Стандартизации) */
   qc: null;
-  /** Исходный email (только для Стандартизации) */
+  /** Исходный email (только для "Команий по email" и "Стандартизации") */
   source: null;
+}
+
+/**
+ * Подробности об email-адресе из API "Компания по email" (`findByEmail/company`).
+ *
+ * @see https://dadata.ru/api/find-company/by-email/
+ */
+export interface PartyByEmailEmailData {
+  /** Локальная часть адреса (то, что до «собачки») */
+  local: string | null;
+  /** Домен (то, что после «собачки») */
+  domain: string | null;
+
+  type: null | EmailType;
+  /** Код проверки. Подходит ли email для маркетинговой рассылки (только для Стандартизации) */
+  qc: null;
+  /** Исходный email */
+  source: string | null;
 }
 
 export type SuggestEmailResponse = SuggestionsResponse<EmailSuggestion>;

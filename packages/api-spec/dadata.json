@@ -10752,7 +10752,7 @@
           },
           "type": {
             "type": "null",
-            "description": "Тип адреса. Корпоративный/личный/etc (только для Стандартизации)"
+            "description": "Тип адреса. Корпоративный/личный/etc (только для \"Команий по email\" и \"Стандартизации\")"
           },
           "qc": {
             "type": "null",
@@ -10760,7 +10760,7 @@
           },
           "source": {
             "type": "null",
-            "description": "Исходный email (только для Стандартизации)"
+            "description": "Исходный email (только для \"Команий по email\" и \"Стандартизации\")"
           }
         },
         "required": [
@@ -15981,18 +15981,21 @@
             "description": "Домен (то, что после «собачки»)"
           },
           "type": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "enum": [
-              null,
-              "PERSONAL",
-              "CORPORATE",
-              "ROLE",
-              "DISPOSABLE"
-            ],
-            "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "PERSONAL",
+                  "CORPORATE",
+                  "ROLE",
+                  "DISPOSABLE"
+                ],
+                "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
+              }
+            ]
           },
           "qc": {
             "type": "number",
@@ -16928,6 +16931,61 @@
         ],
         "description": "@see https://dadata.ru/api/find-company/by-email/"
       },
+      "PartyByEmailEmailData": {
+        "type": "object",
+        "properties": {
+          "local": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Локальная часть адреса (то, что до «собачки»)"
+          },
+          "domain": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Домен (то, что после «собачки»)"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "PERSONAL",
+                  "CORPORATE",
+                  "ROLE",
+                  "DISPOSABLE"
+                ],
+                "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
+              }
+            ]
+          },
+          "qc": {
+            "type": "null",
+            "description": "Код проверки. Подходит ли email для маркетинговой рассылки (только для Стандартизации)"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Исходный email"
+          }
+        },
+        "required": [
+          "local",
+          "domain",
+          "type",
+          "qc",
+          "source"
+        ],
+        "description": "Подробности об email-адресе из API \"Компания по email\" (`findByEmail/company`).\n\n@see https://dadata.ru/api/find-company/by-email/"
+      },
       "PartyByEmailCompanyInfo": {
         "type": "object",
         "properties": {
@@ -17044,7 +17102,7 @@
         "type": "object",
         "properties": {
           "email": {
-            "$ref": "#/components/schemas/EmailSuggestionData",
+            "$ref": "#/components/schemas/PartyByEmailEmailData",
             "description": "Подробности об имейл-адресе из запроса"
           },
           "company": {
