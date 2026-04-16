@@ -28,7 +28,7 @@ Ready-to-use OpenAPI and JSON Schema artifacts live in [`packages/api-spec`](../
 
 Browse the spec here: https://alexchexes.github.io/dadata-sdk/en/spec
 
-**Complete DaData API index, with links into the OpenAPI pages: https://alexchexes.github.io/dadata-sdk/en/api**
+**Complete DaData API index, with links into the OpenAPI pages: https://alexchexes.github.io/dadata-sdk/en/api/**
 
 ## TypeScript Contracts
 

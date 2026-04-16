@@ -34,7 +34,7 @@ import { BASE_SUGGEST_URL, SUGGEST_TYPES } from '@dadata-sdk/api-types';
 ### Документация
 
 - Описание спецификации и схем: https://alexchexes.github.io/dadata-sdk/ru/spec
-- Описание API и эндпоинтов: https://alexchexes.github.io/dadata-sdk/ru/api
+- Описание API и эндпоинтов: https://alexchexes.github.io/dadata-sdk/ru/api/
 - Репозиторий: https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types
 
 ### Связанные пакеты
@@ -78,7 +78,7 @@ import { BASE_SUGGEST_URL, SUGGEST_TYPES } from '@dadata-sdk/api-types';
 ### Documentation
 
 - Spec and schema docs: https://alexchexes.github.io/dadata-sdk/en/spec
-- API and endpoints docs: https://alexchexes.github.io/dadata-sdk/en/api
+- API and endpoints docs: https://alexchexes.github.io/dadata-sdk/en/api/
 - Repository: https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-types
 
 ### Related Packages

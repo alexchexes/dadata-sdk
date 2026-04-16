@@ -90,7 +90,7 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'OpenAPI', link: '/ru/spec' },
-          { text: 'Список API', link: '/ru/api' },
+          { text: 'Список API', link: '/ru/api/' },
           { text: 'Vue', link: '/ru/vue' },
           { text: 'Демо', link: '/ru/demo' },
         ],
@@ -111,7 +111,7 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'OpenAPI spec', link: '/en/spec' },
-          { text: 'API endpoints', link: '/en/api' },
+          { text: 'API endpoints', link: '/en/api/' },
           { text: 'Vue', link: '/en/vue' },
           { text: 'Demo', link: '/en/demo' },
         ],
