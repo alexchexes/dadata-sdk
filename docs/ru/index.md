@@ -12,10 +12,10 @@ hero:
       link: /ru/demo
     - theme: alt
       text: OpenAPI спецификация
-      link: /ru/api
+      link: /ru/api/
     - theme: alt
       text: Список API
-      link: /ru/api
+      link: /ru/api/
     - theme: alt
       text: English
       link: /en

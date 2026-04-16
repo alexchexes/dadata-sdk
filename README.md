@@ -28,7 +28,7 @@
 
 Просмотреть спецификацию можно здесь: https://alexchexes.github.io/dadata-sdk/ru/spec
 
-**Перечень всех API Дадаты, со ссылками к OpenAPI: https://alexchexes.github.io/dadata-sdk/ru/api**
+**Перечень всех API Дадаты, со ссылками к OpenAPI: https://alexchexes.github.io/dadata-sdk/ru/api/**
 
 ## TypeScript-типы
 

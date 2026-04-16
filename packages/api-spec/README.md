@@ -57,7 +57,7 @@ import responseSchema from '@dadata-sdk/api-spec/schemas/response.json' with { t
 ### Документация
 
 - Описание спецификации и схем: https://alexchexes.github.io/dadata-sdk/ru/spec
-- Описание API и эндпоинтов: https://alexchexes.github.io/dadata-sdk/ru/api
+- Описание API и эндпоинтов: https://alexchexes.github.io/dadata-sdk/ru/api/
 - Репозиторий: https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec
 
 ### Связанные пакеты
@@ -118,7 +118,7 @@ import responseSchema from '@dadata-sdk/api-spec/schemas/response.json' with { t
 ### Documentation
 
 - Spec and schema docs: https://alexchexes.github.io/dadata-sdk/en/spec
-- API and endpoints docs: https://alexchexes.github.io/dadata-sdk/en/api
+- API and endpoints docs: https://alexchexes.github.io/dadata-sdk/en/api/
 - Repository: https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/api-spec
 
 ### Related Packages

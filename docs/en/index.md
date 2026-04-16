@@ -12,7 +12,7 @@ hero:
       link: /en/demo
     - theme: alt
       text: All Dadata API endpoints
-      link: /en/api
+      link: /en/api/
     - theme: alt
       text: In Russian
       link: /ru

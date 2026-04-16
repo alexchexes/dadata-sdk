@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import VueDevTools from 'vite-plugin-vue-devtools';
 import { defineConfig } from 'vitepress';
 
+import { getYandexMetrikaInitScript } from './metrika';
 import { getSidebar } from '../utils/getSidebar';
 
 const root = dirname(fileURLToPath(import.meta.url));
@@ -45,7 +46,10 @@ export default defineConfig({
   // GitHub project pages are served from /<repo>/ while user pages use /.
   base: siteBase,
 
-  head: [['link', { rel: 'icon', href: `${siteBase}favicon.ico` }]],
+  head: [
+    ['link', { rel: 'icon', href: `${siteBase}favicon.ico` }],
+    ...(isProd ? [['script', { type: 'text/javascript' }, getYandexMetrikaInitScript()]] : []),
+  ],
 
   // <meta name="description" ...>
   description:
@@ -90,7 +94,7 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'OpenAPI', link: '/ru/spec' },
-          { text: 'Список API', link: '/ru/api' },
+          { text: 'Список API', link: '/ru/api/' },
           { text: 'Vue', link: '/ru/vue' },
           { text: 'Демо', link: '/ru/demo' },
         ],
@@ -111,7 +115,7 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
           { text: 'OpenAPI spec', link: '/en/spec' },
-          { text: 'API endpoints', link: '/en/api' },
+          { text: 'API endpoints', link: '/en/api/' },
           { text: 'Vue', link: '/en/vue' },
           { text: 'Demo', link: '/en/demo' },
         ],

@@ -6,9 +6,10 @@ import {
   locales as vitepressOpenApiLocales,
 } from 'vitepress-openapi/client';
 import DefaultTheme from 'vitepress/theme';
-import { watch } from 'vue';
+import { defineComponent, Fragment, h, watch } from 'vue';
 import { createI18n } from 'vue-i18n';
 
+import { YANDEX_METRIKA_COUNTER_ID } from '../metrika';
 import spec from '../../../packages/api-spec/dadata.json';
 import vpOpenApiLocalesRu from '../../locale-vp-openapi.ru.json';
 import specLocales from '../../locales-spec';
@@ -28,8 +29,46 @@ const openApiMessages = {
   },
 } as const;
 
+declare global {
+  interface Window {
+    ym?: (...args: unknown[]) => void;
+  }
+}
+
+const metrikaEnabled = import.meta.env.PROD;
+
+const ThemeLayout = defineComponent({
+  name: 'DocsThemeLayout',
+  setup() {
+    return () =>
+      h(Fragment, [
+        h(DefaultTheme.Layout),
+        metrikaEnabled
+          ? h('noscript', [
+              h('div', [
+                h('img', {
+                  src: `https://mc.yandex.ru/watch/${YANDEX_METRIKA_COUNTER_ID}`,
+                  style: 'position:absolute; left:-9999px;',
+                  alt: '',
+                }),
+              ]),
+            ])
+          : null,
+      ]);
+  },
+});
+
+function toTrackedUrl(source?: string) {
+  const url = source ? new URL(source, window.location.origin) : new URL(window.location.href);
+
+  url.hash = '';
+
+  return url.href;
+}
+
 export default {
   extends: DefaultTheme,
+  Layout: ThemeLayout,
 
   async enhanceApp(ctx) {
     useOpenapi({
@@ -103,6 +142,46 @@ export default {
     );
 
     theme.enhanceApp(ctx);
+
+    if (inBrowser && metrikaEnabled) {
+      let lastTrackedUrl = '';
+
+      const trackPageView = (source?: string) => {
+        const ym = window.ym;
+
+        if (!ym) {
+          return;
+        }
+
+        const url = toTrackedUrl(source);
+
+        if (url === lastTrackedUrl) {
+          return;
+        }
+
+        const referer = lastTrackedUrl || document.referrer;
+
+        ym(YANDEX_METRIKA_COUNTER_ID, 'hit', url, {
+          title: document.title,
+          ...(referer ? { referer } : {}),
+        });
+
+        lastTrackedUrl = url;
+      };
+
+      const previousOnAfterRouteChange = router.onAfterRouteChange;
+
+      router.onAfterRouteChange = async (to) => {
+        await previousOnAfterRouteChange?.(to);
+        requestAnimationFrame(() => {
+          trackPageView(to);
+        });
+      };
+
+      requestAnimationFrame(() => {
+        trackPageView();
+      });
+    }
 
     const i18n = createI18n({
       legacy: false,

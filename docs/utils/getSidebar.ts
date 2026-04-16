@@ -73,7 +73,7 @@ export function getSidebar(lang: 'ru' | 'en') {
       items: [
         {
           text: t('Список сервисов', 'List of APIs'),
-          link: `/${lang}/api`,
+          link: `/${lang}/api/`,
         },
         ...getSpecSidebar(lang),
       ],
