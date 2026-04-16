@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import VueDevTools from 'vite-plugin-vue-devtools';
 import { defineConfig } from 'vitepress';
 
+import { getYandexMetrikaInitScript } from './metrika';
 import { getSidebar } from '../utils/getSidebar';
 
 const root = dirname(fileURLToPath(import.meta.url));
@@ -45,7 +46,10 @@ export default defineConfig({
   // GitHub project pages are served from /<repo>/ while user pages use /.
   base: siteBase,
 
-  head: [['link', { rel: 'icon', href: `${siteBase}favicon.ico` }]],
+  head: [
+    ['link', { rel: 'icon', href: `${siteBase}favicon.ico` }],
+    ...(isProd ? [['script', { type: 'text/javascript' }, getYandexMetrikaInitScript()]] : []),
+  ],
 
   // <meta name="description" ...>
   description:
