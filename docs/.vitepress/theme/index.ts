@@ -13,6 +13,7 @@ import spec from '../../../packages/api-spec/dadata.json';
 import vpOpenApiLocalesRu from '../../locale-vp-openapi.ru.json';
 import specLocales from '../../locales-spec';
 import { jsDocLinks } from '../../utils/jsDocLinks';
+import 'vitepress-openapi/dist/style.css';
 import './style.css';
 
 const openApiMessages = {

@@ -1,4 +1,6 @@
-@import 'vitepress-openapi/dist/style.css' layer(vitepress-openapi);
+.vp-openapi :is(button, input, optgroup, select, textarea) {
+  border-style: solid;
+}
 
 .OASidebarItem-badge.OAMethodBadge--post {
   display: none;
