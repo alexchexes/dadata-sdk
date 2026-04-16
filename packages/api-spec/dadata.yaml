@@ -95,6 +95,8 @@ tags:
 
       - [Общая информация](https://dadata.ru/clean/)
       - [Список типов стандартизации](https://dadata.ru/api/clean/)
+
+      > **Вызовы ко всем API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
     externalDocs: { url: https://dadata.ru/api/clean/ }
 
   - name: iplocate
@@ -1683,6 +1685,8 @@ paths:
         - Определяет координаты.
         - Показывает округ и район города, ближайшее метро, площадь и стоимость квартиры.
         - Достает коды КЛАДР, ФИАС (ГАР), ОКАТО, ОКТМО и ИФНС.
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/address/ }
       operationId: cleanAddress
       requestBody:
@@ -1719,6 +1723,8 @@ paths:
         - Исправляет опечатки и транслитерирует.
         - Проставляет пол.
         - Склоняет по падежам (кого? кому? кем?).
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/name/ }
       operationId: cleanFio
       requestBody:
@@ -1755,6 +1761,8 @@ paths:
         - Исправляет распространённые опечатки.
         - Проверяет, не «одноразовый» ли адрес.
         - Классифицирует адреса на личные (@mail.ru, @yandex.ru), корпоративные (@myshop.ru) и «ролевые» (info@, support@).
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/email/ }
       operationId: cleanEmail
       requestBody:
@@ -1792,6 +1800,8 @@ paths:
         - Проставляет актуальный код города / DEF-код.
         - Восстанавливает оператора. Учитывает переносы номера между операторами.
         - Определяет страну, регион, город и часовой пояс.
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/phone/ }
       operationId: cleanPhone
       requestBody:
@@ -1831,6 +1841,8 @@ paths:
         **Внимание**
         МВД сломало реестр паспортов, поэтому сервис работает по справочнику от 21 июня 2023 года.
         Подробнее см.: https://t.me/dadataru_health/186
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/passport/ }
       operationId: cleanPassport
       requestBody:
@@ -1865,6 +1877,8 @@ paths:
       summary: Стандартизация дат рождения
       description: |
         Проверяет и приводит дату рождения к единому формату
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/birthdate/ }
       operationId: cleanBirthdate
       requestBody:
@@ -1899,6 +1913,8 @@ paths:
       summary: Стандартизация автомобилей
       description: |
         Распознает марки и модели автомобилей
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/vehicle/ }
       operationId: cleanVehicle
       requestBody:
@@ -1946,6 +1962,8 @@ paths:
         - 1 дата рождения
         - 1 паспорт
         - 1 автомобиль
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/clean/record/ }
       operationId: cleanCombined
       requestBody:
@@ -2261,6 +2279,8 @@ paths:
 
         В поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.
         В поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/stat/ }
       operationId: fetchDailyStats
       responses:
@@ -2283,7 +2303,9 @@ paths:
       tags: [account, balance]
       summary: Баланс пользователя
       description: |
-        Возвращает текущий баланс счета в рублях с точностью до копеек
+        Возвращает текущий баланс счета в рублях с точностью до копеек.
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/balance/ }
       operationId: fetchBalance
       responses:
@@ -2307,6 +2329,8 @@ paths:
       summary: Версии и даты справочников
       description: |
         Возвращает версии сервисов и даты актуальности справочников (ФИАС, ЕГРЮЛ, банки и другие).
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
       externalDocs: { url: https://dadata.ru/api/version/ }
       operationId: fetchVersions
       responses:
