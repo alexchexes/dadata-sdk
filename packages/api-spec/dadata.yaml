@@ -5,11 +5,11 @@ info:
   version: 0.1.0
 
   description: |
-    [Dadata](https://dadata.ru) — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
+    [DaData](https://dadata.ru) — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
 
     Данная спецификация включает полный список публичных API «Дадаты» с детальным описанием формата запросов и ответов.
 
-    _Спецификация не является официальным продуктом «ДаДаты»_.
+    _Спецификация не является официальным продуктом «Дадаты»_.
 
     ## Аутентификация
 
@@ -123,7 +123,64 @@ tags:
 
 components:
   responses:
-    BadRequest:
+    SuggestBadRequest:
+      description: |
+        Некорректный запрос (невалидный JSON или XML)
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestUnauthorized:
+      description: В запросе отсутствует API-ключ
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestForbidden:
+      description: |
+        - В запросе указан неверный API-ключ
+        - Или не подтверждена почта
+        - Или исчерпан дневной лимит запросов (проверьте через ЛК или API `stat/daily`)
+        - Или недостаточно средств для обработки запроса, пополните баланс (`profile/balance`)
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestNotFound:
+      description: |
+        Запрошенный ресурс не найден.
+        Скорее всего, допущена ошибка при формировании URL для выполнения запроса
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestMethodNotAllowed:
+      description: Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestContentTooLarge:
+      description: Слишком большая длина запроса или слишком много условий
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestTooManyRequests:
+      description: Слишком много запросов в секунду или новых соединений в минуту
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestInternalServerError:
+      description: Произошла внутренняя ошибка сервиса
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    # clean
+
+    CleanBadRequest:
       description: |
         Некорректный запрос (невалидный JSON или XML)
 
@@ -132,48 +189,85 @@ components:
         - В `structure` указан неподдерживаемый тип.
         - Количество полей в `data` более указанного в `structure`.
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
 
-    Unauthorized:
-      description: В запросе отсутствует API-ключ (для "Стандартизации", также, секретный ключ)
+    CleanUnauthorized:
+      description: 'В запросе отсутствует API-ключ (`Authorization: Token ...`) или секретный ключ (`X-Secret: ...`)'
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
 
-    Forbidden:
+    CleanForbidden:
       description: |
         В запросе указан неверный API-ключ
         Или не подтверждена почта
         Или исчерпан дневной лимит запросов (проверьте через личный кабинет или API stat/daily)
         Или (Стандартизация) - недостаточно средств для обработки запроса, пополните баланс
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
 
-    NotFound:
+    CleanNotFound:
       description: |
         Запрошенный ресурс не найден.
         Скорее всего, допущена ошибка при формировании URL для выполнения запроса
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
 
-    MethodNotAllowed:
+    CleanMethodNotAllowed:
       description: Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
 
-    ContentTooLarge:
-      description: Слишком большая длина запроса или слишком много условий
-      content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
-
-    TooManyRequests:
+    CleanTooManyRequests:
       description: Слишком много запросов в секунду или новых соединений в минуту
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
 
-    InternalServerError:
+    CleanInternalServerError:
       description: Произошла внутренняя ошибка сервиса
       content:
-        application/json: { schema: { $ref: './schemas/response.json#/definitions/ErrorResponse' } }
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: './schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    # profile
+
+    ApiV2Unauthorized:
+      description: |
+        'Не указан, или указан неверный токен (`Authorization: Token ...`) или секретный ключ (`X-Secret: ...`)'
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2Error4XX:
+      description: Ошибка запроса к API
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2Error5XX:
+      description: Ошибка сервера
+      content:
+        application/json:
+          { schema: { $ref: './schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2MethodNotAllowed:
+      description: Запрос сделан недопустимым методом, например `POST` вместо `GET`
+      content: { text/html: { schema: { type: string } } }
 
   securitySchemes:
     ApiKey:
@@ -219,14 +313,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestAddressResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/fias:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -255,14 +349,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFiasResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -296,14 +390,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/party_by:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -341,14 +435,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyByResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/party_kz:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -382,14 +476,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyKzResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/bank:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -424,14 +518,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestBankResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/fio:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -461,14 +555,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFioResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/email:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -499,14 +593,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestEmailResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/fms_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -533,14 +627,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFmsUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/postal_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -567,14 +661,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/fns_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -605,14 +699,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/fts_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -641,14 +735,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFtsUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/court:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -680,14 +774,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCourtResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/metro:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -722,14 +816,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestMetroResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/car_brand:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -756,14 +850,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCarBrandResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/country:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -793,14 +887,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCountryResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/currency:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -829,14 +923,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCurrencyResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/mktu:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -867,14 +961,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestMktuResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/okved2:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -904,14 +998,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOkved2Response' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/okpd2:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -941,14 +1035,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOkpd2Response' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /suggest/oktmo:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -974,14 +1068,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOktmoResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/address:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1015,14 +1109,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestAddressResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/fias:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1051,14 +1145,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFiasResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/party:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1095,14 +1189,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/FindPartyResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/party_by:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1127,14 +1221,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyByResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/party_kz:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1159,14 +1253,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPartyKzResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/bank:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1204,14 +1298,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/FindBankResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/postal_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1236,14 +1330,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/fns_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1268,14 +1362,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/fts_unit:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1300,14 +1394,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestFtsUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/court:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1336,14 +1430,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCourtResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/car_brand:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1368,14 +1462,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCarBrandResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/country:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1403,14 +1497,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCountryResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/currency:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1439,14 +1533,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestCurrencyResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/mktu:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1473,14 +1567,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestMktuResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/okved2:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1505,14 +1599,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOkved2Response' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/okpd2:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1537,14 +1631,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOkpd2Response' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /findById/oktmo:
     servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
@@ -1569,14 +1663,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestOktmoResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /clean/address:
     servers: [url: https://cleaner.dadata.ru/api/v1]
@@ -1605,13 +1699,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanAddressResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1640,13 +1734,13 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json: { schema: { $ref: './schemas/response.json#/definitions/FioClean' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1677,13 +1771,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanEmailResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1714,13 +1808,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanPhoneResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1753,13 +1847,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanPassportResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1787,13 +1881,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanDateResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1821,13 +1915,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanVehicleResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1873,13 +1967,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/CleanCombinedResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -1910,14 +2004,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestAddressResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
 
@@ -1945,14 +2039,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
 
@@ -1983,13 +2077,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/IpLocateResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
     get:
@@ -2028,13 +2122,13 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/IpLocateResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
 
@@ -2074,14 +2168,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/FindAffiliatedResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
 
@@ -2108,14 +2202,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/FindPartyByEmailResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
       security:
         - ApiKey: []
 
@@ -2144,14 +2238,14 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/FindDeliveryResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '413': { $ref: '#/components/responses/ContentTooLarge' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
 
   /stat/daily:
     servers: [url: https://dadata.ru/api/v2]
@@ -2175,13 +2269,10 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/DailyStats' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '401': { $ref: '#/components/responses/ApiV2Unauthorized' }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -2201,13 +2292,10 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/ProfileBalanceResponse' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '401': { $ref: '#/components/responses/ApiV2Unauthorized' }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
       security:
         - ApiKey: []
           SecretKey: []
@@ -2227,12 +2315,10 @@ paths:
           content:
             application/json:
               { schema: { $ref: './schemas/response.json#/definitions/ServiceVersions' } }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '405': { $ref: '#/components/responses/MethodNotAllowed' }
-        '429': { $ref: '#/components/responses/TooManyRequests' }
-        '5XX': { $ref: '#/components/responses/InternalServerError' }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
       security:
-        - ApiKey: []
+        - { ApiKey: [] }
+        # Официально заявлено, что требуется Api токен: https://dadata.ru/api/version/, но работает и без него
+        - {}

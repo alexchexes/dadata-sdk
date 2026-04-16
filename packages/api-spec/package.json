@@ -27,6 +27,24 @@
     "url": "https://github.com/alexchexes/dadata-sdk",
     "directory": "packages/api-spec"
   },
+  "scripts": {
+    "build": "pnpm run gen:artifacts",
+    "type-check": "tsc -p tsconfig.scripts.json --noEmit",
+    "gen:schemas": "pnpm exec schema-gen --input ../api-types/schema-types --output ./schemas",
+    "gen:bundle": "pnpm exec tsx ./scripts/bundle-openapi.ts ./dadata.yaml ./dadata.json",
+    "gen:artifacts": "pnpm run gen:schemas && pnpm run gen:bundle",
+    "check:official-upstream": "pnpm exec tsx ./scripts/check-official-upstream.ts",
+    "compare:official": "pnpm exec tsx ./scripts/compare-official.ts"
+  },
+  "devDependencies": {
+    "@dadata-sdk/schema-gen": "workspace:*",
+    "@redocly/cli": "^2.0.2",
+    "@scalar/openapi-types": "^0.3.7",
+    "@types/node": "^24.1.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.19.4",
+    "yaml": "^2.8.3"
+  },
   "publishConfig": {
     "access": "public"
   }

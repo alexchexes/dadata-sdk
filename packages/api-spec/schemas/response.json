@@ -81,7 +81,7 @@
       "properties": {
         "version": {
           "type": "string",
-          "description": "Версия бэк-энда «ДаДаты»\n@example 'stable (14385:607a88c61a1e)'",
+          "description": "Версия бэк-энда «Дадаты»\n@example 'stable (14385:607a88c61a1e)'",
           "examples": ["stable (14385:607a88c61a1e)"]
         }
       },
@@ -2975,7 +2975,7 @@
       "minItems": 1,
       "maxItems": 1
     },
-    "ErrorResponse": {
+    "SuggestErrorResponse": {
       "type": "object",
       "properties": {
         "family": { "type": "string", "examples": ["CLIENT_ERROR"], "description": "@example 'CLIENT_ERROR'" },
@@ -2988,12 +2988,114 @@
           "type": "string",
           "examples": [
             "You should provide Authorization header with your api token",
-            "Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help."
+            "Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.",
+            "Feature 'COMPANY' disabled for token 'XXX'."
           ],
-          "description": "@example 'You should provide Authorization header with your api token'\n@example \"Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.\""
+          "description": "@example 'You should provide Authorization header with your api token'\n@example \"Feature 'SUGGESTIONS' disabled for token 'XXX'. See https://dadata.userecho.com/topics/1834 for help.\"\n@example \"Feature 'COMPANY' disabled for token 'XXX'.\""
         }
       },
-      "required": ["family", "reason", "message"]
+      "required": ["family", "reason", "message"],
+      "description": "Объект ошибки, возвращаемой эндпоинтами API `suggest`, `findById`, `findByEmail`"
+    },
+    "CleanErrorResponseAlt1": {
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "description": "@example: '2026-01-01T11:22:33.666+00:00'" },
+        "status": {
+          "type": "number",
+          "examples": [401, 403, 404],
+          "description": "@example 401\n@example 403\n@example 404"
+        },
+        "error": {
+          "type": "string",
+          "examples": ["Unauthorized", "Forbidden", "Not Found"],
+          "description": "@example 'Unauthorized'\n@example 'Forbidden'\n@example 'Not Found'"
+        },
+        "message": {
+          "type": "string",
+          "examples": [
+            "You should provide Authorization header with your api token",
+            "You should provide X-Secret header with your secret key",
+            "Feature 'CLEAN' disabled for token 'XXX'. See https://dadata.userecho.com/topics/7784 for help.",
+            "Service not found: foo"
+          ],
+          "description": "@example \"You should provide Authorization header with your api token\"\n@example \"You should provide X-Secret header with your secret key\"\n@example \"Feature 'CLEAN' disabled for token 'XXX'. See https://dadata.userecho.com/topics/7784 for help.\"\n@example \"Service not found: foo\""
+        },
+        "path": {
+          "type": "string",
+          "examples": ["/api/v1/clean/address", "/api/v1/clean", "/api/v1/clean/foo"],
+          "description": "@example '/api/v1/clean/address'\n@example '/api/v1/clean'\n@example '/api/v1/clean/foo'"
+        }
+      },
+      "required": ["timestamp", "status", "error", "message", "path"],
+      "description": "Один из двух видов объекта ошибки, возвращаемых API Стандартизации."
+    },
+    "CleanErrorResponseAlt2": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "examples": ["about:blank"], "description": "@example \"about:blank\"" },
+        "title": {
+          "type": "string",
+          "examples": ["Bad Request", "Not Found", "Method Not Allowed", "Unsupported Media Type"],
+          "description": "@example \"Bad Request\"\n@example \"Not Found\"\n@example \"Method Not Allowed\"\n@example \"Unsupported Media Type\""
+        },
+        "status": {
+          "type": "number",
+          "examples": [400, 404, 405, 415],
+          "description": "@example 400\n@example 404\n@example 405\n@example 415"
+        },
+        "detail": {
+          "type": "string",
+          "examples": [
+            "Failed to read request",
+            "No static resource api/v1/clean/address/foo.",
+            "Method 'GET' is not supported.",
+            "Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported."
+          ],
+          "description": "@example \"Failed to read request\"\n@example \"No static resource api/v1/clean/address/foo.\"\n@example \"Method 'GET' is not supported.\"\n@example \"Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported.\""
+        },
+        "instance": {
+          "type": "string",
+          "examples": ["/api/v1/clean/address", "/api/v1/clean/address/foo"],
+          "description": "@example \"/api/v1/clean/address\"\n@example \"/api/v1/clean/address/foo\""
+        }
+      },
+      "required": ["type", "title", "status", "detail", "instance"],
+      "description": "Один из двух видов объекта ошибки, возвращаемых API Стандартизации.\n\nОтдаётся в некоторых случаях при некорректно сформированном запросе, например:\n- Запрос к https://cleaner.dadata.ru/api/v1/clean/address c неверным `Content-Type`\n- Запрос к https://cleaner.dadata.ru/api/v1/clean/address с некорректным POST body\n- Запрос к https://cleaner.dadata.ru/api/v1/clean/address методом, отличным от POST\n- Запрос к некорректному URL вида https://cleaner.dadata.ru/api/v1/clean/foo/bar\n- Запрос к некорректному URL вида https://cleaner.dadata.ru/api/v1/clean/foo/bar/baz\n\nЗаголовки ответа с таким форматом объекта содержат `Content-Type: application/problem+json`"
+    },
+    "CleanErrorResponse": {
+      "anyOf": [{ "$ref": "#/definitions/CleanErrorResponseAlt1" }, { "$ref": "#/definitions/CleanErrorResponseAlt2" }]
+    },
+    "ApiV2ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "examples": ["unauthorized"], "description": "@example 'unauthorized'" },
+        "message": { "type": "string" },
+        "fields": {},
+        "errors": { "type": "array", "items": {} }
+      },
+      "required": ["code", "message", "fields", "errors"],
+      "description": "Объект ошибки, возвращаемой эндпоинт API `stat/daily` и `profile/balance`"
+    },
+    "NonPublicApiErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": { "type": "boolean" },
+        "url": {
+          "type": "string",
+          "examples": ["https://dadata.ru/api/profile/balance"],
+          "description": "@example \"https://dadata.ru/api/profile/balance\""
+        },
+        "statusCode": { "type": "number", "examples": [404], "description": "@example 404" },
+        "statusMessage": {
+          "type": "string",
+          "examples": ["Page Not Found"],
+          "description": "@example \"Page Not Found\""
+        },
+        "message": { "type": "string", "examples": ["Page Not Found"], "description": "@example \"Page Not Found\"" }
+      },
+      "required": ["error", "url", "statusCode", "statusMessage", "message"],
+      "description": "Объект ошибки, возвращаемый при запросах к несуществующим или непубличным API, например:\nPOST https://dadata.ru/api/foo"
     },
     "FiasSuggestion": {
       "type": "object",

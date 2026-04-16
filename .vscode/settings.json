@@ -1,0 +1,66 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "vue.server.includeLanguages": ["vue", "markdown"],
+  "files.associations": {
+    "*.md": "mdc"
+  },
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
+  "cSpell.ignoreWords": ["fynjy", "yadex", "Викт", "Срегей", "сухонска"],
+  "cSpell.words": [
+    "cadnum",
+    "dadata",
+    "fias",
+    "geolocate",
+    "geoname",
+    "iplocate",
+    "kladr",
+    "mktu",
+    "myshop",
+    "Okpd",
+    "oktmo",
+    "okved",
+    "razdel",
+    "SABRRUMM",
+    "serega",
+    "strcode",
+    "Дадаты",
+    "ЕГРЮЛ",
+    "ИФНС",
+    "КЛАДР",
+    "МКТУ",
+    "ОГРН",
+    "ОКАТО",
+    "ОКВЭД",
+    "ОКПД",
+    "ОКТМО",
+    "онлайнер",
+    "плейграунд",
+    "СДЭК",
+    "Сухонская",
+    "ФИАС",
+    "физлиц",
+    "эндпоинт",
+    "эндпоинтами",
+    "Эндпоинты",
+    "юрлиц",
+    "юрлицами",
+    "юрлице"
+  ],
+  "cSpell.ignorePaths": [
+    "**/package.json",
+    "**/package-lock.json",
+    "**/node_modules",
+    "vscode-extension",
+    ".git/{info,lfs,logs,refs,objects}/**",
+    ".git/{index,*refs,*HEAD}",
+    ".vscode",
+    ".vscode-insiders"
+  ],
+  "js/ts.tsdk.path": "node_modules\\typescript\\lib"
+}

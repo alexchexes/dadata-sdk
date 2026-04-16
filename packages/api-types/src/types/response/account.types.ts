@@ -95,7 +95,7 @@ export interface ServiceVersions {
 
 export interface ServiceVersionsDadata {
   /**
-   * Версия бэк-энда «ДаДаты»
+   * Версия бэк-энда «Дадаты»
    * @example 'stable (14385:607a88c61a1e)'
    */
   version: string;

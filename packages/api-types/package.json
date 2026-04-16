@@ -39,20 +39,16 @@
   "scripts": {
     "prepare": "pnpm build",
     "clean": "rimraf dist",
-    "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs && pnpm run gen:schema && pnpm run gen:spec",
+    "build": "pnpm run clean && pnpm run build:types && pnpm run build:esm && pnpm run build:cjs && pnpm run prune:stubs",
     "build:types": "tsc -p tsconfig.types.json && node -e \"require('fs').copyFileSync('src/index.d.ts','dist/index.d.ts')\"",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "prune:stubs": "rimraf dist/cjs/types dist/esm/types",
-    "gen:schema": "pnpm exec schema-gen --input schema-types --output ../api-spec/schemas",
-    "gen:spec": "pnpm redocly bundle ../api-spec/dadata.yaml -o ../api-spec/dadata.json"
+    "prune:stubs": "rimraf dist/cjs/types dist/esm/types"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",
     "chalk": "^5.4.1",
-    "rimraf": "^6.0.1",
-    "tsx": "^4.19.4",
-    "@dadata-sdk/schema-gen": "workspace:*"
+    "rimraf": "^6.0.1"
   },
   "publishConfig": {
     "access": "public"

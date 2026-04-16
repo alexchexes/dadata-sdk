@@ -57,19 +57,19 @@ const OFFICIAL_AUTH_OVERRIDES: Record<string, AuthClass> = {
 const OFFICIAL_SPECS: OfficialSourceSpec[] = [
   {
     name: 'suggestions',
-    localPath: 'packages/api-spec/official/suggestions.yml',
+    localPath: 'official/suggestions.yml',
     pathPrefix: '/api/4_1/rs',
     authClass: 'token',
   },
   {
     name: 'cleaner',
-    localPath: 'packages/api-spec/official/cleaner.yml',
+    localPath: 'official/cleaner.yml',
     pathPrefix: '/api/v1',
     authClass: 'token+secret',
   },
   {
     name: 'profile',
-    localPath: 'packages/api-spec/official/profile.yml',
+    localPath: 'official/profile.yml',
     pathPrefix: '/api/v2',
     authClass: 'token+secret',
   },
@@ -83,7 +83,7 @@ const officialDocuments = new Map<OfficialSourceSpec['name'], OpenAPIV3_1.Docume
 );
 
 const ourSpec = JSON.parse(
-  readFileSync(resolve('packages/api-spec/dadata.json'), 'utf8'),
+  readFileSync(resolve('dadata.json'), 'utf8'),
 ) as OpenAPIV3_1.Document;
 
 const options = parseOptions(process.argv.slice(2));

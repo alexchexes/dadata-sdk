@@ -46,7 +46,7 @@ const query = ref('');
 ### Документация
 
 - Описание компонента: https://alexchexes.github.io/dadata-sdk/ru/vue
-- Описание API ДаДаты: https://alexchexes.github.io/dadata-sdk/ru/api/
+- Описание API «Дадаты»: https://alexchexes.github.io/dadata-sdk/ru/api/
 - Демо/плейграунд: https://alexchexes.github.io/dadata-sdk/ru/demo
 - Репозиторий: https://github.com/alexchexes/dadata-sdk/tree/rewritten/packages/vue-dadata
 

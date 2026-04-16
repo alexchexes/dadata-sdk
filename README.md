@@ -13,7 +13,7 @@
 
 ## Пакеты
 
-- [`packages/api-spec`](packages/api-spec) (`@dadata-sdk/api-spec`) - OpenAPI и JSON Schema, покрывающая практически весь публичный API ДаДаты.
+- [`packages/api-spec`](packages/api-spec) (`@dadata-sdk/api-spec`) - OpenAPI и JSON Schema, покрывающая практически весь публичный API Дадаты.
 - [`packages/api-types`](packages/api-types) (`@dadata-sdk/api-types`) - TypeScript-типы, константы и модели запросов/ответов для API DaData
 - [`packages/vue-dadata`](packages/vue-dadata) (`@dadata-sdk/vue`) - Vue 3.5+ компонент подсказок DaData
 - [`packages/schema-gen`](packages/schema-gen) (`@dadata-sdk/schema-gen`) - инструмент для генерации JSON Schema из типов TypeScript (используя [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator)).
@@ -32,7 +32,7 @@
 
 ## TypeScript-типы
 
-Пакет `@dadata-sdk/api-types` содержит TypeScript-контракты запросов и ответов всех публичных эндпоинтов API ДаДаты, а также константы.
+Пакет `@dadata-sdk/api-types` содержит TypeScript-контракты запросов и ответов всех публичных эндпоинтов API Дадаты, а также константы.
 
 ## Vue-компонент
 
