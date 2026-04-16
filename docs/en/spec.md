@@ -2,6 +2,10 @@
 title: OpenAPI spec for Dadata API
 ---
 
+<script setup>
+import OpenApiContent from '../components/OpenApiContent.vue'
+</script>
+
 ::: info
 This documentation was developed in 2025 when the official OpenAPI spec had not yet been published.
 Since then (as of March 2026), much has changed, and although this unofficial documentation is still useful, it requires updating. If you wish to help, join us [on GitHub](https://github.com/alexchexes/dadata-sdk).
@@ -26,6 +30,8 @@ The documentation is in the early stage of development. The site might change fr
 
 _If you're interested in the English version of this spec, let us know [on the GitHub](https://github.com/alexchexes/dadata-sdk)._
 
+<OpenApiContent>
 <OAInfo />
 
 <OAServers />
+</OpenApiContent>
