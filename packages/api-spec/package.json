@@ -34,7 +34,8 @@
     "gen:bundle": "pnpm exec tsx ./scripts/bundle-openapi.ts ./dadata.yaml ./dadata.json",
     "gen:artifacts": "pnpm run gen:schemas && pnpm run gen:bundle",
     "check:official-upstream": "pnpm exec tsx ./scripts/check-official-upstream.ts",
-    "compare:official": "pnpm exec tsx ./scripts/compare-official.ts"
+    "compare:official": "pnpm exec tsx ./scripts/compare-official.ts",
+    "compare:official:suggestions-stage-a": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-a.ts"
   },
   "devDependencies": {
     "@dadata-sdk/schema-gen": "workspace:*",

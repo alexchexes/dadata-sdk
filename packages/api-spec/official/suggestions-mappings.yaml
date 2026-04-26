@@ -1,0 +1,249 @@
+version: 1
+family: suggestions
+approvedTemplateExpansions:
+  - path: /findById/car_brand
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindCarBrandPayload'
+    ourResponseRef: '#/components/schemas/SuggestCarBrandResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/country
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindCountryPayload'
+    ourResponseRef: '#/components/schemas/SuggestCountryResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/court
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindCourtPayload'
+    ourResponseRef: '#/components/schemas/SuggestCourtResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/currency
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindCurrencyPayload'
+    ourResponseRef: '#/components/schemas/SuggestCurrencyResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/delivery
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindDeliveryPayload'
+    ourResponseRef: '#/components/schemas/FindDeliveryResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/fns_unit
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindFnsUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestFnsUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/fts_unit
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindFtsUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestFtsUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/mktu
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindMktuPayload'
+    ourResponseRef: '#/components/schemas/SuggestMktuResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/okpd2
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindOkpd2Payload'
+    ourResponseRef: '#/components/schemas/SuggestOkpd2Response'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/oktmo
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindOktmoPayload'
+    ourResponseRef: '#/components/schemas/SuggestOktmoResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/okved2
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindOkved2Payload'
+    ourResponseRef: '#/components/schemas/SuggestOkved2Response'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/party_by
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindPartyByPayload'
+    ourResponseRef: '#/components/schemas/SuggestPartyByResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/party_kz
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindPartyKzPayload'
+    ourResponseRef: '#/components/schemas/SuggestPartyKzResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /findById/postal_unit
+    method: post
+    officialPathTemplate: '/findById/{name}'
+    officialRequestRef: '#/components/schemas/SuggestRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/FindPostalUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestPostalUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /geolocate/postal_unit
+    method: post
+    officialPathTemplate: '/geolocate/{name}'
+    officialRequestRef: '#/components/schemas/GeoLocateOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/GeolocatePostalUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestPostalUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/car_brand
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestCarBrandPayload'
+    ourResponseRef: '#/components/schemas/SuggestCarBrandResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/country
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestCountryPayload'
+    ourResponseRef: '#/components/schemas/SuggestCountryResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/court
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestCourtPayload'
+    ourResponseRef: '#/components/schemas/SuggestCourtResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/currency
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestCurrencyPayload'
+    ourResponseRef: '#/components/schemas/SuggestCurrencyResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/fms_unit
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestFmsUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestFmsUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/fns_unit
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestFnsUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestFnsUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/fts_unit
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestFtsUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestFtsUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/metro
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestMetroPayload'
+    ourResponseRef: '#/components/schemas/SuggestMetroResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/mktu
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestMktuPayload'
+    ourResponseRef: '#/components/schemas/SuggestMktuResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/okpd2
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestOkpd2Payload'
+    ourResponseRef: '#/components/schemas/SuggestOkpd2Response'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/oktmo
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestOktmoPayload'
+    ourResponseRef: '#/components/schemas/SuggestOktmoResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/okved2
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestOkved2Payload'
+    ourResponseRef: '#/components/schemas/SuggestOkved2Response'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/party_by
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestPartyByPayload'
+    ourResponseRef: '#/components/schemas/SuggestPartyByResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/party_kz
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestPartyKzPayload'
+    ourResponseRef: '#/components/schemas/SuggestPartyKzResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+  - path: /suggest/postal_unit
+    method: post
+    officialPathTemplate: '/suggest/{name}'
+    officialRequestRef: '#/components/schemas/SuggestOutwardRequest'
+    officialResponseRef: '#/components/schemas/SuggestResponseObject'
+    ourRequestRef: '#/components/schemas/SuggestPostalUnitPayload'
+    ourResponseRef: '#/components/schemas/SuggestPostalUnitResponse'
+    reason: Official suggestions OpenAPI models this concrete operation only through the generic path template.
+approvedExtensions:
+  - path: /iplocate/address
+    method: get
+    ourRequestRef: null
+    ourResponseRef: '#/components/schemas/IpLocateResponse'
+    reason: Our spec exposes this operation, but the official suggestions OpenAPI has no matching operation yet.
