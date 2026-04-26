@@ -5,18 +5,16 @@ import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 import YAML from 'yaml';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
-type AuthClass = 'none' | 'token' | 'token+secret' | 'unknown';
 
 interface OfficialSourceSpec {
   name: 'cleaner' | 'suggestions' | 'profile';
   pathPrefix: string;
-  authClass: Extract<AuthClass, 'token' | 'token+secret'>;
+  acceptedUndeclaredSecurity: OpenAPIV3_1.SecurityRequirementObject[];
   localPath: string;
 }
 
 interface OfficialOperationRecord {
   source: OfficialSourceSpec['name'];
-  authClass: OfficialSourceSpec['authClass'];
   path: string;
   method: HttpMethod;
   operation: OpenAPIV3_1.OperationObject;
@@ -30,19 +28,17 @@ interface OperationMismatch {
   issues: string[];
 }
 
-interface InformationalDifference {
+interface ComparedDifference {
   path: string;
   method: HttpMethod;
   source: OfficialSourceSpec['name'];
-  notes: string[];
+  field: string;
+  official: string;
+  ours: string;
 }
 
-interface AcceptedNormalization {
-  path: string;
-  method: HttpMethod;
-  source: OfficialSourceSpec['name'];
-  notes: string[];
-}
+type AcceptedMismatch = ComparedDifference;
+type AppliedNormalization = ComparedDifference;
 
 interface CompareOptions {
   showAccepted: boolean;
@@ -50,8 +46,8 @@ interface CompareOptions {
 
 const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
-const OFFICIAL_AUTH_OVERRIDES: Record<string, AuthClass> = {
-  '/version': 'token',
+const ACCEPTED_UNDECLARED_SECURITY_OVERRIDES: Record<string, OpenAPIV3_1.SecurityRequirementObject[]> = {
+  '/version': [{ ApiKey: [] }, {}],
 };
 
 const OFFICIAL_SPECS: OfficialSourceSpec[] = [
@@ -59,19 +55,19 @@ const OFFICIAL_SPECS: OfficialSourceSpec[] = [
     name: 'suggestions',
     localPath: 'official/suggestions.yml',
     pathPrefix: '/api/4_1/rs',
-    authClass: 'token',
+    acceptedUndeclaredSecurity: [{ ApiKey: [] }],
   },
   {
     name: 'cleaner',
     localPath: 'official/cleaner.yml',
     pathPrefix: '/api/v1',
-    authClass: 'token+secret',
+    acceptedUndeclaredSecurity: [{ ApiKey: [], SecretKey: [] }],
   },
   {
     name: 'profile',
     localPath: 'official/profile.yml',
     pathPrefix: '/api/v2',
-    authClass: 'token+secret',
+    acceptedUndeclaredSecurity: [{ ApiKey: [], SecretKey: [] }],
   },
 ];
 
@@ -87,7 +83,8 @@ const ourSpec = JSON.parse(
 ) as OpenAPIV3_1.Document;
 
 const options = parseOptions(process.argv.slice(2));
-const acceptedNormalizations: AcceptedNormalization[] = [];
+const appliedNormalizations: AppliedNormalization[] = [];
+const acceptedMismatches: AcceptedMismatch[] = [];
 const officialOperations = loadOfficialOperations();
 const officialPaths = new Set(officialOperations.map((operation) => operation.path));
 const ourPaths = new Set(Object.keys(ourSpec.paths ?? {}));
@@ -96,7 +93,6 @@ const officialOnlyPaths = sortStrings([...officialPaths].filter((path) => !ourPa
 const ourOnlyPaths = sortStrings([...ourPaths].filter((path) => !officialPaths.has(path)));
 
 const mismatches: OperationMismatch[] = [];
-const informationalDifferences: InformationalDifference[] = [];
 
 for (const official of officialOperations) {
   const ourOperation = getOperation(ourSpec, official.path, official.method);
@@ -117,13 +113,17 @@ for (const official of officialOperations) {
       ourOperation.responses,
     );
 
-    if (responseStatusComparison.acceptedMatches.length > 0) {
-      acceptedNormalizations.push({
-        path: official.path,
-        method: official.method,
-        source: official.source,
-        notes: responseStatusComparison.acceptedMatches,
-      });
+    if (responseStatusComparison.coveringMatches.length > 0) {
+      for (const match of responseStatusComparison.coveringMatches) {
+        appliedNormalizations.push({
+          path: official.path,
+          method: official.method,
+          source: official.source,
+          field: 'response status codes',
+          official: match.official,
+          ours: match.ours,
+        });
+      }
     }
 
     if (responseStatusComparison.missingInOurs.length > 0) {
@@ -132,31 +132,38 @@ for (const official of officialOperations) {
       );
     }
 
-    if (responseStatusComparison.extraInOurs.length > 0) {
-      informationalDifferences.push({
+    if (
+      responseStatusComparison.missingInOurs.length === 0 &&
+      responseStatusComparison.extraInOurs.length > 0
+    ) {
+      acceptedMismatches.push({
         path: official.path,
         method: official.method,
         source: official.source,
-        notes: [
-          `extra response status codes in ours: ${responseStatusComparison.extraInOurs.join(', ')}`,
-        ],
+        field: 'response status codes',
+        official: responseStatusComparison.officialCodes.join(', '),
+        ours: responseStatusComparison.ourCodes.join(', '),
       });
     }
 
-    const ourAuthClass = getEffectiveAuthClass(ourSpec, ourOperation);
-    const expectedAuthClass = getExpectedOfficialAuthClass(official);
+    const officialSecurity = getDeclaredSecurityRequirements(getOfficialDocument(official), official.operation);
+    const ourSecurity = getDeclaredSecurityRequirements(ourSpec, ourOperation);
 
-    if (expectedAuthClass.note) {
-      acceptedNormalizations.push({
-        path: official.path,
-        method: official.method,
-        source: official.source,
-        notes: [expectedAuthClass.note],
-      });
-    }
-
-    if (ourAuthClass !== expectedAuthClass.authClass) {
-      issues.push(`auth differs: official=${expectedAuthClass.authClass} ours=${ourAuthClass}`);
+    if (!securityRequirementsEqual(ourSecurity, officialSecurity)) {
+      if (isAcceptedSecurityMismatch(official, officialSecurity, ourSecurity)) {
+        acceptedMismatches.push({
+          path: official.path,
+          method: official.method,
+          source: official.source,
+          field: 'security',
+          official: formatSecurityRequirements(officialSecurity),
+          ours: formatSecurityRequirements(ourSecurity),
+        });
+      } else {
+        issues.push(
+          `security differs: official ${formatSecurityRequirements(officialSecurity)} vs ours ${formatSecurityRequirements(ourSecurity)}`,
+        );
+      }
     }
   }
 
@@ -174,8 +181,8 @@ printReport({
   officialOnlyPaths,
   ourOnlyPaths,
   mismatches,
-  informationalDifferences,
-  acceptedNormalizations,
+  acceptedMismatches,
+  appliedNormalizations,
   options,
 });
 
@@ -203,7 +210,6 @@ function loadOfficialOperations(): OfficialOperationRecord[] {
 
         const record: OfficialOperationRecord = {
           source: spec.name,
-          authClass: spec.authClass,
           path: normalizedPath,
           method,
           operation,
@@ -249,14 +255,15 @@ function expandGenericOfficialOperations(
       .filter((path) => !concreteOfficialPaths.has(path));
 
     for (const path of matchingOurPaths) {
-      acceptedNormalizations.push({
+      appliedNormalizations.push({
         path,
         method: genericOperation.method,
         source: genericOperation.source,
-        notes: [
-          `generic official path ${genericOperation.genericSourcePath ?? genericOperation.path} expanded onto concrete path`,
-        ],
+        field: 'path template',
+        official: genericOperation.genericSourcePath ?? genericOperation.path,
+        ours: 'concrete paths',
       });
+
 
       expanded.push({
         ...genericOperation,
@@ -304,11 +311,17 @@ function fingerprintRequestBody(
 function compareResponseStatusCodes(
   officialResponses: OpenAPIV3_1.OperationObject['responses'],
   ourResponses: OpenAPIV3_1.OperationObject['responses'],
-): { missingInOurs: string[]; extraInOurs: string[]; acceptedMatches: string[] } {
+): {
+  officialCodes: string[];
+  ourCodes: string[];
+  missingInOurs: string[];
+  extraInOurs: string[];
+  coveringMatches: Array<{ official: string; ours: string }>;
+} {
   const officialCodes = extractResponseCodes(officialResponses);
   const ourCodes = extractResponseCodes(ourResponses);
   const missingInOurs: string[] = [];
-  const acceptedMatches: string[] = [];
+  const coveringMatches: Array<{ official: string; ours: string }> = [];
 
   for (const code of officialCodes) {
     const coveringCode = findCoveringResponseCode(code, ourCodes);
@@ -319,14 +332,16 @@ function compareResponseStatusCodes(
     }
 
     if (coveringCode !== code) {
-      acceptedMatches.push(`response status coverage normalized: official ${code} covered by ours ${coveringCode}`);
+      coveringMatches.push({ official: code, ours: coveringCode });
     }
   }
 
   return {
+    officialCodes,
+    ourCodes,
     missingInOurs,
     extraInOurs: ourCodes.filter((code) => !isResponseCodeCovered(code, officialCodes)),
-    acceptedMatches,
+    coveringMatches,
   };
 }
 
@@ -463,78 +478,70 @@ function decodeJsonPointer(segment: string): string {
   return segment.replace(/~1/g, '/').replace(/~0/g, '~');
 }
 
-function getEffectiveAuthClass(
+function getDeclaredSecurityRequirements(
   document: OpenAPIV3_1.Document,
   operation: OpenAPIV3_1.OperationObject,
-): AuthClass {
-  const securityRequirements = operation.security ?? document.security ?? [];
+): OpenAPIV3_1.SecurityRequirementObject[] {
+  return normalizeSecurityRequirements(operation.security ?? document.security ?? []);
+}
 
-  if (securityRequirements.length === 0) {
-    return 'none';
-  }
-
-  const classes = securityRequirements
+function normalizeSecurityRequirements(
+  requirements: OpenAPIV3_1.SecurityRequirementObject[],
+): OpenAPIV3_1.SecurityRequirementObject[] {
+  return requirements
     .map((requirement: OpenAPIV3_1.SecurityRequirementObject) =>
-      classifySecurityRequirement(requirement),
+      Object.fromEntries(
+        Object.entries(requirement)
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([scheme, scopes]) => [scheme, [...scopes].sort()]),
+      ) as OpenAPIV3_1.SecurityRequirementObject,
     )
-    .filter((value: AuthClass) => value !== 'none');
-
-  if (classes.includes('token+secret')) {
-    return 'token+secret';
-  }
-
-  if (classes.includes('token')) {
-    return 'token';
-  }
-
-  return classes[0] ?? 'unknown';
+    .sort((left, right) =>
+      JSON.stringify(left).localeCompare(JSON.stringify(right)),
+    );
 }
 
-function getExpectedOfficialAuthClass(official: OfficialOperationRecord): {
-  authClass: AuthClass;
-  note?: string;
-} {
-  const override = OFFICIAL_AUTH_OVERRIDES[official.path];
-
-  if (!override) {
-    return { authClass: official.authClass };
-  }
-
-  return {
-    authClass: override,
-    note: `official auth overridden for ${official.path}: default ${official.authClass} -> ${override}`,
-  };
+function formatSecurityRequirements(
+  requirements: OpenAPIV3_1.SecurityRequirementObject[],
+): string {
+  return JSON.stringify(normalizeSecurityRequirements(requirements));
 }
 
-function classifySecurityRequirement(
-  requirement: OpenAPIV3_1.SecurityRequirementObject,
-): AuthClass {
-  const keys = Object.keys(requirement);
+function securityRequirementsEqual(
+  left: OpenAPIV3_1.SecurityRequirementObject[],
+  right: OpenAPIV3_1.SecurityRequirementObject[],
+): boolean {
+  return formatSecurityRequirements(left) === formatSecurityRequirements(right);
+}
 
-  if (keys.length === 0) {
-    return 'none';
+function isAcceptedSecurityMismatch(
+  official: OfficialOperationRecord,
+  officialSecurity: OpenAPIV3_1.SecurityRequirementObject[],
+  ourSecurity: OpenAPIV3_1.SecurityRequirementObject[],
+): boolean {
+  if (officialSecurity.length > 0) {
+    return false;
   }
 
-  const hasApiKey = keys.includes('ApiKey');
-  const hasSecretKey = keys.includes('SecretKey');
+  const acceptedUndeclaredSecurity = normalizeSecurityRequirements(
+    ACCEPTED_UNDECLARED_SECURITY_OVERRIDES[official.path] ??
+      OFFICIAL_SPECS.find((spec) => spec.name === official.source)?.acceptedUndeclaredSecurity ??
+      [],
+  );
 
-  if (hasApiKey && hasSecretKey) {
-    return 'token+secret';
+  if (!securityRequirementsEqual(ourSecurity, acceptedUndeclaredSecurity)) {
+    return false;
   }
 
-  if (hasApiKey) {
-    return 'token';
-  }
-
-  return 'unknown';
+  return true;
 }
 
 function printReport(report: {
   officialOnlyPaths: string[];
   ourOnlyPaths: string[];
   mismatches: OperationMismatch[];
-  informationalDifferences: InformationalDifference[];
-  acceptedNormalizations: AcceptedNormalization[];
+  acceptedMismatches: AcceptedMismatch[];
+  appliedNormalizations: AppliedNormalization[];
   options: CompareOptions;
 }) {
   console.info('Official-vs-ours spec comparison report\n');
@@ -543,8 +550,8 @@ function printReport(report: {
   console.info(`- official-only paths: ${report.officialOnlyPaths.length}`);
   console.info(`- our-only paths: ${report.ourOnlyPaths.length}`);
   console.info(`- shared operation mismatches: ${report.mismatches.length}`);
-  console.info(`- informational differences: ${report.informationalDifferences.length}`);
-  console.info(`- accepted normalizations: ${report.acceptedNormalizations.length}`);
+  console.info(`- accepted mismatches: ${report.acceptedMismatches.length}`);
+  console.info(`- applied normalizations: ${report.appliedNormalizations.length}`);
 
   if (report.officialOnlyPaths.length > 0) {
     console.info('\nPaths present in official, missing in ours:');
@@ -570,39 +577,48 @@ function printReport(report: {
     }
   }
 
-  if (report.options.showAccepted && report.acceptedNormalizations.length > 0) {
-    console.info('\nAccepted normalizations:');
-    for (const group of groupDifferences(report.acceptedNormalizations)) {
-      console.info(`- [${group.source}] ${group.note}`);
-      console.info(`  operations: ${group.count}`);
-      console.info(`  sample paths: ${group.samplePaths.join(', ')}`);
+  if (report.options.showAccepted && report.acceptedMismatches.length > 0) {
+    console.info('\nAccepted mismatches:');
+    for (const group of groupComparedDifferences(report.acceptedMismatches)) {
+      console.info(`- [${group.source}]`);
+      console.info(`  paths (${group.count}): ${formatGroupedPaths(group.samplePaths, group.count)}`);
+      console.info(`  field: ${group.field}`);
+      console.info(`  official: ${group.official}`);
+      console.info(`  ours: ${group.ours}`);
     }
   }
 
-  if (report.options.showAccepted && report.informationalDifferences.length > 0) {
-    console.info('\nInformational differences (not treated as mismatches):');
-    for (const group of groupDifferences(report.informationalDifferences)) {
-      console.info(`- [${group.source}] ${group.note}`);
-      console.info(`  operations: ${group.count}`);
-      console.info(`  sample paths: ${group.samplePaths.join(', ')}`);
+  if (report.options.showAccepted && report.appliedNormalizations.length > 0) {
+    console.info('\nApplied normalizations:');
+    for (const group of groupComparedDifferences(report.appliedNormalizations)) {
+      const normalization = describeAppliedNormalization(group);
+
+      console.info(`- [${group.source}]`);
+      console.info(`  paths (${group.count}): ${formatGroupedPaths(group.samplePaths, group.count)}`);
+      console.info(`  normalization: ${normalization.label}`);
+      console.info(`  official: ${group.official}`);
+      console.info(`  ours: ${normalization.ours}`);
     }
   }
 
   if (
     !report.options.showAccepted &&
-    (report.acceptedNormalizations.length > 0 || report.informationalDifferences.length > 0)
+    (
+      report.acceptedMismatches.length > 0 ||
+      report.appliedNormalizations.length > 0
+    )
   ) {
     console.info('\nNotes:');
 
-    if (report.acceptedNormalizations.length > 0) {
+    if (report.acceptedMismatches.length > 0) {
       console.info(
-        `- ${report.acceptedNormalizations.length} accepted normalizations are hidden in the default view.`,
+        `- ${report.acceptedMismatches.length} accepted mismatches are hidden in the default view.`,
       );
     }
 
-    if (report.informationalDifferences.length > 0) {
+    if (report.appliedNormalizations.length > 0) {
       console.info(
-        `- ${report.informationalDifferences.length} informational differences are hidden in the default view.`,
+        `- ${report.appliedNormalizations.length} applied normalizations are hidden in the default view.`,
       );
     }
 
@@ -610,43 +626,89 @@ function printReport(report: {
   }
 }
 
-function groupDifferences(items: Array<InformationalDifference | AcceptedNormalization>): Array<{
+function groupComparedDifferences(items: ComparedDifference[]): Array<{
   source: OfficialSourceSpec['name'];
-  note: string;
+  field: string;
+  official: string;
+  ours: string;
   count: number;
   samplePaths: string[];
 }> {
-  const groups = new Map<string, { source: OfficialSourceSpec['name']; note: string; paths: string[] }>();
+  const groups = new Map<string, {
+    source: OfficialSourceSpec['name'];
+    field: string;
+    official: string;
+    ours: string;
+    paths: string[];
+  }>();
 
   for (const item of items) {
-    for (const note of item.notes) {
-      const key = `${item.source}::${note}`;
-      const existing = groups.get(key);
+    const key = `${item.source}::${item.field}::${item.official}::${item.ours}`;
+    const existing = groups.get(key);
 
-      if (existing) {
-        existing.paths.push(item.path);
-      } else {
-        groups.set(key, {
-          source: item.source,
-          note,
-          paths: [item.path],
-        });
-      }
+    if (existing) {
+      existing.paths.push(item.path);
+    } else {
+      groups.set(key, {
+        source: item.source,
+        field: item.field,
+        official: item.official,
+        ours: item.ours,
+        paths: [item.path],
+      });
     }
   }
 
   return [...groups.values()]
     .map((group) => ({
       source: group.source,
-      note: group.note,
+      field: group.field,
+      official: group.official,
+      ours: group.ours,
       count: group.paths.length,
       samplePaths: [...new Set(group.paths)].sort((left, right) => left.localeCompare(right)).slice(0, 6),
     }))
     .sort(
       (left, right) =>
         left.source.localeCompare(right.source) ||
-        left.note.localeCompare(right.note),
+        left.field.localeCompare(right.field) ||
+        left.official.localeCompare(right.official) ||
+        left.ours.localeCompare(right.ours),
     );
+}
+
+function formatGroupedPaths(samplePaths: string[], count: number): string {
+  const listed = samplePaths.join(', ');
+  return count > samplePaths.length ? `${listed}, ...` : listed;
+}
+
+function describeAppliedNormalization(group: {
+  field: string;
+  ours: string;
+  samplePaths: string[];
+  count: number;
+}): {
+  label: string;
+  ours: string;
+} {
+  if (group.field === 'path template') {
+    return {
+      label: 'generic path template expansion',
+      ours: `concrete paths like ${formatGroupedPaths(group.samplePaths, group.count)}`,
+    };
+  }
+
+  if (group.field === 'response status codes') {
+    return {
+      label: 'response status coverage',
+      ours: group.ours,
+    };
+  }
+
+  return {
+    label: group.field,
+    ours: group.ours,
+  };
 }
 
 function compareOperationRecords(left: OfficialOperationRecord, right: OfficialOperationRecord): number {
