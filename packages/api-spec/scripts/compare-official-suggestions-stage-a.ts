@@ -1,11 +1,11 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 import YAML from 'yaml';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
-type ComparisonUnitKind = 'official-concrete' | 'approved-template-expansion' | 'approved-extension';
+type ComparisonUnitKind = 'official-concrete' | 'template-expansion' | 'extension';
 type RefIdentity = string | null;
 
 interface OperationRecord {
@@ -20,30 +20,34 @@ interface OfficialTemplateOperationRecord extends OperationRecord {
   prefix: string;
 }
 
-interface ApprovedTemplateExpansion {
+interface OperationIdentity {
   path: string;
   method: HttpMethod;
-  officialPathTemplate: string;
-  officialRequestRef: RefIdentity;
-  officialResponseRef: RefIdentity;
-  ourRequestRef: RefIdentity;
-  ourResponseRef: RefIdentity;
-  reason?: string;
 }
 
-interface ApprovedExtension {
-  path: string;
+interface OfficialTemplateIdentity {
+  pathTemplate: string;
   method: HttpMethod;
-  ourRequestRef: RefIdentity;
-  ourResponseRef: RefIdentity;
-  reason?: string;
 }
 
-interface SuggestionsMappingManifest {
+interface TemplateExpansionMapping {
+  our: OperationIdentity;
+  official: OfficialTemplateIdentity;
+}
+
+interface ExtensionMapping {
+  our: OperationIdentity;
+}
+
+interface OperationCuration {
+  templateExpansions: TemplateExpansionMapping[];
+  extensions: ExtensionMapping[];
+}
+
+interface SuggestionsCuration {
   version: 1;
   family: 'suggestions';
-  approvedTemplateExpansions: ApprovedTemplateExpansion[];
-  approvedExtensions: ApprovedExtension[];
+  operations: OperationCuration;
 }
 
 interface ComparisonUnit {
@@ -58,30 +62,47 @@ interface ComparisonUnit {
 }
 
 interface CompareOptions {
-  manifestPath: string | null;
-  showAccepted: boolean;
+  curationPath: string | null;
+  showCuration: boolean;
+  writeProjectionPath: string | null;
+}
+
+interface ProjectionResult {
+  document: OpenAPIV3_1.Document;
+  projectedOperationCount: number;
+  projectedPathCount: number;
+  concreteOperationCount: number;
+  templateExpandedOperationCount: number;
+  excludedExtensionCount: number;
 }
 
 const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const OFFICIAL_PATH_PREFIX = '/api/4_1/rs';
-const DEFAULT_MANIFEST_PATH = 'official/suggestions-mappings.yaml';
-const STDIN_MANIFEST_PATH = '-';
+const DEFAULT_CURATION_PATH = 'official/curation/suggestions.yaml';
+const STDIN_CURATION_PATH = '-';
+const INVOCATION_CWD = process.env.INIT_CWD ?? process.cwd();
 
 const options = parseOptions(process.argv.slice(2));
 const officialSpec = YAML.parse(
-  readFileSync(resolve('official/suggestions.yml'), 'utf8'),
+  readFileSync(resolve('official/source/suggestions.yml'), 'utf8'),
 ) as OpenAPIV3_1.Document;
 const ourSpec = JSON.parse(readFileSync(resolve('dadata.json'), 'utf8')) as OpenAPIV3_1.Document;
-const manifest = parseManifest(readManifestSource(options.manifestPath));
+const curation = parseCuration(readCurationSource(options.curationPath));
 
 const officialOperations = extractOfficialOperations(officialSpec);
 const ourFamilyOperations = extractOurFamilyOperations(ourSpec, officialOperations);
-const comparison = compareSuggestionsStageA(officialOperations, ourFamilyOperations, manifest);
+const comparison = compareSuggestionsStageA(officialOperations, ourFamilyOperations, curation);
 
 printReport(comparison.units, comparison.issues, officialOperations, ourFamilyOperations, options);
 
 if (comparison.issues.length > 0) {
   process.exitCode = 1;
+} else if (options.writeProjectionPath) {
+  const projection = buildProjectedOfficialSuggestionsSpec(comparison.units, officialOperations, officialSpec);
+  const outputPath = resolveOutputPath(options.writeProjectionPath);
+
+  writeJson(outputPath, projection.document);
+  printProjectionReport(projection, outputPath);
 }
 
 function compareSuggestionsStageA(
@@ -90,23 +111,23 @@ function compareSuggestionsStageA(
     templates: OfficialTemplateOperationRecord[];
   },
   ours: Map<string, OperationRecord>,
-  mappingManifest: SuggestionsMappingManifest,
+  curation: SuggestionsCuration,
 ): {
   units: ComparisonUnit[];
   issues: string[];
 } {
   const units: ComparisonUnit[] = [];
   const issues: string[] = [];
-  const consumedTemplateApprovals = new Set<string>();
-  const consumedExtensionApprovals = new Set<string>();
-  const templateApprovals = indexManifestEntries(
-    mappingManifest.approvedTemplateExpansions,
-    'approvedTemplateExpansions',
+  const consumedTemplateMappings = new Set<string>();
+  const consumedExtensionMappings = new Set<string>();
+  const templateMappings = indexOperationMappings(
+    curation.operations.templateExpansions,
+    'operations.templateExpansions',
     issues,
   );
-  const extensionApprovals = indexManifestEntries(
-    mappingManifest.approvedExtensions,
-    'approvedExtensions',
+  const extensionMappings = indexOperationMappings(
+    curation.operations.extensions,
+    'operations.extensions',
     issues,
   );
 
@@ -127,17 +148,17 @@ function compareSuggestionsStageA(
     const concreteOfficialOperation = official.concrete.get(operationKeyValue);
 
     if (concreteOfficialOperation) {
-      if (templateApprovals.has(operationKeyValue)) {
+      if (templateMappings.has(operationKeyValue)) {
         issues.push(
-          `Template approval is stale because official now declares a concrete operation: ${formatOperation(
+          `Template expansion mapping is stale because official now declares a concrete operation: ${formatOperation(
             ourOperation,
           )}`,
         );
       }
 
-      if (extensionApprovals.has(operationKeyValue)) {
+      if (extensionMappings.has(operationKeyValue)) {
         issues.push(
-          `Extension approval is stale because official now declares a concrete operation: ${formatOperation(
+          `Extension mapping is stale because official now declares a concrete operation: ${formatOperation(
             ourOperation,
           )}`,
         );
@@ -170,23 +191,23 @@ function compareSuggestionsStageA(
     const matchingTemplate = matchingTemplates[0];
 
     if (matchingTemplate) {
-      const approval = templateApprovals.get(operationKeyValue);
+      const mapping = templateMappings.get(operationKeyValue);
 
-      if (!approval) {
+      if (!mapping) {
         issues.push(
-          `Generic-derived operation is missing from approvedTemplateExpansions: ${formatOperation(
+          `Generic-derived operation is missing from operations.templateExpansions: ${formatOperation(
             ourOperation,
           )} (candidate official template ${matchingTemplate.path})`,
         );
         continue;
       }
 
-      consumedTemplateApprovals.add(operationKeyValue);
-      validateTemplateApproval(approval, matchingTemplate, ourOperation, issues);
+      consumedTemplateMappings.add(operationKeyValue);
+      validateTemplateExpansionMapping(mapping, matchingTemplate, issues);
       units.push({
         path: ourOperation.path,
         method: ourOperation.method,
-        kind: 'approved-template-expansion',
+        kind: 'template-expansion',
         officialSourcePath: matchingTemplate.path,
         officialRequestRef: matchingTemplate.requestRef,
         officialResponseRef: matchingTemplate.responseRef,
@@ -196,23 +217,22 @@ function compareSuggestionsStageA(
       continue;
     }
 
-    const extensionApproval = extensionApprovals.get(operationKeyValue);
+    const extensionMapping = extensionMappings.get(operationKeyValue);
 
-    if (!extensionApproval) {
+    if (!extensionMapping) {
       issues.push(
-        `Our operation has no official concrete or template analogue and is missing from approvedExtensions: ${formatOperation(
+        `Our operation has no official concrete or template analogue and is missing from operations.extensions: ${formatOperation(
           ourOperation,
         )}`,
       );
       continue;
     }
 
-    consumedExtensionApprovals.add(operationKeyValue);
-    validateExtensionApproval(extensionApproval, ourOperation, issues);
+    consumedExtensionMappings.add(operationKeyValue);
     units.push({
       path: ourOperation.path,
       method: ourOperation.method,
-      kind: 'approved-extension',
+      kind: 'extension',
       officialSourcePath: null,
       officialRequestRef: null,
       officialResponseRef: null,
@@ -221,25 +241,25 @@ function compareSuggestionsStageA(
     });
   }
 
-  for (const approval of mappingManifest.approvedTemplateExpansions) {
-    const key = operationKey(approval.path, approval.method);
+  for (const mapping of curation.operations.templateExpansions) {
+    const key = operationKey(mapping.our.path, mapping.our.method);
 
-    if (!consumedTemplateApprovals.has(key)) {
+    if (!consumedTemplateMappings.has(key)) {
       issues.push(
-        `Template approval was not used and is stale or points outside the compared suggestions surface: ${formatApprovedOperation(
-          approval,
+        `Template expansion mapping was not used and is stale or points outside the compared suggestions surface: ${formatOperationIdentity(
+          mapping.our,
         )}`,
       );
     }
   }
 
-  for (const approval of mappingManifest.approvedExtensions) {
-    const key = operationKey(approval.path, approval.method);
+  for (const mapping of curation.operations.extensions) {
+    const key = operationKey(mapping.our.path, mapping.our.method);
 
-    if (!consumedExtensionApprovals.has(key)) {
+    if (!consumedExtensionMappings.has(key)) {
       issues.push(
-        `Extension approval was not used and is stale or points outside the compared suggestions surface: ${formatApprovedOperation(
-          approval,
+        `Extension mapping was not used and is stale or points outside the compared suggestions surface: ${formatOperationIdentity(
+          mapping.our,
         )}`,
       );
     }
@@ -251,62 +271,26 @@ function compareSuggestionsStageA(
   };
 }
 
-function validateTemplateApproval(
-  approval: ApprovedTemplateExpansion,
+function validateTemplateExpansionMapping(
+  mapping: TemplateExpansionMapping,
   officialTemplate: OfficialTemplateOperationRecord,
-  ourOperation: OperationRecord,
   issues: string[],
 ): void {
-  assertEqual(
-    issues,
-    approval.officialPathTemplate,
-    officialTemplate.path,
-    approval,
-    'officialPathTemplate',
-  );
-  assertEqual(
-    issues,
-    approval.officialRequestRef,
-    officialTemplate.requestRef,
-    approval,
-    'officialRequestRef',
-  );
-  assertEqual(
-    issues,
-    approval.officialResponseRef,
-    officialTemplate.responseRef,
-    approval,
-    'officialResponseRef',
-  );
-  assertEqual(issues, approval.ourRequestRef, ourOperation.requestRef, approval, 'ourRequestRef');
-  assertEqual(issues, approval.ourResponseRef, ourOperation.responseRef, approval, 'ourResponseRef');
-}
-
-function validateExtensionApproval(
-  approval: ApprovedExtension,
-  ourOperation: OperationRecord,
-  issues: string[],
-): void {
-  assertEqual(issues, approval.ourRequestRef, ourOperation.requestRef, approval, 'ourRequestRef');
-  assertEqual(issues, approval.ourResponseRef, ourOperation.responseRef, approval, 'ourResponseRef');
-}
-
-function assertEqual(
-  issues: string[],
-  approvedValue: RefIdentity | string,
-  actualValue: RefIdentity | string,
-  approval: ApprovedTemplateExpansion | ApprovedExtension,
-  field: string,
-): void {
-  if (approvedValue === actualValue) {
-    return;
+  if (mapping.official.pathTemplate !== officialTemplate.path) {
+    issues.push(
+      `Template expansion mapping mismatch for ${formatOperationIdentity(
+        mapping.our,
+      )}: official.pathTemplate=${mapping.official.pathTemplate} actual=${officialTemplate.path}`,
+    );
   }
 
-  issues.push(
-    `Approval mismatch for ${approval.method.toUpperCase()} ${approval.path}: ${field} approved=${formatNullable(
-      approvedValue,
-    )} actual=${formatNullable(actualValue)}`,
-  );
+  if (mapping.official.method !== officialTemplate.method) {
+    issues.push(
+      `Template expansion mapping mismatch for ${formatOperationIdentity(
+        mapping.our,
+      )}: official.method=${mapping.official.method} actual=${officialTemplate.method}`,
+    );
+  }
 }
 
 function extractOfficialOperations(document: OpenAPIV3_1.Document): {
@@ -400,6 +384,130 @@ function findMatchingTemplateOperations(
     .sort((left, right) => right.prefix.length - left.prefix.length || compareOperationRecords(left, right));
 }
 
+function buildProjectedOfficialSuggestionsSpec(
+  units: ComparisonUnit[],
+  official: {
+    concrete: Map<string, OperationRecord>;
+    templates: OfficialTemplateOperationRecord[];
+  },
+  sourceDocument: OpenAPIV3_1.Document,
+): ProjectionResult {
+  const projectedPaths: OpenAPIV3_1.PathsObject = {};
+  let concreteOperationCount = 0;
+  let templateExpandedOperationCount = 0;
+  let excludedExtensionCount = 0;
+
+  for (const unit of sortComparisonUnits(units)) {
+    if (unit.kind === 'extension') {
+      excludedExtensionCount += 1;
+      continue;
+    }
+
+    const sourceOperation = getProjectionSourceOperation(unit, official);
+    const projectedOperation =
+      unit.kind === 'template-expansion'
+        ? normalizeTemplateExpandedOperation(sourceOperation.operation, unit)
+        : cloneJson(sourceOperation.operation);
+    const pathItem = projectedPaths[unit.path] ?? {};
+
+    assignOperation(pathItem, unit.method, projectedOperation);
+    projectedPaths[unit.path] = pathItem;
+
+    if (unit.kind === 'template-expansion') {
+      templateExpandedOperationCount += 1;
+    } else {
+      concreteOperationCount += 1;
+    }
+  }
+
+  const document: OpenAPIV3_1.Document = {
+    openapi: sourceDocument.openapi,
+    info: {
+      ...(cloneJson(sourceDocument.info) ?? {}),
+      title: `${sourceDocument.info?.title ?? 'Official suggestions API'} (projected suggestions slice)`,
+    },
+    servers: cloneJson(sourceDocument.servers),
+    paths: sortPaths(projectedPaths),
+    components: cloneJson(sourceDocument.components),
+  };
+
+  return {
+    document,
+    projectedOperationCount: concreteOperationCount + templateExpandedOperationCount,
+    projectedPathCount: Object.keys(projectedPaths).length,
+    concreteOperationCount,
+    templateExpandedOperationCount,
+    excludedExtensionCount,
+  };
+}
+
+function getProjectionSourceOperation(
+  unit: ComparisonUnit,
+  official: {
+    concrete: Map<string, OperationRecord>;
+    templates: OfficialTemplateOperationRecord[];
+  },
+): OperationRecord {
+  if (!unit.officialSourcePath) {
+    throw new Error(`Projection source is missing for ${unit.method.toUpperCase()} ${unit.path}.`);
+  }
+
+  if (unit.kind === 'official-concrete') {
+    const concreteOperation = official.concrete.get(operationKey(unit.officialSourcePath, unit.method));
+
+    if (!concreteOperation) {
+      throw new Error(
+        `Concrete projection source was not found: ${unit.method.toUpperCase()} ${unit.officialSourcePath}.`,
+      );
+    }
+
+    return concreteOperation;
+  }
+
+  const templateOperation = official.templates.find(
+    (template) => template.path === unit.officialSourcePath && template.method === unit.method,
+  );
+
+  if (!templateOperation) {
+    throw new Error(
+      `Template projection source was not found: ${unit.method.toUpperCase()} ${unit.officialSourcePath}.`,
+    );
+  }
+
+  return templateOperation;
+}
+
+function normalizeTemplateExpandedOperation(
+  operation: OpenAPIV3_1.OperationObject,
+  unit: ComparisonUnit,
+): OpenAPIV3_1.OperationObject {
+  const projectedOperation = cloneJson(operation);
+
+  if (projectedOperation.parameters) {
+    const parameters = projectedOperation.parameters.filter((parameter) => {
+      if ('$ref' in parameter) {
+        return true;
+      }
+
+      return parameter.in !== 'path' || unit.path.includes(`{${parameter.name}}`);
+    });
+
+    if (parameters.length > 0) {
+      projectedOperation.parameters = parameters;
+    } else {
+      delete projectedOperation.parameters;
+    }
+  }
+
+  if (projectedOperation.operationId) {
+    projectedOperation.operationId = `${projectedOperation.operationId}__projected__${slugifyPath(
+      unit.path,
+    )}`;
+  }
+
+  return projectedOperation;
+}
+
 function getRequestBodyJsonSchemaRef(
   requestBody: OpenAPIV3_1.OperationObject['requestBody'],
 ): RefIdentity {
@@ -445,88 +553,84 @@ function getSchemaRef(
   return '<inline-schema>';
 }
 
-function parseManifest(source: string): SuggestionsMappingManifest {
+function parseCuration(source: string): SuggestionsCuration {
   const parsed = YAML.parse(source) as unknown;
 
   if (!isRecord(parsed)) {
-    throw new Error('Suggestions mapping manifest must be a YAML object.');
+    throw new Error('Suggestions curation must be a YAML object.');
   }
 
   if (parsed.version !== 1) {
-    throw new Error('Suggestions mapping manifest must have version: 1.');
+    throw new Error('Suggestions curation must have version: 1.');
   }
 
   if (parsed.family !== 'suggestions') {
-    throw new Error('Suggestions mapping manifest must have family: suggestions.');
+    throw new Error('Suggestions curation must have family: suggestions.');
   }
+
+  const operations = requireRecord(parsed.operations, 'operations');
 
   return {
     version: 1,
     family: 'suggestions',
-    approvedTemplateExpansions: parseTemplateApprovals(parsed.approvedTemplateExpansions),
-    approvedExtensions: parseExtensionApprovals(parsed.approvedExtensions),
+    operations: {
+      templateExpansions: parseTemplateExpansionMappings(operations.templateExpansions),
+      extensions: parseExtensionMappings(operations.extensions),
+    },
   };
 }
 
-function parseTemplateApprovals(value: unknown): ApprovedTemplateExpansion[] {
+function parseTemplateExpansionMappings(value: unknown): TemplateExpansionMapping[] {
   if (!Array.isArray(value)) {
-    throw new Error('approvedTemplateExpansions must be an array.');
+    throw new Error('operations.templateExpansions must be an array.');
   }
 
   return value.map((item, index) => {
-    const record = requireRecord(item, `approvedTemplateExpansions[${index}]`);
+    const record = requireRecord(item, `operations.templateExpansions[${index}]`);
+    const our = parseOperationIdentity(record.our, `operations.templateExpansions[${index}].our`);
+    const official = requireRecord(record.official, `operations.templateExpansions[${index}].official`);
 
     return {
-      path: requireString(record.path, `approvedTemplateExpansions[${index}].path`),
-      method: requireHttpMethod(record.method, `approvedTemplateExpansions[${index}].method`),
-      officialPathTemplate: requireString(
-        record.officialPathTemplate,
-        `approvedTemplateExpansions[${index}].officialPathTemplate`,
-      ),
-      officialRequestRef: requireNullableString(
-        record.officialRequestRef,
-        `approvedTemplateExpansions[${index}].officialRequestRef`,
-      ),
-      officialResponseRef: requireNullableString(
-        record.officialResponseRef,
-        `approvedTemplateExpansions[${index}].officialResponseRef`,
-      ),
-      ourRequestRef: requireNullableString(
-        record.ourRequestRef,
-        `approvedTemplateExpansions[${index}].ourRequestRef`,
-      ),
-      ourResponseRef: requireNullableString(
-        record.ourResponseRef,
-        `approvedTemplateExpansions[${index}].ourResponseRef`,
-      ),
-      reason: optionalString(record.reason, `approvedTemplateExpansions[${index}].reason`),
+      our,
+      official: {
+        pathTemplate: requireString(
+          official.pathTemplate,
+          `operations.templateExpansions[${index}].official.pathTemplate`,
+        ),
+        method: requireHttpMethod(
+          official.method,
+          `operations.templateExpansions[${index}].official.method`,
+        ),
+      },
     };
   });
 }
 
-function parseExtensionApprovals(value: unknown): ApprovedExtension[] {
+function parseExtensionMappings(value: unknown): ExtensionMapping[] {
   if (value === undefined) {
     return [];
   }
 
   if (!Array.isArray(value)) {
-    throw new Error('approvedExtensions must be an array.');
+    throw new Error('operations.extensions must be an array.');
   }
 
   return value.map((item, index) => {
-    const record = requireRecord(item, `approvedExtensions[${index}]`);
+    const record = requireRecord(item, `operations.extensions[${index}]`);
 
     return {
-      path: requireString(record.path, `approvedExtensions[${index}].path`),
-      method: requireHttpMethod(record.method, `approvedExtensions[${index}].method`),
-      ourRequestRef: requireNullableString(record.ourRequestRef, `approvedExtensions[${index}].ourRequestRef`),
-      ourResponseRef: requireNullableString(
-        record.ourResponseRef,
-        `approvedExtensions[${index}].ourResponseRef`,
-      ),
-      reason: optionalString(record.reason, `approvedExtensions[${index}].reason`),
+      our: parseOperationIdentity(record.our, `operations.extensions[${index}].our`),
     };
   });
+}
+
+function parseOperationIdentity(value: unknown, path: string): OperationIdentity {
+  const record = requireRecord(value, path);
+
+  return {
+    path: requireString(record.path, `${path}.path`),
+    method: requireHttpMethod(record.method, `${path}.method`),
+  };
 }
 
 function requireRecord(value: unknown, path: string): Record<string, unknown> {
@@ -543,22 +647,6 @@ function requireString(value: unknown, path: string): string {
   }
 
   return value;
-}
-
-function optionalString(value: unknown, path: string): string | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-
-  return requireString(value, path);
-}
-
-function requireNullableString(value: unknown, path: string): RefIdentity {
-  if (value === null) {
-    return null;
-  }
-
-  return requireString(value, path);
 }
 
 function requireHttpMethod(value: unknown, path: string): HttpMethod {
@@ -579,7 +667,7 @@ function isHttpMethod(value: string): value is HttpMethod {
   return HTTP_METHODS.includes(value as HttpMethod);
 }
 
-function indexManifestEntries<T extends { path: string; method: HttpMethod }>(
+function indexOperationMappings<T extends { our: OperationIdentity }>(
   entries: T[],
   sectionName: string,
   issues: string[],
@@ -587,10 +675,10 @@ function indexManifestEntries<T extends { path: string; method: HttpMethod }>(
   const result = new Map<string, T>();
 
   for (const entry of entries) {
-    const key = operationKey(entry.path, entry.method);
+    const key = operationKey(entry.our.path, entry.our.method);
 
     if (result.has(key)) {
-      issues.push(`Duplicate ${sectionName} entry: ${entry.method.toUpperCase()} ${entry.path}`);
+      issues.push(`Duplicate ${sectionName} entry: ${formatOperationIdentity(entry.our)}`);
       continue;
     }
 
@@ -600,12 +688,16 @@ function indexManifestEntries<T extends { path: string; method: HttpMethod }>(
   return result;
 }
 
-function readManifestSource(manifestPath: string | null): string {
-  if (manifestPath === STDIN_MANIFEST_PATH) {
+function readCurationSource(curationPath: string | null): string {
+  if (curationPath === STDIN_CURATION_PATH) {
     return readFileSync(0, 'utf8');
   }
 
-  return readFileSync(resolve(manifestPath ?? DEFAULT_MANIFEST_PATH), 'utf8');
+  return readFileSync(resolve(curationPath ?? DEFAULT_CURATION_PATH), 'utf8');
+}
+
+function resolveOutputPath(path: string): string {
+  return resolve(INVOCATION_CWD, path);
 }
 
 function normalizeOfficialPath(rawPath: string): string {
@@ -629,12 +721,46 @@ function formatOperation(operation: OperationRecord): string {
   return `${operation.method.toUpperCase()} ${operation.path}`;
 }
 
-function formatApprovedOperation(operation: { path: string; method: HttpMethod }): string {
+function formatOperationIdentity(operation: OperationIdentity): string {
   return `${operation.method.toUpperCase()} ${operation.path}`;
 }
 
 function formatNullable(value: RefIdentity | string): string {
   return value ?? 'null';
+}
+
+function writeJson(path: string, value: unknown): void {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+function cloneJson<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+function sortPaths(paths: OpenAPIV3_1.PathsObject): OpenAPIV3_1.PathsObject {
+  const sorted: OpenAPIV3_1.PathsObject = {};
+
+  for (const path of Object.keys(paths).sort((left, right) => left.localeCompare(right))) {
+    sorted[path] = paths[path];
+  }
+
+  return sorted;
+}
+
+function assignOperation(
+  pathItem: OpenAPIV3_1.PathItemObject,
+  method: HttpMethod,
+  operation: OpenAPIV3_1.OperationObject,
+): void {
+  pathItem[method] = operation;
+}
+
+function slugifyPath(path: string): string {
+  return path
+    .replace(/^\//u, '')
+    .replace(/[^a-zA-Z0-9]+/gu, '_')
+    .replace(/^_+|_+$/gu, '');
 }
 
 function printReport(
@@ -648,8 +774,8 @@ function printReport(
   compareOptions: CompareOptions,
 ): void {
   const concreteUnits = units.filter((unit) => unit.kind === 'official-concrete');
-  const templateUnits = units.filter((unit) => unit.kind === 'approved-template-expansion');
-  const extensionUnits = units.filter((unit) => unit.kind === 'approved-extension');
+  const templateUnits = units.filter((unit) => unit.kind === 'template-expansion');
+  const extensionUnits = units.filter((unit) => unit.kind === 'extension');
 
   console.info('Official suggestions Stage A comparison report\n');
   console.info('Summary:');
@@ -658,16 +784,16 @@ function printReport(
   console.info(`- our compared operations: ${ours.size}`);
   console.info(`- comparison units: ${units.length}`);
   console.info(`- official-concrete units: ${concreteUnits.length}`);
-  console.info(`- approved-template-expansion units: ${templateUnits.length}`);
-  console.info(`- approved-extension units: ${extensionUnits.length}`);
+  console.info(`- template-expansion units: ${templateUnits.length}`);
+  console.info(`- extension units: ${extensionUnits.length}`);
   console.info(`- mismatches: ${issues.length}`);
 
-  if (compareOptions.showAccepted && units.length > 0) {
-    const acceptedUnits = units.filter((unit) => unit.kind !== 'official-concrete');
+  if (compareOptions.showCuration && units.length > 0) {
+    const curatedUnits = units.filter((unit) => unit.kind !== 'official-concrete');
 
-    console.info('\nAccepted mappings and extensions:');
+    console.info('\nCurated mappings and extensions:');
 
-    for (const unit of acceptedUnits) {
+    for (const unit of curatedUnits) {
       console.info(`- [${unit.kind}] ${unit.method.toUpperCase()} ${unit.path}`);
       console.info(`  official source: ${unit.officialSourcePath ?? 'none'}`);
       console.info(`  official request: ${formatNullable(unit.officialRequestRef)}`);
@@ -677,7 +803,7 @@ function printReport(
     }
   } else if (units.length > 0) {
     console.info('\nNotes:');
-    console.info('- Run with `--show-accepted` to inspect manifest-backed mappings and extensions.');
+    console.info('- Run with `--show-curation` to inspect curated mappings and extensions.');
   }
 
   if (issues.length > 0) {
@@ -687,6 +813,16 @@ function printReport(
       console.info(`- ${issue}`);
     }
   }
+}
+
+function printProjectionReport(projection: ProjectionResult, outputPath: string): void {
+  console.info('\nProjection written:');
+  console.info(`- output: ${outputPath}`);
+  console.info(`- projected paths: ${projection.projectedPathCount}`);
+  console.info(`- projected operations: ${projection.projectedOperationCount}`);
+  console.info(`- concrete operations copied: ${projection.concreteOperationCount}`);
+  console.info(`- template-expanded operations copied: ${projection.templateExpandedOperationCount}`);
+  console.info(`- extensions excluded: ${projection.excludedExtensionCount}`);
 }
 
 function sortOperationRecords(records: OperationRecord[]): OperationRecord[] {
@@ -707,26 +843,39 @@ function compareOperationRecords(left: OperationRecord, right: OperationRecord):
 }
 
 function parseOptions(args: string[]): CompareOptions {
-  let manifestPath: string | null = null;
-  let showAccepted = false;
+  let curationPath: string | null = null;
+  let showCuration = false;
+  let writeProjectionPath: string | null = null;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
 
-    if (arg === '--manifest') {
+    if (arg === '--curation') {
       const value = args[index + 1];
 
       if (!value) {
-        throw new Error('Missing value for --manifest.');
+        throw new Error('Missing value for --curation.');
       }
 
-      manifestPath = value;
+      curationPath = value;
       index += 1;
       continue;
     }
 
-    if (arg === '--show-accepted') {
-      showAccepted = true;
+    if (arg === '--write-projection') {
+      const value = args[index + 1];
+
+      if (!value) {
+        throw new Error('Missing value for --write-projection.');
+      }
+
+      writeProjectionPath = value;
+      index += 1;
+      continue;
+    }
+
+    if (arg === '--show-curation') {
+      showCuration = true;
       continue;
     }
 
@@ -734,7 +883,8 @@ function parseOptions(args: string[]): CompareOptions {
   }
 
   return {
-    manifestPath,
-    showAccepted,
+    curationPath,
+    showCuration,
+    writeProjectionPath,
   };
 }

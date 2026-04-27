@@ -53,19 +53,19 @@ const ACCEPTED_UNDECLARED_SECURITY_OVERRIDES: Record<string, OpenAPIV3_1.Securit
 const OFFICIAL_SPECS: OfficialSourceSpec[] = [
   {
     name: 'suggestions',
-    localPath: 'official/suggestions.yml',
+    localPath: 'official/source/suggestions.yml',
     pathPrefix: '/api/4_1/rs',
     acceptedUndeclaredSecurity: [{ ApiKey: [] }],
   },
   {
     name: 'cleaner',
-    localPath: 'official/cleaner.yml',
+    localPath: 'official/source/cleaner.yml',
     pathPrefix: '/api/v1',
     acceptedUndeclaredSecurity: [{ ApiKey: [], SecretKey: [] }],
   },
   {
     name: 'profile',
-    localPath: 'official/profile.yml',
+    localPath: 'official/source/profile.yml',
     pathPrefix: '/api/v2',
     acceptedUndeclaredSecurity: [{ ApiKey: [], SecretKey: [] }],
   },

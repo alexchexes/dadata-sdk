@@ -34,17 +34,17 @@ type FreshnessReportItem = UpToDateOrChangedItem | FetchFailedItem;
 const OFFICIAL_SPECS: OfficialSourceSpec[] = [
   {
     name: 'cleaner',
-    localPath: 'official/cleaner.yml',
+    localPath: 'official/source/cleaner.yml',
     url: 'https://dadata.ru/files/openapi/cleaner.yml',
   },
   {
     name: 'suggestions',
-    localPath: 'official/suggestions.yml',
+    localPath: 'official/source/suggestions.yml',
     url: 'https://dadata.ru/files/openapi/suggestions.yml',
   },
   {
     name: 'profile',
-    localPath: 'official/profile.yml',
+    localPath: 'official/source/profile.yml',
     url: 'https://dadata.ru/files/openapi/profile.yml',
   },
 ];
