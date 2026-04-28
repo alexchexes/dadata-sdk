@@ -6,7 +6,7 @@ Current script roles:
 
 - `compare-official.ts`: legacy broad report across checked-in official specs. Keep it as a reference until the staged pipeline covers the same surface.
 - `compare-official-suggestions-stage-a.ts`: Stage A for `suggestions`; validates curated operation mappings and can write a projected official spec.
-- `compare-official-suggestions-stage-b.ts`: Stage B for `suggestions`; runs Stage A projection, builds the matching slice from `dadata.json`, applies comparison-only normalization, then runs `oasdiff`.
+- `compare-official-suggestions-stage-b.ts`: Stage B for `suggestions`; runs Stage A projection, builds the matching slice from `dadata.json`, applies comparison-only normalization and component pruning, then runs `oasdiff`.
 
 Naming:
 
@@ -16,4 +16,22 @@ Naming:
 Temporary parts:
 
 - `oasdiff breaking` output is useful for reports, but not trusted as the semantic source of truth.
+- `stage-b-diff-units.json` is the first own finding-shaped artifact built from `oasdiff diff -f json`; accepted-difference curation is intentionally not wired yet.
+- Component pruning is comparison-only, follows local `$ref`s from the compared paths before removing unused standard component entries, and validates remaining local `$ref`s after pruning.
 - The broad legacy comparer should not receive deep refactors unless it is needed to preserve coverage while the staged pipeline is incomplete.
+
+Useful quick commands:
+
+```sh
+# Show the compact Stage B console report.
+pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --max-groups 20 --max-samples 5
+
+# Keep raw and normalized JSON artifacts for inspection.
+pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --keep-temp --max-groups 20 --max-samples 5
+```
+
+With `--keep-temp`, inspect:
+
+- `stage-b-diff-units.json` for the flat finding-shaped artifact.
+- `stage-b-diff-units.by-path.json` for the path-first review artifact.
+- `oasdiff-full-diff.json` for the raw full diff.
