@@ -2940,12 +2940,12 @@
         "domain": { "type": ["string", "null"], "description": "Домен (то, что после «собачки»)" },
         "type": {
           "anyOf": [
-            { "type": "null" },
             {
               "type": "string",
               "enum": ["PERSONAL", "CORPORATE", "ROLE", "DISPOSABLE"],
               "description": "Тип адреса\n- PERSONAL — личный (`@mail.ru`, `@yandex.ru`)\n- CORPORATE — корпоративный (`@myshop.ru`)\n- ROLE — «ролевой» (`info@`, `support@`)\n- DISPOSABLE — одноразовый (`@temp-mail.ru`)"
-            }
+            },
+            { "type": "null" }
           ]
         },
         "qc": {

@@ -51,7 +51,7 @@ export interface AddressDivisions {
 }
 
 export type FiasAddressFiasLevel =
-  | '1' // prettier wrap
+  | '1' // <prettier wrap>
   | '3'
   | '4'
   | '5'
@@ -61,7 +61,7 @@ export type FiasAddressFiasLevel =
   | '8';
 
 export type AddressFiasLevel =
-  | '0' // prettier wrap
+  | '0' // <prettier wrap>
   | FiasAddressFiasLevel
   | '75'
   | '9'
@@ -69,7 +69,7 @@ export type AddressFiasLevel =
   | '-1';
 
 export type CleanAddressFiasLevel =
-  | '0' // prettier wrap
+  | '0' // <prettier wrap>
   | FiasAddressFiasLevel
   | '9'
   | '90'

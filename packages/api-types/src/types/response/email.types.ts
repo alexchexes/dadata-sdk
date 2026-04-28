@@ -77,7 +77,7 @@ export interface PartyByEmailEmailData {
   /** Домен (то, что после «собачки») */
   domain: string | null;
 
-  type: null | EmailType;
+  type: EmailType | null;
   /** Код проверки. Подходит ли email для маркетинговой рассылки (только для Стандартизации) */
   qc: null;
   /** Исходный email */
