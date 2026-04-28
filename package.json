@@ -17,6 +17,7 @@
     "check:official-upstream": "pnpm --filter @dadata-sdk/api-spec check:official-upstream",
     "compare:official": "pnpm --filter @dadata-sdk/api-spec compare:official",
     "compare:official:suggestions-stage-a": "pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-a",
+    "compare:official:suggestions-stage-b": "pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b",
     "verify:generated": "pnpm exec tsx ./scripts/verify-generated.ts",
     "dev": "pnpm docs:dev",
     "docs:dev": "rm -rf docs/.vitepress/cache && pnpm vitepress dev docs --host",

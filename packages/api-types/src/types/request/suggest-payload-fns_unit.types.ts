@@ -8,7 +8,7 @@ export interface SuggestFnsUnitPayload extends BaseSuggestPayload {
    * Фильтрация налоговых инспекций
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestFnsUnitFilter[];
+  filters?: SuggestFnsUnitFilter[] | null;
 }
 
 export interface SuggestFnsUnitFilter {

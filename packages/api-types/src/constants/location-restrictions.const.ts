@@ -13,11 +13,17 @@ export const KLADR_ID_RESTRICTION_TYPES = [
   'kladr_id', // any level of kladr is supported: 63, 63000007, 6300000100000
 ] as const satisfies LocationRestrictionKey[];
 
+export const POSTAL_CODE_RESTRICTION_TYPES = [
+  'postal_code',
+] as const satisfies LocationRestrictionKey[];
+
 export const FIAS_ID_RESTRICTION_TYPES = [
   'fias_id',
   'region_fias_id',
   'area_fias_id',
+  'sub_area_fias_id',
   'city_fias_id',
+  'city_district_fias_id',
   'settlement_fias_id',
   'planning_structure_fias_id', // not documented for suggestions (only for FIAS) but works
   'street_fias_id',
@@ -27,6 +33,7 @@ export const NAME_RESTRICTION_TYPES = [
   'country', // "*" - to allow dadata search any country
   'region',
   'area',
+  'sub_area',
   'city',
   'city_district', // not documented for suggestions (only for FIAS) but works
   'settlement',
@@ -37,6 +44,7 @@ export const NAME_RESTRICTION_TYPES = [
 export const TYPE_FULL_RESTRICTION_TYPES = [
   'region_type_full',
   'area_type_full',
+  'sub_area_type_full',
   'city_type_full',
   'city_district_type_full', // not documented for suggestions (only for FIAS) but works
   'settlement_type_full',
@@ -49,6 +57,7 @@ export const TYPE_FULL_RESTRICTION_TYPES = [
 export const RESTRICTION_TYPES = [
   ...ISO_CODE_RESTRICTION_TYPES,
   ...KLADR_ID_RESTRICTION_TYPES,
+  ...POSTAL_CODE_RESTRICTION_TYPES,
   ...FIAS_ID_RESTRICTION_TYPES,
   ...NAME_RESTRICTION_TYPES,
   ...TYPE_FULL_RESTRICTION_TYPES,

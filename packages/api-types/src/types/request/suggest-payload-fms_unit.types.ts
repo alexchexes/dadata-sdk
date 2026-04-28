@@ -1,5 +1,5 @@
-import type { BaseSuggestPayload } from './suggest-payload.types';
 import type { FmsUnitType } from '../common.types';
+import type { BaseSuggestPayload } from './suggest-payload.types';
 
 /**
  * @see https://dadata.ru/api/suggest/fms_unit/
@@ -9,7 +9,7 @@ export interface SuggestFmsUnitPayload extends BaseSuggestPayload {
    * Фильтрация подразделений ФМС
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestFmsUnitFilter[];
+  filters?: SuggestFmsUnitFilter[] | null;
 }
 
 export interface SuggestFmsUnitFilter {

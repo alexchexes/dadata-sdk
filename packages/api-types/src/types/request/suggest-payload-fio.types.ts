@@ -10,7 +10,7 @@ export type FioParts = (typeof FIO_PARTS)[number];
  */
 export interface SuggestFioPayload extends BaseSuggestPayload {
   /** Пол (`UNKNOWN` / `MALE` / `FEMALE`) */
-  gender?: FioGenders;
+  gender?: FioGenders | null;
 
   /**
    * Подсказки по части ФИО:
@@ -18,5 +18,5 @@ export interface SuggestFioPayload extends BaseSuggestPayload {
    * - Имена и отчества: `["NAME", "PATRONYMIC"]`
    * - Имена и фамилии: `["NAME", "SURNAME"]`
    */
-  parts?: FioParts[];
+  parts?: FioParts[] | null;
 }

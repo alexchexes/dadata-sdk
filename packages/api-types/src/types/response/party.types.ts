@@ -271,7 +271,7 @@ export interface PartySuggestionData {
   management?: null | PartyManagementInfo;
 
   /** Количество филиалов (только для юрлиц) */
-  branch_count?: number;
+  branch_count?: number | null;
 
   /**
    * Тип подразделения (только для юрлиц)

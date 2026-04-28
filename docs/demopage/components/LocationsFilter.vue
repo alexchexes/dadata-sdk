@@ -5,6 +5,7 @@ import {
   ISO_CODE_RESTRICTION_TYPES,
   KLADR_ID_RESTRICTION_TYPES,
   NAME_RESTRICTION_TYPES,
+  POSTAL_CODE_RESTRICTION_TYPES,
   TYPE_FULL_RESTRICTION_TYPES,
 } from '@dadata-sdk/vue';
 import type { VueDadataOptions } from '@dadata-sdk/vue';
@@ -37,6 +38,7 @@ const restrictionGroupsLabels = computed(() => {
     ISO: 'By ISO code',
     FIAS: 'By FIAS ID',
     KLADR: 'By KLADR ID',
+    POSTAL_CODE: 'By postal code',
   };
 });
 
@@ -49,6 +51,7 @@ const restrictionsGroups = computed(() => {
     return (options = {
       [restrictionGroupsLabels.value.NAME]: NAME_RESTRICTION_TYPES,
       ...options,
+      [restrictionGroupsLabels.value.POSTAL_CODE]: POSTAL_CODE_RESTRICTION_TYPES,
       [restrictionGroupsLabels.value.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
       [restrictionGroupsLabels.value.FIAS]: FIAS_ID_RESTRICTION_TYPES,
       [restrictionGroupsLabels.value.ISO]: ISO_CODE_RESTRICTION_TYPES,
@@ -57,6 +60,7 @@ const restrictionsGroups = computed(() => {
     return (options = {
       [restrictionGroupsLabels.value.NAME]: NAME_RESTRICTION_TYPES.filter((el) => el !== 'country'),
       ...options,
+      [restrictionGroupsLabels.value.POSTAL_CODE]: POSTAL_CODE_RESTRICTION_TYPES,
       [restrictionGroupsLabels.value.FIAS]: FIAS_ID_RESTRICTION_TYPES,
       [restrictionGroupsLabels.value.TYPE]: TYPE_FULL_RESTRICTION_TYPES,
     });

@@ -19,22 +19,22 @@ export interface GeolocateAddressPayload {
    * @default 10
    * @maximum 20
    */
-  count?: number;
+  count?: number | null;
   /**
    * Радиус поиска в метрах
    * @default 100
    * @maximum 1000
    */
-  radius_meters?: number;
+  radius_meters?: number | null;
   /**
    * На каком языке вернуть результат
    * @default 'ru'
    */
-  language?: Language;
+  language?: Language | null;
   /**
    * Административное либо муниципальное деление
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589
    * @default 'ADMINISTRATIVE'
    */
-  division?: DivisionType;
+  division?: DivisionType | null;
 }

@@ -72,14 +72,16 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса" },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 300",
           "default": 10,
           "maximum": 300
         },
         "scope": {
-          "type": "array",
-          "items": { "type": "string", "enum": ["FOUNDERS", "MANAGERS"] },
+          "anyOf": [
+            { "type": "array", "items": { "type": "string", "enum": ["FOUNDERS", "MANAGERS"] } },
+            { "type": "null" }
+          ],
           "description": "Фильтр - Где искать\n- `FOUNDERS` - среди учредителей\n- `MANAGERS` - среди руководителей\n\n@see https://dadata.ru/api/find-affiliated/#scope\n\n@example {\"query\": \"7736207543\",\"scope\": [\"FOUNDERS\"]} // Только среди учредителей\n@example {\"query\": \"7736207543\",\"scope\": [\"MANAGERS\"]} // Только среди руководителей\n\n@default ['FOUNDERS', 'MANAGERS']",
           "examples": [
             { "query": "7736207543", "scope": ["FOUNDERS"] },
@@ -108,7 +110,7 @@
       "properties": {
         "query": { "type": "string", "maxLength": 300, "description": "@maxLength 300" },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -130,19 +132,17 @@
           ]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
         },
         "language": {
-          "type": "string",
-          "enum": ["RU", "EN"],
+          "anyOf": [{ "type": "string", "enum": ["RU", "EN"] }, { "type": "null" }],
           "description": "На каком языке вернуть результат (ru / en)"
         },
         "division": {
-          "type": "string",
-          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "anyOf": [{ "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] }, { "type": "null" }],
           "description": "Административное либо муниципальное деление\n@default 'ADMINISTRATIVE'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589",
           "default": "ADMINISTRATIVE"
         }
@@ -161,7 +161,7 @@
           "examples": [{ "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" }, { "query": "77000000000292300" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -179,25 +179,27 @@
           "maxLength": 300
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
         },
         "kpp": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "КПП организации\n* для ~25% компаний налоговая не сообщает КПП филиалов\n\n@example { \"query\": \"7707083893\", \"kpp\": \"540602001\" }",
           "examples": [{ "query": "7707083893", "kpp": "540602001" }]
         },
         "branch_type": {
-          "type": "string",
-          "enum": ["MAIN", "BRANCH"],
+          "anyOf": [
+            { "type": "string", "enum": ["MAIN", "BRANCH"] },
+            { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } },
+            { "type": "null" }
+          ],
           "description": "Головная организация (`MAIN`) или филиал (`BRANCH`).\n\n@example { \"query\": \"7707083893\", \"branch_type\": \"MAIN\" }",
           "examples": [{ "query": "7707083893", "branch_type": "MAIN" }]
         },
         "type": {
-          "type": "string",
-          "enum": ["LEGAL", "INDIVIDUAL"],
+          "anyOf": [{ "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] }, { "type": "null" }],
           "description": "Юрлицо (`LEGAL`) или индивидуальный предприниматель (`INDIVIDUAL`)\n@example {\"query\": \"7707083893\",\"type\": \"LEGAL\"} // Юрлица\n@example {\"query\": \"784806113663\",\"type\": \"INDIVIDUAL\"} // Индивидуальные предприниматели",
           "examples": [
             { "query": "7707083893", "type": "LEGAL" },
@@ -205,8 +207,13 @@
           ]
         },
         "status": {
-          "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] }
+            },
+            { "type": "null" }
+          ],
           "description": "Ограничение по статусу организации"
         }
       },
@@ -221,7 +228,7 @@
       "properties": {
         "query": { "type": "string", "description": "УНП (учетный номер налогоплательщика)" },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -235,7 +242,7 @@
       "properties": {
         "query": { "type": "string", "description": "БИН (бизнес-идентификационный номер)" },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -252,12 +259,12 @@
           "description": "Любой из идентификаторов банка:\n- БИК,\n- SWIFT,\n- ИНН,\n- ИНН + КПП (для филиалов),\n- регистрационному номеру, присвоенному Банком России.\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+"
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
         },
-        "kpp": { "type": "string", "description": "КПП банка\n\n* подсказки 20.3+" }
+        "kpp": { "type": ["string", "null"], "description": "КПП банка\n\n* подсказки 20.3+" }
       },
       "required": ["query"],
       "description": "Банк\n@see https://dadata.ru/api/find-bank/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560"
@@ -271,7 +278,7 @@
           "examples": [{ "query": "127642" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -289,7 +296,7 @@
           "examples": [{ "query": "5257" }, { "query": "7727406020" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -307,7 +314,7 @@
           "examples": [{ "query": "10002000" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -325,7 +332,7 @@
           "examples": [{ "query": "52MS0022" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -343,7 +350,7 @@
           "examples": [{ "query": "FORD" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -361,7 +368,7 @@
           "examples": [{ "query": "764" }, { "query": "TH" }, { "query": "THA" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -379,7 +386,7 @@
           "examples": [{ "query": "RUB" }, { "query": "643" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -397,7 +404,7 @@
           "examples": [{ "query": "250173" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -415,7 +422,7 @@
           "examples": [{ "query": "51.22.3" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -433,7 +440,7 @@
           "examples": [{ "query": "95.23.10.133" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -451,7 +458,7 @@
           "examples": [{ "query": "54623425" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -469,7 +476,7 @@
           "examples": [{ "query": "3100400100000" }]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
@@ -492,26 +499,24 @@
           "examples": [37.359486]
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
         },
         "radius_meters": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 1000",
           "default": 100,
           "maximum": 1000
         },
         "language": {
-          "type": "string",
-          "enum": ["RU", "EN"],
+          "anyOf": [{ "type": "string", "enum": ["RU", "EN"] }, { "type": "null" }],
           "description": "На каком языке вернуть результат\n@default 'ru'",
           "default": "ru"
         },
         "division": {
-          "type": "string",
-          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "anyOf": [{ "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] }, { "type": "null" }],
           "description": "Административное либо муниципальное деление\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'",
           "default": "ADMINISTRATIVE"
         }
@@ -525,38 +530,57 @@
         "lat": { "type": "number", "description": "Географическая широта\n@example 55.878", "examples": [55.878] },
         "lon": { "type": "number", "description": "Географическая долгота\n@example 37.653", "examples": [37.653] },
         "radius_meters": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 1000",
           "default": 100,
           "maximum": 1000
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
           "default": 10,
           "maximum": 20
+        },
+        "filters": {
+          "anyOf": [
+            { "type": "array", "items": { "$ref": "#/definitions/SuggestPostalUnitFilter" } },
+            { "type": "null" }
+          ],
+          "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "required": ["lat", "lon"],
       "description": "https://dadata.ru/api/suggest/postal_unit/"
     },
+    "SuggestPostalUnitFilter": {
+      "type": "object",
+      "properties": {
+        "is_closed": {
+          "type": "boolean",
+          "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
+        },
+        "type_code": { "type": "string", "description": "Фильтрация по типу отделения (например, `ГОПС`)" },
+        "address_kladr_id": {
+          "type": "string",
+          "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
+        }
+      }
+    },
     "IpLocatePayload": {
       "type": "object",
       "properties": {
         "ip": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "IP-адрес для определения города.\n\nЕсли не указан, будет использован IP из заголовка `X-Forwarded-For`.\nЕсли и там пусто, будет использован IP сокета соединения.\n\n@example '46.226.227.20'",
           "examples": ["46.226.227.20"]
         },
         "language": {
-          "type": "string",
-          "enum": ["RU", "EN"],
+          "anyOf": [{ "type": "string", "enum": ["RU", "EN"] }, { "type": "null" }],
           "description": "На каком языке вернуть результат\n@default 'ru'",
           "default": "ru"
         },
         "division": {
-          "type": "string",
-          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "anyOf": [{ "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] }, { "type": "null" }],
           "description": "Административное либо муниципальное деление\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'",
           "default": "ADMINISTRATIVE"
         }
@@ -566,16 +590,16 @@
     "RadiusFilter": {
       "type": "object",
       "properties": {
-        "lat": { "type": "string", "description": "Географическая широта, например: `'59.244634'`" },
-        "lon": { "type": "string", "description": "Географическая долгота, например: `'39.913355'`" },
+        "lat": { "type": ["string", "number"], "description": "Географическая широта, например: `'59.244634'`" },
+        "lon": { "type": ["string", "number"], "description": "Географическая долгота, например: `'39.913355'`" },
         "radius_meters": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
           "default": 100,
           "maximum": 100000
         }
       },
-      "required": ["lat", "lon", "radius_meters"],
+      "required": ["lat", "lon"],
       "description": "Объект для передачи фильтра по радиусу от заданной точки"
     },
     "Bound": {
@@ -599,15 +623,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "locations_boost": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Приоритет города или региона при ранжировании.\nПередавайте код КЛАДР (kladr_id). Можно указать несколько кодов.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795"
         },
         "from_bound": {
@@ -619,30 +642,24 @@
           "description": "Гранулярные подсказки – \"правая\" граница.\n\nЕсли задано, подсказки будут только до этой границы (включительно).\nНапример, чтобы исключить поиск по улицам, можно указать `to_bound = 'settlement'`,\nи при запросе `\"москва новая\"` результаты не будут включать `\"г Москва, ул Новая\"`,\nно могут включать `\"Брянская обл, пос. Новая Москва\"`.\n\nДоступные границы для `from_bound`:\n\n- `country` - Страна\n- `region` - Регион\n- `area` - Район\n- `city` - Город\n- `settlement` - Населенный пункт\n- `planning_structure` - Планировочная структура *(в официальной документации - только для ФИАС,\nно работает также для подсказок по адресу)*\n- `street` - Улица\n- `house` - Дом\n- `flat` - Квартира\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017"
         },
         "locations": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/LocationRestriction" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/LocationRestriction" } }, { "type": "null" }],
           "description": "Ограничение сектора поиска адреса.\n\nЧтобы искать адреса только в определенном регионе, городе, районе и т.д.,\nукажите их в параметре locations.\nМожно указать несколько ограничений, но не более 10.\n\n**Адрес без региона и города:**\nЧтобы адрес одной строкой в ответе (поле `value`) не содержал регион / город, заданный в ограничении,\nдобавьте в запрос параметр `restrict_value` = true.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108"
         },
         "restrict_value": {
-          "type": "boolean",
+          "type": ["boolean", "null"],
           "description": "Используется совместно с ограничениями (параметр `locations`), чтобы адрес в ответе\n(поле `value`) не содержал регион / город / район и т.д., заданный в ограничении.\n\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода\n- @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value"
         },
         "locations_geo": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/RadiusFilter" },
-          "minItems": 1,
-          "maxItems": 1,
-          "description": "Ограничение по радиусу окружности.\nПозволяет искать адреса в определенном радиусе от заданной точки.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/RadiusFilter" } }, { "type": "null" }],
+          "description": "Ограничение по радиусу окружности.\nПозволяет искать адреса в определенном радиусе от заданной точки.\nМожно указать несколько точек.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
         },
         "language": {
-          "type": "string",
-          "enum": ["RU", "EN"],
+          "anyOf": [{ "type": "string", "enum": ["RU", "EN"] }, { "type": "null" }],
           "description": "Язык результатов поиска. Поддерживается русский и английский.\nВлияет на все поля в объекте адреса.\n@default 'RU'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726",
           "default": "RU"
         },
         "division": {
-          "type": "string",
-          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "anyOf": [{ "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] }, { "type": "null" }],
           "description": "Административное либо муниципальное деление.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'",
           "default": "ADMINISTRATIVE"
         }
@@ -652,89 +669,107 @@
     },
     "KladrIdFilter": {
       "type": "object",
-      "properties": { "kladr_id": { "type": "string" } },
+      "properties": { "kladr_id": { "type": ["string", "null"] } },
       "description": "Объект для передачи КЛАДР-кода"
     },
     "LocationRestriction": {
       "type": "object",
       "properties": {
         "country_iso_code": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ISO-коду страны в формате [ISO_3166](https://ru.wikipedia.org/wiki/ISO_3166).\nНапример: `BY`.\nПо умолчанию - `RU`.\nЧтобы разрешить любые страны - укажите `*`."
         },
-        "region_iso_code": { "type": "string", "description": "ISO-код региона. Например: `BY-BR`" },
+        "region_iso_code": { "type": ["string", "null"], "description": "ISO-код региона. Например: `BY-BR`" },
         "kladr_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по КЛАДР-коду. Например:\n- `63` — Самарская обл.\n- `63000001` — г. Самара\n- `6300000100000` — г. Самара (полный код)\n\nНе рекомендуем использовать для объектов ниже города:\n- не слишком надежно для населенных пунктов (КЛАДР-коды н/п довольно часто меняются);\n- не работает для план. структур (они появились после того, как была придумана иерархия КЛАДР, и не вписываются в нее);\n- очень ненадежно для улиц (КЛАДР-коды улиц часто меняются);\n- не работает для домов.\n\nРекомендуем использовать `fias_id` - [ограничение по ФИАС-коду](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737930)."
         },
+        "postal_code": {
+          "type": ["string", "null"],
+          "description": "Ограничение по почтовому индексу.\n\n@example '420000'",
+          "examples": ["420000"]
+        },
         "fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду.\n\nНапример: `\"fias_id\": \"110d6ad9-0b64-47cf-a2ee-7e935228799c\"` - Санкт-Петербург, г Пушкин\n\nОграничение по fias_id дома не поддерживается"
         },
         "region_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду региона. Лучшая альтернатива - `fias_id`."
         },
         "area_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`."
         },
+        "sub_area_fias_id": {
+          "type": ["string", "null"],
+          "description": "Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`."
+        },
         "city_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду города. Лучшая альтернатива - `fias_id`."
         },
+        "city_district_fias_id": {
+          "type": ["string", "null"],
+          "description": "Ограничение по ФИАС-коду района города. Лучшая альтернатива - `fias_id`."
+        },
         "settlement_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду населённого пункта. Лучшая альтернатива - `fias_id`."
         },
         "planning_structure_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду планировочной структуры. Лучшая альтернатива - `fias_id`.\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "street_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду улицы. Лучшая альтернатива - `fias_id`."
         },
-        "country": { "type": "string", "description": "Ограничение по названию страны" },
-        "region": { "type": "string", "description": "Ограничение по названию региона" },
-        "area": { "type": "string", "description": "Ограничение по названию административного района" },
-        "city": { "type": "string", "description": "Ограничение по названию города" },
+        "country": { "type": ["string", "null"], "description": "Ограничение по названию страны" },
+        "region": { "type": ["string", "null"], "description": "Ограничение по названию региона" },
+        "area": { "type": ["string", "null"], "description": "Ограничение по названию административного района" },
+        "sub_area": { "type": ["string", "null"], "description": "Ограничение по названию муниципального поселения" },
+        "city": { "type": ["string", "null"], "description": "Ограничение по названию города" },
         "city_district": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по названию района города\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
-        "settlement": { "type": "string", "description": "Ограничение по названию населённого пункта" },
+        "settlement": { "type": ["string", "null"], "description": "Ограничение по названию населённого пункта" },
         "planning_structure": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по названию планировочной структуры\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
-        "street": { "type": "string", "description": "Ограничение по названию улицы" },
+        "street": { "type": ["string", "null"], "description": "Ограничение по названию улицы" },
         "region_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу региона, например: `республика`"
         },
         "area_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу адм. района в регионе. Например: `улус`"
         },
+        "sub_area_type_full": {
+          "type": ["string", "null"],
+          "description": "Ограничение по полному типу муниципального поселения"
+        },
         "city_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу города. Например: `поселок городского типа`"
         },
         "city_district_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу района города.\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "settlement_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу населенного пункта. Например: `деревня`"
         },
         "planning_structure_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу планировочной структуры. Например: `территория снт`\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "street_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу улицы. Например: `проспект`"
         }
       },
@@ -750,33 +785,39 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "type": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
-          },
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["CBR", "BANK", "BANK_BRANCH", "NKO", "NKO_BRANCH", "RKC", "TREASURY", "OTHER"]
+              }
+            },
+            { "type": "null" }
+          ],
           "description": "Ограничение по типу банка.\nAPI принимает массив, например: `\"type\": [\"BANK\", \"BANK_BRANCH\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}"
         },
         "status": {
-          "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
-          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+          "anyOf": [
+            { "type": "array", "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] } },
+            { "type": "null" }
+          ],
+          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `{\"status\": [\"LIQUIDATING\"]}`\n\n- `ACTIVE` — действующая\n- `LIQUIDATING` — ликвидируется\n- `LIQUIDATED` — ликвидирована (не встречается)\n\nСтатус `LIQUIDATED` в реальных данных не встречается, потому что Банк России не возвращает\nинформацию о ликвидированных финансовых организациях.\n\n@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120\n\n@example {\"status\": [\"LIQUIDATING\"]}",
+          "examples": [{ "status": ["LIQUIDATING"] }]
         },
         "locations": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Ограничение по региону или городу\nAPI принимает массив вида `{ kladr_id: string }[]`\n {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}"
         },
         "locations_boost": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}"
         }
       },
@@ -791,76 +832,94 @@
       "type": "object",
       "properties": {
         "kladr_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по КЛАДР-коду. Например:\n- `63` — Самарская обл.\n- `63000001` — г. Самара\n- `6300000100000` — г. Самара (полный код)\n\nНе рекомендуем использовать для объектов ниже города:\n- не слишком надежно для населенных пунктов (КЛАДР-коды н/п довольно часто меняются);\n- не работает для план. структур (они появились после того, как была придумана иерархия КЛАДР, и не вписываются в нее);\n- очень ненадежно для улиц (КЛАДР-коды улиц часто меняются);\n- не работает для домов.\n\nРекомендуем использовать `fias_id` - [ограничение по ФИАС-коду](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737930)."
         },
+        "postal_code": {
+          "type": ["string", "null"],
+          "description": "Ограничение по почтовому индексу.\n\n@example '420000'",
+          "examples": ["420000"]
+        },
         "fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду.\n\nНапример: `\"fias_id\": \"110d6ad9-0b64-47cf-a2ee-7e935228799c\"` - Санкт-Петербург, г Пушкин\n\nОграничение по fias_id дома не поддерживается"
         },
         "region_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду региона. Лучшая альтернатива - `fias_id`."
         },
         "area_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`."
         },
+        "sub_area_fias_id": {
+          "type": ["string", "null"],
+          "description": "Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`."
+        },
         "city_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду города. Лучшая альтернатива - `fias_id`."
         },
+        "city_district_fias_id": {
+          "type": ["string", "null"],
+          "description": "Ограничение по ФИАС-коду района города. Лучшая альтернатива - `fias_id`."
+        },
         "settlement_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду населённого пункта. Лучшая альтернатива - `fias_id`."
         },
         "planning_structure_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду планировочной структуры. Лучшая альтернатива - `fias_id`.\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "street_fias_id": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду улицы. Лучшая альтернатива - `fias_id`."
         },
-        "region": { "type": "string", "description": "Ограничение по названию региона" },
-        "area": { "type": "string", "description": "Ограничение по названию административного района" },
-        "city": { "type": "string", "description": "Ограничение по названию города" },
+        "region": { "type": ["string", "null"], "description": "Ограничение по названию региона" },
+        "area": { "type": ["string", "null"], "description": "Ограничение по названию административного района" },
+        "sub_area": { "type": ["string", "null"], "description": "Ограничение по названию муниципального поселения" },
+        "city": { "type": ["string", "null"], "description": "Ограничение по названию города" },
         "city_district": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по названию района города\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
-        "settlement": { "type": "string", "description": "Ограничение по названию населённого пункта" },
+        "settlement": { "type": ["string", "null"], "description": "Ограничение по названию населённого пункта" },
         "planning_structure": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по названию планировочной структуры\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
-        "street": { "type": "string", "description": "Ограничение по названию улицы" },
+        "street": { "type": ["string", "null"], "description": "Ограничение по названию улицы" },
         "region_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу региона, например: `республика`"
         },
         "area_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу адм. района в регионе. Например: `улус`"
         },
+        "sub_area_type_full": {
+          "type": ["string", "null"],
+          "description": "Ограничение по полному типу муниципального поселения"
+        },
         "city_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу города. Например: `поселок городского типа`"
         },
         "city_district_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу района города.\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "settlement_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу населенного пункта. Например: `деревня`"
         },
         "planning_structure_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу планировочной структуры. Например: `территория снт`\n* *не задокументировано для API адресов, только для API ФИАС, но работает*"
         },
         "street_type_full": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Ограничение по полному типу улицы. Например: `проспект`"
         }
       },
@@ -883,15 +942,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "locations_boost": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Приоритет города или региона при ранжировании.\nПередавайте код КЛАДР (kladr_id). Можно указать несколько кодов.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529"
         },
         "from_bound": {
@@ -903,12 +961,14 @@
           "description": "Гранулярные подсказки по ФИАС – \"правая\" граница.\n\nДоступные границы:\n\n- `region` - Регион\n- `area` - Район\n- `city` - Город\n- `settlement` - Населенный пункт\n- `planning_structure` - Планировочная структура\n- `street` - Улица\n- `house` - Дом\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521"
         },
         "locations": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/LocationRestrictionFias" },
+          "anyOf": [
+            { "type": "array", "items": { "$ref": "#/definitions/LocationRestrictionFias" } },
+            { "type": "null" }
+          ],
           "description": "Ограничение сектора поиска адреса.\n\nЧтобы искать адреса только в определенном регионе, городе, районе и т.д.,\nукажите их в параметре locations.\nМожно указать несколько ограничений, но не более 10.\n\n**Адрес без региона и города:**\nЧтобы адрес одной строкой в ответе (поле `value`) не содержал регион / город, заданный в ограничении,\nдобавьте в запрос параметр `restrict_value` = true.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974"
         },
         "restrict_value": {
-          "type": "boolean",
+          "type": ["boolean", "null"],
           "description": "Используется совместно с ограничениями (параметр `locations`), чтобы адрес в ответе\n(поле `value`) не содержал регион / город / район и т.д., заданный в ограничении.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города"
         }
       },
@@ -921,20 +981,21 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "gender": {
-          "type": "string",
-          "enum": ["MALE", "FEMALE", "UNKNOWN"],
+          "anyOf": [{ "type": "string", "enum": ["MALE", "FEMALE", "UNKNOWN"] }, { "type": "null" }],
           "description": "Пол (`UNKNOWN` / `MALE` / `FEMALE`)"
         },
         "parts": {
-          "type": "array",
-          "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] },
+          "anyOf": [
+            { "type": "array", "items": { "type": "string", "enum": ["NAME", "SURNAME", "PATRONYMIC"] } },
+            { "type": "null" }
+          ],
           "description": "Подсказки по части ФИО:\n- Только имена: `[\"NAME\"]`\n- Имена и отчества: `[\"NAME\", \"PATRONYMIC\"]`\n- Имена и фамилии: `[\"NAME\", \"SURNAME\"]`"
         }
       },
@@ -947,15 +1008,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestFmsUnitFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestFmsUnitFilter" } }, { "type": "null" }],
           "description": "Фильтрация подразделений ФМС\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -982,15 +1042,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestFnsUnitFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestFnsUnitFilter" } }, { "type": "null" }],
           "description": "Фильтрация налоговых инспекций\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -1011,15 +1070,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestMetroFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestMetroFilter" } }, { "type": "null" }],
           "description": "Фильтрация станций метро по различным параметрам.\n\nПримеры:\n- Поиск среди станций Санкт-Петербурга:\n  `[{ city_kladr_id: \"7800000000000\" }]`\n\n- Поиск среди открытых станций Кольцевой ветки Москвы:\n  `[{ city: \"Москва\", line_id: \"5\", is_closed: null }]`\n\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -1051,15 +1109,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestMktuFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestMktuFilter" } }, { "type": "null" }],
           "description": "Фильтрация записей МКТУ\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -1075,15 +1132,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestOkpd2Filter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestOkpd2Filter" } }, { "type": "null" }],
           "description": "Фильтрация по разделу классификатора ОКПД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -1101,15 +1157,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestOkved2Filter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestOkved2Filter" } }, { "type": "null" }],
           "description": "Фильтрация по разделу классификатора ОКВЭД 2.\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
@@ -1127,15 +1182,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestPartyByFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestPartyByFilter" } }, { "type": "null" }],
           "description": "Фильтрация работает по полям `status` (статус организации) и `type` (тип организации).\n\nЕсли заданы оба параметра (`status` и `type`), необходимо передавать не отдельные объекты с одним полем,\nа массив объектов, представляющий декартово произведение всех комбинаций `type` и `status`.\n\n❌ Неправильно:\n`[{ type: 'LEGAL' }, { status: 'BANKRUPT' }, { status: 'SUSPENDED' }]`\n\n✅ Правильно:\n`[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`"
         }
       },
@@ -1163,15 +1217,14 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestPartyKzFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestPartyKzFilter" } }, { "type": "null" }],
           "description": "Фильтрация работает по полю `type` (тип организации)"
         }
       },
@@ -1197,42 +1250,44 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "type": {
-          "type": "string",
-          "enum": ["LEGAL", "INDIVIDUAL"],
+          "anyOf": [{ "type": "string", "enum": ["LEGAL", "INDIVIDUAL"] }, { "type": "null" }],
           "description": "Фильтр по типу организации. API принимает одно из двух значений в виде строки:\n- `LEGAL` - юрлицо\n- `INDIVIDUAL` - ИП\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}"
         },
         "status": {
-          "type": "array",
-          "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] },
+          "anyOf": [
+            {
+              "type": "array",
+              "items": { "type": "string", "enum": ["ACTIVE", "BANKRUPT", "LIQUIDATED", "LIQUIDATING", "REORGANIZING"] }
+            },
+            { "type": "null" }
+          ],
           "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
         },
         "branch_type": {
           "anyOf": [
             { "type": "string", "enum": ["MAIN", "BRANCH"] },
-            { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } }
+            { "type": "array", "items": { "type": "string", "enum": ["MAIN", "BRANCH"] } },
+            { "type": "null" }
           ],
           "description": "Фильтр по типу филиала\n- `MAIN` - искать только по головным организациям\n- `BRANCH` - искать только по филиалам"
         },
         "okved": {
-          "type": "array",
-          "items": { "type": "string" },
+          "anyOf": [{ "type": "array", "items": { "type": "string" } }, { "type": "null" }],
           "description": "Фильтр по коду ОКВЭД. API принимает массив вида `[\"07.1\", \"07.10\", \"07.2\", \"07.21\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}"
         },
         "locations": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Фильтр по региону (**двузначный** код).\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}"
         },
         "locations_boost": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/KladrIdFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/KladrIdFilter" } }, { "type": "null" }],
           "description": "Приоритет города при ранжировании.\nAPI принимает массив вида `{ kladr_id: string }[]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}"
         }
       },
@@ -1249,49 +1304,36 @@
           "maxLength": 300
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestPostalUnitFilter" },
+          "anyOf": [
+            { "type": "array", "items": { "$ref": "#/definitions/SuggestPostalUnitFilter" } },
+            { "type": "null" }
+          ],
           "description": "Фильтрация почтовых отделений\n* Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`"
         }
       },
       "required": ["query"],
       "description": "@see https://dadata.ru/api/suggest/postal_unit/"
     },
-    "SuggestPostalUnitFilter": {
-      "type": "object",
-      "properties": {
-        "is_closed": {
-          "type": "boolean",
-          "description": "Фильтрация по признаку открыто/закрыто. `false` - искать только открытые, `true` - только закрытые"
-        },
-        "type_code": { "type": "string", "description": "Фильтрация по типу отделения (например, `ГОПС`)" },
-        "address_kladr_id": {
-          "type": "string",
-          "description": "Фильтрация по населённому пункту отделения. Например `'6300000100000'` (КЛАД-код города)"
-        }
-      }
-    },
     "SuggestCourtPayload": {
       "type": "object",
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
           "default": 10
         },
         "filters": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/SuggestCourtFilter" },
+          "anyOf": [{ "type": "array", "items": { "$ref": "#/definitions/SuggestCourtFilter" } }, { "type": "null" }],
           "description": "Фильтрация работает по полю `court_type` (двухбуквенный тип суда):"
         }
       },
@@ -1319,16 +1361,20 @@
         "country_iso_code",
         "region_iso_code",
         "kladr_id",
+        "postal_code",
         "fias_id",
         "region_fias_id",
         "area_fias_id",
+        "sub_area_fias_id",
         "city_fias_id",
+        "city_district_fias_id",
         "settlement_fias_id",
         "planning_structure_fias_id",
         "street_fias_id",
         "country",
         "region",
         "area",
+        "sub_area",
         "city",
         "city_district",
         "settlement",
@@ -1336,6 +1382,7 @@
         "street",
         "region_type_full",
         "area_type_full",
+        "sub_area_type_full",
         "city_type_full",
         "city_district_type_full",
         "settlement_type_full",
@@ -1348,7 +1395,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1362,7 +1409,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1377,7 +1424,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1392,7 +1439,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1407,7 +1454,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1422,7 +1469,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -1437,7 +1484,7 @@
       "properties": {
         "query": { "type": "string", "description": "Текст запроса.\n@maxLength 300", "maxLength": 300 },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,

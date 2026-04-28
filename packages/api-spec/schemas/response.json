@@ -2362,7 +2362,7 @@
         "status": {
           "type": "string",
           "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"],
-          "description": "Статус организации\n- `ACTIVE` — действующая\n- `LIQUIDATING` — ликвидируется\n- `LIQUIDATED` — ликвидирована\n\nСтатус LIQUIDATED в реальных данных не встречается, потому что Банк России не возвращает\nинформацию о ликвидированных финансовых организациях."
+          "description": "Статус финансовой организации\n- `ACTIVE` — действующая\n- `LIQUIDATING` — ликвидируется\n- `LIQUIDATED` — ликвидирована (не встречается)\n\nСтатус LIQUIDATED в реальных данных не встречается, потому что Банк России не возвращает\nинформацию о ликвидированных финансовых организациях."
         },
         "code": {
           "type": ["string", "null"],
@@ -3788,7 +3788,7 @@
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/PartyManagementInfo" }],
           "description": "Руководитель (только для юрлиц)"
         },
-        "branch_count": { "type": "number", "description": "Количество филиалов (только для юрлиц)" },
+        "branch_count": { "type": ["number", "null"], "description": "Количество филиалов (только для юрлиц)" },
         "branch_type": {
           "type": "string",
           "enum": ["MAIN", "BRANCH"],
@@ -4111,7 +4111,7 @@
           "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/PartyManagementInfo" }],
           "description": "Руководитель (только для юрлиц)"
         },
-        "branch_count": { "type": "number", "description": "Количество филиалов (только для юрлиц)" },
+        "branch_count": { "type": ["number", "null"], "description": "Количество филиалов (только для юрлиц)" },
         "branch_type": {
           "type": "string",
           "enum": ["MAIN", "BRANCH"],
@@ -4702,7 +4702,7 @@
           "enum": [true, null],
           "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
         },
-        "branch_count": { "type": "number", "description": "Количество филиалов (только для юрлиц)" },
+        "branch_count": { "type": ["number", "null"], "description": "Количество филиалов (только для юрлиц)" },
         "branch_type": {
           "type": "string",
           "enum": ["MAIN", "BRANCH"],

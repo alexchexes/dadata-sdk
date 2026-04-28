@@ -16,7 +16,7 @@ export interface SuggestPostalUnitPayload extends BaseSuggestPayload {
    * Фильтрация почтовых отделений
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestPostalUnitFilter[];
+  filters?: SuggestPostalUnitFilter[] | null;
 }
 
 export interface SuggestPostalUnitFilter {

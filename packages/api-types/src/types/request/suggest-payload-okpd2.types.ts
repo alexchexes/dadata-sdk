@@ -8,7 +8,7 @@ export interface SuggestOkpd2Payload extends BaseSuggestPayload {
    * Фильтрация по разделу классификатора ОКПД 2.
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestOkpd2Filter[];
+  filters?: SuggestOkpd2Filter[] | null;
 }
 
 export interface SuggestOkpd2Filter {

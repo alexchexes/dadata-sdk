@@ -12,11 +12,11 @@ export type LocationRestriction = {
    * По умолчанию - `RU`.
    * Чтобы разрешить любые страны - укажите `*`.
    */
-  country_iso_code?: string;
+  country_iso_code?: string | null;
   /**
    * ISO-код региона. Например: `BY-BR`
    */
-  region_iso_code?: string;
+  region_iso_code?: string | null;
 
   /**
    * Ограничение по КЛАДР-коду. Например:
@@ -32,7 +32,14 @@ export type LocationRestriction = {
    *
    * Рекомендуем использовать `fias_id` - [ограничение по ФИАС-коду](https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737930).
    */
-  kladr_id?: string;
+  kladr_id?: string | null;
+
+  /**
+   * Ограничение по почтовому индексу.
+   *
+   * @example '420000'
+   */
+  postal_code?: string | null;
 
   /**
    * Ограничение по ФИАС-коду.
@@ -41,66 +48,74 @@ export type LocationRestriction = {
    *
    * Ограничение по fias_id дома не поддерживается
    */
-  fias_id?: string;
+  fias_id?: string | null;
   /** Ограничение по ФИАС-коду региона. Лучшая альтернатива - `fias_id`. */
-  region_fias_id?: string;
+  region_fias_id?: string | null;
   /** Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`. */
-  area_fias_id?: string;
+  area_fias_id?: string | null;
+  /** Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`. */
+  sub_area_fias_id?: string | null;
   /** Ограничение по ФИАС-коду города. Лучшая альтернатива - `fias_id`. */
-  city_fias_id?: string;
+  city_fias_id?: string | null;
+  /** Ограничение по ФИАС-коду района города. Лучшая альтернатива - `fias_id`. */
+  city_district_fias_id?: string | null;
   /** Ограничение по ФИАС-коду населённого пункта. Лучшая альтернатива - `fias_id`. */
-  settlement_fias_id?: string;
+  settlement_fias_id?: string | null;
   /**
    * Ограничение по ФИАС-коду планировочной структуры. Лучшая альтернатива - `fias_id`.
    * * *не задокументировано для API адресов, только для API ФИАС, но работает*
    */
-  planning_structure_fias_id?: string;
+  planning_structure_fias_id?: string | null;
   /** Ограничение по ФИАС-коду улицы. Лучшая альтернатива - `fias_id`. */
-  street_fias_id?: string;
+  street_fias_id?: string | null;
 
   /** Ограничение по названию страны */
-  country?: string;
+  country?: string | null;
   /** Ограничение по названию региона */
-  region?: string;
+  region?: string | null;
   /** Ограничение по названию административного района */
-  area?: string;
+  area?: string | null;
+  /** Ограничение по названию муниципального поселения */
+  sub_area?: string | null;
   /** Ограничение по названию города */
-  city?: string;
+  city?: string | null;
   /**
    * Ограничение по названию района города
    * * *не задокументировано для API адресов, только для API ФИАС, но работает*
    */
-  city_district?: string;
+  city_district?: string | null;
   /** Ограничение по названию населённого пункта */
-  settlement?: string;
+  settlement?: string | null;
   /**
    * Ограничение по названию планировочной структуры
    * * *не задокументировано для API адресов, только для API ФИАС, но работает*
    */
-  planning_structure?: string;
+  planning_structure?: string | null;
   /** Ограничение по названию улицы */
-  street?: string;
+  street?: string | null;
 
   /** Ограничение по полному типу региона, например: `республика` */
-  region_type_full?: string;
+  region_type_full?: string | null;
   /** Ограничение по полному типу адм. района в регионе. Например: `улус` */
-  area_type_full?: string;
+  area_type_full?: string | null;
+  /** Ограничение по полному типу муниципального поселения */
+  sub_area_type_full?: string | null;
   /** Ограничение по полному типу города. Например: `поселок городского типа` */
-  city_type_full?: string;
+  city_type_full?: string | null;
   /**
    * Ограничение по полному типу района города.
    * * *не задокументировано для API адресов, только для API ФИАС, но работает*
    */
-  city_district_type_full?: string;
+  city_district_type_full?: string | null;
   /** Ограничение по полному типу населенного пункта. Например: `деревня` */
-  settlement_type_full?: string;
+  settlement_type_full?: string | null;
   /**
    * Ограничение по полному типу планировочной структуры. Например: `территория снт`
    * * *не задокументировано для API адресов, только для API ФИАС, но работает*
    */
-  planning_structure_type_full?: string;
+  planning_structure_type_full?: string | null;
   /** Ограничение по полному типу улицы. Например: `проспект` */
-  street_type_full?: string;
+  street_type_full?: string | null;
 };
 
 export type LocationRestrictionKey = keyof LocationRestriction;
@@ -109,7 +124,7 @@ export type BoundType = (typeof BOUND_TYPES)[number];
 
 /** Объект для передачи КЛАДР-кода */
 export interface KladrIdFilter {
-  kladr_id?: string;
+  kladr_id?: string | null;
 }
 
 export interface BaseSuggestPayload {
@@ -124,7 +139,7 @@ export interface BaseSuggestPayload {
    * @maximum 20
    * @default 10
    */
-  count?: number;
+  count?: number | null;
 }
 
 /** @see https://dadata.ru/api/suggest/car_brand/ */

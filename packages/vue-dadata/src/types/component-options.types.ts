@@ -135,7 +135,7 @@ export interface VueDadataOptions {
    * Maximum number of suggestion items to fetch from the DaData API.
    * Max: `20`, Default: `10`
    */
-  count?: number;
+  count?: number | null;
   /**
    * `kladr_id` или массив `kladr_id` региона/города, который нужно приоритизировать в подсказках.
    * Соответствует параметру API `locations_boost`.

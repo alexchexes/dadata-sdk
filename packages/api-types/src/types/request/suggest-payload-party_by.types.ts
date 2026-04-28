@@ -17,7 +17,7 @@ export interface SuggestPartyByPayload extends BaseSuggestPayload {
    * ✅ Правильно:
    * `[{ type: 'LEGAL', status: 'BANKRUPT' }, { type: 'LEGAL', status: 'SUSPENDED' }]`
    */
-  filters?: SuggestPartyByFilter[];
+  filters?: SuggestPartyByFilter[] | null;
 }
 
 export interface SuggestPartyByFilter {

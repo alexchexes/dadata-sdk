@@ -53,7 +53,7 @@
           "description": "Пользовательские HTTP-заголовки для API-запроса.\nЗаголовки, указанные здесь, будут добавлены в итоговые headers переопределяя существующие значения.\n\n@locale EN\nCustom headers for the API request.\nAny headers specified here will be added to the final request headers, or override existing values if already set."
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество подсказок, запрашиваемых у API DaData.\nМакс: `20`, по умолчанию: `10`\n\n@locale EN\nMaximum number of suggestion items to fetch from the DaData API.\nMax: `20`, Default: `10`"
         },
         "locationsBoost": {
@@ -459,14 +459,12 @@
           "description": "Ограничение по радиусу окружности.\nПозволяет искать адреса в определенном радиусе от заданной точки.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806"
         },
         "language": {
-          "type": "string",
-          "enum": ["RU", "EN"],
+          "anyOf": [{ "type": "string", "enum": ["RU", "EN"] }, { "type": "null" }],
           "description": "Язык результатов поиска. Поддерживается русский и английский.\nВлияет на все поля в объекте адреса.\n@default 'RU'\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726",
           "default": "RU"
         },
         "division": {
-          "type": "string",
-          "enum": ["ADMINISTRATIVE", "MUNICIPAL"],
+          "anyOf": [{ "type": "string", "enum": ["ADMINISTRATIVE", "MUNICIPAL"] }, { "type": "null" }],
           "description": "Административное либо муниципальное деление.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589\n@default 'ADMINISTRATIVE'",
           "default": "ADMINISTRATIVE"
         },
@@ -484,7 +482,7 @@
           "maxLength": 300
         },
         "count": {
-          "type": "number",
+          "type": ["number", "null"],
           "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
           "minimum": 1,
           "maximum": 20,
@@ -513,7 +511,8 @@
             {
               "type": "array",
               "items": { "type": "string", "enum": ["ACTIVE", "LIQUIDATED", "LIQUIDATING"] },
-              "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+              "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `{\"status\": [\"LIQUIDATING\"]}`\n\n- `ACTIVE` — действующая\n- `LIQUIDATING` — ликвидируется\n- `LIQUIDATED` — ликвидирована (не встречается)\n\nСтатус `LIQUIDATED` в реальных данных не встречается, потому что Банк России не возвращает\nинформацию о ликвидированных финансовых организациях.\n\n@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120\n\n@example {\"status\": [\"LIQUIDATING\"]}",
+              "examples": [{ "status": ["LIQUIDATING"] }]
             },
             {
               "type": "array",
@@ -524,7 +523,8 @@
               "description": "Фильтр по статусу организации. API принимает массив. Например:\n- действующие: `[\"ACTIVE\"]`\n- ликвидируемые и ликвидированные: `[\"LIQUIDATING\", \"LIQUIDATED\"]`\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}"
             }
           ],
-          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `\"status\": [\"LIQUIDATING\"]`\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}"
+          "description": "Ограничение по статусу банка.\nAPI принимает массив, например: `{\"status\": [\"LIQUIDATING\"]}`\n\n- `ACTIVE` — действующая\n- `LIQUIDATING` — ликвидируется\n- `LIQUIDATED` — ликвидирована (не встречается)\n\nСтатус `LIQUIDATED` в реальных данных не встречается, потому что Банк России не возвращает\nинформацию о ликвидированных финансовых организациях.\n\n@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120\n\n@example {\"status\": [\"LIQUIDATING\"]}",
+          "examples": [{ "status": ["LIQUIDATING"] }]
         },
         "gender": {
           "type": "string",

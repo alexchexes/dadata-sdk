@@ -16,26 +16,36 @@ export interface SuggestBankPayload extends BaseSuggestPayload {
    * API принимает массив, например: `"type": ["BANK", "BANK_BRANCH"]`
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996122}
    */
-  type?: BankType[];
+  type?: BankType[] | null;
 
   /**
    * Ограничение по статусу банка.
-   * API принимает массив, например: `"status": ["LIQUIDATING"]`
-   * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120}
+   * API принимает массив, например: `{"status": ["LIQUIDATING"]}`
+   *
+   * - `ACTIVE` — действующая
+   * - `LIQUIDATING` — ликвидируется
+   * - `LIQUIDATED` — ликвидирована (не встречается)
+   *
+   * Статус `LIQUIDATED` в реальных данных не встречается, потому что Банк России не возвращает
+   * информацию о ликвидированных финансовых организациях.
+   *
+   * @link https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996120
+   *
+   * @example {"status": ["LIQUIDATING"]}
    */
-  status?: BankStatus[];
+  status?: BankStatus[] | null;
 
   /**
    * Ограничение по региону или городу
    * API принимает массив вида `{ kladr_id: string }[]`
    *  {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106238}
    */
-  locations?: KladrIdFilter[];
+  locations?: KladrIdFilter[] | null;
 
   /**
    * Приоритет города при ранжировании.
    * API принимает массив вида `{ kladr_id: string }[]`
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=527106242}
    */
-  locations_boost?: KladrIdFilter[];
+  locations_boost?: KladrIdFilter[] | null;
 }

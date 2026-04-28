@@ -12,7 +12,7 @@ export interface BaseFindByIdPayload {
    * @default 10
    * @maximum 20
    */
-  count?: number;
+  count?: number | null;
 }
 
 /**
@@ -44,13 +44,13 @@ export interface FindAddressPayload extends BaseFindByIdPayload {
   /**
    * На каком языке вернуть результат (ru / en)
    */
-  language?: Language;
+  language?: Language | null;
   /**
    * Административное либо муниципальное деление
    * @default 'ADMINISTRATIVE'
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589
    */
-  division?: DivisionType;
+  division?: DivisionType | null;
 }
 
 /**
@@ -89,23 +89,23 @@ export interface FindPartyPayload extends BaseFindByIdPayload {
    *
    * @example { "query": "7707083893", "kpp": "540602001" }
    */
-  kpp?: string;
+  kpp?: string | null;
   /**
    * Головная организация (`MAIN`) или филиал (`BRANCH`).
    *
    * @example { "query": "7707083893", "branch_type": "MAIN" }
    */
-  branch_type?: BranchType;
+  branch_type?: BranchType | BranchType[] | null;
   /**
    * Юрлицо (`LEGAL`) или индивидуальный предприниматель (`INDIVIDUAL`)
    * @example {"query": "7707083893","type": "LEGAL"} // Юрлица
    * @example {"query": "784806113663","type": "INDIVIDUAL"} // Индивидуальные предприниматели
    */
-  type?: PartyType;
+  type?: PartyType | null;
   /**
    * Ограничение по статусу организации
    */
-  status?: PartyStatus[];
+  status?: PartyStatus[] | null;
 }
 
 /**
@@ -155,7 +155,7 @@ export interface FindBankPayload extends BaseFindByIdPayload {
    *
    * * подсказки 20.3+
    */
-  kpp?: string;
+  kpp?: string | null;
 }
 
 /**

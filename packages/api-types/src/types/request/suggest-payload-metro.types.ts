@@ -16,7 +16,7 @@ export interface SuggestMetroPayload extends BaseSuggestPayload {
    *
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestMetroFilter[];
+  filters?: SuggestMetroFilter[] | null;
 }
 
 export interface SuggestMetroFilter {

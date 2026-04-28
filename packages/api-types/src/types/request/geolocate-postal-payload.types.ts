@@ -1,3 +1,5 @@
+import type { SuggestPostalUnitFilter } from './suggest-payload-postal_unit.types';
+
 /**
  * https://dadata.ru/api/suggest/postal_unit/
  */
@@ -17,11 +19,17 @@ export interface GeolocatePostalUnitPayload {
    * @default 100
    * @maximum 1000
    */
-  radius_meters?: number;
+  radius_meters?: number | null;
   /**
    * Максимальное количество результатов
    * @default 10
    * @maximum 20
    */
-  count?: number;
+  count?: number | null;
+
+  /**
+   * Фильтрация почтовых отделений
+   * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
+   */
+  filters?: SuggestPostalUnitFilter[] | null;
 }

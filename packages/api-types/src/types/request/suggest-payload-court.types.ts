@@ -10,7 +10,7 @@ export interface SuggestCourtPayload extends BaseSuggestPayload {
   /**
    * Фильтрация работает по полю `court_type` (двухбуквенный тип суда):
    */
-  filters?: SuggestCourtFilter[];
+  filters?: SuggestCourtFilter[] | null;
 }
 
 /** Объект для передачи фильтров API "Подсказки по судам" */

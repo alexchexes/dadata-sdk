@@ -9,15 +9,15 @@ import type {
 /** Объект для передачи фильтра по радиусу от заданной точки */
 export interface RadiusFilter {
   /** Географическая широта, например: `'59.244634'` */
-  lat: string;
+  lat: string | number;
   /** Географическая долгота, например: `'39.913355'` */
-  lon: string;
+  lon: string | number;
   /**
    * Радиус поиска в метрах
    * @default 100
    * @maximum 100000
    */
-  radius_meters: number;
+  radius_meters?: number | null;
 }
 
 export type Language = (typeof LANGUAGES)[number];
@@ -55,7 +55,7 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343795
    */
-  locations_boost?: KladrIdFilter[];
+  locations_boost?: KladrIdFilter[] | null;
 
   /**
    * Гранулярные подсказки – "левая" граница.
@@ -123,7 +123,7 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669108
    */
-  locations?: LocationRestriction[];
+  locations?: LocationRestriction[] | null;
 
   /**
    * Используется совместно с ограничениями (параметр `locations`), чтобы адрес в ответе
@@ -133,15 +133,16 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    * - @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1023737934#id-Ограничениепоназваниюадресногообъекта-Адресбезрегионаигорода
    * - @see https://confluence.hflabs.ru/display/SGTDOC/address.value#address.value-Параметрrestrict_value
    */
-  restrict_value?: boolean;
+  restrict_value?: boolean | null;
 
   /**
    * Ограничение по радиусу окружности.
    * Позволяет искать адреса в определенном радиусе от заданной точки.
+   * Можно указать несколько точек.
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=990871806
    */
-  locations_geo?: [RadiusFilter];
+  locations_geo?: RadiusFilter[] | null;
 
   /**
    * Язык результатов поиска. Поддерживается русский и английский.
@@ -149,7 +150,7 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    * @default 'RU'
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=976388726
    */
-  language?: Language;
+  language?: Language | null;
 
   /**
    * Административное либо муниципальное деление.
@@ -157,5 +158,5 @@ export interface SuggestAddressPayload extends BaseSuggestPayload {
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=1326056589
    * @default 'ADMINISTRATIVE'
    */
-  division?: DivisionType;
+  division?: DivisionType | null;
 }

@@ -8,7 +8,7 @@ export interface SuggestMktuPayload extends BaseSuggestPayload {
    * Фильтрация записей МКТУ
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestMktuFilter[];
+  filters?: SuggestMktuFilter[] | null;
 }
 
 export interface SuggestMktuFilter {

@@ -47,7 +47,7 @@ export interface BaseSuggestOptions {
   query: string;
 
   /** Max results to fetch from Dadata (max - 20) */
-  count?: number;
+  count?: number | null;
 
   /** Custom URL of an API in case you proxy requests.  */
   url?: string;

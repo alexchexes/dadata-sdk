@@ -138,6 +138,7 @@ export default {
     'By ISO code': 'По ISO коду',
     'By FIAS ID': 'По ФИАС коду',
     'By KLADR ID': 'По КЛАДР коду',
+    'By postal code': 'По индексу',
     'enter': 'введите',
     'AND': 'И',
     'OR': 'ИЛИ',
@@ -150,6 +151,7 @@ export default {
 
       region: 'регион',
       area: 'адм.район',
+      sub_area: 'мун.поселение',
       city: 'город',
       city_district: 'район города',
       settlement: 'поселение',
@@ -158,6 +160,7 @@ export default {
 
       region_type_full: 'тип региона',
       area_type_full: 'тип адм.района',
+      sub_area_type_full: 'тип мун.поселения',
       city_type_full: 'тип города',
       city_district_type_full: 'тип района города',
       settlement_type_full: 'тип поселения',
@@ -165,11 +168,14 @@ export default {
       planning_structure_type_full: 'тип план.структуры',
 
       kladr_id: 'КЛАДР код',
+      postal_code: 'Индекс',
 
       fias_id: 'ФИАС код',
       region_fias_id: 'ФИАС код региона',
       area_fias_id: 'ФИАС код адм.района',
+      sub_area_fias_id: 'ФИАС код мун.поселения',
       city_fias_id: 'ФИАС код города',
+      city_district_fias_id: 'ФИАС код района города',
       settlement_fias_id: 'ФИАС код поселения',
       street_fias_id: 'ФИАС код улицы',
       planning_structure_fias_id: 'ФИАС код план.структуры',

@@ -13,7 +13,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176337}
    */
-  type?: PartyType;
+  type?: PartyType | null;
 
   /**
    * Фильтр по статусу организации. API принимает массив. Например:
@@ -22,21 +22,21 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=206176335}
    */
-  status?: PartyStatus[];
+  status?: PartyStatus[] | null;
 
   /**
    * Фильтр по типу филиала
    * - `MAIN` - искать только по головным организациям
    * - `BRANCH` - искать только по филиалам
    */
-  branch_type?: BranchType | BranchType[];
+  branch_type?: BranchType | BranchType[] | null;
 
   /**
    * Фильтр по коду ОКВЭД. API принимает массив вида `["07.1", "07.10", "07.2", "07.21"]`
    *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1093075333}
    */
-  okved?: string[];
+  okved?: string[] | null;
 
   /**
    * Фильтр по региону (**двузначный** код).
@@ -44,7 +44,7 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669123}
    */
-  locations?: KladrIdFilter[];
+  locations?: KladrIdFilter[] | null;
 
   /**
    * Приоритет города при ранжировании.
@@ -52,5 +52,5 @@ export interface SuggestPartyPayload extends BaseSuggestPayload {
    *
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=285343852}
    */
-  locations_boost?: KladrIdFilter[];
+  locations_boost?: KladrIdFilter[] | null;
 }

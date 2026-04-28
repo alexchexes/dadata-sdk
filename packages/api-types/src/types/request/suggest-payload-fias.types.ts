@@ -45,7 +45,7 @@ export interface SuggestFiasPayload extends BaseSuggestPayload {
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425529
    */
-  locations_boost?: KladrIdFilter[];
+  locations_boost?: KladrIdFilter[] | null;
 
   /**
    * Гранулярные подсказки по ФИАС – "левая" граница.
@@ -94,7 +94,7 @@ export interface SuggestFiasPayload extends BaseSuggestPayload {
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974
    */
-  locations?: LocationRestrictionFias[];
+  locations?: LocationRestrictionFias[] | null;
 
   /**
    * Используется совместно с ограничениями (параметр `locations`), чтобы адрес в ответе
@@ -102,5 +102,5 @@ export interface SuggestFiasPayload extends BaseSuggestPayload {
    *
    * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974#:~:text=Адрес%20без%20региона%20и%20города
    */
-  restrict_value?: boolean;
+  restrict_value?: boolean | null;
 }

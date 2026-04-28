@@ -63,6 +63,7 @@ export const BANK_TYPES = [
   'TREASURY', // нет в документации по фильтрам
   'OTHER',
 ] as const;
+
 export const BANK_STATUSES = [
   'ACTIVE',
   'LIQUIDATED', // в реальных данных не встречается

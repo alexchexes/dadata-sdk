@@ -8,7 +8,7 @@ export interface SuggestOkved2Payload extends BaseSuggestPayload {
    * Фильтрация по разделу классификатора ОКВЭД 2.
    * * Поля внутри одного фильтра интерпретируются как `AND`, между фильтрами - как `OR`
    */
-  filters?: SuggestOkved2Filter[];
+  filters?: SuggestOkved2Filter[] | null;
 }
 
 export interface SuggestOkved2Filter {

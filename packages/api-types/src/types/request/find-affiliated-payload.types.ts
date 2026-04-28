@@ -13,7 +13,7 @@ export interface FindAffiliatedPayload {
    * @default 10
    * @maximum 300
    */
-  count?: number;
+  count?: number | null;
   /**
    * Фильтр - Где искать
    * - `FOUNDERS` - среди учредителей
@@ -26,5 +26,5 @@ export interface FindAffiliatedPayload {
    *
    * @default ['FOUNDERS', 'MANAGERS']
    */
-  scope?: AffilatedSearchScope[];
+  scope?: AffilatedSearchScope[] | null;
 }
