@@ -1,3 +1,5 @@
+// Legacy broad official-vs-ours report across checked-in official specs.
+// Keep this as coverage/reference until the staged comparison pipeline replaces the same surface.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -186,6 +188,7 @@ printReport({
   options,
 });
 
+/** Loads checked-in official specs and expands broad generic endpoints for the legacy report. */
 function loadOfficialOperations(): OfficialOperationRecord[] {
   const concreteOperations: OfficialOperationRecord[] = [];
   const genericOperations: OfficialOperationRecord[] = [];
@@ -241,6 +244,7 @@ function getOfficialDocument(record: OfficialOperationRecord): OpenAPIV3_1.Docum
   return document;
 }
 
+/** Expands legacy generic official operations onto our concrete paths by prefix. */
 function expandGenericOfficialOperations(
   genericOperations: OfficialOperationRecord[],
   concreteOfficialPaths: Set<string>,
@@ -308,6 +312,7 @@ function fingerprintRequestBody(
   return mediaTypes.length > 0 ? mediaTypes.join(', ') : 'present:no-content';
 }
 
+/** Compares response status coverage while accepting compatible wildcard families. */
 function compareResponseStatusCodes(
   officialResponses: OpenAPIV3_1.OperationObject['responses'],
   ourResponses: OpenAPIV3_1.OperationObject['responses'],
@@ -385,6 +390,7 @@ function getResponseCodeFamily(code: string): string | null {
   return match?.groups?.family ?? null;
 }
 
+/** Produces a normalized schema fingerprint for shallow legacy request/response comparison. */
 function fingerprintSchema(
   schema: OpenAPIV3_1.SchemaObject | OpenAPIV3_1.ReferenceObject | undefined,
   document: OpenAPIV3_1.Document,
@@ -536,6 +542,7 @@ function isAcceptedSecurityMismatch(
   return true;
 }
 
+/** Prints the broad legacy official comparison report. */
 function printReport(report: {
   officialOnlyPaths: string[];
   ourOnlyPaths: string[];
@@ -723,6 +730,7 @@ function sortStrings(values: string[]): string[] {
   return [...values].sort((left, right) => left.localeCompare(right));
 }
 
+/** Parses legacy compare:official CLI options. */
 function parseOptions(args: string[]): CompareOptions {
   return {
     showAccepted: args.includes('--show-accepted'),

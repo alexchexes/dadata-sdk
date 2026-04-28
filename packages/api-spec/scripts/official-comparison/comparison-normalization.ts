@@ -1,4 +1,8 @@
+// Comparison-only normalization used before external diff tools see the temporary specs.
+// Keep each transform narrow and logged; source specs must not be rewritten here.
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
+
+import { cloneJson, isRecord } from './io.js';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
 type CompositionKey = 'anyOf' | 'oneOf';
@@ -17,6 +21,7 @@ export const COMPARISON_INFO = {
 
 const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
+/** Normalizes a temporary comparison document and returns every schema rewrite decision. */
 export function normalizeComparisonDocument(
   document: OpenAPIV3_1.Document,
   openapiVersion: string,
@@ -43,6 +48,7 @@ export function normalizeComparisonDocument(
   return decisions;
 }
 
+/** Removes operation metadata that is not part of the current payload comparison. */
 function normalizeComparisonOperations(document: OpenAPIV3_1.Document): void {
   for (const pathItem of Object.values(document.paths ?? {})) {
     if (!isRecord(pathItem)) {
@@ -75,6 +81,7 @@ function normalizeComparisonOperations(document: OpenAPIV3_1.Document): void {
   }
 }
 
+/** Walks the document and canonicalizes only narrow nullable schema shapes. */
 function normalizeNullableSchemas(
   value: unknown,
   root: Record<string, unknown>,
@@ -108,6 +115,7 @@ function normalizeNullableSchemas(
   }
 }
 
+/** Rewrites two-branch nullable compositions when the non-null branch is safe to flatten. */
 function canonicalizeNullableComposition(
   schema: Record<string, unknown>,
   root: Record<string, unknown>,
@@ -172,6 +180,7 @@ function canonicalizeNullableComposition(
   });
 }
 
+/** Replaces the composition keyword with a cloned branch while preserving local siblings. */
 function replaceCompositionWithSchema(
   schema: Record<string, unknown>,
   compositionKey: CompositionKey,
@@ -198,6 +207,7 @@ function getNullableCompositionKey(schema: Record<string, unknown>): Composition
   return null;
 }
 
+/** Checks for non-composed inline schemas that can safely absorb a null type. */
 function canFlattenNullableBranch(schema: Record<string, unknown>): boolean {
   return (
     !('$ref' in schema) &&
@@ -209,6 +219,7 @@ function canFlattenNullableBranch(schema: Record<string, unknown>): boolean {
   );
 }
 
+/** Checks for plain object ref targets that can be inlined as object-or-null. */
 function canFlattenNullableObjectRefTarget(schema: Record<string, unknown>): boolean {
   const type = schema.type;
 
@@ -232,6 +243,7 @@ function getPlainRef(schema: Record<string, unknown>): string | null {
   return schema.$ref;
 }
 
+/** Resolves local JSON Pointer refs inside the temporary comparison document. */
 function resolveLocalRef(root: Record<string, unknown>, ref: string): unknown {
   if (!ref.startsWith('#/')) {
     return null;
@@ -283,18 +295,10 @@ function addNullEnumValue(schema: Record<string, unknown>): void {
   schema.enum = [...enumValues, null];
 }
 
-function cloneJson<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value)) as T;
-}
-
 function escapeJsonPointerSegment(value: string): string {
   return value.replaceAll('~', '~0').replaceAll('/', '~1');
 }
 
 function unescapeJsonPointerSegment(value: string): string {
   return value.replaceAll('~1', '/').replaceAll('~0', '~');
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }

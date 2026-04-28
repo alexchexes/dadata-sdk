@@ -1,3 +1,5 @@
+// Stage A validates the suggestions operation inventory against curated mappings.
+// On a clean run it can also project official generic templates onto concrete paths for Stage B.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
@@ -105,6 +107,7 @@ if (comparison.issues.length > 0) {
   printProjectionReport(projection, outputPath);
 }
 
+/** Builds and validates the Stage A suggestions operation comparison units. */
 function compareSuggestionsStageA(
   official: {
     concrete: Map<string, OperationRecord>;
@@ -271,6 +274,7 @@ function compareSuggestionsStageA(
   };
 }
 
+/** Validates one curated generic-template expansion against official and our operations. */
 function validateTemplateExpansionMapping(
   mapping: TemplateExpansionMapping,
   officialTemplate: OfficialTemplateOperationRecord,
@@ -293,6 +297,7 @@ function validateTemplateExpansionMapping(
   }
 }
 
+/** Extracts concrete and generic-template operations from the official suggestions spec. */
 function extractOfficialOperations(document: OpenAPIV3_1.Document): {
   concrete: Map<string, OperationRecord>;
   templates: OfficialTemplateOperationRecord[];
@@ -335,6 +340,7 @@ function extractOfficialOperations(document: OpenAPIV3_1.Document): {
   };
 }
 
+/** Extracts our operations that belong to the comparable suggestions family. */
 function extractOurFamilyOperations(
   document: OpenAPIV3_1.Document,
   official: {
@@ -384,6 +390,7 @@ function findMatchingTemplateOperations(
     .sort((left, right) => right.prefix.length - left.prefix.length || compareOperationRecords(left, right));
 }
 
+/** Writes the clean Stage A operation set as a projected official spec for payload diffing. */
 function buildProjectedOfficialSuggestionsSpec(
   units: ComparisonUnit[],
   official: {
@@ -441,6 +448,7 @@ function buildProjectedOfficialSuggestionsSpec(
   };
 }
 
+/** Resolves the official operation used as source for one projected Stage A unit. */
 function getProjectionSourceOperation(
   unit: ComparisonUnit,
   official: {
@@ -477,6 +485,7 @@ function getProjectionSourceOperation(
   return templateOperation;
 }
 
+/** Removes stale template parameters and gives expanded operations unique operationIds. */
 function normalizeTemplateExpandedOperation(
   operation: OpenAPIV3_1.OperationObject,
   unit: ComparisonUnit,
@@ -553,6 +562,7 @@ function getSchemaRef(
   return '<inline-schema>';
 }
 
+/** Parses and validates the suggestions curation YAML shape. */
 function parseCuration(source: string): SuggestionsCuration {
   const parsed = YAML.parse(source) as unknown;
 
@@ -667,6 +677,7 @@ function isHttpMethod(value: string): value is HttpMethod {
   return HTTP_METHODS.includes(value as HttpMethod);
 }
 
+/** Indexes curated operations by our path+method and rejects duplicates. */
 function indexOperationMappings<T extends { our: OperationIdentity }>(
   entries: T[],
   sectionName: string,
@@ -763,6 +774,7 @@ function slugifyPath(path: string): string {
     .replace(/^_+|_+$/gu, '');
 }
 
+/** Prints the Stage A inventory/mapping report. */
 function printReport(
   units: ComparisonUnit[],
   issues: string[],
@@ -842,6 +854,7 @@ function compareOperationRecords(left: OperationRecord, right: OperationRecord):
   return left.path.localeCompare(right.path) || left.method.localeCompare(right.method);
 }
 
+/** Parses Stage A CLI options. */
 function parseOptions(args: string[]): CompareOptions {
   let curationPath: string | null = null;
   let showCuration = false;

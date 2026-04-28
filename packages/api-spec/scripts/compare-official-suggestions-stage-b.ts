@@ -1,5 +1,6 @@
-import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+// Stage B compares payload schemas after Stage A has produced a concrete official suggestions slice.
+// This is still report-only: it normalizes comparison inputs, runs oasdiff, and prints grouped findings.
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -10,8 +11,9 @@ import {
   type ComparisonNormalizationDecision,
   normalizeComparisonDocument,
 } from './official-comparison/comparison-normalization.js';
-
-type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
+import { cloneJson, cloneOptionalJson, isRecord, parseJson, readJson, writeJson } from './official-comparison/io.js';
+import { buildExactPathRegex, HTTP_METHODS, type HttpMethod, sortPaths } from './official-comparison/openapi.js';
+import { printFailedCommand, runCommand } from './official-comparison/process.js';
 
 interface CompareOptions {
   curationPath: string | null;
@@ -19,15 +21,6 @@ interface CompareOptions {
   maxGroups: number;
   maxSamples: number;
   oasdiffBin: string | null;
-}
-
-interface CommandResult {
-  command: string;
-  args: string[];
-  status: number | null;
-  stdout: string;
-  stderr: string;
-  error?: Error;
 }
 
 interface OasdiffSummary {
@@ -59,7 +52,6 @@ interface RevisionSliceResult {
   operationCount: number;
 }
 
-const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const OUR_SPEC_PATH = resolve('dadata.json');
 const STAGE_A_SCRIPT_PATH = './scripts/compare-official-suggestions-stage-a.ts';
 const DEFAULT_MAX_GROUPS = 8;
@@ -78,11 +70,11 @@ try {
 
   runStageAProjection(projectionPath, options);
 
-  const projectedSpec = parseJson<OpenAPIV3_1.Document>(
-    readFileSync(projectionPath, 'utf8'),
+  const projectedSpec = readJson<OpenAPIV3_1.Document>(
+    projectionPath,
     'projected official suggestions spec',
   );
-  const ourSpec = parseJson<OpenAPIV3_1.Document>(readFileSync(OUR_SPEC_PATH, 'utf8'), 'our dadata.json');
+  const ourSpec = readJson<OpenAPIV3_1.Document>(OUR_SPEC_PATH, 'our dadata.json');
   const comparisonOpenapiVersion = ourSpec.openapi ?? '3.1.1';
 
   const projectionNormalizationDecisions = normalizeComparisonDocument(
@@ -125,6 +117,7 @@ try {
   }
 }
 
+/** Runs Stage A and writes the projected official suggestions spec for this Stage B run. */
 function runStageAProjection(projectionPath: string, compareOptions: CompareOptions): void {
   const args = [
     'exec',
@@ -148,6 +141,7 @@ function runStageAProjection(projectionPath: string, compareOptions: CompareOpti
   }
 }
 
+/** Runs oasdiff summary against the bounded comparable path set. */
 function runOasdiffSummary(
   oasdiffBin: string,
   projectionPath: string,
@@ -174,6 +168,7 @@ function runOasdiffSummary(
   return parseJson<OasdiffSummary>(result.stdout, 'oasdiff summary JSON');
 }
 
+/** Runs oasdiff breaking output; this is used for report grouping, not semantic truth. */
 function runOasdiffBreaking(
   oasdiffBin: string,
   projectionPath: string,
@@ -210,6 +205,7 @@ function runOasdiffBreaking(
   });
 }
 
+/** Extracts the projected path+method inventory that Stage B is allowed to compare. */
 function extractComparableOperations(document: OpenAPIV3_1.Document): Map<string, Set<HttpMethod>> {
   const operations = new Map<string, Set<HttpMethod>>();
 
@@ -234,6 +230,7 @@ function extractComparableOperations(document: OpenAPIV3_1.Document): Map<string
   return operations;
 }
 
+/** Builds our temporary spec slice with only operations present in the Stage A projection. */
 function writeComparableRevisionSlice(
   comparableOperations: Map<string, Set<HttpMethod>>,
   outputPath: string,
@@ -288,6 +285,7 @@ function writeComparableRevisionSlice(
   };
 }
 
+/** Resolves the oasdiff binary from CLI/env/PATH/local experiment locations. */
 function resolveOasdiffBin(explicitPath: string | null): string {
   const envPath = process.env.OASDIFF_BIN;
   const localExperimentBin = resolve('../../tmp/oasdiff-experiment/bin/oasdiff.exe');
@@ -315,72 +313,7 @@ function resolveOasdiffBin(explicitPath: string | null): string {
   );
 }
 
-function runCommand(
-  command: string,
-  args: string[],
-  options: {
-    shell?: boolean;
-  } = {},
-): CommandResult {
-  const result = spawnSync(command, args, {
-    encoding: 'utf8',
-    shell: options.shell ?? false,
-  });
-
-  return {
-    command,
-    args,
-    status: result.status,
-    stdout: result.stdout ?? '',
-    stderr: result.stderr ?? '',
-    error: result.error,
-  };
-}
-
-function parseJson<T>(source: string, label: string): T {
-  try {
-    return JSON.parse(source) as T;
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-
-    throw new Error(`Failed to parse ${label}: ${message}`);
-  }
-}
-
-function buildExactPathRegex(paths: string[]): string {
-  if (paths.length === 0) {
-    throw new Error('Projected official suggestions spec has no paths.');
-  }
-
-  return `^(${paths.map(escapeRegex).join('|')})$`;
-}
-
-function escapeRegex(value: string): string {
-  return value.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
-}
-
-function writeJson(path: string, value: unknown): void {
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
-}
-
-function cloneJson<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value)) as T;
-}
-
-function cloneOptionalJson<T>(value: T | undefined): T | undefined {
-  return value === undefined ? undefined : cloneJson(value);
-}
-
-function sortPaths(paths: OpenAPIV3_1.PathsObject): OpenAPIV3_1.PathsObject {
-  const sorted: OpenAPIV3_1.PathsObject = {};
-
-  for (const path of Object.keys(paths).sort((left, right) => left.localeCompare(right))) {
-    sorted[path] = paths[path];
-  }
-
-  return sorted;
-}
-
+/** Prints the Stage B report in a compact operator-facing shape. */
 function printReport(report: {
   breakingFindings: OasdiffBreakingFinding[];
   matchPathRegex: string;
@@ -460,6 +393,7 @@ function printReport(report: {
   }
 }
 
+/** Summarizes comparison-only schema normalization decisions. */
 function printNormalizationDetails(
   officialDecisions: ComparisonNormalizationDecision[],
   revisionDecisions: ComparisonNormalizationDecision[],
@@ -481,6 +415,7 @@ function printNormalizationDetails(
   }
 }
 
+/** Prints oasdiff summary details with stable section ordering. */
 function printSummaryDetails(summary: OasdiffSummary): void {
   const details = summary.details ?? {};
   const preferredSections = ['endpoints', 'paths', 'responses', 'schemas', 'security', 'securitySchemes'];
@@ -502,6 +437,7 @@ function printSummaryDetails(summary: OasdiffSummary): void {
   }
 }
 
+/** Prints grouped finding samples according to CLI limits. */
 function printGroups(title: string, groups: FindingGroup[], compareOptions: CompareOptions): void {
   if (groups.length === 0) {
     return;
@@ -525,6 +461,7 @@ function printGroups(title: string, groups: FindingGroup[], compareOptions: Comp
   }
 }
 
+/** Groups oasdiff breaking findings by caller-provided key. */
 function groupFindings(
   findings: OasdiffBreakingFinding[],
   getKey: (finding: OasdiffBreakingFinding) => string,
@@ -556,6 +493,7 @@ function groupFindings(
   );
 }
 
+/** Formats the operation identity used in finding samples. */
 function formatFindingOperation(finding: OasdiffBreakingFinding): string {
   const method = finding.operation ?? '<unknown-method>';
   const path = finding.path ?? '<unknown-path>';
@@ -563,6 +501,7 @@ function formatFindingOperation(finding: OasdiffBreakingFinding): string {
   return `${method.toUpperCase()} ${path}`;
 }
 
+/** Formats one report sample line. */
 function formatFindingSample(finding: OasdiffBreakingFinding): string {
   const severity = isErrorFinding(finding) ? 'ERR' : isWarningFinding(finding) ? 'WARN' : 'INFO';
   const id = finding.id ?? '<missing-id>';
@@ -572,6 +511,7 @@ function formatFindingSample(finding: OasdiffBreakingFinding): string {
   return `[${severity}] ${operation}: ${id} - ${text}`;
 }
 
+/** Applies small display fixes to oasdiff finding text. */
 function formatFindingText(finding: OasdiffBreakingFinding): string {
   const text = finding.text ?? '<missing text>';
 
@@ -590,25 +530,7 @@ function isWarningFinding(finding: OasdiffBreakingFinding): boolean {
   return finding.level === 2;
 }
 
-function printFailedCommand(message: string, result: CommandResult): void {
-  console.error(message);
-  console.error(`command: ${result.command} ${result.args.join(' ')}`);
-
-  if (result.error) {
-    console.error(`error: ${result.error.message}`);
-  }
-
-  if (result.stdout.trim()) {
-    console.error('\nstdout:');
-    console.error(result.stdout.trim());
-  }
-
-  if (result.stderr.trim()) {
-    console.error('\nstderr:');
-    console.error(result.stderr.trim());
-  }
-}
-
+/** Parses Stage B CLI options. */
 function parseOptions(args: string[]): CompareOptions {
   let curationPath: string | null = null;
   let keepTemp = false;
@@ -678,8 +600,4 @@ function parsePositiveInteger(value: string, optionName: string): number {
   }
 
   return parsed;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
