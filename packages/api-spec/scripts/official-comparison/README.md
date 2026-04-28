@@ -28,10 +28,19 @@ pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --max
 
 # Keep raw and normalized JSON artifacts for inspection.
 pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --keep-temp --max-groups 20 --max-samples 5
+
+# Update the committed suggestions diff snapshot.
+pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b:update-snapshot
+
+# Check the generated suggestions diff against the committed snapshot.
+pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b:check-snapshot
 ```
 
 With `--keep-temp`, inspect:
 
 - `stage-b-diff-units.json` for the flat finding-shaped artifact.
 - `stage-b-diff-units.by-path.json` for the path-first review artifact.
+- `stage-b-diff-units.snapshot.txt` for the deterministic one-unit-per-line snapshot candidate.
 - `oasdiff-full-diff.json` for the raw full diff.
+
+The committed accepted snapshot lives at `packages/api-spec/official/snapshots/suggestions.diff.txt`.

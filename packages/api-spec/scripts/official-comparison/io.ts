@@ -16,9 +16,19 @@ export function readJson<T>(path: string, label: string): T {
   return parseJson<T>(readFileSync(path, 'utf8'), label);
 }
 
+/** Reads a UTF-8 text file. */
+export function readText(path: string): string {
+  return readFileSync(path, 'utf8');
+}
+
 /** Writes stable pretty JSON with a trailing newline. */
 export function writeJson(path: string, value: unknown): void {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+}
+
+/** Writes UTF-8 text exactly as supplied. */
+export function writeText(path: string, value: string): void {
+  writeFileSync(path, value, 'utf8');
 }
 
 /** Deep-clones JSON-compatible values. */

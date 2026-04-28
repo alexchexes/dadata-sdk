@@ -112,6 +112,13 @@ export function buildDiffUnitsByPath(units: DiffUnit[]): DiffUnitsByPath {
   return sortDiffUnitsByPath(grouped);
 }
 
+/** Renders one deterministic factual line per diff unit for future snapshot baselines. */
+export function renderDiffUnitSnapshot(units: DiffUnit[]): string {
+  const lines = sortDiffUnits([...units]).map(formatDiffUnitSnapshotLine);
+
+  return lines.length > 0 ? `${lines.join('\n')}\n` : '';
+}
+
 /** Extracts request schema units from one operation diff. */
 function collectRequestBodyUnits(
   path: string,
@@ -469,6 +476,71 @@ function sortDiffUnitsByPath(grouped: DiffUnitsByPath): DiffUnitsByPath {
         responseStatuses: sortDiffUnits([...operation.responseStatuses]),
       };
     }
+  }
+
+  return sorted;
+}
+
+/** Formats one diff unit as a stable single-line snapshot record. */
+function formatDiffUnitSnapshotLine(unit: DiffUnit): string {
+  return [
+    unit.path,
+    unit.method,
+    unit.side,
+    unit.status,
+    unit.mediaType,
+    unit.location,
+    unit.kind,
+    ...formatDiffUnitValueFields(unit),
+  ]
+    .filter((part): part is string => part !== undefined)
+    .join(' ');
+}
+
+/** Formats changed value fields in a fixed order. */
+function formatDiffUnitValueFields(unit: DiffUnit): string[] {
+  const fields: string[] = [];
+
+  appendDiffUnitValueField(fields, unit, 'added');
+  appendDiffUnitValueField(fields, unit, 'removed');
+  appendDiffUnitValueField(fields, unit, 'from');
+  appendDiffUnitValueField(fields, unit, 'to');
+
+  return fields;
+}
+
+/** Appends a value field only when the unit explicitly contains that property. */
+function appendDiffUnitValueField(
+  fields: string[],
+  unit: DiffUnit,
+  key: 'added' | 'from' | 'removed' | 'to',
+): void {
+  if (Object.prototype.hasOwnProperty.call(unit, key)) {
+    fields.push(`${key}=${stringifySnapshotValue(unit[key])}`);
+  }
+}
+
+/** Stringifies values after recursively sorting unordered collections from oasdiff. */
+function stringifySnapshotValue(value: unknown): string {
+  return JSON.stringify(canonicalizeSnapshotValue(value));
+}
+
+/** Canonicalizes values for stable one-line snapshots. */
+function canonicalizeSnapshotValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value
+      .map(canonicalizeSnapshotValue)
+      .sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)));
+  }
+
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  const sorted: Record<string, unknown> = {};
+
+  for (const [key, child] of Object.entries(value).sort(([left], [right]) => left.localeCompare(right))) {
+    sorted[key] = canonicalizeSnapshotValue(child);
   }
 
   return sorted;

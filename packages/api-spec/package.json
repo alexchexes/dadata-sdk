@@ -36,7 +36,9 @@
     "check:official-upstream": "pnpm exec tsx ./scripts/check-official-upstream.ts",
     "compare:official": "pnpm exec tsx ./scripts/compare-official.ts",
     "compare:official:suggestions-stage-a": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-a.ts",
-    "compare:official:suggestions-stage-b": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts"
+    "compare:official:suggestions-stage-b": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts",
+    "compare:official:suggestions-stage-b:check-snapshot": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts --check-snapshot",
+    "compare:official:suggestions-stage-b:update-snapshot": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts --update-snapshot"
   },
   "devDependencies": {
     "@dadata-sdk/schema-gen": "workspace:*",

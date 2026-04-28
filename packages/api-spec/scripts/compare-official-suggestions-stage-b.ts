@@ -1,8 +1,8 @@
 // Stage B compares payload schemas after Stage A has produced a concrete official suggestions slice.
 // This is still report-only: it normalizes comparison inputs, runs oasdiff, and prints grouped findings.
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
@@ -18,19 +18,31 @@ import {
 import {
   buildDiffUnits,
   buildDiffUnitsByPath,
+  renderDiffUnitSnapshot,
   type DiffUnit,
   type DiffUnitsByPath,
 } from './official-comparison/diff-units.js';
-import { cloneJson, cloneOptionalJson, isRecord, parseJson, readJson, writeJson } from './official-comparison/io.js';
+import {
+  cloneJson,
+  cloneOptionalJson,
+  isRecord,
+  parseJson,
+  readJson,
+  readText,
+  writeJson,
+  writeText,
+} from './official-comparison/io.js';
 import { buildExactPathRegex, HTTP_METHODS, type HttpMethod, sortPaths } from './official-comparison/openapi.js';
 import { printFailedCommand, runCommand } from './official-comparison/process.js';
 
 interface CompareOptions {
+  checkSnapshot: boolean;
   curationPath: string | null;
   keepTemp: boolean;
   maxGroups: number;
   maxSamples: number;
   oasdiffBin: string | null;
+  updateSnapshot: boolean;
 }
 
 interface OasdiffSummary {
@@ -76,7 +88,15 @@ interface OasdiffDiffSummary {
   rootSections: string[];
 }
 
+interface SnapshotResult {
+  message: string;
+  mode: 'check' | 'none' | 'update';
+  ok: boolean;
+  path: string;
+}
+
 const OUR_SPEC_PATH = resolve('dadata.json');
+const SNAPSHOT_PATH = resolve('official/snapshots/suggestions.diff.txt');
 const STAGE_A_SCRIPT_PATH = './scripts/compare-official-suggestions-stage-a.ts';
 const DEFAULT_MAX_GROUPS = 8;
 const DEFAULT_MAX_SAMPLES = 2;
@@ -95,6 +115,7 @@ const revisionComponentPruningPath = join(tempDir, 'ours-suggestions.component-p
 const fullDiffPath = join(tempDir, 'oasdiff-full-diff.json');
 const diffUnitsPath = join(tempDir, 'stage-b-diff-units.json');
 const diffUnitsByPathPath = join(tempDir, 'stage-b-diff-units.by-path.json');
+const diffUnitsSnapshotPath = join(tempDir, 'stage-b-diff-units.snapshot.txt');
 
 try {
   const oasdiffBin = resolveOasdiffBin(options.oasdiffBin);
@@ -137,8 +158,11 @@ try {
   writeJson(fullDiffPath, fullDiff);
   const diffUnits = buildDiffUnits(fullDiff);
   const diffUnitsByPath = buildDiffUnitsByPath(diffUnits);
+  const diffUnitsSnapshot = renderDiffUnitSnapshot(diffUnits);
   writeJson(diffUnitsPath, diffUnits);
   writeJson(diffUnitsByPathPath, diffUnitsByPath);
+  writeText(diffUnitsSnapshotPath, diffUnitsSnapshot);
+  const snapshotResult = handleSnapshot(diffUnitsSnapshot, options);
   const breakingFindings = runOasdiffBreaking(oasdiffBin, projectionPath, revisionSlicePath, matchPathRegex);
 
   printReport({
@@ -147,6 +171,7 @@ try {
     diffUnitsByPath,
     diffUnitsByPathPath,
     diffUnitsPath,
+    diffUnitsSnapshotPath,
     fullDiff,
     fullDiffPath,
     matchPathRegex,
@@ -165,9 +190,14 @@ try {
     revisionNormalizedUnprunedPath,
     revisionSlice,
     revisionSlicePath,
+    snapshotResult,
     summary,
     tempDir,
   });
+
+  if (!snapshotResult.ok) {
+    process.exit(1);
+  }
 } finally {
   if (!options.keepTemp) {
     rmSync(tempDir, { force: true, recursive: true });
@@ -293,6 +323,49 @@ function runOasdiffBreaking(
   });
 }
 
+/** Applies requested snapshot update/check behavior to the generated Stage B snapshot. */
+function handleSnapshot(snapshotText: string, compareOptions: CompareOptions): SnapshotResult {
+  if (compareOptions.updateSnapshot) {
+    mkdirSync(dirname(SNAPSHOT_PATH), { recursive: true });
+    writeText(SNAPSHOT_PATH, snapshotText);
+
+    return {
+      message: 'updated',
+      mode: 'update',
+      ok: true,
+      path: SNAPSHOT_PATH,
+    };
+  }
+
+  if (!compareOptions.checkSnapshot) {
+    return {
+      message: 'not checked',
+      mode: 'none',
+      ok: true,
+      path: SNAPSHOT_PATH,
+    };
+  }
+
+  if (!existsSync(SNAPSHOT_PATH)) {
+    return {
+      message: 'missing snapshot; run with --update-snapshot to create it',
+      mode: 'check',
+      ok: false,
+      path: SNAPSHOT_PATH,
+    };
+  }
+
+  const expected = readText(SNAPSHOT_PATH);
+  const ok = expected === snapshotText;
+
+  return {
+    message: ok ? 'matched' : 'mismatched; run with --update-snapshot if the new diff is accepted',
+    mode: 'check',
+    ok,
+    path: SNAPSHOT_PATH,
+  };
+}
+
 /** Extracts the projected path+method inventory that Stage B is allowed to compare. */
 function extractComparableOperations(document: OpenAPIV3_1.Document): Map<string, Set<HttpMethod>> {
   const operations = new Map<string, Set<HttpMethod>>();
@@ -408,6 +481,7 @@ function printReport(report: {
   diffUnitsByPath: DiffUnitsByPath;
   diffUnitsByPathPath: string;
   diffUnitsPath: string;
+  diffUnitsSnapshotPath: string;
   fullDiff: OasdiffDiff;
   fullDiffPath: string;
   matchPathRegex: string;
@@ -426,6 +500,7 @@ function printReport(report: {
   revisionNormalizedUnprunedPath: string;
   revisionSlice: RevisionSliceResult;
   revisionSlicePath: string;
+  snapshotResult: SnapshotResult;
   summary: OasdiffSummary;
   tempDir: string;
 }): void {
@@ -445,6 +520,7 @@ function printReport(report: {
   console.info(
     `- local ref validation: official ${report.projectionComponentPruning.validatedLocalRefCount}, ours ${report.revisionComponentPruning.validatedLocalRefCount}`,
   );
+  console.info(`- accepted snapshot: ${formatSnapshotResult(report.snapshotResult)}`);
   console.info(`- oasdiff binary: ${report.oasdiffBin}`);
 
   if (report.options.keepTemp) {
@@ -460,6 +536,7 @@ function printReport(report: {
     console.info(`- oasdiff full diff JSON: ${report.fullDiffPath}`);
     console.info(`- Stage B diff units: ${report.diffUnitsPath}`);
     console.info(`- Stage B diff units by path: ${report.diffUnitsByPathPath}`);
+    console.info(`- Stage B diff units snapshot: ${report.diffUnitsSnapshotPath}`);
   }
 
   printNormalizationDetails(
@@ -633,6 +710,15 @@ function formatCounts(counts: Record<string, number>): string {
   }
 
   return entries.map(([key, count]) => `${key} ${count}`).join(', ');
+}
+
+/** Formats snapshot update/check status for the main report. */
+function formatSnapshotResult(result: SnapshotResult): string {
+  if (result.mode === 'none') {
+    return `${result.message} (${result.path})`;
+  }
+
+  return `${result.mode} ${result.ok ? 'ok' : 'failed'}: ${result.message} (${result.path})`;
 }
 
 /** Counts diff units by kind. */
@@ -926,14 +1012,21 @@ function isWarningFinding(finding: OasdiffBreakingFinding): boolean {
 
 /** Parses Stage B CLI options. */
 function parseOptions(args: string[]): CompareOptions {
+  let checkSnapshot = false;
   let curationPath: string | null = null;
   let keepTemp = false;
   let maxGroups = DEFAULT_MAX_GROUPS;
   let maxSamples = DEFAULT_MAX_SAMPLES;
   let oasdiffBin: string | null = null;
+  let updateSnapshot = false;
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
+
+    if (arg === '--check-snapshot') {
+      checkSnapshot = true;
+      continue;
+    }
 
     if (arg === '--curation') {
       curationPath = requireOptionValue(args, index, arg);
@@ -964,15 +1057,26 @@ function parseOptions(args: string[]): CompareOptions {
       continue;
     }
 
+    if (arg === '--update-snapshot') {
+      updateSnapshot = true;
+      continue;
+    }
+
     throw new Error(`Unknown argument: ${arg}`);
   }
 
+  if (checkSnapshot && updateSnapshot) {
+    throw new Error('--check-snapshot and --update-snapshot cannot be used together.');
+  }
+
   return {
+    checkSnapshot,
     curationPath,
     keepTemp,
     maxGroups,
     maxSamples,
     oasdiffBin,
+    updateSnapshot,
   };
 }
 
