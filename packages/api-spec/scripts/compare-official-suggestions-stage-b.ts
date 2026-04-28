@@ -7,6 +7,7 @@ import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
 import {
   COMPARISON_INFO,
+  type ComparisonNormalizationDecision,
   normalizeComparisonDocument,
 } from './official-comparison/comparison-normalization.js';
 
@@ -53,6 +54,11 @@ interface FindingGroup {
   samples: OasdiffBreakingFinding[];
 }
 
+interface RevisionSliceResult {
+  normalizationDecisions: ComparisonNormalizationDecision[];
+  operationCount: number;
+}
+
 const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 const OUR_SPEC_PATH = resolve('dadata.json');
 const STAGE_A_SCRIPT_PATH = './scripts/compare-official-suggestions-stage-a.ts';
@@ -63,7 +69,9 @@ const METADATA_SUMMARY_ELEMENTS = 'description,examples,extensions,summary,title
 const options = parseOptions(process.argv.slice(2));
 const tempDir = mkdtempSync(join(tmpdir(), 'dadata-suggestions-stage-b-'));
 const projectionPath = join(tempDir, 'official-suggestions.projected.json');
+const projectionNormalizationDecisionsPath = join(tempDir, 'official-suggestions.normalization-decisions.json');
 const revisionSlicePath = join(tempDir, 'ours-suggestions.comparable.json');
+const revisionNormalizationDecisionsPath = join(tempDir, 'ours-suggestions.normalization-decisions.json');
 
 try {
   const oasdiffBin = resolveOasdiffBin(options.oasdiffBin);
@@ -77,15 +85,20 @@ try {
   const ourSpec = parseJson<OpenAPIV3_1.Document>(readFileSync(OUR_SPEC_PATH, 'utf8'), 'our dadata.json');
   const comparisonOpenapiVersion = ourSpec.openapi ?? '3.1.1';
 
-  normalizeComparisonDocument(projectedSpec, comparisonOpenapiVersion);
+  const projectionNormalizationDecisions = normalizeComparisonDocument(
+    projectedSpec,
+    comparisonOpenapiVersion,
+  );
   writeJson(projectionPath, projectedSpec);
+  writeJson(projectionNormalizationDecisionsPath, projectionNormalizationDecisions);
 
   const comparableOperations = extractComparableOperations(projectedSpec);
-  const revisionOperationCount = writeComparableRevisionSlice(
+  const revisionSlice = writeComparableRevisionSlice(
     comparableOperations,
     revisionSlicePath,
     ourSpec,
   );
+  writeJson(revisionNormalizationDecisionsPath, revisionSlice.normalizationDecisions);
   const projectedPaths = [...comparableOperations.keys()].sort((left, right) => left.localeCompare(right));
   const matchPathRegex = buildExactPathRegex(projectedPaths);
   const summary = runOasdiffSummary(oasdiffBin, projectionPath, revisionSlicePath, matchPathRegex);
@@ -98,7 +111,10 @@ try {
     options,
     projectedPaths,
     projectionPath,
-    revisionOperationCount,
+    projectionNormalizationDecisions,
+    projectionNormalizationDecisionsPath,
+    revisionNormalizationDecisionsPath,
+    revisionSlice,
     revisionSlicePath,
     summary,
     tempDir,
@@ -222,7 +238,7 @@ function writeComparableRevisionSlice(
   comparableOperations: Map<string, Set<HttpMethod>>,
   outputPath: string,
   ourSpec: OpenAPIV3_1.Document,
-): number {
+): RevisionSliceResult {
   const paths: OpenAPIV3_1.PathsObject = {};
   let operationCount = 0;
 
@@ -263,10 +279,13 @@ function writeComparableRevisionSlice(
     components: cloneOptionalJson(ourSpec.components),
   };
 
-  normalizeComparisonDocument(document, document.openapi ?? '3.1.1');
+  const normalizationDecisions = normalizeComparisonDocument(document, document.openapi ?? '3.1.1');
   writeJson(outputPath, document);
 
-  return operationCount;
+  return {
+    normalizationDecisions,
+    operationCount,
+  };
 }
 
 function resolveOasdiffBin(explicitPath: string | null): string {
@@ -369,7 +388,10 @@ function printReport(report: {
   options: CompareOptions;
   projectedPaths: string[];
   projectionPath: string;
-  revisionOperationCount: number;
+  projectionNormalizationDecisions: ComparisonNormalizationDecision[];
+  projectionNormalizationDecisionsPath: string;
+  revisionNormalizationDecisionsPath: string;
+  revisionSlice: RevisionSliceResult;
   revisionSlicePath: string;
   summary: OasdiffSummary;
   tempDir: string;
@@ -378,16 +400,26 @@ function printReport(report: {
   console.info('Pipeline:');
   console.info('- Stage A projection: clean');
   console.info(`- projected comparable paths: ${report.projectedPaths.length}`);
-  console.info(`- projected comparable operations: ${report.revisionOperationCount}`);
+  console.info(`- projected comparable operations: ${report.revisionSlice.operationCount}`);
   console.info(`- revision source: ${OUR_SPEC_PATH}`);
   console.info('- revision slice: derived from dadata.json with only projected path+method operations');
+  console.info(
+    `- comparison normalization: official ${report.projectionNormalizationDecisions.length}, ours ${report.revisionSlice.normalizationDecisions.length}`,
+  );
   console.info(`- oasdiff binary: ${report.oasdiffBin}`);
 
   if (report.options.keepTemp) {
     console.info(`- temp dir: ${report.tempDir}`);
     console.info(`- projected official spec: ${report.projectionPath}`);
+    console.info(`- projected official normalization decisions: ${report.projectionNormalizationDecisionsPath}`);
     console.info(`- comparable revision spec: ${report.revisionSlicePath}`);
+    console.info(`- comparable revision normalization decisions: ${report.revisionNormalizationDecisionsPath}`);
   }
+
+  printNormalizationDetails(
+    report.projectionNormalizationDecisions,
+    report.revisionSlice.normalizationDecisions,
+  );
 
   console.info('\noasdiff summary:');
   console.info(`- diff: ${report.summary.diff === true ? 'true' : 'false'}`);
@@ -425,6 +457,27 @@ function printReport(report: {
 
   if (report.options.keepTemp) {
     console.info(`- oasdiff path filter regex: ${report.matchPathRegex}`);
+  }
+}
+
+function printNormalizationDetails(
+  officialDecisions: ComparisonNormalizationDecision[],
+  revisionDecisions: ComparisonNormalizationDecision[],
+): void {
+  const groups = new Map<string, number>();
+
+  for (const decision of [...officialDecisions, ...revisionDecisions]) {
+    groups.set(decision.kind, (groups.get(decision.kind) ?? 0) + 1);
+  }
+
+  if (groups.size === 0) {
+    return;
+  }
+
+  console.info('\ncomparison normalization decisions:');
+
+  for (const [kind, count] of [...groups.entries()].sort(([left], [right]) => left.localeCompare(right))) {
+    console.info(`- ${kind}: ${count}`);
   }
 }
 
