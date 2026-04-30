@@ -4608,8 +4608,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -6128,8 +6129,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -6567,8 +6569,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -6729,8 +6732,9 @@
             "description": "`true`, если в состав руководства входят дисквалифицированные лица (19.7+, в данный момент не заполняется)"
           },
           "start_date": {
-            "type": ["number", "null"],
-            "description": "Дата вступления в должность (unix-время в миллисекундах). (24.9+)"
+            "type": ["integer", "null"],
+            "description": "Дата вступления в должность (unix-время в миллисекундах). (24.9+)\n@format int64",
+            "format": "int64"
           }
         },
         "required": ["name", "post", "disqualified", "start_date"]
@@ -7284,16 +7288,19 @@
         "type": "object",
         "properties": {
           "actuality_date": {
-            "type": "number",
-            "description": "Дата актуальности сведений (unix-время в миллисекундах)"
+            "type": "integer",
+            "description": "Дата актуальности сведений (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "registration_date": {
-            "type": "number",
-            "description": "Дата регистрации (unix-время в миллисекундах)"
+            "type": "integer",
+            "description": "Дата регистрации (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "liquidation_date": {
-            "type": ["number", "null"],
-            "description": "Дата ликвидации (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата ликвидации (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "status": {
             "type": "string",
@@ -7391,8 +7398,9 @@
             "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
           },
           "ogrn_date": {
-            "type": "number",
-            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
+            "type": "integer",
+            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "hid": {
             "type": "string",
@@ -7650,8 +7658,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -7827,8 +7836,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -8027,8 +8037,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -8693,16 +8704,19 @@
         "type": "object",
         "properties": {
           "actuality_date": {
-            "type": ["number", "null"],
-            "description": "дата актуальности сведений (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "дата актуальности сведений (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "registration_date": {
-            "type": ["number", "null"],
-            "description": "дата регистрации (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "дата регистрации (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "liquidation_date": {
-            "type": ["number", "null"],
-            "description": "дата ликвидации (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "дата ликвидации (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "status": {
             "type": "string",
@@ -8860,8 +8874,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -8972,8 +8987,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9065,8 +9081,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9179,8 +9196,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9336,8 +9354,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9504,8 +9523,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9644,8 +9664,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9799,8 +9820,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9923,8 +9945,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -9993,8 +10016,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10071,8 +10095,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10154,8 +10179,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10255,8 +10281,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10352,8 +10379,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10440,8 +10468,9 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+            "format": "int32",
             "minimum": 1,
             "maximum": 20,
             "default": 10
@@ -10550,9 +10579,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           },
           "language": {
@@ -10600,9 +10630,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -10618,9 +10649,10 @@
             "maxLength": 300
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           },
           "kpp": {
@@ -10898,8 +10930,9 @@
             "description": "Номер судебного решения"
           },
           "date": {
-            "type": ["number", "null"],
-            "description": "Дата судебного решения (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата судебного решения (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           }
         },
         "required": ["court_name", "number", "date"]
@@ -10984,8 +11017,9 @@
             "description": "Недостоверность сведений об учредителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
           },
           "start_date": {
-            "type": ["number", "null"],
-            "description": "Дата вступления в права учредителя (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата вступления в права учредителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           }
         },
         "required": ["inn", "hid", "type", "share", "invalidity", "start_date"]
@@ -11041,8 +11075,9 @@
             "description": "Недостоверность сведений о руководителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
           },
           "start_date": {
-            "type": ["number", "null"],
-            "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           }
         },
         "required": ["inn", "hid", "type", "invalidity", "start_date"]
@@ -11130,8 +11165,9 @@
             "description": "Номер документа"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": ["string", "null"],
@@ -11157,8 +11193,9 @@
             "description": "Номер документа"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": ["string", "null"],
@@ -11184,8 +11221,9 @@
             "description": "Номер документа"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": ["string", "null"],
@@ -11211,8 +11249,9 @@
             "description": "Номер документа"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": ["string", "null"],
@@ -11238,8 +11277,9 @@
             "description": "Не заполняется"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": "null",
@@ -11326,28 +11366,32 @@
             "description": "Номер документа"
           },
           "issue_date": {
-            "type": ["number", "null"],
-            "description": "Дата выдачи (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата выдачи (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "issue_authority": {
             "type": ["string", "null"],
             "description": "Название выдавшего органа"
           },
           "suspend_date": {
-            "type": ["number", "null"],
-            "description": "Дата приостановки (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата приостановки (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "suspend_authority": {
             "type": ["string", "null"],
             "description": "Название приостановившего органа"
           },
           "valid_from": {
-            "type": ["number", "null"],
-            "description": "Дата начала действия (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата начала действия (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "valid_to": {
-            "type": ["number", "null"],
-            "description": "Дата окончания действия (unix-время в миллисекундах)"
+            "type": ["integer", "null"],
+            "description": "Дата окончания действия (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "activities": {
             "anyOf": [
@@ -11776,8 +11820,9 @@
             "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
           },
           "ogrn_date": {
-            "type": "number",
-            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
+            "type": "integer",
+            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "hid": {
             "type": "string",
@@ -11945,9 +11990,10 @@
             "description": "УНП (учетный номер налогоплательщика)"
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -11962,9 +12008,10 @@
             "description": "БИН (бизнес-идентификационный номер)"
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -11979,9 +12026,10 @@
             "description": "Любой из идентификаторов банка:\n- БИК,\n- SWIFT,\n- ИНН,\n- ИНН + КПП (для филиалов),\n- регистрационному номеру, присвоенному Банком России.\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+"
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           },
           "kpp": {
@@ -12287,9 +12335,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12312,9 +12361,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12334,9 +12384,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12356,9 +12407,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12378,9 +12430,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12406,9 +12459,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12431,9 +12485,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12453,9 +12508,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12475,9 +12531,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12497,9 +12554,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -12519,9 +12577,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },
@@ -13561,9 +13620,10 @@
             "examples": [37.359486]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           },
           "radius_meters": {
@@ -13622,9 +13682,10 @@
             "maximum": 1000
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           },
           "filters": {
@@ -13709,9 +13770,10 @@
             "description": "Текст запроса"
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 300",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 300",
             "default": 10,
+            "format": "int32",
             "maximum": 300
           },
           "scope": {
@@ -13776,8 +13838,9 @@
             "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
           },
           "ogrn_date": {
-            "type": "number",
-            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)"
+            "type": "integer",
+            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
           "hid": {
             "type": "string",
@@ -14169,9 +14232,10 @@
             ]
           },
           "count": {
-            "type": ["number", "null"],
-            "description": "Максимальное количество результатов\n@default 10\n@maximum 20",
+            "type": ["integer", "null"],
+            "description": "Максимальное количество результатов\n@default 10\n@format int32\n@maximum 20",
             "default": 10,
+            "format": "int32",
             "maximum": 20
           }
         },

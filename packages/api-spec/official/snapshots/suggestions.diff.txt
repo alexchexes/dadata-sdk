@@ -1,6 +1,4 @@
-/findAffiliated/party POST request application/json count schema-format-changed from="int32" to=""
 /findAffiliated/party POST request application/json count schema-max-changed from=null to=300
-/findAffiliated/party POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findAffiliated/party POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findAffiliated/party POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -127,9 +125,7 @@
 /findByEmail/company POST response 413 <response> response-status-added
 /findByEmail/company POST response 429 <response> response-status-added
 /findByEmail/company POST response 5XX <response> response-status-added
-/findById/address POST request application/json count schema-format-changed from="int32" to=""
 /findById/address POST request application/json count schema-max-changed from=null to=20
-/findById/address POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/address POST request application/json from_bound schema-property-deleted removed="from_bound"
 /findById/address POST request application/json to_bound schema-property-deleted removed="to_bound"
 /findById/address POST response 200 application/json <schema> schema-type-changed added=[] removed=["object"]
@@ -142,9 +138,7 @@
 /findById/address POST response 413 <response> response-status-added
 /findById/address POST response 429 <response> response-status-added
 /findById/address POST response 5XX <response> response-status-added
-/findById/bank POST request application/json count schema-format-changed from="int32" to=""
 /findById/bank POST request application/json count schema-max-changed from=null to=20
-/findById/bank POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/bank POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/bank POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/bank POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -363,16 +357,10 @@
 /findById/bank POST response 200 application/json suggestions/items/data/phones/items schema-deleted
 /findById/bank POST response 200 application/json suggestions/items/data/registration_number schema-required-added added="registration_number"
 /findById/bank POST response 200 application/json suggestions/items/data/rkc schema-required-added added="rkc"
-/findById/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-format-changed from="int64" to=""
 /findById/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-required-added added="actuality_date"
-/findById/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-type-changed added=["number"] removed=["integer"]
 /findById/bank POST response 200 application/json suggestions/items/data/state/code schema-required-added added="code"
-/findById/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-format-changed from="int64" to=""
 /findById/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-required-added added="liquidation_date"
-/findById/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-type-changed added=["number"] removed=["integer"]
-/findById/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-format-changed from="int64" to=""
 /findById/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-required-added added="registration_date"
-/findById/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-type-changed added=["number"] removed=["integer"]
 /findById/bank POST response 200 application/json suggestions/items/data/swift schema-required-added added="swift"
 /findById/bank POST response 200 application/json suggestions/items/data/treasury_accounts schema-required-added added="treasury_accounts"
 /findById/bank POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
@@ -387,9 +375,7 @@
 /findById/bank POST response 413 <response> response-status-added
 /findById/bank POST response 429 <response> response-status-added
 /findById/bank POST response 5XX <response> response-status-added
-/findById/car_brand POST request application/json count schema-format-changed from="int32" to=""
 /findById/car_brand POST request application/json count schema-max-changed from=null to=20
-/findById/car_brand POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/car_brand POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/car_brand POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/car_brand POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -412,9 +398,7 @@
 /findById/car_brand POST response 413 <response> response-status-added
 /findById/car_brand POST response 429 <response> response-status-added
 /findById/car_brand POST response 5XX <response> response-status-added
-/findById/country POST request application/json count schema-format-changed from="int32" to=""
 /findById/country POST request application/json count schema-max-changed from=null to=20
-/findById/country POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/country POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/country POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/country POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -441,9 +425,7 @@
 /findById/country POST response 413 <response> response-status-added
 /findById/country POST response 429 <response> response-status-added
 /findById/country POST response 5XX <response> response-status-added
-/findById/court POST request application/json count schema-format-changed from="int32" to=""
 /findById/court POST request application/json count schema-max-changed from=null to=20
-/findById/court POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/court POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/court POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/court POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -476,9 +458,7 @@
 /findById/court POST response 413 <response> response-status-added
 /findById/court POST response 429 <response> response-status-added
 /findById/court POST response 5XX <response> response-status-added
-/findById/currency POST request application/json count schema-format-changed from="int32" to=""
 /findById/currency POST request application/json count schema-max-changed from=null to=20
-/findById/currency POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/currency POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/currency POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/currency POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -503,9 +483,7 @@
 /findById/currency POST response 413 <response> response-status-added
 /findById/currency POST response 429 <response> response-status-added
 /findById/currency POST response 5XX <response> response-status-added
-/findById/delivery POST request application/json count schema-format-changed from="int32" to=""
 /findById/delivery POST request application/json count schema-max-changed from=null to=20
-/findById/delivery POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/delivery POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/delivery POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/delivery POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -532,9 +510,7 @@
 /findById/delivery POST response 413 <response> response-status-added
 /findById/delivery POST response 429 <response> response-status-added
 /findById/delivery POST response 5XX <response> response-status-added
-/findById/fias POST request application/json count schema-format-changed from="int32" to=""
 /findById/fias POST request application/json count schema-max-changed from=null to=20
-/findById/fias POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/fias POST request application/json from_bound schema-property-deleted removed="from_bound"
 /findById/fias POST request application/json to_bound schema-property-deleted removed="to_bound"
 /findById/fias POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -631,9 +607,7 @@
 /findById/fias POST response 413 <response> response-status-added
 /findById/fias POST response 429 <response> response-status-added
 /findById/fias POST response 5XX <response> response-status-added
-/findById/fns_unit POST request application/json count schema-format-changed from="int32" to=""
 /findById/fns_unit POST request application/json count schema-max-changed from=null to=20
-/findById/fns_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/fns_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/fns_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fns_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -688,9 +662,7 @@
 /findById/fns_unit POST response 413 <response> response-status-added
 /findById/fns_unit POST response 429 <response> response-status-added
 /findById/fns_unit POST response 5XX <response> response-status-added
-/findById/fts_unit POST request application/json count schema-format-changed from="int32" to=""
 /findById/fts_unit POST request application/json count schema-max-changed from=null to=20
-/findById/fts_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/fts_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/fts_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fts_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -729,9 +701,7 @@
 /findById/fts_unit POST response 413 <response> response-status-added
 /findById/fts_unit POST response 429 <response> response-status-added
 /findById/fts_unit POST response 5XX <response> response-status-added
-/findById/mktu POST request application/json count schema-format-changed from="int32" to=""
 /findById/mktu POST request application/json count schema-max-changed from=null to=20
-/findById/mktu POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/mktu POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/mktu POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/mktu POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -758,9 +728,7 @@
 /findById/mktu POST response 413 <response> response-status-added
 /findById/mktu POST response 429 <response> response-status-added
 /findById/mktu POST response 5XX <response> response-status-added
-/findById/okpd2 POST request application/json count schema-format-changed from="int32" to=""
 /findById/okpd2 POST request application/json count schema-max-changed from=null to=20
-/findById/okpd2 POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/okpd2 POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/okpd2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okpd2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -785,9 +753,7 @@
 /findById/okpd2 POST response 413 <response> response-status-added
 /findById/okpd2 POST response 429 <response> response-status-added
 /findById/okpd2 POST response 5XX <response> response-status-added
-/findById/oktmo POST request application/json count schema-format-changed from="int32" to=""
 /findById/oktmo POST request application/json count schema-max-changed from=null to=20
-/findById/oktmo POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/oktmo POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/oktmo POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/oktmo POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -818,9 +784,7 @@
 /findById/oktmo POST response 413 <response> response-status-added
 /findById/oktmo POST response 429 <response> response-status-added
 /findById/oktmo POST response 5XX <response> response-status-added
-/findById/okved2 POST request application/json count schema-format-changed from="int32" to=""
 /findById/okved2 POST request application/json count schema-max-changed from=null to=20
-/findById/okved2 POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/okved2 POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/okved2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okved2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -847,9 +811,7 @@
 /findById/okved2 POST response 5XX <response> response-status-added
 /findById/party POST request application/json branch_type schema-type-changed added=[] removed=["array","null"]
 /findById/party POST request application/json branch_type/items schema-deleted
-/findById/party POST request application/json count schema-format-changed from="int32" to=""
 /findById/party POST request application/json count schema-max-changed from=null to=20
-/findById/party POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/party POST request application/json query schema-maxLength-changed from=null to=300
 /findById/party POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/party POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
@@ -932,9 +894,7 @@
 /findById/party POST response 413 <response> response-status-added
 /findById/party POST response 429 <response> response-status-added
 /findById/party POST response 5XX <response> response-status-added
-/findById/party_by POST request application/json count schema-format-changed from="int32" to=""
 /findById/party_by POST request application/json count schema-max-changed from=null to=20
-/findById/party_by POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/party_by POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/party_by POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_by POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -985,9 +945,7 @@
 /findById/party_by POST response 413 <response> response-status-added
 /findById/party_by POST response 429 <response> response-status-added
 /findById/party_by POST response 5XX <response> response-status-added
-/findById/party_kz POST request application/json count schema-format-changed from="int32" to=""
 /findById/party_kz POST request application/json count schema-max-changed from=null to=20
-/findById/party_kz POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/party_kz POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/party_kz POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_kz POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -1054,9 +1012,7 @@
 /findById/party_kz POST response 413 <response> response-status-added
 /findById/party_kz POST response 429 <response> response-status-added
 /findById/party_kz POST response 5XX <response> response-status-added
-/findById/postal_unit POST request application/json count schema-format-changed from="int32" to=""
 /findById/postal_unit POST request application/json count schema-max-changed from=null to=20
-/findById/postal_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /findById/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/postal_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -1103,9 +1059,7 @@
 /findById/postal_unit POST response 413 <response> response-status-added
 /findById/postal_unit POST response 429 <response> response-status-added
 /findById/postal_unit POST response 5XX <response> response-status-added
-/geolocate/address POST request application/json count schema-format-changed from="int32" to=""
 /geolocate/address POST request application/json count schema-max-changed from=null to=20
-/geolocate/address POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /geolocate/address POST request application/json lat schema-format-changed from="double" to=""
 /geolocate/address POST request application/json lat schema-required-added added="lat"
 /geolocate/address POST request application/json lat schema-type-changed added=[] removed=["null"]
@@ -1124,9 +1078,7 @@
 /geolocate/address POST response 413 <response> response-status-added
 /geolocate/address POST response 429 <response> response-status-added
 /geolocate/address POST response 5XX <response> response-status-added
-/geolocate/postal_unit POST request application/json count schema-format-changed from="int32" to=""
 /geolocate/postal_unit POST request application/json count schema-max-changed from=null to=20
-/geolocate/postal_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /geolocate/postal_unit POST request application/json filters/items/additionalProperties schema-deleted
 /geolocate/postal_unit POST request application/json filters/items/address_kladr_id schema-property-added added="address_kladr_id"
 /geolocate/postal_unit POST request application/json filters/items/is_closed schema-property-added added="is_closed"
@@ -1197,10 +1149,8 @@
 /iplocate/address POST response 413 <response> response-status-added
 /iplocate/address POST response 429 <response> response-status-added
 /iplocate/address POST response 5XX <response> response-status-added
-/suggest/address POST request application/json count schema-format-changed from="int32" to=""
 /suggest/address POST request application/json count schema-max-changed from=null to=20
 /suggest/address POST request application/json count schema-min-changed from=null to=1
-/suggest/address POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/address POST request application/json from_bound/include schema-property-deleted removed="include"
 /suggest/address POST request application/json from_bound/value schema-enum-value-added added="area"
 /suggest/address POST request application/json from_bound/value schema-enum-value-added added="city"
@@ -1243,10 +1193,8 @@
 /suggest/address POST response 413 <response> response-status-added
 /suggest/address POST response 429 <response> response-status-added
 /suggest/address POST response 5XX <response> response-status-added
-/suggest/bank POST request application/json count schema-format-changed from="int32" to=""
 /suggest/bank POST request application/json count schema-max-changed from=null to=20
 /suggest/bank POST request application/json count schema-min-changed from=null to=1
-/suggest/bank POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/bank POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/bank POST request application/json status/items schema-enum-value-deleted removed="BANKRUPT"
 /suggest/bank POST request application/json status/items schema-enum-value-deleted removed="REORGANIZING"
@@ -1468,16 +1416,10 @@
 /suggest/bank POST response 200 application/json suggestions/items/data/phones/items schema-deleted
 /suggest/bank POST response 200 application/json suggestions/items/data/registration_number schema-required-added added="registration_number"
 /suggest/bank POST response 200 application/json suggestions/items/data/rkc schema-required-added added="rkc"
-/suggest/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-format-changed from="int64" to=""
 /suggest/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-required-added added="actuality_date"
-/suggest/bank POST response 200 application/json suggestions/items/data/state/actuality_date schema-type-changed added=["number"] removed=["integer"]
 /suggest/bank POST response 200 application/json suggestions/items/data/state/code schema-required-added added="code"
-/suggest/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-format-changed from="int64" to=""
 /suggest/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-required-added added="liquidation_date"
-/suggest/bank POST response 200 application/json suggestions/items/data/state/liquidation_date schema-type-changed added=["number"] removed=["integer"]
-/suggest/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-format-changed from="int64" to=""
 /suggest/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-required-added added="registration_date"
-/suggest/bank POST response 200 application/json suggestions/items/data/state/registration_date schema-type-changed added=["number"] removed=["integer"]
 /suggest/bank POST response 200 application/json suggestions/items/data/swift schema-required-added added="swift"
 /suggest/bank POST response 200 application/json suggestions/items/data/treasury_accounts schema-required-added added="treasury_accounts"
 /suggest/bank POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
@@ -1492,10 +1434,8 @@
 /suggest/bank POST response 413 <response> response-status-added
 /suggest/bank POST response 429 <response> response-status-added
 /suggest/bank POST response 5XX <response> response-status-added
-/suggest/car_brand POST request application/json count schema-format-changed from="int32" to=""
 /suggest/car_brand POST request application/json count schema-max-changed from=null to=20
 /suggest/car_brand POST request application/json count schema-min-changed from=null to=1
-/suggest/car_brand POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/car_brand POST request application/json filters schema-property-deleted removed="filters"
 /suggest/car_brand POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/car_brand POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -1520,10 +1460,8 @@
 /suggest/car_brand POST response 413 <response> response-status-added
 /suggest/car_brand POST response 429 <response> response-status-added
 /suggest/car_brand POST response 5XX <response> response-status-added
-/suggest/country POST request application/json count schema-format-changed from="int32" to=""
 /suggest/country POST request application/json count schema-max-changed from=null to=20
 /suggest/country POST request application/json count schema-min-changed from=null to=1
-/suggest/country POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/country POST request application/json filters schema-property-deleted removed="filters"
 /suggest/country POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/country POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -1552,10 +1490,8 @@
 /suggest/country POST response 413 <response> response-status-added
 /suggest/country POST response 429 <response> response-status-added
 /suggest/country POST response 5XX <response> response-status-added
-/suggest/court POST request application/json count schema-format-changed from="int32" to=""
 /suggest/court POST request application/json count schema-max-changed from=null to=20
 /suggest/court POST request application/json count schema-min-changed from=null to=1
-/suggest/court POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/court POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/court POST request application/json filters/items/court_type schema-property-added added="court_type"
 /suggest/court POST request application/json query schema-maxLength-changed from=null to=300
@@ -1591,10 +1527,8 @@
 /suggest/court POST response 413 <response> response-status-added
 /suggest/court POST response 429 <response> response-status-added
 /suggest/court POST response 5XX <response> response-status-added
-/suggest/currency POST request application/json count schema-format-changed from="int32" to=""
 /suggest/currency POST request application/json count schema-max-changed from=null to=20
 /suggest/currency POST request application/json count schema-min-changed from=null to=1
-/suggest/currency POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/currency POST request application/json filters schema-property-deleted removed="filters"
 /suggest/currency POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/currency POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -1621,10 +1555,8 @@
 /suggest/currency POST response 413 <response> response-status-added
 /suggest/currency POST response 429 <response> response-status-added
 /suggest/currency POST response 5XX <response> response-status-added
-/suggest/email POST request application/json count schema-format-changed from="int32" to=""
 /suggest/email POST request application/json count schema-max-changed from=null to=20
 /suggest/email POST request application/json count schema-min-changed from=null to=1
-/suggest/email POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/email POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/email POST response 200 application/json suggestions schema-required-added added="suggestions"
 /suggest/email POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
@@ -1649,10 +1581,8 @@
 /suggest/email POST response 413 <response> response-status-added
 /suggest/email POST response 429 <response> response-status-added
 /suggest/email POST response 5XX <response> response-status-added
-/suggest/fias POST request application/json count schema-format-changed from="int32" to=""
 /suggest/fias POST request application/json count schema-max-changed from=null to=20
 /suggest/fias POST request application/json count schema-min-changed from=null to=1
-/suggest/fias POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/fias POST request application/json from_bound/include schema-property-deleted removed="include"
 /suggest/fias POST request application/json from_bound/value schema-enum-value-added added="area"
 /suggest/fias POST request application/json from_bound/value schema-enum-value-added added="city"
@@ -1768,10 +1698,8 @@
 /suggest/fias POST response 413 <response> response-status-added
 /suggest/fias POST response 429 <response> response-status-added
 /suggest/fias POST response 5XX <response> response-status-added
-/suggest/fio POST request application/json count schema-format-changed from="int32" to=""
 /suggest/fio POST request application/json count schema-max-changed from=null to=20
 /suggest/fio POST request application/json count schema-min-changed from=null to=1
-/suggest/fio POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/fio POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/fio POST response 200 application/json suggestions schema-required-added added="suggestions"
 /suggest/fio POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
@@ -1800,10 +1728,8 @@
 /suggest/fio POST response 413 <response> response-status-added
 /suggest/fio POST response 429 <response> response-status-added
 /suggest/fio POST response 5XX <response> response-status-added
-/suggest/fms_unit POST request application/json count schema-format-changed from="int32" to=""
 /suggest/fms_unit POST request application/json count schema-max-changed from=null to=20
 /suggest/fms_unit POST request application/json count schema-min-changed from=null to=1
-/suggest/fms_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/fms_unit POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/fms_unit POST request application/json filters/items/region_code schema-property-added added="region_code"
 /suggest/fms_unit POST request application/json filters/items/type schema-property-added added="type"
@@ -1832,10 +1758,8 @@
 /suggest/fms_unit POST response 413 <response> response-status-added
 /suggest/fms_unit POST response 429 <response> response-status-added
 /suggest/fms_unit POST response 5XX <response> response-status-added
-/suggest/fns_unit POST request application/json count schema-format-changed from="int32" to=""
 /suggest/fns_unit POST request application/json count schema-max-changed from=null to=20
 /suggest/fns_unit POST request application/json count schema-min-changed from=null to=1
-/suggest/fns_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/fns_unit POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/fns_unit POST request application/json filters/items/region_code schema-property-added added="region_code"
 /suggest/fns_unit POST request application/json query schema-maxLength-changed from=null to=300
@@ -1893,10 +1817,8 @@
 /suggest/fns_unit POST response 413 <response> response-status-added
 /suggest/fns_unit POST response 429 <response> response-status-added
 /suggest/fns_unit POST response 5XX <response> response-status-added
-/suggest/fts_unit POST request application/json count schema-format-changed from="int32" to=""
 /suggest/fts_unit POST request application/json count schema-max-changed from=null to=20
 /suggest/fts_unit POST request application/json count schema-min-changed from=null to=1
-/suggest/fts_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/fts_unit POST request application/json filters schema-property-deleted removed="filters"
 /suggest/fts_unit POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/fts_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -1937,10 +1859,8 @@
 /suggest/fts_unit POST response 413 <response> response-status-added
 /suggest/fts_unit POST response 429 <response> response-status-added
 /suggest/fts_unit POST response 5XX <response> response-status-added
-/suggest/metro POST request application/json count schema-format-changed from="int32" to=""
 /suggest/metro POST request application/json count schema-max-changed from=null to=20
 /suggest/metro POST request application/json count schema-min-changed from=null to=1
-/suggest/metro POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/metro POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/metro POST request application/json filters/items/city schema-property-added added="city"
 /suggest/metro POST request application/json filters/items/city_fias_id schema-property-added added="city_fias_id"
@@ -1984,10 +1904,8 @@
 /suggest/metro POST response 413 <response> response-status-added
 /suggest/metro POST response 429 <response> response-status-added
 /suggest/metro POST response 5XX <response> response-status-added
-/suggest/mktu POST request application/json count schema-format-changed from="int32" to=""
 /suggest/mktu POST request application/json count schema-max-changed from=null to=20
 /suggest/mktu POST request application/json count schema-min-changed from=null to=1
-/suggest/mktu POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/mktu POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/mktu POST request application/json filters/items/class schema-property-added added="class"
 /suggest/mktu POST request application/json query schema-maxLength-changed from=null to=300
@@ -2017,10 +1935,8 @@
 /suggest/mktu POST response 413 <response> response-status-added
 /suggest/mktu POST response 429 <response> response-status-added
 /suggest/mktu POST response 5XX <response> response-status-added
-/suggest/okpd2 POST request application/json count schema-format-changed from="int32" to=""
 /suggest/okpd2 POST request application/json count schema-max-changed from=null to=20
 /suggest/okpd2 POST request application/json count schema-min-changed from=null to=1
-/suggest/okpd2 POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/okpd2 POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/okpd2 POST request application/json filters/items/razdel schema-property-added added="razdel"
 /suggest/okpd2 POST request application/json query schema-maxLength-changed from=null to=300
@@ -2048,10 +1964,8 @@
 /suggest/okpd2 POST response 413 <response> response-status-added
 /suggest/okpd2 POST response 429 <response> response-status-added
 /suggest/okpd2 POST response 5XX <response> response-status-added
-/suggest/oktmo POST request application/json count schema-format-changed from="int32" to=""
 /suggest/oktmo POST request application/json count schema-max-changed from=null to=20
 /suggest/oktmo POST request application/json count schema-min-changed from=null to=1
-/suggest/oktmo POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/oktmo POST request application/json filters schema-property-deleted removed="filters"
 /suggest/oktmo POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/oktmo POST response 200 application/json suggestions schema-required-added added="suggestions"
@@ -2084,10 +1998,8 @@
 /suggest/oktmo POST response 413 <response> response-status-added
 /suggest/oktmo POST response 429 <response> response-status-added
 /suggest/oktmo POST response 5XX <response> response-status-added
-/suggest/okved2 POST request application/json count schema-format-changed from="int32" to=""
 /suggest/okved2 POST request application/json count schema-max-changed from=null to=20
 /suggest/okved2 POST request application/json count schema-min-changed from=null to=1
-/suggest/okved2 POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/okved2 POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/okved2 POST request application/json filters/items/razdel schema-property-added added="razdel"
 /suggest/okved2 POST request application/json query schema-maxLength-changed from=null to=300
@@ -2117,10 +2029,8 @@
 /suggest/okved2 POST response 5XX <response> response-status-added
 /suggest/party POST request application/json branch_type schema-type-changed added=[] removed=["array","null"]
 /suggest/party POST request application/json branch_type/items schema-deleted
-/suggest/party POST request application/json count schema-format-changed from="int32" to=""
 /suggest/party POST request application/json count schema-max-changed from=null to=20
 /suggest/party POST request application/json count schema-min-changed from=null to=1
-/suggest/party POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/party POST request application/json query schema-maxLength-changed from=null to=300
 /suggest/party POST response 200 application/json suggestions schema-required-added added="suggestions"
 /suggest/party POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
@@ -2203,10 +2113,8 @@
 /suggest/party POST response 413 <response> response-status-added
 /suggest/party POST response 429 <response> response-status-added
 /suggest/party POST response 5XX <response> response-status-added
-/suggest/party_by POST request application/json count schema-format-changed from="int32" to=""
 /suggest/party_by POST request application/json count schema-max-changed from=null to=20
 /suggest/party_by POST request application/json count schema-min-changed from=null to=1
-/suggest/party_by POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/party_by POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/party_by POST request application/json filters/items/status schema-property-added added="status"
 /suggest/party_by POST request application/json filters/items/type schema-property-added added="type"
@@ -2261,10 +2169,8 @@
 /suggest/party_by POST response 413 <response> response-status-added
 /suggest/party_by POST response 429 <response> response-status-added
 /suggest/party_by POST response 5XX <response> response-status-added
-/suggest/party_kz POST request application/json count schema-format-changed from="int32" to=""
 /suggest/party_kz POST request application/json count schema-max-changed from=null to=20
 /suggest/party_kz POST request application/json count schema-min-changed from=null to=1
-/suggest/party_kz POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/party_kz POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/party_kz POST request application/json filters/items/type schema-property-added added="type"
 /suggest/party_kz POST request application/json query schema-maxLength-changed from=null to=300
@@ -2334,10 +2240,8 @@
 /suggest/party_kz POST response 413 <response> response-status-added
 /suggest/party_kz POST response 429 <response> response-status-added
 /suggest/party_kz POST response 5XX <response> response-status-added
-/suggest/postal_unit POST request application/json count schema-format-changed from="int32" to=""
 /suggest/postal_unit POST request application/json count schema-max-changed from=null to=20
 /suggest/postal_unit POST request application/json count schema-min-changed from=null to=1
-/suggest/postal_unit POST request application/json count schema-type-changed added=["number"] removed=["integer"]
 /suggest/postal_unit POST request application/json filters/items/additionalProperties schema-deleted
 /suggest/postal_unit POST request application/json filters/items/address_kladr_id schema-property-added added="address_kladr_id"
 /suggest/postal_unit POST request application/json filters/items/is_closed schema-property-added added="is_closed"

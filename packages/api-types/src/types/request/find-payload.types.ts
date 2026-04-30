@@ -10,6 +10,7 @@ export interface BaseFindByIdPayload {
   /**
    * Максимальное количество результатов
    * @default 10
+   * @format int32
    * @maximum 20
    */
   count?: number | null;

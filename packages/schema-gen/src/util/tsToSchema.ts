@@ -8,6 +8,7 @@ import { log, logWarn } from './log.js';
 import { replaceFullDescription } from './replaceFullDescription.js';
 import { allowAdditionalProperties } from './allowAdditionalProperties.js';
 import { inlineSingleRefGenerics } from './inlineSingleRefGenerics.js';
+import { normalizeIntegerFormats } from './normalizeIntegerFormats.js';
 
 export const tsToSchema = (generatorConfig: Config & { tsconfig?: string }): Schema => {
   const config: CompletedConfig = {
@@ -34,6 +35,7 @@ function postProcessGeneratedSchema(schema: Schema) {
   // Since schemas aren't unofficial, we should allow "additionalProperties" on all types so schemas
   // remain usable when Dadata adds new fields and we haven't updated the schemas yet
   schema = allowAdditionalProperties(schema);
+  schema = normalizeIntegerFormats(schema);
 
   checkForWarnings(schema);
   return schema;

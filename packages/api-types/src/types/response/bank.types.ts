@@ -102,11 +102,20 @@ export interface BankOpfInfoCbr {
 }
 
 export interface BankStateInfo {
-  /** дата актуальности сведений (unix-время в миллисекундах) */
+  /**
+   * дата актуальности сведений (unix-время в миллисекундах)
+   * @format int64
+   */
   actuality_date: number | null;
-  /** дата регистрации (unix-время в миллисекундах) */
+  /**
+   * дата регистрации (unix-время в миллисекундах)
+   * @format int64
+   */
   registration_date: number | null;
-  /** дата ликвидации (unix-время в миллисекундах) */
+  /**
+   * дата ликвидации (unix-время в миллисекундах)
+   * @format int64
+   */
   liquidation_date: number | null;
   /**
    * Статус финансовой организации

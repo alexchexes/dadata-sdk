@@ -135,6 +135,7 @@ export interface BaseSuggestPayload {
   query: string;
   /**
    * Максимальное количество результатов.
+   * @format int32
    * @minimum 1
    * @maximum 20
    * @default 10

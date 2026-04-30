@@ -11,6 +11,7 @@ export interface FindAffiliatedPayload {
   /**
    * Максимальное количество результатов
    * @default 10
+   * @format int32
    * @maximum 300
    */
   count?: number | null;

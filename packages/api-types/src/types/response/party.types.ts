@@ -120,16 +120,28 @@ export interface PartyManagementInfo {
   post: string;
   /** `true`, если в состав руководства входят дисквалифицированные лица (19.7+, в данный момент не заполняется) */
   disqualified: null;
-  /** Дата вступления в должность (unix-время в миллисекундах). (24.9+) */
+  /**
+   * Дата вступления в должность (unix-время в миллисекундах). (24.9+)
+   * @format int64
+   */
   start_date: number | null;
 }
 
 export interface PartyStateInfo {
-  /** Дата актуальности сведений (unix-время в миллисекундах) */
+  /**
+   * Дата актуальности сведений (unix-время в миллисекундах)
+   * @format int64
+   */
   actuality_date: number;
-  /** Дата регистрации (unix-время в миллисекундах) */
+  /**
+   * Дата регистрации (unix-время в миллисекундах)
+   * @format int64
+   */
   registration_date: number;
-  /** Дата ликвидации (unix-время в миллисекундах) */
+  /**
+   * Дата ликвидации (unix-время в миллисекундах)
+   * @format int64
+   */
   liquidation_date: number | null;
   /**
    * Статус организации
@@ -221,7 +233,10 @@ export interface PartySuggestionData {
    * Для представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП.
    */
   ogrn: string;
-  /** Дата выдачи ОГРН. (unix-время в миллисекундах) */
+  /**
+   * Дата выдачи ОГРН. (unix-время в миллисекундах)
+   * @format int64
+   */
   ogrn_date: number;
   /** Внутренний идентификатор в Дадате */
   hid: string;
@@ -413,7 +428,10 @@ export interface PartyFounder {
    * - {@link https://dadata.ru/api/find-party/#invalidity}
    */
   invalidity: InvalidityInfo | null;
-  /** Дата вступления в права учредителя (unix-время в миллисекундах) */
+  /**
+   * Дата вступления в права учредителя (unix-время в миллисекундах)
+   * @format int64
+   */
   start_date: number | null;
 }
 
@@ -437,7 +455,10 @@ export interface PartyManager {
    * - {@link https://dadata.ru/api/find-party/#invalidity}
    */
   invalidity: null | InvalidityInfo;
-  /** Дата вступления в должность руководителя (unix-время в миллисекундах) */
+  /**
+   * Дата вступления в должность руководителя (unix-время в миллисекундах)
+   * @format int64
+   */
   start_date: number | null;
 }
 
@@ -527,7 +548,10 @@ export interface CourtDecisionInfo {
   court_name: string | null;
   /** Номер судебного решения */
   number: string | null;
-  /** Дата судебного решения (unix-время в миллисекундах) */
+  /**
+   * Дата судебного решения (unix-время в миллисекундах)
+   * @format int64
+   */
   date: number | null;
 }
 
@@ -593,7 +617,10 @@ interface DocumentInfo<
   series: string | null;
   /** Номер документа */
   number: string | null;
-  /** Дата выдачи / регистрациии (unix-время в миллисекундах) */
+  /**
+   * Дата выдачи / регистрациии (unix-время в миллисекундах)
+   * @format int64
+   */
   issue_date: number | null;
   /** Серия документа */
   issue_authority: string | null;
@@ -625,17 +652,29 @@ export interface LicenseInfo {
   series: string | null;
   /** Номер документа */
   number: string | null;
-  /** Дата выдачи (unix-время в миллисекундах) */
+  /**
+   * Дата выдачи (unix-время в миллисекундах)
+   * @format int64
+   */
   issue_date: number | null;
   /** Название выдавшего органа */
   issue_authority: string | null;
-  /** Дата приостановки (unix-время в миллисекундах) */
+  /**
+   * Дата приостановки (unix-время в миллисекундах)
+   * @format int64
+   */
   suspend_date: number | null;
   /** Название приостановившего органа */
   suspend_authority: string | null;
-  /** Дата начала действия (unix-время в миллисекундах) */
+  /**
+   * Дата начала действия (unix-время в миллисекундах)
+   * @format int64
+   */
   valid_from: number | null;
-  /** Дата окончания действия (unix-время в миллисекундах) */
+  /**
+   * Дата окончания действия (unix-время в миллисекундах)
+   * @format int64
+   */
   valid_to: number | null;
   /** Перечень лицензируемых видов деятельности */
   activities: string[] | null;
