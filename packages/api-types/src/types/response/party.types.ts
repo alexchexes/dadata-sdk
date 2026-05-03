@@ -489,7 +489,10 @@ export interface RichPartySuggestionData
   extends Override<
     PartySuggestionData,
     {
-      /** Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+) */
+      /**
+       * Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)
+       * @format int32
+       */
       employee_count: number | null;
 
       /** Коды ОКВЭД дополнительных видов деятельности (Тарифы «Расширенный» и «Максимальный») */
@@ -801,6 +804,7 @@ export interface PartyByEmailCompanyInfo {
   okved_name: string | null;
   /**
    * Среднесписочная численность работников (заполнена для 65% компаний)
+   * @format int32
    * @example 10
    */
   employee_count: number | null;

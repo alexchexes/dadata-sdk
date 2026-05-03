@@ -7,7 +7,10 @@ export interface AddressMetroItem {
   name: null | string;
   /** название линии */
   line: null | string;
-  /** расстояние до станции в километрах */
+  /**
+   * расстояние до станции в километрах
+   * @format double
+   */
   distance: null | number;
 }
 

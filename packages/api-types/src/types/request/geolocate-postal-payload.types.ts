@@ -6,16 +6,19 @@ import type { SuggestPostalUnitFilter } from './suggest-payload-postal_unit.type
 export interface GeolocatePostalUnitPayload {
   /**
    * Географическая широта
+   * @format double
    * @example 55.878
    */
   lat: number;
   /**
    * Географическая долгота
+   * @format double
    * @example 37.653
    */
   lon: number;
   /**
    * Радиус поиска в метрах
+   * @format double
    * @default 100
    * @maximum 1000
    */

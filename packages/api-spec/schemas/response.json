@@ -158,7 +158,11 @@
       "properties": {
         "name": { "type": ["null", "string"], "description": "название станции" },
         "line": { "type": ["null", "string"], "description": "название линии" },
-        "distance": { "type": ["null", "number"], "description": "расстояние до станции в километрах" }
+        "distance": {
+          "type": ["null", "number"],
+          "description": "расстояние до станции в километрах\n@format double",
+          "format": "double"
+        }
       },
       "required": ["name", "line", "distance"]
     },
@@ -4030,8 +4034,9 @@
       "type": "object",
       "properties": {
         "employee_count": {
-          "type": ["number", "null"],
-          "description": "Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)"
+          "type": ["integer", "null"],
+          "description": "Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)\n@format int32",
+          "format": "int32"
         },
         "okveds": {
           "anyOf": [{ "type": "null" }, { "type": "array", "items": { "$ref": "#/definitions/PartyOkvedInfo" } }],
@@ -4869,9 +4874,10 @@
           "examples": ["Деятельность по обработке данных ... и связанная с этим деятельность"]
         },
         "employee_count": {
-          "type": ["number", "null"],
-          "description": "Среднесписочная численность работников (заполнена для 65% компаний)\n@example 10",
-          "examples": [10]
+          "type": ["integer", "null"],
+          "description": "Среднесписочная численность работников (заполнена для 65% компаний)\n@format int32\n@example 10",
+          "examples": [10],
+          "format": "int32"
         },
         "income": {
           "type": ["number", "null"],

@@ -4583,15 +4583,18 @@
         "properties": {
           "lat": {
             "type": ["string", "number"],
-            "description": "Географическая широта, например: `'59.244634'`"
+            "description": "Географическая широта, например: `'59.244634'`\n@format double",
+            "format": "double"
           },
           "lon": {
             "type": ["string", "number"],
-            "description": "Географическая долгота, например: `'39.913355'`"
+            "description": "Географическая долгота, например: `'39.913355'`\n@format double",
+            "format": "double"
           },
           "radius_meters": {
             "type": ["number", "null"],
-            "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
+            "description": "Радиус поиска в метрах\n@format double\n@default 100\n@maximum 100000",
+            "format": "double",
             "default": 100,
             "maximum": 100000
           }
@@ -4740,7 +4743,8 @@
           },
           "distance": {
             "type": ["null", "number"],
-            "description": "расстояние до станции в километрах"
+            "description": "расстояние до станции в километрах\n@format double",
+            "format": "double"
           }
         },
         "required": ["name", "line", "distance"]
@@ -11629,8 +11633,9 @@
         "type": "object",
         "properties": {
           "employee_count": {
-            "type": ["number", "null"],
-            "description": "Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)"
+            "type": ["integer", "null"],
+            "description": "Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)\n@format int32",
+            "format": "int32"
           },
           "okveds": {
             "anyOf": [
@@ -13611,13 +13616,22 @@
         "properties": {
           "lat": {
             "type": "number",
-            "description": "Географическая широта\n@example 55.601983",
-            "examples": [55.601983]
+            "description": "Географическая широта\n@format double\n@example 55.601983",
+            "examples": [55.601983],
+            "format": "double"
           },
           "lon": {
             "type": "number",
-            "description": "Географическая долгота\n@example 37.359486",
-            "examples": [37.359486]
+            "description": "Географическая долгота\n@format double\n@example 37.359486",
+            "examples": [37.359486],
+            "format": "double"
+          },
+          "radius_meters": {
+            "type": ["number", "null"],
+            "description": "Радиус поиска в метрах\n@format double\n@default 100\n@maximum 1000",
+            "format": "double",
+            "default": 100,
+            "maximum": 1000
           },
           "count": {
             "type": ["integer", "null"],
@@ -13625,12 +13639,6 @@
             "default": 10,
             "format": "int32",
             "maximum": 20
-          },
-          "radius_meters": {
-            "type": ["number", "null"],
-            "description": "Радиус поиска в метрах\n@default 100\n@maximum 1000",
-            "default": 100,
-            "maximum": 1000
           },
           "language": {
             "anyOf": [
@@ -13667,17 +13675,20 @@
         "properties": {
           "lat": {
             "type": "number",
-            "description": "Географическая широта\n@example 55.878",
-            "examples": [55.878]
+            "description": "Географическая широта\n@format double\n@example 55.878",
+            "examples": [55.878],
+            "format": "double"
           },
           "lon": {
             "type": "number",
-            "description": "Географическая долгота\n@example 37.653",
-            "examples": [37.653]
+            "description": "Географическая долгота\n@format double\n@example 37.653",
+            "examples": [37.653],
+            "format": "double"
           },
           "radius_meters": {
             "type": ["number", "null"],
-            "description": "Радиус поиска в метрах\n@default 100\n@maximum 1000",
+            "description": "Радиус поиска в метрах\n@format double\n@default 100\n@maximum 1000",
+            "format": "double",
             "default": 100,
             "maximum": 1000
           },
@@ -14130,9 +14141,10 @@
             "examples": ["Деятельность по обработке данных ... и связанная с этим деятельность"]
           },
           "employee_count": {
-            "type": ["number", "null"],
-            "description": "Среднесписочная численность работников (заполнена для 65% компаний)\n@example 10",
-            "examples": [10]
+            "type": ["integer", "null"],
+            "description": "Среднесписочная численность работников (заполнена для 65% компаний)\n@format int32\n@example 10",
+            "examples": [10],
+            "format": "int32"
           },
           "income": {
             "type": ["number", "null"],

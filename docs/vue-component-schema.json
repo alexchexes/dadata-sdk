@@ -477,8 +477,9 @@
           "maxLength": 300
         },
         "count": {
-          "type": ["number", "null"],
-          "description": "Максимальное количество результатов.\n@minimum 1\n@maximum 20\n@default 10",
+          "type": ["integer", "null"],
+          "description": "Максимальное количество результатов.\n@format int32\n@minimum 1\n@maximum 20\n@default 10",
+          "format": "int32",
           "minimum": 1,
           "maximum": 20,
           "default": 10
@@ -873,11 +874,20 @@
     "RadiusFilter": {
       "type": "object",
       "properties": {
-        "lat": { "type": ["string", "number"], "description": "Географическая широта, например: `'59.244634'`" },
-        "lon": { "type": ["string", "number"], "description": "Географическая долгота, например: `'39.913355'`" },
+        "lat": {
+          "type": ["string", "number"],
+          "description": "Географическая широта, например: `'59.244634'`\n@format double",
+          "format": "double"
+        },
+        "lon": {
+          "type": ["string", "number"],
+          "description": "Географическая долгота, например: `'39.913355'`\n@format double",
+          "format": "double"
+        },
         "radius_meters": {
           "type": ["number", "null"],
-          "description": "Радиус поиска в метрах\n@default 100\n@maximum 100000",
+          "description": "Радиус поиска в метрах\n@format double\n@default 100\n@maximum 100000",
+          "format": "double",
           "default": 100,
           "maximum": 100000
         }

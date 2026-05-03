@@ -90,9 +90,7 @@
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/city schema-required-added added="city"
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/domain schema-required-added added="domain"
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/domain schema-type-changed added=[] removed=["null"]
-/findByEmail/company POST response 200 application/json suggestions/items/data/company/employee_count schema-format-changed from="int32" to=""
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/employee_count schema-required-added added="employee_count"
-/findByEmail/company POST response 200 application/json suggestions/items/data/company/employee_count schema-type-changed added=["number"] removed=["integer"]
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/income schema-required-added added="income"
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/inn schema-required-added added="inn"
 /findByEmail/company POST response 200 application/json suggestions/items/data/company/name schema-required-added added="name"
@@ -249,7 +247,6 @@
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/house_type_full schema-required-added added="house_type_full"
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/kladr_id schema-required-added added="kladr_id"
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/metro schema-required-added added="metro"
-/findById/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/distance schema-format-changed from="double" to=""
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/distance schema-required-added added="distance"
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/line schema-required-added added="line"
 /findById/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/name schema-required-added added="name"
@@ -1060,13 +1057,10 @@
 /findById/postal_unit POST response 429 <response> response-status-added
 /findById/postal_unit POST response 5XX <response> response-status-added
 /geolocate/address POST request application/json count schema-max-changed from=null to=20
-/geolocate/address POST request application/json lat schema-format-changed from="double" to=""
 /geolocate/address POST request application/json lat schema-required-added added="lat"
 /geolocate/address POST request application/json lat schema-type-changed added=[] removed=["null"]
-/geolocate/address POST request application/json lon schema-format-changed from="double" to=""
 /geolocate/address POST request application/json lon schema-required-added added="lon"
 /geolocate/address POST request application/json lon schema-type-changed added=[] removed=["null"]
-/geolocate/address POST request application/json radius_meters schema-format-changed from="double" to=""
 /geolocate/address POST request application/json radius_meters schema-max-changed from=null to=1000
 /geolocate/address POST response 200 application/json <schema> schema-type-changed added=[] removed=["object"]
 /geolocate/address POST response 200 application/json suggestions schema-property-deleted removed="suggestions"
@@ -1083,13 +1077,10 @@
 /geolocate/postal_unit POST request application/json filters/items/address_kladr_id schema-property-added added="address_kladr_id"
 /geolocate/postal_unit POST request application/json filters/items/is_closed schema-property-added added="is_closed"
 /geolocate/postal_unit POST request application/json filters/items/type_code schema-property-added added="type_code"
-/geolocate/postal_unit POST request application/json lat schema-format-changed from="double" to=""
 /geolocate/postal_unit POST request application/json lat schema-required-added added="lat"
 /geolocate/postal_unit POST request application/json lat schema-type-changed added=[] removed=["null"]
-/geolocate/postal_unit POST request application/json lon schema-format-changed from="double" to=""
 /geolocate/postal_unit POST request application/json lon schema-required-added added="lon"
 /geolocate/postal_unit POST request application/json lon schema-type-changed added=[] removed=["null"]
-/geolocate/postal_unit POST request application/json radius_meters schema-format-changed from="double" to=""
 /geolocate/postal_unit POST request application/json radius_meters schema-max-changed from=null to=1000
 /geolocate/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /geolocate/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
@@ -1161,13 +1152,10 @@
 /suggest/address POST request application/json from_bound/value schema-enum-value-added added="region"
 /suggest/address POST request application/json from_bound/value schema-enum-value-added added="settlement"
 /suggest/address POST request application/json from_bound/value schema-enum-value-added added="street"
-/suggest/address POST request application/json locations_geo/items/lat schema-format-changed from="double" to=""
 /suggest/address POST request application/json locations_geo/items/lat schema-required-added added="lat"
 /suggest/address POST request application/json locations_geo/items/lat schema-type-changed added=["string"] removed=["null"]
-/suggest/address POST request application/json locations_geo/items/lon schema-format-changed from="double" to=""
 /suggest/address POST request application/json locations_geo/items/lon schema-required-added added="lon"
 /suggest/address POST request application/json locations_geo/items/lon schema-type-changed added=["string"] removed=["null"]
-/suggest/address POST request application/json locations_geo/items/radius_meters schema-format-changed from="double" to=""
 /suggest/address POST request application/json locations_geo/items/radius_meters schema-max-changed from=null to=100000
 /suggest/address POST request application/json locations/items/planning_structure schema-property-added added="planning_structure"
 /suggest/address POST request application/json locations/items/planning_structure_fias_id schema-property-added added="planning_structure_fias_id"
@@ -1308,7 +1296,6 @@
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/house_type_full schema-required-added added="house_type_full"
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/kladr_id schema-required-added added="kladr_id"
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/metro schema-required-added added="metro"
-/suggest/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/distance schema-format-changed from="double" to=""
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/distance schema-required-added added="distance"
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/line schema-required-added added="line"
 /suggest/bank POST response 200 application/json suggestions/items/data/address/data/metro/items/name schema-required-added added="name"

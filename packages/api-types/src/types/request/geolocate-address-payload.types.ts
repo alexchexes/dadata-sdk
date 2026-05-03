@@ -6,14 +6,23 @@ import type { DivisionType, Language } from './suggest-payload-address.types';
 export interface GeolocateAddressPayload {
   /**
    * Географическая широта
+   * @format double
    * @example 55.601983
    */
   lat: number;
   /**
    * Географическая долгота
+   * @format double
    * @example 37.359486
    */
   lon: number;
+  /**
+   * Радиус поиска в метрах
+   * @format double
+   * @default 100
+   * @maximum 1000
+   */
+  radius_meters?: number | null;
   /**
    * Максимальное количество результатов
    * @default 10
@@ -21,12 +30,6 @@ export interface GeolocateAddressPayload {
    * @maximum 20
    */
   count?: number | null;
-  /**
-   * Радиус поиска в метрах
-   * @default 100
-   * @maximum 1000
-   */
-  radius_meters?: number | null;
   /**
    * На каком языке вернуть результат
    * @default 'ru'
