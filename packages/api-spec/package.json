@@ -18,6 +18,7 @@
   "license": "MIT",
   "files": [
     "dadata.json",
+    "dadata.yaml",
     "schemas/request.json",
     "schemas/response.json",
     "README.md"
@@ -31,7 +32,7 @@
     "build": "pnpm run gen:artifacts",
     "type-check": "tsc -p tsconfig.scripts.json --noEmit",
     "gen:schemas": "pnpm exec schema-gen --input ../api-types/schema-types --output ./schemas",
-    "gen:bundle": "pnpm exec tsx ./scripts/bundle-openapi.ts ./dadata.yaml ./dadata.json",
+    "gen:bundle": "pnpm exec tsx ./scripts/bundle-openapi.ts ./source/dadata.yaml ./dadata.json ./dadata.yaml",
     "gen:artifacts": "pnpm run gen:schemas && pnpm run gen:bundle",
     "check:official-upstream": "pnpm exec tsx ./scripts/check-official-upstream.ts",
     "compare:official": "pnpm exec tsx ./scripts/compare-official.ts",

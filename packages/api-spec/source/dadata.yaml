@@ -1,0 +1,2348 @@
+openapi: 3.1.1
+
+info:
+  title: DaData.ru API
+  version: 0.1.0
+
+  description: |
+    [DaData](https://dadata.ru) — это сервис подсказок и поиска по российским адресам, организациям, ФИО и другим данным.
+
+    Данная спецификация включает полный список публичных API «Дадаты» с детальным описанием формата запросов и ответов.
+
+    _Спецификация не является официальным продуктом «Дадаты»_.
+
+    ## Аутентификация
+
+    - Запросы к API подсказок и «Поиск по коду» требуют передать API-ключ (токен) в заголовке `Authorization: Token <API_KEY>`. [Получить API-ключ](https://dadata.ru/profile/#info)
+    - Запросы к API «Стандартизации», а также данным об аккаунте, помимо токена, требуют также указать секретный ключ в заголовке `X-Secret: <SECRET_KEY>`
+      **Внимание!** Запросы к «Стандартизации» и данным аккаунта (любые запросы, где требуется заголовок `X-Secret`) недоступны из браузера.
+
+    Некоторые сервисы являются платными. Для уточнения цен и условий ознакомьтесь с [соответствующим разделом](https://dadata.ru/pricing/) официального сайта.
+
+    ## Лимиты запросов
+
+    ### API «Подсказки» (`suggest`) и «Поиск по коду» (`findById`):
+
+    - До **30 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+    - Суточные лимиты зависят от тарифного плана.
+
+    ### API стандартизации:
+
+    - До **20 запросов в секунду** на один IP
+    - До **60 новых соединений в минуту** на один IP
+
+    ## Важно знать
+
+    Данная спецификация составлена на основании официального описания от DaData и анализа ответов API, но не является официальной.
+    При обнаружении расхождений с официальными ресурсами, имейте в виду:
+
+    - В некоторых случаях, данный документ исправляет неточности официальной документации.
+    - Но не исключены ошибки, отставание от официальных обновлений, или ограничения, связанные с противоречиями и неполнотой официальных ресурсов.
+
+    ## Если у вас есть вопросы:
+
+    - По спецификации - откройте Issue и дискуссию [на GitHub](https://github.com/alexchexes/dadata-sdk)
+    - Официальная поддержка «Дадаты»: [support.dadata.ru](https://support.dadata.ru/)
+
+  contact:
+    name: Dadata SDK на GitHub (unofficial)
+    url: https://github.com/alexchexes/dadata-sdk
+
+  termsOfService: https://dadata.ru/offer/
+
+  license:
+    name: Оферта «Дадаты»
+    url: https://dadata.ru/offer/
+
+externalDocs:
+  url: https://dadata.ru/api/
+  description: |
+    Официальное описание на сайте Dadata
+
+servers:
+  - url: https://suggestions.dadata.ru/suggestions/api/4_1/rs
+    description: Для сервисов «Подсказок» и «Поиск по коду»
+
+  - url: https://cleaner.dadata.ru/api/v1
+    description: Для сервисов «Стандартизации»
+
+  - url: https://dadata.ru/api/v2
+    description: Эндпоинты, связанные с аккаунтом пользователя или самой «Дадатой»
+
+security:
+  - ApiKey: []
+
+tags:
+  - name: suggest
+    description: |
+      «Подсказки» выполняют полнотекстовый поиск и возвращают почтовые адреса, ФИО, реквизиты компаний или банков, и другую информацию в структурированном виде.
+
+      - [Общая информация](https://dadata.ru/suggestions/)
+      - [О подключении к разным проектам](https://dadata.ru/suggestions/usage/)
+      - [Список типов подсказок](https://dadata.ru/api/suggest/)
+    externalDocs: { url: https://dadata.ru/api/suggest/ }
+
+  - name: findById
+    description: |
+      Сервисы поиска по коду (идентификатору), как правило, используют те же справочники, что и соответствующие им сервисы «Подсказок», но позволяют получить конкретную запись или набор записей, если заранее известен необходимый идентификатор / код. Например, для сервиса «Компании РФ» это может быть ИНН или ОГРН; в каждом API - свой список поддерживаемых типов идентификаторов.
+
+      В ряде случаев (например, при поиске организаций), получить максимально полную информацию можно используя именно «Поиск по коду».
+
+  - name: clean
+    description: |
+      Сервисы стандартизации исправляют ошибки, приводят контакты к единому формату. Принимают данные строкой и отдаёт назад структурированный ответ. Отмечают мусорные сведения и те, что стоит проверить.
+
+      - [Общая информация](https://dadata.ru/clean/)
+      - [Список типов стандартизации](https://dadata.ru/api/clean/)
+
+      > **Вызовы ко всем API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+    externalDocs: { url: https://dadata.ru/api/clean/ }
+
+  - name: iplocate
+    description: |
+      Сервис определяет город по IP-адресу (в России). Использует IP-адрес клиента, значение из параметра ip или заголовок X-Forwarded-For.
+
+      - Поддерживает как IPv4, так и IPv6 адреса.
+      - Возвращает детальную информацию о городе, в том числе почтовый индекс.
+
+      **Алгоритм выбора IP-адреса из параметров запроса:**
+
+      ```
+      ЕСЛИ IP указан в параметре ip
+      ТО использовать его
+      ИНАЧЕ
+        ЕСЛИ IP указан в HTTP-заголовке X-Forwarded-For
+        ТО использовать его
+        ИНАЧЕ вернуть IP сокета соединения
+      ```
+
+      Местоположение определяется только для российских адресов.
+
+  - name: cars
+    x-summary: Автомобили
+    description: Сервисы DaData, связанные с автомобилями
+
+components:
+  responses:
+    SuggestBadRequest:
+      description: |
+        Некорректный запрос (невалидный JSON или XML)
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestUnauthorized:
+      description: В запросе отсутствует API-ключ
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestForbidden:
+      description: |
+        - В запросе указан неверный API-ключ
+        - Или не подтверждена почта
+        - Или исчерпан дневной лимит запросов (проверьте через ЛК или API `stat/daily`)
+        - Или недостаточно средств для обработки запроса, пополните баланс (`profile/balance`)
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestNotFound:
+      description: |
+        Запрошенный ресурс не найден.
+        Скорее всего, допущена ошибка при формировании URL для выполнения запроса
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestMethodNotAllowed:
+      description: Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestContentTooLarge:
+      description: Слишком большая длина запроса или слишком много условий
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestTooManyRequests:
+      description: Слишком много запросов в секунду или новых соединений в минуту
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    SuggestInternalServerError:
+      description: Произошла внутренняя ошибка сервиса
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/SuggestErrorResponse' } }
+
+    # clean
+
+    CleanBadRequest:
+      description: |
+        Некорректный запрос (невалидный JSON или XML)
+
+        Для API стандартизации составных записей (`clean/record`):
+        - Отсутствуют обязательные параметры `structure` или `data`.
+        - В `structure` указан неподдерживаемый тип.
+        - Количество полей в `data` более указанного в `structure`.
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    CleanUnauthorized:
+      description: 'В запросе отсутствует API-ключ (`Authorization: Token ...`) или секретный ключ (`X-Secret: ...`)'
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+
+    CleanForbidden:
+      description: |
+        В запросе указан неверный API-ключ
+        Или не подтверждена почта
+        Или исчерпан дневной лимит запросов (проверьте через личный кабинет или API stat/daily)
+        Или (Стандартизация) - недостаточно средств для обработки запроса, пополните баланс
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+
+    CleanNotFound:
+      description: |
+        Запрошенный ресурс не найден.
+        Скорее всего, допущена ошибка при формировании URL для выполнения запроса
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    CleanMethodNotAllowed:
+      description: Запрос сделан с неподходящим для данного API HTTP-методом, например `GET` там, где разрешён только `POST`
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    CleanTooManyRequests:
+      description: Слишком много запросов в секунду или новых соединений в минуту
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    CleanInternalServerError:
+      description: Произошла внутренняя ошибка сервиса
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt1' } }
+        application/problem+json:
+          { schema: { $ref: '../schemas/response.json#/definitions/CleanErrorResponseAlt2' } }
+
+    # profile
+
+    ApiV2Unauthorized:
+      description: |
+        'Не указан, или указан неверный токен (`Authorization: Token ...`) или секретный ключ (`X-Secret: ...`)'
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2Error4XX:
+      description: Ошибка запроса к API
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2Error5XX:
+      description: Ошибка сервера
+      content:
+        application/json:
+          { schema: { $ref: '../schemas/response.json#/definitions/ApiV2ErrorResponse' } }
+
+    ApiV2MethodNotAllowed:
+      description: Запрос сделан недопустимым методом, например `POST` вместо `GET`
+      content: { text/html: { schema: { type: string } } }
+
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        API-ключ. Полный вид заголовка: `Authorization: Token <YOUR_KEY>`. [Получить ключ](https://dadata.ru/profile/#info)
+    SecretKey:
+      type: apiKey
+      in: header
+      name: X-Secret
+      description: Секретный ключ
+
+paths:
+  /suggest/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/address/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669107
+      - url: https://dadata.ru/suggestions/usage/address/
+    post:
+      tags: [suggest, address]
+      summary: Подсказки по адресам
+      description: |
+        Ищет адреса по любой части адреса от региона до квартиры:
+        `самара авроры 7 12` → `443017, Самарская обл, г Самара, ул Авроры, д 7, кв 12`.
+        Также ищет по почтовому индексу:
+        `105568` → `г Москва, ул Магнитогорская`.
+      externalDocs: { url: https://dadata.ru/api/suggest/address/ }
+      operationId: suggestAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestAddressPayload' }
+            examples:
+              Пример:
+                value: { query: 'москва хабар' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestAddressResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/fias:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/fias/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835953
+      - url: https://dadata.ru/suggestions/usage/fias/
+    post:
+      tags: [suggest, fias]
+      summary: Подсказки по ФИАС
+      description: |
+        Ищет адреса строго по ФИАС. Нужны только если вам по какой-то причине важно точное, побуквенное соответствие справочнику адресов налоговой службы. В остальных случаях используйте Подсказки по адресу (`/suggest/address`).
+      externalDocs: { url: https://dadata.ru/api/suggest/fias/ }
+      operationId: suggestFias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestFiasPayload' }
+            examples:
+              Пример:
+                value: { query: 'москва хабар' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFiasResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/party:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/party/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122
+      - url: https://dadata.ru/suggestions/usage/party/
+    post:
+      tags: [suggest, party]
+      summary: Подсказки по организациям
+      description: |
+        Ищет компании и индивидуальных предпринимателей:
+        - по ИНН, ОГРН и КПП;
+        - названию (полному и краткому);
+        - ФИО (для индивидуальных предпринимателей);
+        - ФИО руководителя компании;
+        - адресу до улицы
+      externalDocs: { url: https://dadata.ru/api/suggest/party/ }
+      operationId: suggestParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestPartyPayload' }
+            examples:
+              Пример:
+                value: { query: 'сбербанк' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/party_by:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, party_by]
+      summary: Подсказки по организациям Беларуси
+      description: |
+        Подсказки по справочнику организаций и индивидуальных предпринимателей Беларуси
+        Поиск выполняется по полям:
+        - `unp`
+        - `full_name_ru`
+        - `full_name_by`
+        - `short_name_ru`
+        - `short_name_by`
+        - `trade_name_ru`
+        - `trade_name_by`
+        - `address`
+      externalDocs: { url: https://dadata.ru/api/suggest/party_by/ }
+      operationId: suggestPartyBy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestPartyByPayload' }
+            examples:
+              Пример:
+                value: { query: 'онлайнер' }
+              Только ликвидированные:
+                value: { 'query': 'лар', 'filters': [{ 'status': 'LIQUIDATED' }] }
+              Только ИП:
+                value: { 'query': 'лар', 'filters': [{ 'type': 'INDIVIDUAL' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyByResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/party_kz:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, party_kz]
+      summary: Подсказки по организациям Казахстана
+      description: |
+        Подсказки по справочнику организаций и индивидуальных предпринимателей Казахстана
+        Поиск выполняется по полям:
+        - `bin`
+        - `name_ru`
+        - `name_kz`
+        - `fio`
+        - `address_ru`
+        - `address_kz`
+      externalDocs: { url: https://dadata.ru/api/suggest/party_kz/ }
+      operationId: suggestPartyKz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestPartyKzPayload' }
+            examples:
+              Пример:
+                value: { query: 'онлайн' }
+              Филиалы иностр. юрлиц:
+                value: { 'query': 'хен', 'filters': [{ 'type': 'FOREIGN_BRANCH' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyKzResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/bank:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/bank/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=262996078
+      - url: https://dadata.ru/suggestions/usage/bank/
+    post:
+      tags: [suggest, bank]
+      summary: Подсказки по банкам
+      description: |
+        Ищет кредитные организации:
+        - по БИК,
+        - SWIFT,
+        - ИНН,
+        - ИНН + КПП,
+        - названию,
+        - адресу до улицы.
+      externalDocs: { url: https://dadata.ru/api/suggest/bank/ }
+      operationId: suggestBank
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestBankPayload' }
+            examples:
+              Пример:
+                value: { query: 'сбербанк' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestBankResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/fio:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/name/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669115
+    post:
+      tags: [suggest, fio]
+      summary: Подсказки по ФИО
+      description: |
+        - Подсказывает ФИО одной строкой или отдельно фамилию, имя, отчество.
+        - Исправляет клавиатурную раскладку («fynjy» → «Антон»).
+        - Определяет пол.
+      externalDocs: { url: https://dadata.ru/api/suggest/name/ }
+      operationId: suggestFio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestFioPayload' }
+            examples:
+              Пример:
+                value: { query: 'Викт' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFioResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/email:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/suggest/email/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=234782803
+      - url: https://dadata.ru/suggestions/usage/email/
+    post:
+      tags: [suggest, email]
+      summary: Подсказки по email
+      description: |
+        - Подсказывает локальную часть (до «собачки»).
+        - Подсказывает доменную часть (после «собачки»).
+        - Исправляет опечатки (yadex.ru → yandex.ru).
+      externalDocs: { url: https://dadata.ru/api/suggest/email/ }
+      operationId: suggestEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestEmailPayload' }
+            examples:
+              Пример:
+                value: { query: 'anton@' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestEmailResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/fms_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, fms_unit]
+      summary: Подсказки по полю «Кем выдан паспорт»
+      description: |
+        Поиск выполняется по полям:
+        - `name` - наименование (как в паспорте)
+        - `code` - код подразделения
+      externalDocs: { url: https://dadata.ru/api/suggest/fms_unit/ }
+      operationId: suggestFmsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestFmsUnitPayload' }
+            examples:
+              Пример:
+                value: { query: '772-053' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFmsUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/postal_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, postal_unit]
+      summary: Подсказки по отделениям Почты России
+      description: |
+        Поиск выполняется по полям:
+        - `postal_code` - индекс
+        - `address_str` - адрес
+      externalDocs: { url: https://dadata.ru/api/suggest/postal_unit/ }
+      operationId: suggestPostalUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestPostalUnitPayload' }
+            examples:
+              Пример:
+                value: { query: 'дежнева 2а' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/fns_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, fns_unit]
+      summary: Подсказки по налоговым инспекциям
+      description: |
+        Поиск выполняется по полям:
+        - `code` - код инспекции
+        - `name_short` - наименование
+        - `address` - адрес
+      externalDocs: { url: https://dadata.ru/api/suggest/fns_unit/ }
+      operationId: suggestFnsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestFnsUnitPayload' }
+            examples:
+              Пример:
+                value: { query: 'нижнего' }
+              Фильтр по региону:
+                description: Фильтрация по полю `region_code` (первые 2 цифры КЛАДР-кода региона)
+                value: { query: 'вор', filters: [{ region_code: '36' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/fts_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, fts_unit]
+      summary: Подсказки по таможенным органам и постам
+      description: |
+        Поиск выполняется по полям:
+        - `code` - код таможни
+        - `name_short` - короткое наименование
+        - `name` - полное наименование
+        - `address` - адрес
+      externalDocs: { url: https://dadata.ru/api/suggest/fts_unit/ }
+      operationId: suggestFtsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestFtsUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: 'домодедово' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFtsUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/court:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, court]
+      summary: Подсказки по судам России
+      description: |
+        Поиск выполняется по полям:
+        - `code` - Код суда (уникальный)
+        - `name` - Полное название суда
+        - `address` - Адрес суда
+        - `legal_address` - Юридический адрес суда. Только у судов, которые являются юрлицами
+      externalDocs: { url: https://dadata.ru/api/suggest/court/ }
+      operationId: suggestCourt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestCourtPayload' }
+            examples:
+              simple_query:
+                value: { query: 'ленинск' }
+              filter_court_type:
+                description: Фильтрация работает по полю `court_type` (двухбуквенный тип суда)
+                value: { query: 'ленинск', filters: [{ court_type: 'MS' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCourtResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/metro:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, metro]
+      summary: Станции метро
+      description: |
+        Подсказки по станциям метро в Москве, Санкт-Петербурге и других городах России.
+        Поиск выполняется по полям:
+        - `name` - название станции
+        - `city` - название города
+      externalDocs: { url: https://dadata.ru/api/suggest/metro/ }
+      operationId: suggestMetro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestMetroPayload' }
+            examples:
+              simple_query:
+                summary: Пример запроса
+                value: { query: 'алек' }
+              only_spb:
+                summary: Поиск среди станций Санкт-Петербурга
+                value: { query: 'алек', filters: [{ city_kladr_id: '7800000000000' }] }
+              only_open_in_moscow_on_line_5:
+                summary: Поиск только среди открытых станций Кольцевой ветки Москвы
+                value: { query: 'па', filters: [{ city: 'Москва', line_id: '5', is_closed: null }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestMetroResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/car_brand:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, car_brand, cars]
+      summary: Подсказки по маркам автомобилей на русском и английском языках
+      description: |
+        Поиск выполняется по полям:
+        - `name_ru` - марка на русском языке
+        - `name` - марка на исходном языке
+      externalDocs: { url: https://dadata.ru/api/suggest/car_brand/ }
+      operationId: suggestCarBrand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestCarBrandPayload' }
+            examples:
+              simple_query:
+                value: { query: 'форд' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCarBrandResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/country:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, country]
+      summary: Подсказки по странам мира (стандарт ISO 3166)
+      description: |
+        Поиск выполняется по полям:
+        - `name` - Полное наименование страны
+        - `name_short` - Краткое наименование
+        - `code` - Цифровой код страны
+        - `alfa2` - Буквенный код альфа-2
+        - `alfa3` - Буквенный код альфа-3
+      externalDocs: { url: https://dadata.ru/api/suggest/country/ }
+      operationId: suggestCountry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestCountryPayload' }
+            examples:
+              simple_query:
+                value: { query: 'та' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCountryResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/currency:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, currency]
+      summary: Подсказки по мировым валютам (стандарт ISO 4217)
+      description: |
+        Поиск выполняется по полям:
+        - `code` - Цифровой код валюты
+        - `strcode` - Буквенный код валюты
+        - `name` - Наименование валюты
+        - `country` - Страна, в которой валюта является официальной
+      externalDocs: { url: https://dadata.ru/api/suggest/currency/ }
+      operationId: suggestCurrency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestCurrencyPayload' }
+            examples:
+              simple_query:
+                value: { query: 'руб' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCurrencyResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/mktu:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, mktu]
+      summary: Подсказки по классификатору товаров и услуг (МКТУ)
+      description: |
+        Международный классификатор товаров и услуг на трех языках (русский, английский, французский).
+        Поиск выполняется по полям:
+        - `number` - Уникальный номер позиции в классификаторе
+        - `name_ru` - Наименование на русском
+        - `name_en` - Наименование на английском
+      externalDocs: { url: https://dadata.ru/api/suggest/mktu/ }
+      operationId: suggestMktu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestMktuPayload' }
+            examples:
+              simple_query:
+                value: { query: 'валенки' }
+              filter_by_mktu_class:
+                value: { 'query': 'кра', 'filters': [{ 'class': '03' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestMktuResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/okved2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, okved2]
+      summary: Подсказки по видам деятельности (ОКВЭД 2)
+      description: |
+        Общероссийский классификатор видов экономической деятельности
+        Поиск выполняется по полям:
+        - `kod` - Код ОКВЭД 2
+        - `name` - Название вида деятельности
+      externalDocs: { url: https://dadata.ru/api/suggest/okved2/ }
+      operationId: suggestOkved2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestOkved2Payload' }
+            examples:
+              simple_query:
+                value: { query: 'запуск' }
+              filter_by_razdel:
+                value: { 'query': 'мыл', 'filters': [{ 'razdel': 'C' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOkved2Response' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/okpd2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, okpd2]
+      summary: Подсказки по видам продукции (ОКПД 2)
+      description: |
+        Общероссийский классификатор продукции по видам экономической деятельности
+        Поиск выполняется по полям:
+        - `kod` - Код ОКПД 2
+        - `name` - Наименование продукции или услуги
+      externalDocs: { url: https://dadata.ru/api/suggest/okpd2/ }
+      operationId: suggestOkpd2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestOkpd2Payload' }
+            examples:
+              simple_query:
+                value: { query: 'калоши' }
+              filter_by_razdel:
+                value: { 'query': 'уст', 'filters': [{ 'razdel': 'A' }] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOkpd2Response' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /suggest/oktmo:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [suggest, oktmo]
+      summary: Подсказки по кодам муниципальных образований (ОКТМО)
+      description: |
+        Общероссийский классификатор территорий муниципальных образований
+        Поиск выполняется по полю `oktmo` (8-значный код ОКТМО)
+      externalDocs: { url: https://dadata.ru/api/suggest/oktmo/ }
+      operationId: suggestOktmo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/SuggestOktmoPayload' }
+            examples:
+              simple_query:
+                value: { query: '546234' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOktmoResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-address/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=312016944
+    post:
+      tags: [findById, address]
+      summary: Адрес по коду ФИАС, ГАР, КЛАДР или кадастровому номеру
+      description: |
+        Находит адрес по идентификатору:
+        - кадастровый номер (`stead_cadnum`, `house_cadnum` или `flat_cadnum`), только для России;
+        - ФИАС-код, он же ГАР-код (`fias_id`), только для России;
+        - КЛАДР-код (`kladr_id`), только для России;
+        - Идентификатор OpenStreetMap (`fias_id`), только для Беларуси, Казахстана и Узбекистана;
+        - Идентификатор GeoNames (`geoname_id`), для всех остальных стран.
+        По КЛАДР-коду ищет до улицы, по ФИАС-коду — до квартиры.
+      externalDocs: { url: https://dadata.ru/api/find-address/ }
+      operationId: findAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindAddressPayload' }
+            examples:
+              simple_query:
+                value: { query: '9120b43f-2fae-4838-a144-85e43c2bfb29' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestAddressResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/fias:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-fias/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835965
+    post:
+      tags: [findById, fias]
+      summary: Адрес в ФИАС по идентификатору
+      description: |
+        Находит адрес в справочнике ФИАС по коду КЛАДР или ФИАС.
+        По КЛАДР-коду ищет до улицы, по ФИАС-коду — до дома. По ФИАС-коду квартиры не ищет
+      externalDocs: { url: https://dadata.ru/api/find-fias/ }
+      operationId: findFias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindFiasPayload' }
+            examples:
+              simple_query:
+                value: { query: '9120b43f-2fae-4838-a144-85e43c2bfb29' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFiasResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/party:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-party/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058
+    post:
+      tags: [findById, party]
+      summary: Организация по ИНН или ОГРН
+      description: |
+        Находит компанию или ИП по ИНН или ОГРН.
+        Возвращает все доступные сведения о компании, в отличие от метода suggest, который возвращает только базовые поля.
+      externalDocs: { url: https://dadata.ru/api/find-party/ }
+      operationId: findParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindPartyPayload' }
+            examples:
+              simple_query:
+                value: { query: '7707083893' }
+              only_main_branch:
+                value: { 'query': '7707083893', 'branch_type': 'MAIN' }
+              find_branch_by_kpp:
+                value: { 'query': '7707083893', 'kpp': '540602001' }
+              only_companies:
+                value: { 'query': '7707083893', 'type': 'LEGAL' }
+              only_individuals:
+                value: { 'query': '784806113663', 'type': 'INDIVIDUAL' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/FindPartyResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/party_by:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, party_by]
+      summary: Компании Беларуси по УНП
+      description: |
+        Поиск в справочнике организаций и индивидуальных предпринимателей Беларуси по УНП (учетному номеру налогоплательщика)
+      externalDocs: { url: https://dadata.ru/api/suggest/party_by/ }
+      operationId: findPartyBy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindPartyByPayload' }
+            examples:
+              simple_query:
+                value: { query: '190657494' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyByResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/party_kz:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, party_kz]
+      summary: Компании Казахстана по БИН
+      description: |
+        Поиск в справочнике организаций и индивидуальных предпринимателей Казахстана по БИН (бизнес-идентификационный номер)
+      externalDocs: { url: https://dadata.ru/api/suggest/party_kz/ }
+      operationId: findPartyKz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindPartyKzPayload' }
+            examples:
+              simple_query:
+                value: { query: '140440031745' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyKzResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/bank:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-bank/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=820117560
+    post:
+      tags: [findById, bank]
+      summary: Банк по БИК, SWIFT, ИНН или регистрационному номеру
+      description: |
+        Находит банк по любому из идентификаторов:
+        - БИК,
+        - SWIFT,
+        - ИНН,
+        - ИНН + КПП (для филиалов),
+        - регистрационному номеру, присвоенному Банком России.
+        Ищет только по точному совпадению, для частичного совпадения используйте метод suggest.
+      externalDocs: { url: https://dadata.ru/api/find-bank/ }
+      operationId: findBank
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindBankPayload' }
+            examples:
+              simple_query:
+                value: { query: '044525225' }
+              simple_query_swift:
+                value: { query: 'SABRRUMM012' }
+              inn_i_kpp:
+                value: { query: '7728168971', kpp: '667102002' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/FindBankResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/postal_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, postal_unit]
+      summary: Отделение почты РФ по индексу
+      description: |
+        Находит отделение Почты России по почтовому индексу
+      externalDocs: { url: https://dadata.ru/api/suggest/postal_unit/ }
+      operationId: findPostalUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindPostalUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '127642' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/fns_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, fns_unit]
+      summary: Налоговая инспекция по коду или ИНН
+      description: |
+        Находит запись в справочнике инспекций Налоговой службы по коду инспекции или ИНН
+      externalDocs: { url: https://dadata.ru/api/suggest/fns_unit/ }
+      operationId: findFnsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindFnsUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '127642' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFnsUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/fts_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, fts_unit]
+      summary: Таможня по коду
+      description: |
+        Находит запись в справочнике таможенных органов и постов по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/fts_unit/ }
+      operationId: findFtsUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindFtsUnitPayload' }
+            examples:
+              simple_query:
+                value: { query: '10002000' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestFtsUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/court:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, court]
+      summary: Суд по коду
+      description: |
+        Находит запись в справочнике судов России по коду суда
+        Источники данных:
+          - [ГАС «Правосудие»](https://sudrf.ru/index.php?id=300&var=true#sp)
+          - [Федеральные арбитражные суды](https://arbitr.ru/)
+          - Сайты судов
+      externalDocs: { url: https://dadata.ru/api/suggest/court/ }
+      operationId: findCourt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindCourtPayload' }
+            examples:
+              simple_query:
+                value: { query: '52MS0022' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCourtResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/car_brand:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, car_brand, cars]
+      summary: Марка авто по ID
+      description: |
+        Получает марку автомобиля по ID, ранее полученному из подсказок по маркам (`suggest/car_brand`) в поле `id`  (`ZAZ`, `FORD`, и т.д.).
+      externalDocs: { url: https://dadata.ru/api/suggest/car_brand/ }
+      operationId: findCarBrand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindCarBrandPayload' }
+            examples:
+              simple_query:
+                value: { query: 'FORD' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCarBrandResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/country:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, country]
+      summary: Страна по коду (стандарт ISO 3166)
+      description: |
+        Находит страну по одному из кодов:
+        - `code` - Цифровой код страны
+        - `alfa2` - Буквенный код альфа-2
+        - `alfa3` - Буквенный код альфа-3
+      externalDocs: { url: https://dadata.ru/api/suggest/country/ }
+      operationId: findCountry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindCountryPayload' }
+            examples:
+              simple_query:
+                value: { query: 'TH' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCountryResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/currency:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, currency]
+      summary: Валюта по коду (стандарт ISO 4217)
+      description: |
+        Находит валюту по одному из кодов:
+        - `code` - Цифровой код валюты
+        - `strcode` - Буквенный код валюты
+
+        Источник данных: [Общероссийский классификатор валют (ОКВ)](https://data.gov.ru/opendata/7710168515-okw)
+      externalDocs: { url: https://dadata.ru/api/suggest/currency/ }
+      operationId: findCurrency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindCurrencyPayload' }
+            examples:
+              simple_query:
+                value: { query: 'RUB' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestCurrencyResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/mktu:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, mktu]
+      summary: Запись МКТУ по уникальному номеру позиции
+      description: |
+        Находит запись по уникальному номеру позиции в Международном классификаторе товаров и услуг (МКТУ)
+
+        Источник данных: [Международный классификатор товаров и услуг (МКТУ)](https://www.fips.ru/publication-web/classification/mktu?view=index)
+      externalDocs: { url: https://dadata.ru/api/suggest/mktu/ }
+      operationId: findMktu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindMktuPayload' }
+            examples:
+              simple_query:
+                value: { query: '250173' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestMktuResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/okved2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, okved2]
+      summary: Вид деятельности из ОКВЭД 2 по коду
+      description: |
+        Находит запись в общероссийском классификаторе видов экономической деятельности (ОКВЭД 2) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/okved2/ }
+      operationId: findOkved2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindOkved2Payload' }
+            examples:
+              simple_query:
+                value: { query: '51.22.3' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOkved2Response' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/okpd2:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, okpd2]
+      summary: Вид продукции из ОКПД 2 по коду
+      description: |
+        Находит запись в Общероссийском классификаторе продукции по видам экономической деятельности (ОКПД 2) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/okpd2/ }
+      operationId: findOkpd2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindOkpd2Payload' }
+            examples:
+              simple_query:
+                value: { query: '95.23.10.133' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOkpd2Response' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /findById/oktmo:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, oktmo]
+      summary: Муниципальные образования (ОКТМО) по коду
+      description: |
+        Находит запись в Общероссийском классификаторе территорий муниципальных образований (ОКТМО) по коду
+      externalDocs: { url: https://dadata.ru/api/suggest/oktmo/ }
+      operationId: findOktmo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindOktmoPayload' }
+            examples:
+              simple_query:
+                value: { query: '54623425' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestOktmoResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /clean/address:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, address]
+      summary: Стандартизация адресов
+      description: |
+        - Разбивает адрес по отдельным полям (регион, город, улица, дом, квартира).
+        - Рассчитывает корректный индекс по данным Почты России.
+        - Определяет координаты.
+        - Показывает округ и район города, ближайшее метро, площадь и стоимость квартиры.
+        - Достает коды КЛАДР, ФИАС (ГАР), ОКАТО, ОКТМО и ИФНС.
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/address/ }
+      operationId: cleanAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['мск сухонска 11/-89']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanAddressResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/name:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, fio]
+      summary: Стандартизация ФИО
+      description: |
+        - Исправляет опечатки и транслитерирует.
+        - Проставляет пол.
+        - Склоняет по падежам (кого? кому? кем?).
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/name/ }
+      operationId: cleanFio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['Срегей владимерович иванов']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json: { schema: { $ref: '../schemas/response.json#/definitions/FioClean' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/email:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, email]
+      summary: Стандартизация email
+      description: |
+        - Проверяет формат адреса.
+        - Исправляет распространённые опечатки.
+        - Проверяет, не «одноразовый» ли адрес.
+        - Классифицирует адреса на личные (@mail.ru, @yandex.ru), корпоративные (@myshop.ru) и «ролевые» (info@, support@).
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/email/ }
+      operationId: cleanEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['serega@yandex/ru']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanEmailResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/phone:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, phone]
+      summary: Стандартизация телефонов
+      description: |
+        - Проверяет телефон.
+        - Проставляет актуальный код города / DEF-код.
+        - Восстанавливает оператора. Учитывает переносы номера между операторами.
+        - Определяет страну, регион, город и часовой пояс.
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/phone/ }
+      operationId: cleanPhone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['раб 846)231.60.14 *139']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanPhoneResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/passport:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, passport]
+      summary: Стандартизация паспортов
+      description: |
+        - Проверяет формат серии и номера.
+        - Проверяет паспорт по справочнику недействительных паспортов МВД.
+
+        **Внимание**
+        МВД сломало реестр паспортов, поэтому сервис работает по справочнику от 21 июня 2023 года.
+        Подробнее см.: https://t.me/dadataru_health/186
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/passport/ }
+      operationId: cleanPassport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['4509 235857']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanPassportResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/birthdate:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, birthdate]
+      summary: Стандартизация дат рождения
+      description: |
+        Проверяет и приводит дату рождения к единому формату
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/birthdate/ }
+      operationId: cleanBirthdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['24/3/12']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanDateResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean/vehicle:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean, vehicle, cars]
+      summary: Стандартизация автомобилей
+      description: |
+        Распознает марки и модели автомобилей
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/vehicle/ }
+      operationId: cleanVehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/BaseCleanPayload' }
+            examples:
+              simple_query:
+                value: ['форд фокус']
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanVehicleResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /clean:
+    servers: [url: https://cleaner.dadata.ru/api/v1]
+    post:
+      tags: [clean]
+      summary: Стандартизация составных записей
+      description: |
+        Стандартизует запись, которая состоит из нескольких полей. Например:
+        - ФИО + адрес + телефон + второй телефон
+        - Дата рождения + паспорт
+        - Адрес + email
+
+        В одном запросе можно передавать только одну составную запись.
+        Максимальное количество полей в одной записи:
+        - 3 адреса
+        - 3 телефона
+        - 3 email
+        - 1 ФИО
+        - 1 дата рождения
+        - 1 паспорт
+        - 1 автомобиль
+
+        > **Вызовы к API стандартизации из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/clean/record/ }
+      operationId: cleanCombined
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/CleanCombinedPayload' }
+            examples:
+              simple_query:
+                value:
+                  {
+                    structure: ['NAME', 'ADDRESS', 'PHONE'],
+                    data:
+                      [['Федотов Алексей', 'Москва, Сухонская улица, 11 кв 89', '8 916 823 3454']],
+                  }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanCombinedResponse' } }
+        '400': { $ref: '#/components/responses/CleanBadRequest' }
+        '401': { $ref: '#/components/responses/CleanUnauthorized' }
+        '403': { $ref: '#/components/responses/CleanForbidden' }
+        '404': { $ref: '#/components/responses/CleanNotFound' }
+        '405': { $ref: '#/components/responses/CleanMethodNotAllowed' }
+        '429': { $ref: '#/components/responses/CleanTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/CleanInternalServerError' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /geolocate/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/geolocate/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=808583277
+    post:
+      tags: [other, geolocate, address]
+      summary: Адрес по координатам
+      description: |
+        Находит ближайшие адреса (дома, улицы, города) по географическим координатам. Только для России.
+      externalDocs: { url: https://dadata.ru/api/geolocate/ }
+      operationId: geolocateAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/GeolocateAddressPayload' }
+            examples:
+              simple_query:
+                value: { lat: 55.878, lon: 37.653 }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestAddressResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+
+  /geolocate/postal_unit:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, geolocate, postal_unit]
+      summary: Ближайшие почтовые отделения
+      description: |
+        Находит ближайшие к указанным координатам отделения Почты России
+        Можно указать радиус максимального удаления от указанных координат
+      externalDocs: { url: https://dadata.ru/api/suggest/postal_unit/ }
+      operationId: geolocatePostalUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/GeolocatePostalUnitPayload' }
+            examples:
+              simple_query:
+                value: { lat: 55.878, lon: 37.653, radius_meters: 1000 }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+
+  /iplocate/address:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/iplocate/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669119
+    summary: Город по IP-адресу
+    post:
+      tags: [other, iplocate, address]
+      summary: Город по IP-адресу (POST)
+      description: Определяет город по IP-адресу, указанному в теле запроса, или в заголовке `X-Forwarded-For`, или по IP сокета соединения.
+      externalDocs:
+        url: https://dadata.ru/api/iplocate/
+      operationId: ipLocate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/IpLocatePayload' }
+            examples:
+              simple_query:
+                value: { ip: '46.226.227.20' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/IpLocateResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+    get:
+      tags: [other, iplocate, address]
+      summary: Город по IP-адресу (GET)
+      description:
+        Определяет город по IP-адресу, указанному в URL параметре, или в заголовке `X-Forwarded-For`,
+        или по IP сокета соединения.
+      parameters:
+        - name: ip
+          in: query
+          description: IP-адрес для определения города (IPv4 или IPv6)
+          schema: { type: string }
+        - name: language
+          in: query
+          description: Язык результата
+          schema:
+            type: string
+            enum: [ru, en]
+            default: ru
+        - name: division
+          in: query
+          description: Административное либо муниципальное деление
+          schema:
+            type: string
+            enum: [ADMINISTRATIVE, MUNICIPAL]
+            default: ADMINISTRATIVE
+        - name: X-Forwarded-For
+          in: header
+          description: IP-адрес клиента (используется если ip не указан в параметрах)
+          schema: { type: string }
+      operationId: ipLocateGet
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/IpLocateResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+
+  /findAffiliated/party:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    x-externalDocs:
+      - url: https://dadata.ru/api/find-affiliated/
+      - url: https://confluence.hflabs.ru/pages/viewpage.action?pageId=978026645
+    post:
+      tags: [other, findAffiliated, party]
+      summary: Поиск аффилированных компаний
+      description: |
+        Часто учредитель или директор не ограничивается участием в одном юрлице, а фигурирует в нескольких. Порой — в десятках разных компаний. Знать об этом полезно как для оценки надёжности контрагента, так и для более эффективного маркетинга и продаж. Чтобы облегчить поиск аффилированных компаний, «Дадата» находит организации по ИНН учредителей и руководителей.
+
+        Ищет по ИНН физлиц и юрлиц.
+
+        По каждой организации возвращается ограниченный набор полей. Чтобы получить все поля, выберите конкретную компанию из ответа и вызовите метод "Организация по ИНН/ОГРН" (`findById/party`).
+      externalDocs: { url: https://dadata.ru/api/find-affiliated/ }
+      operationId: findAffiliated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindAffiliatedPayload' }
+            examples:
+              simple_query:
+                value: { query: '7736207543' }
+              only_founders:
+                description: Искать только среди учредителей
+                value: { query: '7736207543', scope: ['FOUNDERS'] }
+              only_managers:
+                description: Искать только среди руководителей
+                value: { query: '7736207543', scope: ['MANAGERS'] }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/FindAffiliatedResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+
+  /findByEmail/company:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [other, findByEmail, party]
+      summary: Компания по email
+      description: |
+        Находит компанию по адресу электронной почты
+      externalDocs: { url: https://dadata.ru/api/find-company/by-email/ }
+      operationId: findPartyByEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindPartyByEmailPayload' }
+            examples:
+              simple_query:
+                value: { query: 'info@dadata.ru' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/FindPartyByEmailResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+      security:
+        - ApiKey: []
+
+  /findById/delivery:
+    servers: [url: https://suggestions.dadata.ru/suggestions/api/4_1/rs]
+    post:
+      tags: [findById, delivery, address]
+      summary: ID города в службах доставки
+      description: |
+        Службы доставки часто используют собственные идентификаторы городов, и требуют от магазина указывать их в заказе.
+        Метод `findById/delivery` определяет идентификатор города в службе доставке на основании КЛАДР-кода города.
+        Пока поддерживаются службы доставки СДЭК, Boxberry и DPD
+      externalDocs: { url: https://dadata.ru/api/delivery/ }
+      operationId: findDelivery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '../schemas/request.json#/definitions/FindDeliveryPayload' }
+            examples:
+              simple_query:
+                value: { query: '3100400100000' }
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/FindDeliveryResponse' } }
+        '400': { $ref: '#/components/responses/SuggestBadRequest' }
+        '401': { $ref: '#/components/responses/SuggestUnauthorized' }
+        '403': { $ref: '#/components/responses/SuggestForbidden' }
+        '404': { $ref: '#/components/responses/SuggestNotFound' }
+        '405': { $ref: '#/components/responses/SuggestMethodNotAllowed' }
+        '413': { $ref: '#/components/responses/SuggestContentTooLarge' }
+        '429': { $ref: '#/components/responses/SuggestTooManyRequests' }
+        '5XX': { $ref: '#/components/responses/SuggestInternalServerError' }
+
+  /stat/daily:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, stats]
+      summary: Статистика использования
+      description: |
+        Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:
+        - стандартизация (`clean`)
+        - компания по email (`company`)
+        - поиск дублей (`merging`)
+        - подсказки (`suggestions`)
+
+        В поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.
+        В поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/stat/ }
+      operationId: fetchDailyStats
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/DailyStats' } }
+        '401': { $ref: '#/components/responses/ApiV2Unauthorized' }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /profile/balance:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, balance]
+      summary: Баланс пользователя
+      description: |
+        Возвращает текущий баланс счета в рублях с точностью до копеек.
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/balance/ }
+      operationId: fetchBalance
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/ProfileBalanceResponse' } }
+        '401': { $ref: '#/components/responses/ApiV2Unauthorized' }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
+      security:
+        - ApiKey: []
+          SecretKey: []
+
+  /version:
+    servers: [url: https://dadata.ru/api/v2]
+    get:
+      tags: [account, dadata, versions]
+      summary: Версии и даты справочников
+      description: |
+        Возвращает версии сервисов и даты актуальности справочников (ФИАС, ЕГРЮЛ, банки и другие).
+
+        > **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**
+      externalDocs: { url: https://dadata.ru/api/version/ }
+      operationId: fetchVersions
+      responses:
+        '200':
+          description: Запрос успешно обработан
+          content:
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/ServiceVersions' } }
+        '405': { $ref: '#/components/responses/ApiV2MethodNotAllowed' }
+        '4XX': { $ref: '#/components/responses/ApiV2Error4XX' }
+        '5XX': { $ref: '#/components/responses/ApiV2Error5XX' }
+      security:
+        - { ApiKey: [] }
+        # Официально заявлено, что требуется Api токен: https://dadata.ru/api/version/, но работает и без него
+        - {}

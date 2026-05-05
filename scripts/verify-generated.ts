@@ -7,6 +7,7 @@ const generatedTargets = [
   'packages/api-spec/schemas/request.json',
   'packages/api-spec/schemas/response.json',
   'packages/api-spec/dadata.json',
+  'packages/api-spec/dadata.yaml',
   'docs/vue-component-schema.json',
 ];
 

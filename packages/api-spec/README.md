@@ -24,6 +24,7 @@ pnpm i @dadata-sdk/api-spec
 ### Содержимое пакета
 
 - `dadata.json` - Собранный OpenAPI `3.1` с описанием всех публичных эндпоинтов «Дадаты»
+- `dadata.yaml` - Та же собранная OpenAPI `3.1` спецификация в YAML-формате
 - `schemas/request.json` - JSON-Schema `draft-07`, описывающая объекты, используемые в **запросах** к API «Дадаты»
 - `schemas/response.json` - JSON-Schema `draft-07`, описывающая объекты, используемые в **ответах** от API «Дадаты»
 
@@ -91,6 +92,7 @@ pnpm i @dadata-sdk/api-spec
 ### Included Files
 
 - `dadata.json` - bundled OpenAPI `3.1` document describing all public DaData endpoints
+- `dadata.yaml` - the same bundled OpenAPI `3.1` document in YAML format
 - `schemas/request.json` - JSON Schema `draft-07` describing objects used in **requests** to the DaData API
 - `schemas/response.json` - JSON Schema `draft-07` describing objects used in **responses** from the DaData API
 
