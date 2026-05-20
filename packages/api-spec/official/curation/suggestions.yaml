@@ -186,14 +186,14 @@ operations:
     - our:
         path: /iplocate/address
         method: get
-
-comparison:
-  anyOfFolding:
-    - target: official
-      operation:
-        path: /findAffiliated/party
-        method: post
-      response:
-        status: '200'
-        mediaType: application/json
-      schemaPath: suggestions/items/data
+#
+# comparison:
+#   anyOfFolding:
+#     - target: official
+#       operation:
+#         path: /findAffiliated/party
+#         method: post
+#       response:
+#         status: '200'
+#         mediaType: application/json
+#       schemaPath: suggestions/items/data

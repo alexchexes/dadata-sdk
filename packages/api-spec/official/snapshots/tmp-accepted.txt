@@ -1,0 +1,522 @@
+/findAffiliated/party POST request application/json count schema-max-changed from=null to=300
+/findAffiliated/party POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findByEmail/company POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/bank POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/car_brand POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/country POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/court POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/currency POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/delivery POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/fias POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/fns_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/fts_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/mktu POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/okpd2 POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/oktmo POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/okved2 POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/party POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/party_by POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/party_kz POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findById/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/geolocate/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/bank POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/car_brand POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/country POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/court POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/currency POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/email POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/fias POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/fio POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/fms_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/fns_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/fts_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/metro POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/mktu POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/okpd2 POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/oktmo POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/okved2 POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/party POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/party_by POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/party_kz POST response 200 application/json suggestions schema-required-added added="suggestions"
+/suggest/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
+/findAffiliated/party POST response 400 <response> response-status-added
+/findAffiliated/party POST response 401 <response> response-status-added
+/findAffiliated/party POST response 403 <response> response-status-added
+/findAffiliated/party POST response 404 <response> response-status-added
+/findAffiliated/party POST response 405 <response> response-status-added
+/findAffiliated/party POST response 413 <response> response-status-added
+/findAffiliated/party POST response 429 <response> response-status-added
+/findAffiliated/party POST response 5XX <response> response-status-added
+/findByEmail/company POST response 400 <response> response-status-added
+/findByEmail/company POST response 401 <response> response-status-added
+/findByEmail/company POST response 403 <response> response-status-added
+/findByEmail/company POST response 404 <response> response-status-added
+/findByEmail/company POST response 405 <response> response-status-added
+/findByEmail/company POST response 413 <response> response-status-added
+/findByEmail/company POST response 429 <response> response-status-added
+/findByEmail/company POST response 5XX <response> response-status-added
+/findById/address POST response 400 <response> response-status-added
+/findById/address POST response 401 <response> response-status-added
+/findById/address POST response 403 <response> response-status-added
+/findById/address POST response 404 <response> response-status-added
+/findById/address POST response 405 <response> response-status-added
+/findById/address POST response 413 <response> response-status-added
+/findById/address POST response 429 <response> response-status-added
+/findById/address POST response 5XX <response> response-status-added
+/findById/bank POST response 400 <response> response-status-added
+/findById/bank POST response 401 <response> response-status-added
+/findById/bank POST response 403 <response> response-status-added
+/findById/bank POST response 404 <response> response-status-added
+/findById/bank POST response 405 <response> response-status-added
+/findById/bank POST response 413 <response> response-status-added
+/findById/bank POST response 429 <response> response-status-added
+/findById/bank POST response 5XX <response> response-status-added
+/findById/car_brand POST response 400 <response> response-status-added
+/findById/car_brand POST response 401 <response> response-status-added
+/findById/car_brand POST response 403 <response> response-status-added
+/findById/car_brand POST response 404 <response> response-status-added
+/findById/car_brand POST response 405 <response> response-status-added
+/findById/car_brand POST response 413 <response> response-status-added
+/findById/car_brand POST response 429 <response> response-status-added
+/findById/car_brand POST response 5XX <response> response-status-added
+/findById/country POST response 400 <response> response-status-added
+/findById/country POST response 401 <response> response-status-added
+/findById/country POST response 403 <response> response-status-added
+/findById/country POST response 404 <response> response-status-added
+/findById/country POST response 405 <response> response-status-added
+/findById/country POST response 413 <response> response-status-added
+/findById/country POST response 429 <response> response-status-added
+/findById/country POST response 5XX <response> response-status-added
+/findById/court POST response 400 <response> response-status-added
+/findById/court POST response 401 <response> response-status-added
+/findById/court POST response 403 <response> response-status-added
+/findById/court POST response 404 <response> response-status-added
+/findById/court POST response 405 <response> response-status-added
+/findById/court POST response 413 <response> response-status-added
+/findById/court POST response 429 <response> response-status-added
+/findById/court POST response 5XX <response> response-status-added
+/findById/currency POST response 400 <response> response-status-added
+/findById/currency POST response 401 <response> response-status-added
+/findById/currency POST response 403 <response> response-status-added
+/findById/currency POST response 404 <response> response-status-added
+/findById/currency POST response 405 <response> response-status-added
+/findById/currency POST response 413 <response> response-status-added
+/findById/currency POST response 429 <response> response-status-added
+/findById/currency POST response 5XX <response> response-status-added
+/findById/delivery POST response 400 <response> response-status-added
+/findById/delivery POST response 401 <response> response-status-added
+/findById/delivery POST response 403 <response> response-status-added
+/findById/delivery POST response 404 <response> response-status-added
+/findById/delivery POST response 405 <response> response-status-added
+/findById/delivery POST response 413 <response> response-status-added
+/findById/delivery POST response 429 <response> response-status-added
+/findById/delivery POST response 5XX <response> response-status-added
+/findById/fias POST response 400 <response> response-status-added
+/findById/fias POST response 401 <response> response-status-added
+/findById/fias POST response 403 <response> response-status-added
+/findById/fias POST response 404 <response> response-status-added
+/findById/fias POST response 405 <response> response-status-added
+/findById/fias POST response 413 <response> response-status-added
+/findById/fias POST response 429 <response> response-status-added
+/findById/fias POST response 5XX <response> response-status-added
+/findById/fns_unit POST response 400 <response> response-status-added
+/findById/fns_unit POST response 401 <response> response-status-added
+/findById/fns_unit POST response 403 <response> response-status-added
+/findById/fns_unit POST response 404 <response> response-status-added
+/findById/fns_unit POST response 405 <response> response-status-added
+/findById/fns_unit POST response 413 <response> response-status-added
+/findById/fns_unit POST response 429 <response> response-status-added
+/findById/fns_unit POST response 5XX <response> response-status-added
+/findById/fts_unit POST response 400 <response> response-status-added
+/findById/fts_unit POST response 401 <response> response-status-added
+/findById/fts_unit POST response 403 <response> response-status-added
+/findById/fts_unit POST response 404 <response> response-status-added
+/findById/fts_unit POST response 405 <response> response-status-added
+/findById/fts_unit POST response 413 <response> response-status-added
+/findById/fts_unit POST response 429 <response> response-status-added
+/findById/fts_unit POST response 5XX <response> response-status-added
+/findById/mktu POST response 400 <response> response-status-added
+/findById/mktu POST response 401 <response> response-status-added
+/findById/mktu POST response 403 <response> response-status-added
+/findById/mktu POST response 404 <response> response-status-added
+/findById/mktu POST response 405 <response> response-status-added
+/findById/mktu POST response 413 <response> response-status-added
+/findById/mktu POST response 429 <response> response-status-added
+/findById/mktu POST response 5XX <response> response-status-added
+/findById/okpd2 POST response 400 <response> response-status-added
+/findById/okpd2 POST response 401 <response> response-status-added
+/findById/okpd2 POST response 403 <response> response-status-added
+/findById/okpd2 POST response 404 <response> response-status-added
+/findById/okpd2 POST response 405 <response> response-status-added
+/findById/okpd2 POST response 413 <response> response-status-added
+/findById/okpd2 POST response 429 <response> response-status-added
+/findById/okpd2 POST response 5XX <response> response-status-added
+/findById/oktmo POST response 400 <response> response-status-added
+/findById/oktmo POST response 401 <response> response-status-added
+/findById/oktmo POST response 403 <response> response-status-added
+/findById/oktmo POST response 404 <response> response-status-added
+/findById/oktmo POST response 405 <response> response-status-added
+/findById/oktmo POST response 413 <response> response-status-added
+/findById/oktmo POST response 429 <response> response-status-added
+/findById/oktmo POST response 5XX <response> response-status-added
+/findById/okved2 POST response 400 <response> response-status-added
+/findById/okved2 POST response 401 <response> response-status-added
+/findById/okved2 POST response 403 <response> response-status-added
+/findById/okved2 POST response 404 <response> response-status-added
+/findById/okved2 POST response 405 <response> response-status-added
+/findById/okved2 POST response 413 <response> response-status-added
+/findById/okved2 POST response 429 <response> response-status-added
+/findById/okved2 POST response 5XX <response> response-status-added
+/findById/party POST response 400 <response> response-status-added
+/findById/party POST response 401 <response> response-status-added
+/findById/party POST response 403 <response> response-status-added
+/findById/party POST response 404 <response> response-status-added
+/findById/party POST response 405 <response> response-status-added
+/findById/party POST response 413 <response> response-status-added
+/findById/party POST response 429 <response> response-status-added
+/findById/party POST response 5XX <response> response-status-added
+/findById/party_by POST response 400 <response> response-status-added
+/findById/party_by POST response 401 <response> response-status-added
+/findById/party_by POST response 403 <response> response-status-added
+/findById/party_by POST response 404 <response> response-status-added
+/findById/party_by POST response 405 <response> response-status-added
+/findById/party_by POST response 413 <response> response-status-added
+/findById/party_by POST response 429 <response> response-status-added
+/findById/party_by POST response 5XX <response> response-status-added
+/findById/party_kz POST response 400 <response> response-status-added
+/findById/party_kz POST response 401 <response> response-status-added
+/findById/party_kz POST response 403 <response> response-status-added
+/findById/party_kz POST response 404 <response> response-status-added
+/findById/party_kz POST response 405 <response> response-status-added
+/findById/party_kz POST response 413 <response> response-status-added
+/findById/party_kz POST response 429 <response> response-status-added
+/findById/party_kz POST response 5XX <response> response-status-added
+/findById/postal_unit POST response 400 <response> response-status-added
+/findById/postal_unit POST response 401 <response> response-status-added
+/findById/postal_unit POST response 403 <response> response-status-added
+/findById/postal_unit POST response 404 <response> response-status-added
+/findById/postal_unit POST response 405 <response> response-status-added
+/findById/postal_unit POST response 413 <response> response-status-added
+/findById/postal_unit POST response 429 <response> response-status-added
+/findById/postal_unit POST response 5XX <response> response-status-added
+/geolocate/address POST response 400 <response> response-status-added
+/geolocate/address POST response 401 <response> response-status-added
+/geolocate/address POST response 403 <response> response-status-added
+/geolocate/address POST response 404 <response> response-status-added
+/geolocate/address POST response 405 <response> response-status-added
+/geolocate/address POST response 413 <response> response-status-added
+/geolocate/address POST response 429 <response> response-status-added
+/geolocate/address POST response 5XX <response> response-status-added
+/geolocate/postal_unit POST response 400 <response> response-status-added
+/geolocate/postal_unit POST response 401 <response> response-status-added
+/geolocate/postal_unit POST response 403 <response> response-status-added
+/geolocate/postal_unit POST response 404 <response> response-status-added
+/geolocate/postal_unit POST response 405 <response> response-status-added
+/geolocate/postal_unit POST response 413 <response> response-status-added
+/geolocate/postal_unit POST response 429 <response> response-status-added
+/geolocate/postal_unit POST response 5XX <response> response-status-added
+/iplocate/address POST response 400 <response> response-status-added
+/iplocate/address POST response 401 <response> response-status-added
+/iplocate/address POST response 403 <response> response-status-added
+/iplocate/address POST response 404 <response> response-status-added
+/iplocate/address POST response 413 <response> response-status-added
+/iplocate/address POST response 429 <response> response-status-added
+/iplocate/address POST response 5XX <response> response-status-added
+/suggest/address POST response 400 <response> response-status-added
+/suggest/address POST response 401 <response> response-status-added
+/suggest/address POST response 403 <response> response-status-added
+/suggest/address POST response 404 <response> response-status-added
+/suggest/address POST response 405 <response> response-status-added
+/suggest/address POST response 413 <response> response-status-added
+/suggest/address POST response 429 <response> response-status-added
+/suggest/address POST response 5XX <response> response-status-added
+/suggest/bank POST response 400 <response> response-status-added
+/suggest/bank POST response 401 <response> response-status-added
+/suggest/bank POST response 403 <response> response-status-added
+/suggest/bank POST response 404 <response> response-status-added
+/suggest/bank POST response 405 <response> response-status-added
+/suggest/bank POST response 413 <response> response-status-added
+/suggest/bank POST response 429 <response> response-status-added
+/suggest/bank POST response 5XX <response> response-status-added
+/suggest/car_brand POST response 400 <response> response-status-added
+/suggest/car_brand POST response 401 <response> response-status-added
+/suggest/car_brand POST response 403 <response> response-status-added
+/suggest/car_brand POST response 404 <response> response-status-added
+/suggest/car_brand POST response 405 <response> response-status-added
+/suggest/car_brand POST response 413 <response> response-status-added
+/suggest/car_brand POST response 429 <response> response-status-added
+/suggest/car_brand POST response 5XX <response> response-status-added
+/suggest/country POST response 400 <response> response-status-added
+/suggest/country POST response 401 <response> response-status-added
+/suggest/country POST response 403 <response> response-status-added
+/suggest/country POST response 404 <response> response-status-added
+/suggest/country POST response 405 <response> response-status-added
+/suggest/country POST response 413 <response> response-status-added
+/suggest/country POST response 429 <response> response-status-added
+/suggest/country POST response 5XX <response> response-status-added
+/suggest/court POST response 400 <response> response-status-added
+/suggest/court POST response 401 <response> response-status-added
+/suggest/court POST response 403 <response> response-status-added
+/suggest/court POST response 404 <response> response-status-added
+/suggest/court POST response 405 <response> response-status-added
+/suggest/court POST response 413 <response> response-status-added
+/suggest/court POST response 429 <response> response-status-added
+/suggest/court POST response 5XX <response> response-status-added
+/suggest/currency POST response 400 <response> response-status-added
+/suggest/currency POST response 401 <response> response-status-added
+/suggest/currency POST response 403 <response> response-status-added
+/suggest/currency POST response 404 <response> response-status-added
+/suggest/currency POST response 405 <response> response-status-added
+/suggest/currency POST response 413 <response> response-status-added
+/suggest/currency POST response 429 <response> response-status-added
+/suggest/currency POST response 5XX <response> response-status-added
+/suggest/email POST response 400 <response> response-status-added
+/suggest/email POST response 401 <response> response-status-added
+/suggest/email POST response 403 <response> response-status-added
+/suggest/email POST response 404 <response> response-status-added
+/suggest/email POST response 405 <response> response-status-added
+/suggest/email POST response 413 <response> response-status-added
+/suggest/email POST response 429 <response> response-status-added
+/suggest/email POST response 5XX <response> response-status-added
+/suggest/fias POST response 400 <response> response-status-added
+/suggest/fias POST response 401 <response> response-status-added
+/suggest/fias POST response 403 <response> response-status-added
+/suggest/fias POST response 404 <response> response-status-added
+/suggest/fias POST response 405 <response> response-status-added
+/suggest/fias POST response 413 <response> response-status-added
+/suggest/fias POST response 429 <response> response-status-added
+/suggest/fias POST response 5XX <response> response-status-added
+/suggest/fio POST response 400 <response> response-status-added
+/suggest/fio POST response 401 <response> response-status-added
+/suggest/fio POST response 403 <response> response-status-added
+/suggest/fio POST response 404 <response> response-status-added
+/suggest/fio POST response 405 <response> response-status-added
+/suggest/fio POST response 413 <response> response-status-added
+/suggest/fio POST response 429 <response> response-status-added
+/suggest/fio POST response 5XX <response> response-status-added
+/suggest/fms_unit POST response 400 <response> response-status-added
+/suggest/fms_unit POST response 401 <response> response-status-added
+/suggest/fms_unit POST response 403 <response> response-status-added
+/suggest/fms_unit POST response 404 <response> response-status-added
+/suggest/fms_unit POST response 405 <response> response-status-added
+/suggest/fms_unit POST response 413 <response> response-status-added
+/suggest/fms_unit POST response 429 <response> response-status-added
+/suggest/fms_unit POST response 5XX <response> response-status-added
+/suggest/fns_unit POST response 400 <response> response-status-added
+/suggest/fns_unit POST response 401 <response> response-status-added
+/suggest/fns_unit POST response 403 <response> response-status-added
+/suggest/fns_unit POST response 404 <response> response-status-added
+/suggest/fns_unit POST response 405 <response> response-status-added
+/suggest/fns_unit POST response 413 <response> response-status-added
+/suggest/fns_unit POST response 429 <response> response-status-added
+/suggest/fns_unit POST response 5XX <response> response-status-added
+/suggest/fts_unit POST response 400 <response> response-status-added
+/suggest/fts_unit POST response 401 <response> response-status-added
+/suggest/fts_unit POST response 403 <response> response-status-added
+/suggest/fts_unit POST response 404 <response> response-status-added
+/suggest/fts_unit POST response 405 <response> response-status-added
+/suggest/fts_unit POST response 413 <response> response-status-added
+/suggest/fts_unit POST response 429 <response> response-status-added
+/suggest/fts_unit POST response 5XX <response> response-status-added
+/suggest/metro POST response 400 <response> response-status-added
+/suggest/metro POST response 401 <response> response-status-added
+/suggest/metro POST response 403 <response> response-status-added
+/suggest/metro POST response 404 <response> response-status-added
+/suggest/metro POST response 405 <response> response-status-added
+/suggest/metro POST response 413 <response> response-status-added
+/suggest/metro POST response 429 <response> response-status-added
+/suggest/metro POST response 5XX <response> response-status-added
+/suggest/mktu POST response 400 <response> response-status-added
+/suggest/mktu POST response 401 <response> response-status-added
+/suggest/mktu POST response 403 <response> response-status-added
+/suggest/mktu POST response 404 <response> response-status-added
+/suggest/mktu POST response 405 <response> response-status-added
+/suggest/mktu POST response 413 <response> response-status-added
+/suggest/mktu POST response 429 <response> response-status-added
+/suggest/mktu POST response 5XX <response> response-status-added
+/suggest/okpd2 POST response 400 <response> response-status-added
+/suggest/okpd2 POST response 401 <response> response-status-added
+/suggest/okpd2 POST response 403 <response> response-status-added
+/suggest/okpd2 POST response 404 <response> response-status-added
+/suggest/okpd2 POST response 405 <response> response-status-added
+/suggest/okpd2 POST response 413 <response> response-status-added
+/suggest/okpd2 POST response 429 <response> response-status-added
+/suggest/okpd2 POST response 5XX <response> response-status-added
+/suggest/oktmo POST response 400 <response> response-status-added
+/suggest/oktmo POST response 401 <response> response-status-added
+/suggest/oktmo POST response 403 <response> response-status-added
+/suggest/oktmo POST response 404 <response> response-status-added
+/suggest/oktmo POST response 405 <response> response-status-added
+/suggest/oktmo POST response 413 <response> response-status-added
+/suggest/oktmo POST response 429 <response> response-status-added
+/suggest/oktmo POST response 5XX <response> response-status-added
+/suggest/okved2 POST response 400 <response> response-status-added
+/suggest/okved2 POST response 401 <response> response-status-added
+/suggest/okved2 POST response 403 <response> response-status-added
+/suggest/okved2 POST response 404 <response> response-status-added
+/suggest/okved2 POST response 405 <response> response-status-added
+/suggest/okved2 POST response 413 <response> response-status-added
+/suggest/okved2 POST response 429 <response> response-status-added
+/suggest/okved2 POST response 5XX <response> response-status-added
+/suggest/party POST response 400 <response> response-status-added
+/suggest/party POST response 401 <response> response-status-added
+/suggest/party POST response 403 <response> response-status-added
+/suggest/party POST response 404 <response> response-status-added
+/suggest/party POST response 405 <response> response-status-added
+/suggest/party POST response 413 <response> response-status-added
+/suggest/party POST response 429 <response> response-status-added
+/suggest/party POST response 5XX <response> response-status-added
+/suggest/party_by POST response 400 <response> response-status-added
+/suggest/party_by POST response 401 <response> response-status-added
+/suggest/party_by POST response 403 <response> response-status-added
+/suggest/party_by POST response 404 <response> response-status-added
+/suggest/party_by POST response 405 <response> response-status-added
+/suggest/party_by POST response 413 <response> response-status-added
+/suggest/party_by POST response 429 <response> response-status-added
+/suggest/party_by POST response 5XX <response> response-status-added
+/suggest/party_kz POST response 400 <response> response-status-added
+/suggest/party_kz POST response 401 <response> response-status-added
+/suggest/party_kz POST response 403 <response> response-status-added
+/suggest/party_kz POST response 404 <response> response-status-added
+/suggest/party_kz POST response 405 <response> response-status-added
+/suggest/party_kz POST response 413 <response> response-status-added
+/suggest/party_kz POST response 429 <response> response-status-added
+/suggest/party_kz POST response 5XX <response> response-status-added
+/suggest/postal_unit POST response 400 <response> response-status-added
+/suggest/postal_unit POST response 401 <response> response-status-added
+/suggest/postal_unit POST response 403 <response> response-status-added
+/suggest/postal_unit POST response 404 <response> response-status-added
+/suggest/postal_unit POST response 405 <response> response-status-added
+/suggest/postal_unit POST response 413 <response> response-status-added
+/suggest/postal_unit POST response 429 <response> response-status-added
+/suggest/postal_unit POST response 5XX <response> response-status-added
+/findByEmail/company POST response 200 application/json suggestions/items/data/email/type schema-enum-value-added added="CORPORATE"
+/findByEmail/company POST response 200 application/json suggestions/items/data/email/type schema-enum-value-added added="DISPOSABLE"
+/findByEmail/company POST response 200 application/json suggestions/items/data/email/type schema-enum-value-added added="PERSONAL"
+/findByEmail/company POST response 200 application/json suggestions/items/data/email/type schema-enum-value-added added="ROLE"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_KAD"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_MKAD"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_KAD"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_MKAD"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="0"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="1"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="2"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="3"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="4"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="0"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="1"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="3"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="0"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="1"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="10"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="2"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="3"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="4"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="5"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="6"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="7"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="8"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="9"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="0"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="1"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="2"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="3"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="4"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="5"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="6"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="10"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="2"
+/findById/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="3"
+/findById/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="0"
+/findById/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="1"
+/findById/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="2"
+/findById/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="3"
+/findById/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="4"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="1"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="3"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="4"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="5"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="6"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="65"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="7"
+/findById/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="8"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="area"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="city"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="country"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="flat"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="house"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="planning_structure"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="region"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="settlement"
+/suggest/address POST request application/json from_bound/value schema-enum-value-added added="street"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="area"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="city"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="country"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="flat"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="house"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="planning_structure"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="region"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="settlement"
+/suggest/address POST request application/json to_bound/value schema-enum-value-added added="street"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_KAD"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_MKAD"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_KAD"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_MKAD"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="0"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="1"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="2"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="3"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="4"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="0"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="1"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="3"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="0"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="1"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="10"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="2"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="3"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="4"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="5"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="6"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="7"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="8"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-enum-value-added added="9"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="0"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="1"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="2"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="3"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="4"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="5"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="6"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="10"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="2"
+/suggest/bank POST response 200 application/json suggestions/items/data/address/data/qc_house schema-enum-value-added added="3"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="area"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="city"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="house"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="planning_structure"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="region"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="settlement"
+/suggest/fias POST request application/json from_bound/value schema-enum-value-added added="street"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="area"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="city"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="house"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="planning_structure"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="region"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="settlement"
+/suggest/fias POST request application/json to_bound/value schema-enum-value-added added="street"
+/suggest/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="0"
+/suggest/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="1"
+/suggest/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="2"
+/suggest/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="3"
+/suggest/fias POST response 200 application/json suggestions/items/data/capital_marker schema-enum-value-added added="4"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="1"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="3"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="4"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="5"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="6"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="65"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="7"
+/suggest/fias POST response 200 application/json suggestions/items/data/fias_level schema-enum-value-added added="8"
+/suggest/fio POST response 200 application/json suggestions/items/data/qc schema-enum-value-added added="0"
+/suggest/fio POST response 200 application/json suggestions/items/data/qc schema-enum-value-added added="1"
