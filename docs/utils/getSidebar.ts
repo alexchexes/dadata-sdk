@@ -56,6 +56,10 @@ export function getSidebar(lang: 'ru' | 'en') {
               link: 'https://dadata.ru/api/clean/',
             },
             {
+              text: t('«Руководство по эксплуатации» (PDF)', '"Manual" (legal document), PDF'),
+              link: 'https://dadata.ru/files/documents/Руководство_по_эксплуатации_DaData.pdf',
+            },
+            {
               text: t('Цены', 'Pricing'),
               link: 'https://dadata.ru/pricing/',
             },

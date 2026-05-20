@@ -6,6 +6,8 @@ import { dirname, join, resolve } from 'node:path';
 
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
+import { applyAnyOfFoldingRules, type AnyOfFoldingRule } from './official-comparison/anyof-folding.js';
+import { readComparisonCuration } from './official-comparison/comparison-curation.js';
 import {
   COMPARISON_INFO,
   type ComparisonNormalizationDecision,
@@ -97,6 +99,7 @@ interface SnapshotResult {
 
 const OUR_SPEC_PATH = resolve('dadata.json');
 const SNAPSHOT_PATH = resolve('official/snapshots/suggestions.diff.txt');
+const DEFAULT_CURATION_PATH = resolve('official/curation/suggestions.yaml');
 const STAGE_A_SCRIPT_PATH = './scripts/compare-official-suggestions-stage-a.ts';
 const DEFAULT_MAX_GROUPS = 8;
 const DEFAULT_MAX_SAMPLES = 2;
@@ -122,6 +125,7 @@ try {
 
   runStageAProjection(projectionPath, options);
 
+  const comparisonCuration = readComparisonCuration(options.curationPath, DEFAULT_CURATION_PATH);
   const projectedSpec = readJson<OpenAPIV3_1.Document>(
     projectionPath,
     'projected official suggestions spec',
@@ -133,6 +137,12 @@ try {
     projectedSpec,
     comparisonOpenapiVersion,
   );
+  projectionNormalizationDecisions.push(
+    ...applyAnyOfFoldingRules(
+      projectedSpec,
+      comparisonCuration.anyOfFolding.filter((rule) => rule.target === 'official'),
+    ),
+  );
   writeJson(projectionNormalizedUnprunedPath, projectedSpec);
   const projectionComponentPruning = pruneUnreferencedComponents(projectedSpec);
   writeJson(projectionPath, projectedSpec);
@@ -142,6 +152,7 @@ try {
   const comparableOperations = extractComparableOperations(projectedSpec);
   const revisionSlice = writeComparableRevisionSlice(
     comparableOperations,
+    comparisonCuration.anyOfFolding.filter((rule) => rule.target === 'ours'),
     revisionSlicePath,
     ourSpec,
   );
@@ -394,6 +405,7 @@ function extractComparableOperations(document: OpenAPIV3_1.Document): Map<string
 /** Builds our temporary spec slice with only operations present in the Stage A projection. */
 function writeComparableRevisionSlice(
   comparableOperations: Map<string, Set<HttpMethod>>,
+  anyOfFoldingRules: AnyOfFoldingRule[],
   outputPath: string,
   ourSpec: OpenAPIV3_1.Document,
 ): RevisionSliceResult {
@@ -438,6 +450,7 @@ function writeComparableRevisionSlice(
   };
 
   const normalizationDecisions = normalizeComparisonDocument(document, document.openapi ?? '3.1.1');
+  normalizationDecisions.push(...applyAnyOfFoldingRules(document, anyOfFoldingRules));
   writeJson(outputPath, document);
 
   return {

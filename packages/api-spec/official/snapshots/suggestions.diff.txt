@@ -2,73 +2,314 @@
 /findAffiliated/party POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findAffiliated/party POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data schema-required-added added="data"
-/findAffiliated/party POST response 200 application/json suggestions/items/data schema-type-changed added=["object"] removed=[]
-/findAffiliated/party POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities schema-property-added added="authorities"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data schema-required-added added="data"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area schema-required-added added="area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area_fias_id schema-required-added added="area_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area_kladr_id schema-required-added added="area_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area_type schema-required-added added="area_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area_type_full schema-required-added added="area_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/area_with_type schema-required-added added="area_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_distance schema-required-added added="beltway_distance"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_KAD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="IN_MKAD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_KAD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added="OUT_MKAD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-enum-value-added added=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/beltway_hit schema-required-added added="beltway_hit"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/block schema-required-added added="block"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/block_type schema-required-added added="block_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/block_type_full schema-required-added added="block_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="0"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="1"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="2"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="3"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added="4"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-enum-value-added added=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/capital_marker schema-required-added added="capital_marker"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city schema-required-added added="city"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_area schema-required-added added="city_area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district schema-required-added added="city_district"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_fias_id schema-required-added added="city_district_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_kladr_id schema-required-added added="city_district_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_kladr_id schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_type schema-required-added added="city_district_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_type_full schema-required-added added="city_district_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_district_with_type schema-required-added added="city_district_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_fias_id schema-required-added added="city_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_kladr_id schema-required-added added="city_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_type schema-required-added added="city_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_type_full schema-required-added added="city_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/city_with_type schema-required-added added="city_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/country schema-required-added added="country"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/country schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/country_iso_code schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/custom schema-property-deleted removed="custom"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative schema-required-added added="administrative"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/name_with_type schema-required-added added="name_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/area/type_full schema-required-added added="type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/name_with_type schema-required-added added="name_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city_district/type_full schema-required-added added="type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/name_with_type schema-required-added added="name_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/city/type_full schema-required-added added="type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/name_with_type schema-required-added added="name_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/planning_structure/type_full schema-required-added added="type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/name_with_type schema-required-added added="name_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/administrative/settlement/type_full schema-required-added added="type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal/area schema-property-deleted removed="area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal/city schema-property-deleted removed="city"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal/planning_structure schema-property-deleted removed="planning_structure"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal/settlement schema-property-deleted removed="settlement"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/divisions/municipal/sub_area schema-property-deleted removed="sub_area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/fias_actuality_state schema-required-added added="fias_actuality_state"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/fias_code schema-required-added added="fias_code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/fias_id schema-required-added added="fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/fias_level schema-required-added added="fias_level"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/fias_level schema-type-changed added=[] removed=["null","string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/flat schema-required-added added="flat"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/flat_area schema-required-added added="flat_area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/flat_price schema-required-added added="flat_price"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/flat_type schema-required-added added="flat_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/flat_type_full schema-required-added added="flat_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/geo_lat schema-required-added added="geo_lat"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/geo_lon schema-required-added added="geo_lon"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/geoname_id schema-required-added added="geoname_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/history_values schema-required-added added="history_values"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/house schema-required-added added="house"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/house_fias_id schema-required-added added="house_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/house_kladr_id schema-required-added added="house_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/house_type schema-required-added added="house_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/house_type_full schema-required-added added="house_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/kladr_id schema-required-added added="kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/metro schema-required-added added="metro"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/metro/items/distance schema-required-added added="distance"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/metro/items/line schema-required-added added="line"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/metro/items/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/okato schema-required-added added="okato"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/oktmo schema-required-added added="oktmo"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/postal_box schema-required-added added="postal_box"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/postal_code schema-required-added added="postal_code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="0"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="1"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc schema-enum-value-added added="3"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc schema-required-added added="qc"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_complete schema-required-added added="qc_complete"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="0"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="1"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="2"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="3"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="4"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="5"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added="6"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-enum-value-added added=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_geo schema-required-added added="qc_geo"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/qc_house schema-required-added added="qc_house"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region schema-required-added added="region"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region_fias_id schema-required-added added="region_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region_kladr_id schema-required-added added="region_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region_type schema-required-added added="region_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region_type_full schema-required-added added="region_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/region_with_type schema-required-added added="region_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement schema-required-added added="settlement"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement_fias_id schema-required-added added="settlement_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement_kladr_id schema-required-added added="settlement_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement_type schema-required-added added="settlement_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement_type_full schema-required-added added="settlement_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/settlement_with_type schema-required-added added="settlement_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/source schema-required-added added="source"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/source schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/square_meter_price schema-required-added added="square_meter_price"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street schema-required-added added="street"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street_fias_id schema-required-added added="street_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street_kladr_id schema-required-added added="street_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street_type schema-required-added added="street_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street_type_full schema-required-added added="street_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/street_with_type schema-required-added added="street_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area schema-property-deleted removed="sub_area"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area_fias_id schema-property-deleted removed="sub_area_fias_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area_kladr_id schema-property-deleted removed="sub_area_kladr_id"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area_type schema-property-deleted removed="sub_area_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area_type_full schema-property-deleted removed="sub_area_type_full"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/sub_area_with_type schema-property-deleted removed="sub_area_with_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/tax_office schema-required-added added="tax_office"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/tax_office_legal schema-required-added added="tax_office_legal"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/timezone schema-required-added added="timezone"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/unparsed_parts schema-required-added added="unparsed_parts"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/data/unparsed_parts schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/invalidity schema-required-added added="invalidity"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/invalidity schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/invalidity/code schema-property-deleted removed="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/invalidity/code schema-required-deleted removed="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/invalidity/decision schema-property-deleted removed="decision"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/unrestricted_value schema-required-added added="unrestricted_value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/unrestricted_value schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/value schema-required-added added="value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/address/value schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/authorities schema-required-added added="authorities"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_count schema-property-added added="branch_count"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_type schema-property-added added="branch_type"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/capital schema-property-added added="capital"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship schema-property-added added="citizenship"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/documents schema-property-added added="documents"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities/fts_registration schema-property-deleted removed="fts_registration"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities/fts_report schema-property-deleted removed="fts_report"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities/pf schema-property-deleted removed="pf"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/authorities/sif schema-property-deleted removed="sif"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_count schema-format-changed from="int32" to=""
+/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_count schema-type-changed added=["number"] removed=["integer"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_type schema-enum-value-deleted removed=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/branch_type schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/capital schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/capital/type schema-property-deleted removed="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/capital/value schema-property-deleted removed="value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship/code schema-property-deleted removed="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship/code schema-required-deleted removed="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship/name schema-property-deleted removed="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/citizenship/name schema-required-deleted removed="name"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/documents schema-required-added added="documents"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/emails schema-property-added added="emails"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents/fts_registration schema-property-deleted removed="fts_registration"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents/fts_report schema-property-deleted removed="fts_report"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents/pf_registration schema-property-deleted removed="pf_registration"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents/sif_registration schema-property-deleted removed="sif_registration"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/documents/smb schema-property-deleted removed="smb"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/emails schema-required-added added="emails"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/employee_count schema-property-added added="employee_count"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/emails schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/emails/items schema-deleted
+/findAffiliated/party POST response 200 application/json suggestions/items/data/employee_count schema-format-changed from="int32" to=""
 /findAffiliated/party POST response 200 application/json suggestions/items/data/employee_count schema-required-added added="employee_count"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/finance schema-property-added added="finance"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/employee_count schema-type-changed added=[] removed=["integer"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/finance schema-required-added added="finance"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/fio schema-property-added added="fio"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/founders schema-property-added added="founders"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/hid schema-property-added added="hid"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/debt schema-required-added added="debt"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/debt schema-type-changed added=[] removed=["number"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/expense schema-required-added added="expense"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/expense schema-type-changed added=[] removed=["number"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/income schema-required-added added="income"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/income schema-type-changed added=[] removed=["number"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/penalty schema-required-added added="penalty"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/penalty schema-type-changed added=[] removed=["number"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/revenue schema-required-added added="revenue"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/revenue schema-type-changed added=[] removed=["number"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="AUSN"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="ENVD_ESHN"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="ENVD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="ESHN"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="SRP"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="USN_ENVD"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed="USN"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-enum-value-deleted removed=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-required-added added="tax_system"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/tax_system schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/year schema-format-changed from="int32" to=""
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/year schema-required-added added="year"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/finance/year schema-type-changed added=[] removed=["integer"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio schema-type-changed added=["null"] removed=[]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-enum-value-deleted removed="FEMALE"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-enum-value-deleted removed="MALE"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-enum-value-deleted removed="UNKNOWN"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-enum-value-deleted removed=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-required-added added="gender"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/gender schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/name schema-required-added added="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/patronymic schema-required-added added="patronymic"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/qc schema-required-added added="qc"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/qc schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/source schema-required-added added="source"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/source schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/fio/surname schema-required-added added="surname"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/founders schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/founders/items schema-deleted
 /findAffiliated/party POST response 200 application/json suggestions/items/data/hid schema-required-added added="hid"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/hid schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/invalid schema-property-added added="invalid"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/kpp schema-property-added added="kpp"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/kpp_largest schema-property-added added="kpp_largest"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/licenses schema-property-added added="licenses"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/inn schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/invalid schema-enum-value-added added=null
+/findAffiliated/party POST response 200 application/json suggestions/items/data/invalid schema-enum-value-added added=true
+/findAffiliated/party POST response 200 application/json suggestions/items/data/kpp schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/licenses schema-required-added added="licenses"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/management schema-property-added added="management"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/licenses schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/licenses/items schema-deleted
 /findAffiliated/party POST response 200 application/json suggestions/items/data/management schema-required-added added="management"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/managers schema-property-added added="managers"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn schema-property-added added="ogrn"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/management schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/management/disqualified schema-property-deleted removed="disqualified"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/management/name schema-property-deleted removed="name"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/management/post schema-property-deleted removed="post"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/management/start_date schema-property-deleted removed="start_date"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/managers schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/managers/items schema-deleted
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name/full_value schema-property-deleted removed="full_value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name/full_with_opf schema-property-deleted removed="full_with_opf"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name/latin schema-property-deleted removed="latin"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name/short_value schema-property-deleted removed="short_value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/name/short_with_opf schema-property-deleted removed="short_with_opf"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn schema-required-added added="ogrn"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn_date schema-property-added added="ogrn_date"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn_date schema-required-added added="ogrn_date"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okato schema-property-added added="okato"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/ogrn_date schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okato schema-required-added added="okato"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okfs schema-property-added added="okfs"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okfs schema-required-added added="okfs"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okogu schema-property-added added="okogu"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okogu schema-required-added added="okogu"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okpo schema-property-added added="okpo"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okpo schema-required-added added="okpo"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/oktmo schema-required-added added="oktmo"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okved schema-property-added added="okved"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okved schema-required-added added="okved"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okved_type schema-property-added added="okved_type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okved schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okved_type schema-enum-value-added added="2001"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okved_type schema-enum-value-added added="2014"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okved_type schema-required-added added="okved_type"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/okveds schema-property-added added="okveds"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okved_type schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/okveds schema-required-added added="okveds"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/opf schema-property-added added="opf"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okveds schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/okveds/items schema-deleted
 /findAffiliated/party POST response 200 application/json suggestions/items/data/opf schema-required-added added="opf"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/phones schema-property-added added="phones"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/opf schema-type-changed added=["null"] removed=["object"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/opf/code schema-property-deleted removed="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/opf/full_value schema-property-deleted removed="full_value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/opf/short_value schema-property-deleted removed="short_value"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/opf/type schema-property-deleted removed="type"
 /findAffiliated/party POST response 200 application/json suggestions/items/data/phones schema-required-added added="phones"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/predecessors schema-property-added added="predecessors"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/qc schema-property-added added="qc"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/phones schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/phones/items schema-deleted
+/findAffiliated/party POST response 200 application/json suggestions/items/data/predecessors schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/predecessors/items schema-deleted
 /findAffiliated/party POST response 200 application/json suggestions/items/data/qc schema-required-added added="qc"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/source schema-property-added added="source"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/qc schema-type-changed added=[] removed=["string"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data/source schema-required-added added="source"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/state schema-property-added added="state"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/state schema-required-added added="state"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/successors schema-property-added added="successors"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/findAffiliated/party POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/source schema-type-changed added=[] removed=["string"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/actuality_date schema-required-added added="actuality_date"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/actuality_date schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/code schema-required-added added="code"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/liquidation_date schema-required-added added="liquidation_date"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/registration_date schema-required-added added="registration_date"
+/findAffiliated/party POST response 200 application/json suggestions/items/data/state/registration_date schema-type-changed added=[] removed=["null"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/successors schema-type-changed added=[] removed=["array"]
+/findAffiliated/party POST response 200 application/json suggestions/items/data/successors/items schema-deleted
 /findAffiliated/party POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findAffiliated/party POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/value schema-required-added added="value"

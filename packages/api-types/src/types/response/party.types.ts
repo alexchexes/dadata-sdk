@@ -10,9 +10,17 @@ import type { PartySuggestionAddressData } from './address.types';
 import type { PartyByEmailEmailData } from './email.types';
 
 /**
- * Generic suggestion object returned from 'suggest/party' or 'findById/party' APIs
+ * Объект подсказки, возвращаемый из API `suggest/party`, `findById/party`, `findAffiliated/party`
+ *
+ * - @see https://dadata.ru/api/suggest/party
+ * - @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122
+ *
+ * - @see https://dadata.ru/api/find-party/
+ * - @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058
+ *
+ * - @see https://dadata.ru/api/find-affiliated/
  */
-export interface BasePartySuggestion<T = RichPartySuggestionData | PartySuggestionData> {
+export interface PartySuggestion {
   /**
    * Краткое наименование организации (data.name.short_with_opf).
    * Если краткое наименование не указано — полное наименование (data.name.full_with_opf)
@@ -25,33 +33,13 @@ export interface BasePartySuggestion<T = RichPartySuggestionData | PartySuggesti
   /**
    * Подробности об организации
    */
-  data: T;
+  data: PartyLegal | PartyIndividual;
 }
 
 /**
- * Suggestion object returned from 'suggest/party' API
- * - {@link https://dadata.ru/api/suggest/party}
- * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122}
+ * Объект адреса (`data.address`), возвращаемый API `suggest/party` и `findById/party`
  */
-export interface PartySuggestion extends BasePartySuggestion<PartySuggestionData> {}
-
-/**
- * Suggestion object returned from 'findById/party' API
- * - {@link https://dadata.ru/api/find-party/}
- * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058}
- */
-export interface RichPartySuggestion extends BasePartySuggestion<RichPartySuggestionData> {}
-
-/**
- * Suggestion object returned from 'findAffiliated/party' API endpoint
- * @see https://dadata.ru/api/find-affiliated/
- */
-export interface PartyAffiliatedSuggestion extends BasePartySuggestion<PartyAffiliatedData> {}
-
-/**
- * `data.address` object returned from 'suggest/party' API
- */
-export interface PartySuggestionDataAddressBasic {
+export interface PartyAddress {
   /**
    * Адрес одной строкой, сокращённый по правилам, описанным здесь: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1105068073}
    * - Для юрлиц: **адрес организации**
@@ -68,26 +56,14 @@ export interface PartySuggestionDataAddressBasic {
    * * Стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ.
    */
   unrestricted_value: string;
-  /** Недостоверность сведений об адресе (только в «Организация по ИНН») */
-  invalidity: null;
+  /**
+   * Недостоверность сведений об адресе (только в «Организация по ИНН», Только «Максимальный» тариф)
+   * - {@link https://dadata.ru/api/find-party/#invalidity}
+   */
+  invalidity: InvalidityInfo | null;
   /** Подробности об адресе организации */
   data: PartySuggestionAddressData;
 }
-
-/**
- * `data.address` object returned from 'findById/party' API
- */
-export interface PartySuggestionDataAddressExtra
-  extends Override<
-    PartySuggestionDataAddressBasic,
-    {
-      /**
-       * Недостоверность сведений об адресе (Только «Максимальный» тариф)
-       * - {@link https://dadata.ru/api/find-party/#invalidity}
-       */
-      invalidity: InvalidityInfo | null;
-    }
-  > {}
 
 export interface PartyNameInfo {
   /** Полное наименование */
@@ -159,33 +135,22 @@ export interface PartyStateInfo {
   code: string | null;
 }
 
-export interface PartyFinanceInfoBasic {
-  /** Система налогообложения (только в «Организация по ИНН») */
-  tax_system: null;
-  /** Год бух. отчетности (только в «Организация по ИНН») */
-  year: null;
-  /** Доходы по бух. отчетности (только в «Организация по ИНН») */
-  income: null;
-  /** Выручка по бух. отчетности (только в «Организация по ИНН») */
-  revenue: null;
-  /** Расходы по бух. отчетности (только в «Организация по ИНН») */
-  expense: null;
-  /** Недоимки по налогам (только в «Организация по ИНН») */
-  debt: null;
-  /** Налоговые штрафы (только в «Организация по ИНН») */
-  penalty: null;
-}
-
-export interface PartyFinanceInfoExtra {
+export interface PartyFinance {
   /**
-   * Система налогообложения (Тарифы «Расширенный» и «Максимальный»)
-   * - `AUSN` — автоматизированная упрощенная система налогообложения (АУСН)
+   * Система налогообложения (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)
    * - `ESHN` — единый сельскохозяйственный налог (ЕСХН)
+   * - `ENVD` — единый налог на вмененный доход для отдельных видов деятельности (ЕНВД)
    * - `SRP` — система налогообложения при выполнении соглашений о разделе продукции (СРП)
    * - `USN` — упрощенная система налогообложения (УСН)
+   * - `AUSN` — автоматизированная упрощенная система налогообложения (АУСН)
+   * - `USN_ENVD` — совмещение УСН и ЕНВД
+   * - `ENVD_ESHN` — совмещение ЕНВД и ЕСХН
    */
-  tax_system: string | null;
-  /** Год бух. отчетности (Только «Максимальный» тариф, 21.3+) */
+  tax_system: TaxSystem | null;
+  /**
+   * Год бух. отчетности (только в «Организация по ИНН», Только «Максимальный» тариф, 21.3+)
+   * @format int32
+   */
   year: number | null;
   /**
    * Доходы по бух. отчетности, руб (Только «Максимальный» тариф)
@@ -193,17 +158,17 @@ export interface PartyFinanceInfoExtra {
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}
    */
   income: number | null;
-  /** Выручка по бух. отчетности, руб (Только «Максимальный» тариф, 23.8+) */
+  /** Выручка по бух. отчетности, руб (только в «Организация по ИНН», Только «Максимальный» тариф, 23.8+) */
   revenue: number | null;
   /**
-   * Расходы по бух. отчетности, руб (Только «Максимальный» тариф)
+   * Расходы по бух. отчетности, руб (только в «Организация по ИНН», Только «Максимальный» тариф)
    * - {@link https://dadata.ru/api/find-party/#finance}
    * - {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}
    */
   expense: number | null;
-  /** Недоимки по налогам за позапрошлый год, руб (Только «Максимальный» тариф) */
+  /** Недоимки по налогам за позапрошлый год, руб (только в «Организация по ИНН», Только «Максимальный» тариф) */
   debt: number | null;
-  /** Налоговые штрафы за позапрошлый год, руб (Только «Максимальный» тариф) */
+  /** Налоговые штрафы за позапрошлый год, руб (только в «Организация по ИНН», Только «Максимальный» тариф) */
   penalty: number | null;
 }
 
@@ -221,13 +186,10 @@ export interface PartyOkvedInfo {
 /**
  * `suggestion[ ].data` object, returned from 'suggest/party' API
  */
-export interface PartySuggestionData {
+interface PartyBase {
   /** ИНН */
   inn: string;
-  /** КПП */
-  kpp?: string;
-  /** КПП крупнейшего налогоплательщика */
-  kpp_largest?: string | null;
+
   /**
    * ОГРН (13 цифр)
    * Для представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП.
@@ -247,7 +209,10 @@ export interface PartySuggestionData {
    */
   type: PartyType;
 
-  /** Наименование организации */
+  /**
+   * Наименование организации.  
+   * Не заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»
+   */
   name: PartyNameInfo;
 
   /** Код ОКПО */
@@ -264,11 +229,84 @@ export interface PartySuggestionData {
   okved: string;
   /** Версия справочника ОКВЭД (2001 или 2014) */
   okved_type: OkvedType;
-  /** Организационно-правовая форма */
+  /**
+   * Организационно-правовая форма.  
+   * Не заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»
+   */
   opf: PartyOpfInfo;
 
+  /** Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации */
+  address: PartyAddress;
+
+  /** Состояние организации */
+  state: PartyStateInfo;
+
+  // === Дополнительные поля, заполняются только через метод «Организация по ИНН» ===
+
   /**
-   * Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)
+   * Среднесписочная численность работников
+   * (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный», 19.7+)
+   */
+  employee_count: number | null;
+  /**
+   * Коды ОКВЭД дополнительных видов деятельности
+   * (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)
+   */
+  okveds: PartyOkvedInfo[] | null;
+  /**
+   * Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)
+   *
+   * - `fts_registration` — ИФНС регистрации
+   * - `fts_report` — ИФНС отчётности
+   * - `pf` — Отделение Пенсионного фонда
+   * - `sif` — Отделение Фонда соц. страхования
+   */
+  authorities: PartyAuthorities | null;
+
+  /**
+   * Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН», 19.7+)
+   */
+  finance: PartyFinance | null;
+  /**
+   * Документы и реестры (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  documents: PartyDocuments | null;
+  /**
+   * Лицензии (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  licenses: LicenseInfo[] | null;
+  /**
+   * Телефоны, заполнены у 60% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  phones: PartyPhoneInfo[] | null;
+  /**
+   * Адреса эл. почты, заполнены у 50% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  emails: PartyEmailInfo[] | null;
+
+  /** Не заполняется */
+  source: null;
+  /** Не заполняется */
+  qc: null;
+}
+
+export interface PartyLegal extends PartyBase {
+  /**
+   * Количество филиалов
+   */
+  branch_count: number | null;
+  /**
+   * Тип подразделения
+   * - `MAIN` — головная организация
+   * - `BRANCH` — филиал
+   */
+  branch_type: BranchType;
+  /**
+   * Уставной капитал компании (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  capital: PartyCapital | null;
+  /**
+   * Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам)
    * - {@link https://dadata.ru/api/find-party/#invalidity}
    *
    * Подробности об этом указываются в полях:
@@ -280,81 +318,49 @@ export interface PartySuggestionData {
    * «Дадата» вернет для организации в целом маркер `data.invalid = true`
    *
    * * Только «Максимальный» тариф */
-  invalid?: true | null;
-
-  /** Руководитель (только для юрлиц) */
-  management?: null | PartyManagementInfo;
-
-  /** Количество филиалов (только для юрлиц) */
-  branch_count?: number | null;
-
+  invalid: true | null;
   /**
-   * Тип подразделения (только для юрлиц)
-   * - `MAIN` — головная организация
-   * - `BRANCH` — филиал
+   * КПП
    */
-  branch_type?: BranchType;
-
-  /** Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации */
-  address: PartySuggestionDataAddressBasic;
-
-  /** Состояние организации */
-  state: PartyStateInfo;
-  /** ФИО индивидуального предпринимателя (21.3+) */
-  fio?: null | FioInfoBasic;
-
-  // === Дополнительные поля, заполняются только через метод «Организация по ИНН» ===
-
-  /** Среднесписочная численность работников (только в «Организация по ИНН») */
-  employee_count: null;
-  /** Коды ОКВЭД дополнительных видов деятельности (только в «Организация по ИНН») */
-  okveds: null;
-  /** Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН») */
-  authorities: null;
-  /** Гражданство ИП (только в «Организация по ИНН») */
-  citizenship?: null;
-  /** Учредители компании, только для юрлиц (только в «Организация по ИНН») */
-  founders?: null;
-  /** Руководители компании, только для юрлиц (только в «Организация по ИНН») */
-  managers?: null;
-  /** Правопредшественники компании, только для юрлиц (только в «Организация по ИНН») */
-  predecessors?: null;
-  /** Правопреемники компании, только для юрлиц (только в «Организация по ИНН») */
-  successors?: null;
-  /** Уставной капитал компании, только для юрлиц (только в «Организация по ИНН») */
-  capital?: null;
-  /** Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН») */
-  finance: null | PartyFinanceInfoBasic;
-  /** Документы и реестры (только в «Организация по ИНН») */
-  documents: null;
-  /** Лицензии (только в «Организация по ИНН») */
-  licenses: null;
-  /** Телефоны (только в «Организация по ИНН») */
-  phones: null;
-  /** Адреса эл. почты (только в «Организация по ИНН») */
-  emails: null;
-
-  /** Не заполняется */
-  source: null;
-  /** Не заполняется */
-  qc: null;
+  kpp: string;
+  /**
+   * КПП крупнейшего налогоплательщика
+   */
+  kpp_largest: string | null;
+  /**
+   * Учредители компании (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  founders: PartyFounderLegal[] | PartyFounderPhysical[] | null;
+  /**
+   * Руководитель  
+   * Не заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»
+   */
+  management: PartyManagementInfo | null;
+  /**
+   * Руководители компании (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  managers: PartyManagerLegal[] | PartyManagerPhysical[] | null;
+  /**
+   * Правопредшественники компании (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  predecessors: LinkedLegalEntity[] | null;
+  /**
+   * Правопреемники компании (только в «Организация по ИНН», Только «Максимальный» тариф)
+   */
+  successors: LinkedLegalEntity[] | null;
 }
 
-/**
- * @see https://dadata.ru/api/find-affiliated
- */
-export interface PartyAffiliatedData
-  extends Override<
-    PartySuggestionData,
-    {
-      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
-      management: null;
-      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
-      opf: null;
-      /** Не заполняется, используйте метод "Организация по ИНН" (`findById/party`) */
-      name: null;
-    }
-  > {}
+export interface PartyIndividual extends PartyBase {
+  /**
+   * Гражданство ИП (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)
+   */
+  citizenship: PartyCitizenshipInfo | null;
+
+  /**
+   * ФИО индивидуального предпринимателя (21.3+)
+   */
+  fio: FioInfoBasic | null;
+}
 
 export interface PartyAuthoritiesItem {
   /** Код гос. органа */
@@ -392,7 +398,7 @@ export interface PartyCitizenshipInfo {
   name: PartyCitizenshipName;
 }
 
-export interface PartyFounderShare {
+export interface FounderShare {
   /**
    * Тип значения для доли
    * - `PERCENT` - процент (пример: `75`)
@@ -400,66 +406,98 @@ export interface PartyFounderShare {
    * - `FRACTION` - обычная дробь (пример: `3/4`)
    */
   type: 'PERCENT' | 'DECIMAL' | 'FRACTION';
-  /** Значение доли. Для процентных и десятичных (type = `PERCENT` и type = `DECIMAL`) */
+  /**
+   * Значение доли. Для процентных и десятичных (type = `PERCENT` и type = `DECIMAL`)
+   */
   value?: number;
-  /** Числитель дроби у доли (для type = `FRACTION`) */
+  /**
+   * Числитель дроби у доли (для type = `FRACTION`)
+   * @format int64
+   */
   numerator?: number;
-  /** Знаменатель дроби у доли (для type = `FRACTION`) */
+  /**
+   * Знаменатель дроби у доли (для type = `FRACTION`)
+   * @format int64
+   */
   denominator?: number;
 }
 
-export interface PartyFounder {
-  /** ОГРН учредителя (для юрлиц) */
-  ogrn?: null | string;
-  /** ИНН учредителя */
-  inn: null | string;
-  /** Наименование учредителя (для юрлиц) */
-  name?: null | string;
-  /** ФИО учредителя (для физлиц) */
-  fio?: null | FioInfoExtra;
+interface PartyFounder {
   /** Внутренний идентификатор в Дадате */
-  hid: null | string;
-  /** Тип учредителя (`LEGAL` - юрлицо / `PHYSICAL` - физлицо) */
-  type: null | 'LEGAL' | 'PHYSICAL';
-  /** Доля учредителя */
-  share: null | PartyFounderShare;
+  hid: string | null;
+
+  /** ИНН учредителя */
+  inn: string | null;
+
   /**
    * Недостоверность сведений об учредителе
    * - {@link https://dadata.ru/api/find-party/#invalidity}
    */
   invalidity: InvalidityInfo | null;
+
+  /** Доля учредителя */
+  share: FounderShare | null;
+
   /**
    * Дата вступления в права учредителя (unix-время в миллисекундах)
    * @format int64
    */
   start_date: number | null;
+
+  /** Тип учредителя (`LEGAL` - юрлицо / `PHYSICAL` - физлицо) */
+  type: 'LEGAL' | 'PHYSICAL' | null;
 }
 
-export interface PartyManager {
-  /** ОГРН руководителя (для юрлиц) */
-  ogrn?: string | null;
+export interface PartyFounderLegal extends PartyFounder {
+  /** ОГРН учредителя */
+  ogrn: string | null;
+
+  /** Наименование учредителя */
+  name: string | null;
+}
+
+export interface PartyFounderPhysical extends PartyFounder {
+  /** ФИО учредителя */
+  fio: FioInfoExtra | null;
+}
+
+interface PartyManager {
   /** ИНН руководителя */
   inn: string | null;
-  /** Наименование руководителя (для юрлиц) */
-  name?: string | null;
-  /** ФИО руководителя (для физлиц) */
-  fio?: FioInfoExtra | null;
-  /** Должность руководителя (для физлиц) */
-  post?: string | null;
-  /** Внутренний идентификатор в Дадате */
-  hid: string | null;
+
   /** Тип руководителя. `EMPLOYEE` — сотрудник, `LEGAL` — юрлицо */
   type: 'EMPLOYEE' | 'LEGAL';
+
   /**
    * Недостоверность сведений о руководителе
    * - {@link https://dadata.ru/api/find-party/#invalidity}
    */
-  invalidity: null | InvalidityInfo;
+  invalidity: InvalidityInfo | null;
+
   /**
    * Дата вступления в должность руководителя (unix-время в миллисекундах)
    * @format int64
    */
   start_date: number | null;
+
+  /** Внутренний идентификатор в Дадате */
+  hid: string | null;
+}
+
+export interface PartyManagerLegal extends PartyManager {
+  /** ОГРН руководителя (для юрлиц) */
+  ogrn: string | null;
+
+  /** Наименование руководителя (для юрлиц) */
+  name: string | null;
+}
+
+export interface PartyManagerPhysical extends PartyManager {
+  /** ФИО руководителя (для физлиц) */
+  fio: FioInfoExtra | null;
+
+  /** Должность руководителя (для физлиц) */
+  post: string | null;
 }
 
 export interface PartyCapital {
@@ -481,70 +519,6 @@ export interface PartyDocuments {
   /** Запись в реестре малого и среднего предпринимательства */
   smb: DocumentInfoSmb | null;
 }
-
-/**
- * `suggestion[ ].data` object, returned from 'findById/party' API
- */
-export interface RichPartySuggestionData
-  extends Override<
-    PartySuggestionData,
-    {
-      /**
-       * Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)
-       * @format int32
-       */
-      employee_count: number | null;
-
-      /** Коды ОКВЭД дополнительных видов деятельности (Тарифы «Расширенный» и «Максимальный») */
-      okveds: null | PartyOkvedInfo[];
-
-      /**
-       * Сведения о налоговой, ПФР и ФСС (Тарифы «Расширенный» и «Максимальный»)
-       *
-       * - `fts_registration` — ИФНС регистрации
-       * - `fts_report` — ИФНС отчётности
-       * - `pf` — Отделение Пенсионного фонда
-       * - `sif` — Отделение Фонда соц. страхования
-       */
-      authorities: null | PartyAuthorities;
-
-      /** Гражданство ИП (Тарифы «Расширенный» и «Максимальный») */
-      citizenship?: null | PartyCitizenshipInfo;
-
-      /** Учредители компании (Только «Максимальный» тариф) */
-      founders?: null | PartyFounder[];
-
-      /** Руководители компании, только для юрлиц (Только «Максимальный» тариф) */
-      managers?: null | PartyManager[];
-
-      /** Правопредшественники компании, только для юрлиц (Только «Максимальный» тариф) */
-      predecessors?: LinkedLegalEntity[] | null;
-
-      /** Правопреемники компании, только для юрлиц (Только «Максимальный» тариф) */
-      successors?: LinkedLegalEntity[] | null;
-
-      /** Уставной капитал компании, только для юрлиц (Только «Максимальный» тариф) */
-      capital?: null | PartyCapital;
-
-      /** Налоговый режим, доходы, расходы, долги и штрафы (19.7+) */
-      finance: null | PartyFinanceInfoExtra;
-
-      /** Документы и реестры (Только «Максимальный» тариф) */
-      documents: null | PartyDocuments;
-
-      /** Лицензии (Только «Максимальный» тариф) */
-      licenses: LicenseInfo[] | null;
-
-      /** Телефоны, заполнены у 60% действующих компаний (Только «Максимальный» тариф) */
-      phones: PartyPhoneInfo[] | null;
-
-      /** Адреса эл. почты, заполнены у 50% действующих компаний (Только «Максимальный» тариф) */
-      emails: PartyEmailInfo[] | null;
-
-      /** Подробности об адресе организации / о городе ИП */
-      address: PartySuggestionDataAddressExtra;
-    }
-  > {}
 
 export interface CourtDecisionInfo {
   /** Наименование суда */
@@ -586,16 +560,15 @@ export interface FioInfoBasic {
   source: null;
 }
 
-export interface FioInfoExtra
-  extends Override<
-    FioInfoBasic,
-    {
-      /** Пол */
-      gender: FioGenders;
-      /** Исходная запись */
-      source: string | null;
-    }
-  > {}
+export interface FioInfoExtra extends Override<
+  FioInfoBasic,
+  {
+    /** Пол */
+    gender: FioGenders;
+    /** Исходная запись */
+    source: string | null;
+  }
+> {}
 
 export interface LinkedLegalEntity {
   /** ОГРН предшественника (`predecessors`) или преемника (`successors`) */
@@ -608,11 +581,7 @@ export interface LinkedLegalEntity {
 
 interface DocumentInfo<
   T extends string =
-    | 'FTS_REGISTRATION'
-    | 'FTS_REPORT'
-    | 'PF_REGISTRATION'
-    | 'SIF_REGISTRATION'
-    | 'SMB',
+    'FTS_REGISTRATION' | 'FTS_REPORT' | 'PF_REGISTRATION' | 'SIF_REGISTRATION' | 'SMB',
 > {
   /** Тип документа */
   type: T;
@@ -768,6 +737,8 @@ export interface PartyEmailInfo {
 
 export type OkvedType = '2001' | '2014';
 
+export type TaxSystem = 'ESHN' | 'ENVD' | 'SRP' | 'USN' | 'AUSN' | 'USN_ENVD' | 'ENVD_ESHN';
+
 /**
  * @see https://dadata.ru/api/find-company/by-email/
  */
@@ -848,6 +819,4 @@ export interface PartyByEmailSuggestion {
 }
 
 export type SuggestPartyResponse = SuggestionsResponse<PartySuggestion>;
-export type FindPartyResponse = SuggestionsResponse<RichPartySuggestion>;
 export type FindPartyByEmailResponse = SuggestionsResponse<PartyByEmailSuggestion>;
-export type FindAffiliatedResponse = SuggestionsResponse<PartyAffiliatedSuggestion>;

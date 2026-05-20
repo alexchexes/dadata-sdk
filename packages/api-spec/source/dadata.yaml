@@ -662,7 +662,9 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+              {
+                schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' },
+              }
         '400': { $ref: '#/components/responses/SuggestBadRequest' }
         '401': { $ref: '#/components/responses/SuggestUnauthorized' }
         '403': { $ref: '#/components/responses/SuggestForbidden' }
@@ -1190,7 +1192,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: '../schemas/response.json#/definitions/FindPartyResponse' } }
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyResponse' } }
         '400': { $ref: '#/components/responses/SuggestBadRequest' }
         '401': { $ref: '#/components/responses/SuggestUnauthorized' }
         '403': { $ref: '#/components/responses/SuggestForbidden' }
@@ -1331,7 +1333,9 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+              {
+                schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' },
+              }
         '400': { $ref: '#/components/responses/SuggestBadRequest' }
         '401': { $ref: '#/components/responses/SuggestUnauthorized' }
         '403': { $ref: '#/components/responses/SuggestForbidden' }
@@ -2056,7 +2060,9 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' } }
+              {
+                schema: { $ref: '../schemas/response.json#/definitions/SuggestPostalUnitResponse' },
+              }
         '400': { $ref: '#/components/responses/SuggestBadRequest' }
         '401': { $ref: '#/components/responses/SuggestUnauthorized' }
         '403': { $ref: '#/components/responses/SuggestForbidden' }
@@ -2185,7 +2191,7 @@ paths:
           description: Запрос успешно обработан
           content:
             application/json:
-              { schema: { $ref: '../schemas/response.json#/definitions/FindAffiliatedResponse' } }
+              { schema: { $ref: '../schemas/response.json#/definitions/SuggestPartyResponse' } }
         '400': { $ref: '#/components/responses/SuggestBadRequest' }
         '401': { $ref: '#/components/responses/SuggestUnauthorized' }
         '403': { $ref: '#/components/responses/SuggestForbidden' }

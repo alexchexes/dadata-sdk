@@ -1909,7 +1909,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FindPartyResponse"
+                  "$ref": "#/components/schemas/SuggestPartyResponse"
                 }
               }
             }
@@ -3871,7 +3871,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FindAffiliatedResponse"
+                  "$ref": "#/components/schemas/SuggestPartyResponse"
                 }
               }
             }
@@ -6720,28 +6720,46 @@
         },
         "required": ["code", "type", "full", "short"]
       },
-      "PartyManagementInfo": {
+      "CourtDecisionInfo": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "ФИО руководителя"
+          "court_name": {
+            "type": ["string", "null"],
+            "description": "Наименование суда"
           },
-          "post": {
-            "type": "string",
-            "description": "Должность руководителя"
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер судебного решения"
           },
-          "disqualified": {
-            "type": "null",
-            "description": "`true`, если в состав руководства входят дисквалифицированные лица (19.7+, в данный момент не заполняется)"
-          },
-          "start_date": {
+          "date": {
             "type": ["integer", "null"],
-            "description": "Дата вступления в должность (unix-время в миллисекундах). (24.9+)\n@format int64",
+            "description": "Дата судебного решения (unix-время в миллисекундах)\n@format int64",
             "format": "int64"
           }
         },
-        "required": ["name", "post", "disqualified", "start_date"]
+        "required": ["court_name", "number", "date"]
+      },
+      "InvalidityInfo": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["PARTY", "FTS", "COURT", "OTHER"],
+            "description": "Код причины недостоверности\n- `PARTY`  — обращение лица или организации\n- `FTS`    — проверка налоговой\n- `COURT`  — решение суда\n- `OTHER`  — прочие причины"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CourtDecisionInfo"
+              }
+            ],
+            "description": "Решение суда (только для code = `COURT`)"
+          }
+        },
+        "required": ["code"]
       },
       "PartySuggestionAddressData": {
         "type": "object",
@@ -7265,7 +7283,7 @@
           "unparsed_parts"
         ]
       },
-      "PartySuggestionDataAddressBasic": {
+      "PartyAddress": {
         "type": "object",
         "properties": {
           "value": {
@@ -7277,8 +7295,15 @@
             "description": "Адрес одной строкой (полный, с индексом).\n- Для юрлиц: **адрес организации**\n- Для ИП: **город проживания**\n\n* Стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ."
           },
           "invalidity": {
-            "type": "null",
-            "description": "Недостоверность сведений об адресе (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InvalidityInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Недостоверность сведений об адресе (только в «Организация по ИНН», Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#invalidity}"
           },
           "data": {
             "$ref": "#/components/schemas/PartySuggestionAddressData",
@@ -7286,7 +7311,7 @@
           }
         },
         "required": ["value", "unrestricted_value", "invalidity", "data"],
-        "description": "`data.address` object returned from 'suggest/party' API"
+        "description": "Объект адреса (`data.address`), возвращаемый API `suggest/party` и `findById/party`"
       },
       "PartyStateInfo": {
         "type": "object",
@@ -7318,9 +7343,692 @@
         },
         "required": ["actuality_date", "registration_date", "liquidation_date", "status", "code"]
       },
-      "FioInfoBasic": {
+      "PartyOkvedInfo": {
         "type": "object",
         "properties": {
+          "main": {
+            "type": "boolean",
+            "description": "Основной или нет"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["2001", "2014"],
+            "description": "Версия справочника ОКВЭД (2001 или 2014)"
+          },
+          "code": {
+            "type": "string",
+            "description": "Код по справочнику"
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование по справочнику"
+          }
+        },
+        "required": ["main", "type", "code", "name"]
+      },
+      "PartyAuthoritiesItem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Код гос. органа"
+          },
+          "code": {
+            "type": "string",
+            "description": "Код отделения"
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование отделения"
+          },
+          "address": {
+            "type": ["string", "null"],
+            "description": "Адрес отделения одной строкой"
+          }
+        },
+        "required": ["type", "code", "name", "address"]
+      },
+      "PartyAuthorities": {
+        "type": "object",
+        "properties": {
+          "fts_registration": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PartyAuthoritiesItem"
+              }
+            ]
+          },
+          "fts_report": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PartyAuthoritiesItem"
+              }
+            ]
+          },
+          "pf": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PartyAuthoritiesItem"
+              }
+            ]
+          },
+          "sif": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PartyAuthoritiesItem"
+              }
+            ]
+          }
+        },
+        "required": ["fts_registration", "fts_report", "pf", "sif"]
+      },
+      "PartyFinance": {
+        "type": "object",
+        "properties": {
+          "tax_system": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": ["ESHN", "ENVD", "SRP", "USN", "AUSN", "USN_ENVD", "ENVD_ESHN"]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Система налогообложения (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)\n- `ESHN` — единый сельскохозяйственный налог (ЕСХН)\n- `ENVD` — единый налог на вмененный доход для отдельных видов деятельности (ЕНВД)\n- `SRP` — система налогообложения при выполнении соглашений о разделе продукции (СРП)\n- `USN` — упрощенная система налогообложения (УСН)\n- `AUSN` — автоматизированная упрощенная система налогообложения (АУСН)\n- `USN_ENVD` — совмещение УСН и ЕНВД\n- `ENVD_ESHN` — совмещение ЕНВД и ЕСХН"
+          },
+          "year": {
+            "type": ["integer", "null"],
+            "description": "Год бух. отчетности (только в «Организация по ИНН», Только «Максимальный» тариф, 21.3+)\n@format int32",
+            "format": "int32"
+          },
+          "income": {
+            "type": ["number", "null"],
+            "description": "Доходы по бух. отчетности, руб (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#finance}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}"
+          },
+          "revenue": {
+            "type": ["number", "null"],
+            "description": "Выручка по бух. отчетности, руб (только в «Организация по ИНН», Только «Максимальный» тариф, 23.8+)"
+          },
+          "expense": {
+            "type": ["number", "null"],
+            "description": "Расходы по бух. отчетности, руб (только в «Организация по ИНН», Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#finance}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}"
+          },
+          "debt": {
+            "type": ["number", "null"],
+            "description": "Недоимки по налогам за позапрошлый год, руб (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "penalty": {
+            "type": ["number", "null"],
+            "description": "Налоговые штрафы за позапрошлый год, руб (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          }
+        },
+        "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
+      },
+      "DocumentInfoFtsReg": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "FTS_REGISTRATION",
+            "description": "Тип документа"
+          },
+          "series": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер документа"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          }
+        },
+        "required": ["type", "series", "number", "issue_date", "issue_authority"]
+      },
+      "DocumentInfoFtsReport": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "FTS_REPORT",
+            "description": "Тип документа"
+          },
+          "series": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер документа"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          }
+        },
+        "required": ["type", "series", "number", "issue_date", "issue_authority"]
+      },
+      "DocumentInfoPfReg": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "PF_REGISTRATION",
+            "description": "Тип документа"
+          },
+          "series": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер документа"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          }
+        },
+        "required": ["type", "series", "number", "issue_date", "issue_authority"]
+      },
+      "DocumentInfoSifReg": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "SIF_REGISTRATION",
+            "description": "Тип документа"
+          },
+          "series": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер документа"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          }
+        },
+        "required": ["type", "series", "number", "issue_date", "issue_authority"]
+      },
+      "DocumentInfoSmb": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "SMB",
+            "description": "Тип документа"
+          },
+          "series": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "number": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["MICRO", "SMALL", "MEDIUM"],
+            "description": "Категория предприятия:\n- `MICRO` — микро-предприятие\n- `SMALL` — малое предприятие\n- `MEDIUM` — среднее предприятие"
+          }
+        },
+        "required": ["category", "issue_authority", "issue_date", "number", "series", "type"]
+      },
+      "PartyDocuments": {
+        "type": "object",
+        "properties": {
+          "fts_registration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentInfoFtsReg"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Свидетельство о регистрации в налоговой"
+          },
+          "fts_report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentInfoFtsReport"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Сведения об учете в налоговом органе"
+          },
+          "pf_registration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentInfoPfReg"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Свидетельство о регистрации в Пенсионном фонде"
+          },
+          "sif_registration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentInfoSifReg"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Свидетельство о регистрации в Фонде соц. страхования"
+          },
+          "smb": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentInfoSmb"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Запись в реестре малого и среднего предпринимательства"
+          }
+        },
+        "required": ["fts_registration", "fts_report", "pf_registration", "sif_registration", "smb"]
+      },
+      "LicenseInfo": {
+        "type": "object",
+        "properties": {
+          "series": {
+            "type": ["string", "null"],
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Номер документа"
+          },
+          "issue_date": {
+            "type": ["integer", "null"],
+            "description": "Дата выдачи (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "issue_authority": {
+            "type": ["string", "null"],
+            "description": "Название выдавшего органа"
+          },
+          "suspend_date": {
+            "type": ["integer", "null"],
+            "description": "Дата приостановки (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "suspend_authority": {
+            "type": ["string", "null"],
+            "description": "Название приостановившего органа"
+          },
+          "valid_from": {
+            "type": ["integer", "null"],
+            "description": "Дата начала действия (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "valid_to": {
+            "type": ["integer", "null"],
+            "description": "Дата окончания действия (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "activities": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Перечень лицензируемых видов деятельности"
+          },
+          "addresses": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Перечень адресов, по которым действует лицензия"
+          }
+        },
+        "required": [
+          "series",
+          "number",
+          "issue_date",
+          "issue_authority",
+          "suspend_date",
+          "suspend_authority",
+          "valid_from",
+          "valid_to",
+          "activities",
+          "addresses"
+        ]
+      },
+      "PartyPhoneContact": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": ["string", "null"],
+            "description": "Тип контактного лица\n- `MANAGING_PARTY` - управляющая организация\n- `TRUSTED_EMPLOYEE` - сотрудник\n- `TRUSTED_FOREIGNER` - иностранный гражданин"
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "Имя контактного лица"
+          }
+        },
+        "required": ["type", "name"]
+      },
+      "PartyPhoneInfoData": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Телефон одной строкой как в ЕГРЮЛ"
+          },
+          "type": {
+            "type": ["string", "null"],
+            "description": "Тип телефона, например:\n- Мобильный  - `+7 911 243-45-68`\n- Стационарный - `+7 495 456-55-77`\n- Прямой мобильный - `+7 495 243-45-68`\n- Колл-центр - `8 800 222-12-22`\n- Неизвестный  - `+7 333 1111112`"
+          },
+          "country_code": {
+            "type": ["string", "null"],
+            "description": "Телефонный код страны (например `7`)"
+          },
+          "city_code": {
+            "type": ["string", "null"],
+            "description": "Телефонный код города / DEF-код"
+          },
+          "number": {
+            "type": ["string", "null"],
+            "description": "Локальная часть номера телефона"
+          },
+          "provider": {
+            "type": ["string", "null"],
+            "description": "Оператор связи (например, `ПАО \"Вымпел-Коммуникации\"`)"
+          },
+          "country": {
+            "type": ["string", "null"],
+            "description": "Страна"
+          },
+          "region": {
+            "type": ["string", "null"],
+            "description": "Регион (например, `Москва`)"
+          },
+          "city": {
+            "type": ["string", "null"],
+            "description": "Город (только для стационарных телефонов)"
+          },
+          "timezone": {
+            "type": ["string", "null"],
+            "description": "Часовой пояс города (Россия), страны (прочие страны), например, `UTC+3`"
+          },
+          "contact": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PartyPhoneContact"
+              }
+            ],
+            "description": "Контактное лицо"
+          },
+          "extension": {
+            "type": ["string", "null"],
+            "description": "Добавочный номер"
+          },
+          "qc_conflict": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "qc": {
+            "type": "null",
+            "description": "Не заполняется"
+          }
+        },
+        "required": [
+          "source",
+          "type",
+          "country_code",
+          "city_code",
+          "number",
+          "provider",
+          "country",
+          "region",
+          "city",
+          "timezone",
+          "contact",
+          "extension",
+          "qc_conflict",
+          "qc"
+        ]
+      },
+      "PartyPhoneInfo": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Телефон организации одной строкой"
+          },
+          "unrestricted_value": {
+            "type": "string",
+            "description": "Телефон организации одной строкой (то же, что и value)"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PartyPhoneInfoData",
+            "description": "Подробности о телефоне организации"
+          }
+        },
+        "required": ["value", "unrestricted_value", "data"]
+      },
+      "PartyEmailInfoData": {
+        "type": "object",
+        "properties": {
+          "local": {
+            "type": "string",
+            "description": "Локальная часть адреса (то, что до «собачки»)"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Домен (то, что после «собачки»)"
+          },
+          "type": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "source": {
+            "type": ["string", "null"],
+            "description": "Email адрес, указанный в ЕГРЮЛ (может содержать несколько адресов через запятую)"
+          },
+          "qc": {
+            "type": "null",
+            "description": "Не заполняется"
+          }
+        },
+        "required": ["local", "domain", "type", "source", "qc"]
+      },
+      "PartyEmailInfo": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Email одной строкой. Если в ЕГРЮЛ несколько email - здесь, вероятно, будет первый"
+          },
+          "unrestricted_value": {
+            "type": "string",
+            "description": "Email одной строкой (то же, что value)"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PartyEmailInfoData",
+            "description": "Подробности об email-адресе"
+          }
+        },
+        "required": ["value", "unrestricted_value", "data"]
+      },
+      "PartyCapital": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Тип капитала"
+          },
+          "value": {
+            "type": "number",
+            "description": "Размер капитала"
+          }
+        },
+        "required": ["type", "value"]
+      },
+      "FounderShare": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["PERCENT", "DECIMAL", "FRACTION"],
+            "description": "Тип значения для доли\n- `PERCENT` - процент (пример: `75`)\n- `DECIMAL` - десятичная дробь (пример: `0.75`)\n- `FRACTION` - обычная дробь (пример: `3/4`)"
+          },
+          "value": {
+            "type": "number",
+            "description": "Значение доли. Для процентных и десятичных (type = `PERCENT` и type = `DECIMAL`)"
+          },
+          "numerator": {
+            "type": "integer",
+            "description": "Числитель дроби у доли (для type = `FRACTION`)\n@format int64",
+            "format": "int64"
+          },
+          "denominator": {
+            "type": "integer",
+            "description": "Знаменатель дроби у доли (для type = `FRACTION`)\n@format int64",
+            "format": "int64"
+          }
+        },
+        "required": ["type"]
+      },
+      "PartyFounderLegal": {
+        "type": "object",
+        "properties": {
+          "hid": {
+            "type": ["string", "null"],
+            "description": "Внутренний идентификатор в Дадате"
+          },
+          "inn": {
+            "type": ["string", "null"],
+            "description": "ИНН учредителя"
+          },
+          "invalidity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InvalidityInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Недостоверность сведений об учредителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
+          },
+          "share": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FounderShare"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Доля учредителя"
+          },
+          "start_date": {
+            "type": ["integer", "null"],
+            "description": "Дата вступления в права учредителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "type": {
+            "type": ["string", "null"],
+            "enum": ["LEGAL", "PHYSICAL", null],
+            "description": "Тип учредителя (`LEGAL` - юрлицо / `PHYSICAL` - физлицо)"
+          },
+          "ogrn": {
+            "type": ["string", "null"],
+            "description": "ОГРН учредителя"
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "Наименование учредителя"
+          }
+        },
+        "required": ["hid", "inn", "invalidity", "name", "ogrn", "share", "start_date", "type"]
+      },
+      "FioInfoExtra": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": ["MALE", "FEMALE", "UNKNOWN"],
+            "description": "Пол"
+          },
+          "source": {
+            "type": ["string", "null"],
+            "description": "Исходная запись"
+          },
           "surname": {
             "type": ["string", "null"],
             "description": "Фамилия"
@@ -7333,69 +8041,210 @@
             "type": ["string", "null"],
             "description": "Отчество"
           },
-          "gender": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
           "qc": {
             "type": "null",
             "description": "Не заполняется"
-          },
-          "source": {
-            "type": "null",
-            "description": "Не заполняется"
           }
         },
-        "required": ["surname", "name", "patronymic", "gender", "qc", "source"]
+        "required": ["gender", "name", "patronymic", "qc", "source", "surname"]
       },
-      "PartyFinanceInfoBasic": {
+      "PartyFounderPhysical": {
         "type": "object",
         "properties": {
-          "tax_system": {
-            "type": "null",
-            "description": "Система налогообложения (только в «Организация по ИНН»)"
+          "hid": {
+            "type": ["string", "null"],
+            "description": "Внутренний идентификатор в Дадате"
           },
-          "year": {
-            "type": "null",
-            "description": "Год бух. отчетности (только в «Организация по ИНН»)"
+          "inn": {
+            "type": ["string", "null"],
+            "description": "ИНН учредителя"
           },
-          "income": {
-            "type": "null",
-            "description": "Доходы по бух. отчетности (только в «Организация по ИНН»)"
+          "invalidity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InvalidityInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Недостоверность сведений об учредителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
           },
-          "revenue": {
-            "type": "null",
-            "description": "Выручка по бух. отчетности (только в «Организация по ИНН»)"
+          "share": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FounderShare"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Доля учредителя"
           },
-          "expense": {
-            "type": "null",
-            "description": "Расходы по бух. отчетности (только в «Организация по ИНН»)"
+          "start_date": {
+            "type": ["integer", "null"],
+            "description": "Дата вступления в права учредителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
           },
-          "debt": {
-            "type": "null",
-            "description": "Недоимки по налогам (только в «Организация по ИНН»)"
+          "type": {
+            "type": ["string", "null"],
+            "enum": ["LEGAL", "PHYSICAL", null],
+            "description": "Тип учредителя (`LEGAL` - юрлицо / `PHYSICAL` - физлицо)"
           },
-          "penalty": {
-            "type": "null",
-            "description": "Налоговые штрафы (только в «Организация по ИНН»)"
+          "fio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FioInfoExtra"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ФИО учредителя"
           }
         },
-        "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
+        "required": ["fio", "hid", "inn", "invalidity", "share", "start_date", "type"]
       },
-      "PartySuggestionData": {
+      "PartyManagementInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "ФИО руководителя"
+          },
+          "post": {
+            "type": "string",
+            "description": "Должность руководителя"
+          },
+          "disqualified": {
+            "type": "null",
+            "description": "`true`, если в состав руководства входят дисквалифицированные лица (19.7+, в данный момент не заполняется)"
+          },
+          "start_date": {
+            "type": ["integer", "null"],
+            "description": "Дата вступления в должность (unix-время в миллисекундах). (24.9+)\n@format int64",
+            "format": "int64"
+          }
+        },
+        "required": ["name", "post", "disqualified", "start_date"]
+      },
+      "PartyManagerLegal": {
+        "type": "object",
+        "properties": {
+          "inn": {
+            "type": ["string", "null"],
+            "description": "ИНН руководителя"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["EMPLOYEE", "LEGAL"],
+            "description": "Тип руководителя. `EMPLOYEE` — сотрудник, `LEGAL` — юрлицо"
+          },
+          "invalidity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InvalidityInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Недостоверность сведений о руководителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
+          },
+          "start_date": {
+            "type": ["integer", "null"],
+            "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "hid": {
+            "type": ["string", "null"],
+            "description": "Внутренний идентификатор в Дадате"
+          },
+          "ogrn": {
+            "type": ["string", "null"],
+            "description": "ОГРН руководителя (для юрлиц)"
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "Наименование руководителя (для юрлиц)"
+          }
+        },
+        "required": ["hid", "inn", "invalidity", "name", "ogrn", "start_date", "type"]
+      },
+      "PartyManagerPhysical": {
+        "type": "object",
+        "properties": {
+          "inn": {
+            "type": ["string", "null"],
+            "description": "ИНН руководителя"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["EMPLOYEE", "LEGAL"],
+            "description": "Тип руководителя. `EMPLOYEE` — сотрудник, `LEGAL` — юрлицо"
+          },
+          "invalidity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InvalidityInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Недостоверность сведений о руководителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
+          },
+          "start_date": {
+            "type": ["integer", "null"],
+            "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "hid": {
+            "type": ["string", "null"],
+            "description": "Внутренний идентификатор в Дадате"
+          },
+          "fio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FioInfoExtra"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ФИО руководителя (для физлиц)"
+          },
+          "post": {
+            "type": ["string", "null"],
+            "description": "Должность руководителя (для физлиц)"
+          }
+        },
+        "required": ["fio", "hid", "inn", "invalidity", "post", "start_date", "type"]
+      },
+      "LinkedLegalEntity": {
+        "type": "object",
+        "properties": {
+          "ogrn": {
+            "type": "string",
+            "description": "ОГРН предшественника (`predecessors`) или преемника (`successors`)"
+          },
+          "inn": {
+            "type": "string",
+            "description": "ИНН предшественника (`predecessors`) или преемника (`successors`)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование предшественника (`predecessors`) или преемника (`successors`)"
+          }
+        },
+        "required": ["ogrn", "inn", "name"]
+      },
+      "PartyLegal": {
         "type": "object",
         "properties": {
           "inn": {
             "type": "string",
             "description": "ИНН"
-          },
-          "kpp": {
-            "type": "string",
-            "description": "КПП"
-          },
-          "kpp_largest": {
-            "type": ["string", "null"],
-            "description": "КПП крупнейшего налогоплательщика"
           },
           "ogrn": {
             "type": "string",
@@ -7417,7 +8266,7 @@
           },
           "name": {
             "$ref": "#/components/schemas/PartyNameInfo",
-            "description": "Наименование организации"
+            "description": "Наименование организации.  \nНе заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»"
           },
           "okpo": {
             "type": ["string", "null"],
@@ -7450,114 +8299,108 @@
           },
           "opf": {
             "$ref": "#/components/schemas/PartyOpfInfo",
-            "description": "Организационно-правовая форма"
-          },
-          "invalid": {
-            "type": ["boolean", "null"],
-            "enum": [true, null],
-            "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
-          },
-          "management": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyManagementInfo"
-              }
-            ],
-            "description": "Руководитель (только для юрлиц)"
-          },
-          "branch_count": {
-            "type": ["number", "null"],
-            "description": "Количество филиалов (только для юрлиц)"
-          },
-          "branch_type": {
-            "type": "string",
-            "enum": ["MAIN", "BRANCH"],
-            "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
+            "description": "Организационно-правовая форма.  \nНе заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»"
           },
           "address": {
-            "$ref": "#/components/schemas/PartySuggestionDataAddressBasic",
+            "$ref": "#/components/schemas/PartyAddress",
             "description": "Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации"
           },
           "state": {
             "$ref": "#/components/schemas/PartyStateInfo",
             "description": "Состояние организации"
           },
-          "fio": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/FioInfoBasic"
-              }
-            ],
-            "description": "ФИО индивидуального предпринимателя (21.3+)"
-          },
           "employee_count": {
-            "type": "null",
-            "description": "Среднесписочная численность работников (только в «Организация по ИНН»)"
+            "type": ["number", "null"],
+            "description": "Среднесписочная численность работников\n(только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный», 19.7+)"
           },
           "okveds": {
-            "type": "null",
-            "description": "Коды ОКВЭД дополнительных видов деятельности (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyOkvedInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Коды ОКВЭД дополнительных видов деятельности\n(только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)"
           },
           "authorities": {
-            "type": "null",
-            "description": "Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН»)"
-          },
-          "citizenship": {
-            "type": "null",
-            "description": "Гражданство ИП (только в «Организация по ИНН»)"
-          },
-          "founders": {
-            "type": "null",
-            "description": "Учредители компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "managers": {
-            "type": "null",
-            "description": "Руководители компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "predecessors": {
-            "type": "null",
-            "description": "Правопредшественники компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "successors": {
-            "type": "null",
-            "description": "Правопреемники компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "capital": {
-            "type": "null",
-            "description": "Уставной капитал компании, только для юрлиц (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyAuthorities"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)\n\n- `fts_registration` — ИФНС регистрации\n- `fts_report` — ИФНС отчётности\n- `pf` — Отделение Пенсионного фонда\n- `sif` — Отделение Фонда соц. страхования"
           },
           "finance": {
             "anyOf": [
               {
-                "type": "null"
+                "$ref": "#/components/schemas/PartyFinance"
               },
               {
-                "$ref": "#/components/schemas/PartyFinanceInfoBasic"
+                "type": "null"
               }
             ],
-            "description": "Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН»)"
+            "description": "Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН», 19.7+)"
           },
           "documents": {
-            "type": "null",
-            "description": "Документы и реестры (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyDocuments"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Документы и реестры (только в «Организация по ИНН», Только «Максимальный» тариф)"
           },
           "licenses": {
-            "type": "null",
-            "description": "Лицензии (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LicenseInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Лицензии (только в «Организация по ИНН», Только «Максимальный» тариф)"
           },
           "phones": {
-            "type": "null",
-            "description": "Телефоны (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyPhoneInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Телефоны, заполнены у 60% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)"
           },
           "emails": {
-            "type": "null",
-            "description": "Адреса эл. почты (только в «Организация по ИНН»)"
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyEmailInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Адреса эл. почты, заполнены у 50% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)"
           },
           "source": {
             "type": "null",
@@ -7566,37 +8409,456 @@
           "qc": {
             "type": "null",
             "description": "Не заполняется"
+          },
+          "branch_count": {
+            "type": ["number", "null"],
+            "description": "Количество филиалов"
+          },
+          "branch_type": {
+            "type": "string",
+            "enum": ["MAIN", "BRANCH"],
+            "description": "Тип подразделения\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
+          },
+          "capital": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyCapital"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Уставной капитал компании (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "invalid": {
+            "type": ["boolean", "null"],
+            "enum": [true, null],
+            "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
+          },
+          "kpp": {
+            "type": "string",
+            "description": "КПП"
+          },
+          "kpp_largest": {
+            "type": ["string", "null"],
+            "description": "КПП крупнейшего налогоплательщика"
+          },
+          "founders": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyFounderLegal"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyFounderPhysical"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Учредители компании (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "management": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyManagementInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Руководитель  \nНе заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»"
+          },
+          "managers": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyManagerLegal"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyManagerPhysical"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Руководители компании (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "predecessors": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LinkedLegalEntity"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Правопредшественники компании (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "successors": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LinkedLegalEntity"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Правопреемники компании (только в «Организация по ИНН», Только «Максимальный» тариф)"
           }
         },
         "required": [
+          "address",
+          "authorities",
+          "branch_count",
+          "branch_type",
+          "capital",
+          "documents",
+          "emails",
+          "employee_count",
+          "finance",
+          "founders",
+          "hid",
           "inn",
+          "invalid",
+          "kpp",
+          "kpp_largest",
+          "licenses",
+          "management",
+          "managers",
+          "name",
           "ogrn",
           "ogrn_date",
-          "hid",
-          "type",
-          "name",
-          "okpo",
           "okato",
-          "oktmo",
-          "okogu",
           "okfs",
+          "okogu",
+          "okpo",
+          "oktmo",
           "okved",
           "okved_type",
-          "opf",
-          "address",
-          "state",
-          "employee_count",
           "okveds",
-          "authorities",
-          "finance",
-          "documents",
-          "licenses",
+          "opf",
           "phones",
-          "emails",
+          "predecessors",
+          "qc",
           "source",
-          "qc"
-        ],
-        "description": "`suggestion[ ].data` object, returned from 'suggest/party' API"
+          "state",
+          "successors",
+          "type"
+        ]
+      },
+      "PartyCitizenshipCode": {
+        "type": "object",
+        "properties": {
+          "numeric": {
+            "type": "number",
+            "description": "Числовой код страны по ОКСМ"
+          },
+          "alpha_3": {
+            "type": "string",
+            "description": "Трехбуквенный код страны по ОКСМ"
+          }
+        },
+        "required": ["numeric", "alpha_3"]
+      },
+      "PartyCitizenshipName": {
+        "type": "object",
+        "properties": {
+          "full": {
+            "type": "string",
+            "description": "Полное название страны"
+          },
+          "short": {
+            "type": "string",
+            "description": "Краткое название страны"
+          }
+        },
+        "required": ["full", "short"]
+      },
+      "PartyCitizenshipInfo": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/PartyCitizenshipCode",
+            "description": "Числовой и буквенный код страны"
+          },
+          "name": {
+            "$ref": "#/components/schemas/PartyCitizenshipName",
+            "description": "Полное и краткое название страны"
+          }
+        },
+        "required": ["code", "name"]
+      },
+      "FioInfoBasic": {
+        "type": "object",
+        "properties": {
+          "surname": {
+            "type": ["string", "null"],
+            "description": "Фамилия"
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "Имя"
+          },
+          "patronymic": {
+            "type": ["string", "null"],
+            "description": "Отчество"
+          },
+          "gender": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "qc": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "source": {
+            "type": "null",
+            "description": "Не заполняется"
+          }
+        },
+        "required": ["surname", "name", "patronymic", "gender", "qc", "source"]
+      },
+      "PartyIndividual": {
+        "type": "object",
+        "properties": {
+          "inn": {
+            "type": "string",
+            "description": "ИНН"
+          },
+          "ogrn": {
+            "type": "string",
+            "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
+          },
+          "ogrn_date": {
+            "type": "integer",
+            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
+            "format": "int64"
+          },
+          "hid": {
+            "type": "string",
+            "description": "Внутренний идентификатор в Дадате"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["LEGAL", "INDIVIDUAL"],
+            "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
+          },
+          "name": {
+            "$ref": "#/components/schemas/PartyNameInfo",
+            "description": "Наименование организации.  \nНе заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»"
+          },
+          "okpo": {
+            "type": ["string", "null"],
+            "description": "Код ОКПО"
+          },
+          "okato": {
+            "type": ["string", "null"],
+            "description": "Код ОКАТО (20.9+)"
+          },
+          "oktmo": {
+            "type": ["string", "null"],
+            "description": "Код ОКТМО (20.9+)"
+          },
+          "okogu": {
+            "type": ["string", "null"],
+            "description": "Код ОКОГУ (20.9+)"
+          },
+          "okfs": {
+            "type": ["string", "null"],
+            "description": "Код ОКФС (20.9+)"
+          },
+          "okved": {
+            "type": "string",
+            "description": "Код ОКВЭД"
+          },
+          "okved_type": {
+            "type": "string",
+            "enum": ["2001", "2014"],
+            "description": "Версия справочника ОКВЭД (2001 или 2014)"
+          },
+          "opf": {
+            "$ref": "#/components/schemas/PartyOpfInfo",
+            "description": "Организационно-правовая форма.  \nНе заполняется в `findAffiliated/party`, только «Подсказки» и «Организация по ИНН»"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PartyAddress",
+            "description": "Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации"
+          },
+          "state": {
+            "$ref": "#/components/schemas/PartyStateInfo",
+            "description": "Состояние организации"
+          },
+          "employee_count": {
+            "type": ["number", "null"],
+            "description": "Среднесписочная численность работников\n(только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный», 19.7+)"
+          },
+          "okveds": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyOkvedInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Коды ОКВЭД дополнительных видов деятельности\n(только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)"
+          },
+          "authorities": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyAuthorities"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)\n\n- `fts_registration` — ИФНС регистрации\n- `fts_report` — ИФНС отчётности\n- `pf` — Отделение Пенсионного фонда\n- `sif` — Отделение Фонда соц. страхования"
+          },
+          "finance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyFinance"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН», 19.7+)"
+          },
+          "documents": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyDocuments"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Документы и реестры (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "licenses": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LicenseInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Лицензии (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "phones": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyPhoneInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Телефоны, заполнены у 60% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "emails": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PartyEmailInfo"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Адреса эл. почты, заполнены у 50% действующих компаний (только в «Организация по ИНН», Только «Максимальный» тариф)"
+          },
+          "source": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "qc": {
+            "type": "null",
+            "description": "Не заполняется"
+          },
+          "citizenship": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyCitizenshipInfo"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Гражданство ИП (только в «Организация по ИНН», Тарифы «Расширенный» и «Максимальный»)"
+          },
+          "fio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FioInfoBasic"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ФИО индивидуального предпринимателя (21.3+)"
+          }
+        },
+        "required": [
+          "address",
+          "authorities",
+          "citizenship",
+          "documents",
+          "emails",
+          "employee_count",
+          "finance",
+          "fio",
+          "hid",
+          "inn",
+          "licenses",
+          "name",
+          "ogrn",
+          "ogrn_date",
+          "okato",
+          "okfs",
+          "okogu",
+          "okpo",
+          "oktmo",
+          "okved",
+          "okved_type",
+          "okveds",
+          "opf",
+          "phones",
+          "qc",
+          "source",
+          "state",
+          "type"
+        ]
       },
       "PartySuggestion": {
         "type": "object",
@@ -7610,12 +8872,19 @@
             "description": "Краткое наименование организации (То же, что и value)"
           },
           "data": {
-            "$ref": "#/components/schemas/PartySuggestionData",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PartyLegal"
+              },
+              {
+                "$ref": "#/components/schemas/PartyIndividual"
+              }
+            ],
             "description": "Подробности об организации"
           }
         },
-        "required": ["data", "unrestricted_value", "value"],
-        "description": "Suggestion object returned from 'suggest/party' API\n- {@link https://dadata.ru/api/suggest/party}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122}"
+        "required": ["value", "unrestricted_value", "data"],
+        "description": "Объект подсказки, возвращаемый из API `suggest/party`, `findById/party`, `findAffiliated/party`\n\n- @see https://dadata.ru/api/suggest/party\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669122\n\n- @see https://dadata.ru/api/find-party/\n- @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058\n\n- @see https://dadata.ru/api/find-affiliated/"
       },
       "SuggestPartyResponse": {
         "type": "object",
@@ -10735,1258 +12004,6 @@
         "required": ["query"],
         "description": "Организации РФ\n@see https://dadata.ru/api/find-party/\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058"
       },
-      "PartyOkvedInfo": {
-        "type": "object",
-        "properties": {
-          "main": {
-            "type": "boolean",
-            "description": "Основной или нет"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["2001", "2014"],
-            "description": "Версия справочника ОКВЭД (2001 или 2014)"
-          },
-          "code": {
-            "type": "string",
-            "description": "Код по справочнику"
-          },
-          "name": {
-            "type": "string",
-            "description": "Наименование по справочнику"
-          }
-        },
-        "required": ["main", "type", "code", "name"]
-      },
-      "PartyAuthoritiesItem": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Код гос. органа"
-          },
-          "code": {
-            "type": "string",
-            "description": "Код отделения"
-          },
-          "name": {
-            "type": "string",
-            "description": "Наименование отделения"
-          },
-          "address": {
-            "type": ["string", "null"],
-            "description": "Адрес отделения одной строкой"
-          }
-        },
-        "required": ["type", "code", "name", "address"]
-      },
-      "PartyAuthorities": {
-        "type": "object",
-        "properties": {
-          "fts_registration": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyAuthoritiesItem"
-              }
-            ]
-          },
-          "fts_report": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyAuthoritiesItem"
-              }
-            ]
-          },
-          "pf": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyAuthoritiesItem"
-              }
-            ]
-          },
-          "sif": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyAuthoritiesItem"
-              }
-            ]
-          }
-        },
-        "required": ["fts_registration", "fts_report", "pf", "sif"]
-      },
-      "PartyCitizenshipCode": {
-        "type": "object",
-        "properties": {
-          "numeric": {
-            "type": "number",
-            "description": "Числовой код страны по ОКСМ"
-          },
-          "alpha_3": {
-            "type": "string",
-            "description": "Трехбуквенный код страны по ОКСМ"
-          }
-        },
-        "required": ["numeric", "alpha_3"]
-      },
-      "PartyCitizenshipName": {
-        "type": "object",
-        "properties": {
-          "full": {
-            "type": "string",
-            "description": "Полное название страны"
-          },
-          "short": {
-            "type": "string",
-            "description": "Краткое название страны"
-          }
-        },
-        "required": ["full", "short"]
-      },
-      "PartyCitizenshipInfo": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "$ref": "#/components/schemas/PartyCitizenshipCode",
-            "description": "Числовой и буквенный код страны"
-          },
-          "name": {
-            "$ref": "#/components/schemas/PartyCitizenshipName",
-            "description": "Полное и краткое название страны"
-          }
-        },
-        "required": ["code", "name"]
-      },
-      "FioInfoExtra": {
-        "type": "object",
-        "properties": {
-          "gender": {
-            "type": "string",
-            "enum": ["MALE", "FEMALE", "UNKNOWN"],
-            "description": "Пол"
-          },
-          "source": {
-            "type": ["string", "null"],
-            "description": "Исходная запись"
-          },
-          "surname": {
-            "type": ["string", "null"],
-            "description": "Фамилия"
-          },
-          "name": {
-            "type": ["string", "null"],
-            "description": "Имя"
-          },
-          "patronymic": {
-            "type": ["string", "null"],
-            "description": "Отчество"
-          },
-          "qc": {
-            "type": "null",
-            "description": "Не заполняется"
-          }
-        },
-        "required": ["gender", "name", "patronymic", "qc", "source", "surname"]
-      },
-      "PartyFounderShare": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["PERCENT", "DECIMAL", "FRACTION"],
-            "description": "Тип значения для доли\n- `PERCENT` - процент (пример: `75`)\n- `DECIMAL` - десятичная дробь (пример: `0.75`)\n- `FRACTION` - обычная дробь (пример: `3/4`)"
-          },
-          "value": {
-            "type": "number",
-            "description": "Значение доли. Для процентных и десятичных (type = `PERCENT` и type = `DECIMAL`)"
-          },
-          "numerator": {
-            "type": "number",
-            "description": "Числитель дроби у доли (для type = `FRACTION`)"
-          },
-          "denominator": {
-            "type": "number",
-            "description": "Знаменатель дроби у доли (для type = `FRACTION`)"
-          }
-        },
-        "required": ["type"]
-      },
-      "CourtDecisionInfo": {
-        "type": "object",
-        "properties": {
-          "court_name": {
-            "type": ["string", "null"],
-            "description": "Наименование суда"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер судебного решения"
-          },
-          "date": {
-            "type": ["integer", "null"],
-            "description": "Дата судебного решения (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          }
-        },
-        "required": ["court_name", "number", "date"]
-      },
-      "InvalidityInfo": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "enum": ["PARTY", "FTS", "COURT", "OTHER"],
-            "description": "Код причины недостоверности\n- `PARTY`  — обращение лица или организации\n- `FTS`    — проверка налоговой\n- `COURT`  — решение суда\n- `OTHER`  — прочие причины"
-          },
-          "decision": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/CourtDecisionInfo"
-              }
-            ],
-            "description": "Решение суда (только для code = `COURT`)"
-          }
-        },
-        "required": ["code"]
-      },
-      "PartyFounder": {
-        "type": "object",
-        "properties": {
-          "ogrn": {
-            "type": ["null", "string"],
-            "description": "ОГРН учредителя (для юрлиц)"
-          },
-          "inn": {
-            "type": ["null", "string"],
-            "description": "ИНН учредителя"
-          },
-          "name": {
-            "type": ["null", "string"],
-            "description": "Наименование учредителя (для юрлиц)"
-          },
-          "fio": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/FioInfoExtra"
-              }
-            ],
-            "description": "ФИО учредителя (для физлиц)"
-          },
-          "hid": {
-            "type": ["null", "string"],
-            "description": "Внутренний идентификатор в Дадате"
-          },
-          "type": {
-            "type": ["null", "string"],
-            "enum": [null, "LEGAL", "PHYSICAL"],
-            "description": "Тип учредителя (`LEGAL` - юрлицо / `PHYSICAL` - физлицо)"
-          },
-          "share": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyFounderShare"
-              }
-            ],
-            "description": "Доля учредителя"
-          },
-          "invalidity": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/InvalidityInfo"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Недостоверность сведений об учредителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
-          },
-          "start_date": {
-            "type": ["integer", "null"],
-            "description": "Дата вступления в права учредителя (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          }
-        },
-        "required": ["inn", "hid", "type", "share", "invalidity", "start_date"]
-      },
-      "PartyManager": {
-        "type": "object",
-        "properties": {
-          "ogrn": {
-            "type": ["string", "null"],
-            "description": "ОГРН руководителя (для юрлиц)"
-          },
-          "inn": {
-            "type": ["string", "null"],
-            "description": "ИНН руководителя"
-          },
-          "name": {
-            "type": ["string", "null"],
-            "description": "Наименование руководителя (для юрлиц)"
-          },
-          "fio": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/FioInfoExtra"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "ФИО руководителя (для физлиц)"
-          },
-          "post": {
-            "type": ["string", "null"],
-            "description": "Должность руководителя (для физлиц)"
-          },
-          "hid": {
-            "type": ["string", "null"],
-            "description": "Внутренний идентификатор в Дадате"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["EMPLOYEE", "LEGAL"],
-            "description": "Тип руководителя. `EMPLOYEE` — сотрудник, `LEGAL` — юрлицо"
-          },
-          "invalidity": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/InvalidityInfo"
-              }
-            ],
-            "description": "Недостоверность сведений о руководителе\n- {@link https://dadata.ru/api/find-party/#invalidity}"
-          },
-          "start_date": {
-            "type": ["integer", "null"],
-            "description": "Дата вступления в должность руководителя (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          }
-        },
-        "required": ["inn", "hid", "type", "invalidity", "start_date"]
-      },
-      "LinkedLegalEntity": {
-        "type": "object",
-        "properties": {
-          "ogrn": {
-            "type": "string",
-            "description": "ОГРН предшественника (`predecessors`) или преемника (`successors`)"
-          },
-          "inn": {
-            "type": "string",
-            "description": "ИНН предшественника (`predecessors`) или преемника (`successors`)"
-          },
-          "name": {
-            "type": "string",
-            "description": "Наименование предшественника (`predecessors`) или преемника (`successors`)"
-          }
-        },
-        "required": ["ogrn", "inn", "name"]
-      },
-      "PartyCapital": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Тип капитала"
-          },
-          "value": {
-            "type": "number",
-            "description": "Размер капитала"
-          }
-        },
-        "required": ["type", "value"]
-      },
-      "PartyFinanceInfoExtra": {
-        "type": "object",
-        "properties": {
-          "tax_system": {
-            "type": ["string", "null"],
-            "description": "Система налогообложения (Тарифы «Расширенный» и «Максимальный»)\n- `AUSN` — автоматизированная упрощенная система налогообложения (АУСН)\n- `ESHN` — единый сельскохозяйственный налог (ЕСХН)\n- `SRP` — система налогообложения при выполнении соглашений о разделе продукции (СРП)\n- `USN` — упрощенная система налогообложения (УСН)"
-          },
-          "year": {
-            "type": ["number", "null"],
-            "description": "Год бух. отчетности (Только «Максимальный» тариф, 21.3+)"
-          },
-          "income": {
-            "type": ["number", "null"],
-            "description": "Доходы по бух. отчетности, руб (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#finance}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}"
-          },
-          "revenue": {
-            "type": ["number", "null"],
-            "description": "Выручка по бух. отчетности, руб (Только «Максимальный» тариф, 23.8+)"
-          },
-          "expense": {
-            "type": ["number", "null"],
-            "description": "Расходы по бух. отчетности, руб (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#finance}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=204669126#id-Объекторганизации-Доходыирасходы}"
-          },
-          "debt": {
-            "type": ["number", "null"],
-            "description": "Недоимки по налогам за позапрошлый год, руб (Только «Максимальный» тариф)"
-          },
-          "penalty": {
-            "type": ["number", "null"],
-            "description": "Налоговые штрафы за позапрошлый год, руб (Только «Максимальный» тариф)"
-          }
-        },
-        "required": ["tax_system", "year", "income", "revenue", "expense", "debt", "penalty"]
-      },
-      "DocumentInfoFtsReg": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "FTS_REGISTRATION",
-            "description": "Тип документа"
-          },
-          "series": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер документа"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          }
-        },
-        "required": ["type", "series", "number", "issue_date", "issue_authority"]
-      },
-      "DocumentInfoFtsReport": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "FTS_REPORT",
-            "description": "Тип документа"
-          },
-          "series": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер документа"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          }
-        },
-        "required": ["type", "series", "number", "issue_date", "issue_authority"]
-      },
-      "DocumentInfoPfReg": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "PF_REGISTRATION",
-            "description": "Тип документа"
-          },
-          "series": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер документа"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          }
-        },
-        "required": ["type", "series", "number", "issue_date", "issue_authority"]
-      },
-      "DocumentInfoSifReg": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "SIF_REGISTRATION",
-            "description": "Тип документа"
-          },
-          "series": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер документа"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          }
-        },
-        "required": ["type", "series", "number", "issue_date", "issue_authority"]
-      },
-      "DocumentInfoSmb": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "const": "SMB",
-            "description": "Тип документа"
-          },
-          "series": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "number": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи / регистрациии (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "category": {
-            "type": "string",
-            "enum": ["MICRO", "SMALL", "MEDIUM"],
-            "description": "Категория предприятия:\n- `MICRO` — микро-предприятие\n- `SMALL` — малое предприятие\n- `MEDIUM` — среднее предприятие"
-          }
-        },
-        "required": ["category", "issue_authority", "issue_date", "number", "series", "type"]
-      },
-      "PartyDocuments": {
-        "type": "object",
-        "properties": {
-          "fts_registration": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DocumentInfoFtsReg"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Свидетельство о регистрации в налоговой"
-          },
-          "fts_report": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DocumentInfoFtsReport"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Сведения об учете в налоговом органе"
-          },
-          "pf_registration": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DocumentInfoPfReg"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Свидетельство о регистрации в Пенсионном фонде"
-          },
-          "sif_registration": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DocumentInfoSifReg"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Свидетельство о регистрации в Фонде соц. страхования"
-          },
-          "smb": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/DocumentInfoSmb"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Запись в реестре малого и среднего предпринимательства"
-          }
-        },
-        "required": ["fts_registration", "fts_report", "pf_registration", "sif_registration", "smb"]
-      },
-      "LicenseInfo": {
-        "type": "object",
-        "properties": {
-          "series": {
-            "type": ["string", "null"],
-            "description": "Серия документа"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Номер документа"
-          },
-          "issue_date": {
-            "type": ["integer", "null"],
-            "description": "Дата выдачи (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "issue_authority": {
-            "type": ["string", "null"],
-            "description": "Название выдавшего органа"
-          },
-          "suspend_date": {
-            "type": ["integer", "null"],
-            "description": "Дата приостановки (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "suspend_authority": {
-            "type": ["string", "null"],
-            "description": "Название приостановившего органа"
-          },
-          "valid_from": {
-            "type": ["integer", "null"],
-            "description": "Дата начала действия (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "valid_to": {
-            "type": ["integer", "null"],
-            "description": "Дата окончания действия (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "activities": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Перечень лицензируемых видов деятельности"
-          },
-          "addresses": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Перечень адресов, по которым действует лицензия"
-          }
-        },
-        "required": [
-          "series",
-          "number",
-          "issue_date",
-          "issue_authority",
-          "suspend_date",
-          "suspend_authority",
-          "valid_from",
-          "valid_to",
-          "activities",
-          "addresses"
-        ]
-      },
-      "PartyPhoneContact": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": ["string", "null"],
-            "description": "Тип контактного лица\n- `MANAGING_PARTY` - управляющая организация\n- `TRUSTED_EMPLOYEE` - сотрудник\n- `TRUSTED_FOREIGNER` - иностранный гражданин"
-          },
-          "name": {
-            "type": ["string", "null"],
-            "description": "Имя контактного лица"
-          }
-        },
-        "required": ["type", "name"]
-      },
-      "PartyPhoneInfoData": {
-        "type": "object",
-        "properties": {
-          "source": {
-            "type": "string",
-            "description": "Телефон одной строкой как в ЕГРЮЛ"
-          },
-          "type": {
-            "type": ["string", "null"],
-            "description": "Тип телефона, например:\n- Мобильный  - `+7 911 243-45-68`\n- Стационарный - `+7 495 456-55-77`\n- Прямой мобильный - `+7 495 243-45-68`\n- Колл-центр - `8 800 222-12-22`\n- Неизвестный  - `+7 333 1111112`"
-          },
-          "country_code": {
-            "type": ["string", "null"],
-            "description": "Телефонный код страны (например `7`)"
-          },
-          "city_code": {
-            "type": ["string", "null"],
-            "description": "Телефонный код города / DEF-код"
-          },
-          "number": {
-            "type": ["string", "null"],
-            "description": "Локальная часть номера телефона"
-          },
-          "provider": {
-            "type": ["string", "null"],
-            "description": "Оператор связи (например, `ПАО \"Вымпел-Коммуникации\"`)"
-          },
-          "country": {
-            "type": ["string", "null"],
-            "description": "Страна"
-          },
-          "region": {
-            "type": ["string", "null"],
-            "description": "Регион (например, `Москва`)"
-          },
-          "city": {
-            "type": ["string", "null"],
-            "description": "Город (только для стационарных телефонов)"
-          },
-          "timezone": {
-            "type": ["string", "null"],
-            "description": "Часовой пояс города (Россия), страны (прочие страны), например, `UTC+3`"
-          },
-          "contact": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyPhoneContact"
-              }
-            ],
-            "description": "Контактное лицо"
-          },
-          "extension": {
-            "type": ["string", "null"],
-            "description": "Добавочный номер"
-          },
-          "qc_conflict": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "qc": {
-            "type": "null",
-            "description": "Не заполняется"
-          }
-        },
-        "required": [
-          "source",
-          "type",
-          "country_code",
-          "city_code",
-          "number",
-          "provider",
-          "country",
-          "region",
-          "city",
-          "timezone",
-          "contact",
-          "extension",
-          "qc_conflict",
-          "qc"
-        ]
-      },
-      "PartyPhoneInfo": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "Телефон организации одной строкой"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "Телефон организации одной строкой (то же, что и value)"
-          },
-          "data": {
-            "$ref": "#/components/schemas/PartyPhoneInfoData",
-            "description": "Подробности о телефоне организации"
-          }
-        },
-        "required": ["value", "unrestricted_value", "data"]
-      },
-      "PartyEmailInfoData": {
-        "type": "object",
-        "properties": {
-          "local": {
-            "type": "string",
-            "description": "Локальная часть адреса (то, что до «собачки»)"
-          },
-          "domain": {
-            "type": "string",
-            "description": "Домен (то, что после «собачки»)"
-          },
-          "type": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "source": {
-            "type": ["string", "null"],
-            "description": "Email адрес, указанный в ЕГРЮЛ (может содержать несколько адресов через запятую)"
-          },
-          "qc": {
-            "type": "null",
-            "description": "Не заполняется"
-          }
-        },
-        "required": ["local", "domain", "type", "source", "qc"]
-      },
-      "PartyEmailInfo": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "Email одной строкой. Если в ЕГРЮЛ несколько email - здесь, вероятно, будет первый"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "Email одной строкой (то же, что value)"
-          },
-          "data": {
-            "$ref": "#/components/schemas/PartyEmailInfoData",
-            "description": "Подробности об email-адресе"
-          }
-        },
-        "required": ["value", "unrestricted_value", "data"]
-      },
-      "PartySuggestionDataAddressExtra": {
-        "type": "object",
-        "properties": {
-          "invalidity": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/InvalidityInfo"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Недостоверность сведений об адресе (Только «Максимальный» тариф)\n- {@link https://dadata.ru/api/find-party/#invalidity}"
-          },
-          "value": {
-            "type": "string",
-            "description": "Адрес одной строкой, сокращённый по правилам, описанным здесь: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=1105068073}\n- Для юрлиц: **адрес организации**\n- Для ИП: **город проживания**\n\n* Стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "Адрес одной строкой (полный, с индексом).\n- Для юрлиц: **адрес организации**\n- Для ИП: **город проживания**\n\n* Стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ."
-          },
-          "data": {
-            "$ref": "#/components/schemas/PartySuggestionAddressData",
-            "description": "Подробности об адресе организации"
-          }
-        },
-        "required": ["data", "invalidity", "unrestricted_value", "value"],
-        "description": "`data.address` object returned from 'findById/party' API"
-      },
-      "RichPartySuggestionData": {
-        "type": "object",
-        "properties": {
-          "employee_count": {
-            "type": ["integer", "null"],
-            "description": "Среднесписочная численность работников (Тарифы «Расширенный» и «Максимальный», 19.7+)\n@format int32",
-            "format": "int32"
-          },
-          "okveds": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PartyOkvedInfo"
-                }
-              }
-            ],
-            "description": "Коды ОКВЭД дополнительных видов деятельности (Тарифы «Расширенный» и «Максимальный»)"
-          },
-          "authorities": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyAuthorities"
-              }
-            ],
-            "description": "Сведения о налоговой, ПФР и ФСС (Тарифы «Расширенный» и «Максимальный»)\n\n- `fts_registration` — ИФНС регистрации\n- `fts_report` — ИФНС отчётности\n- `pf` — Отделение Пенсионного фонда\n- `sif` — Отделение Фонда соц. страхования"
-          },
-          "citizenship": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyCitizenshipInfo"
-              }
-            ],
-            "description": "Гражданство ИП (Тарифы «Расширенный» и «Максимальный»)"
-          },
-          "founders": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PartyFounder"
-                }
-              }
-            ],
-            "description": "Учредители компании (Только «Максимальный» тариф)"
-          },
-          "managers": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PartyManager"
-                }
-              }
-            ],
-            "description": "Руководители компании, только для юрлиц (Только «Максимальный» тариф)"
-          },
-          "predecessors": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedLegalEntity"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Правопредшественники компании, только для юрлиц (Только «Максимальный» тариф)"
-          },
-          "successors": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedLegalEntity"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Правопреемники компании, только для юрлиц (Только «Максимальный» тариф)"
-          },
-          "capital": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyCapital"
-              }
-            ],
-            "description": "Уставной капитал компании, только для юрлиц (Только «Максимальный» тариф)"
-          },
-          "finance": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyFinanceInfoExtra"
-              }
-            ],
-            "description": "Налоговый режим, доходы, расходы, долги и штрафы (19.7+)"
-          },
-          "documents": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyDocuments"
-              }
-            ],
-            "description": "Документы и реестры (Только «Максимальный» тариф)"
-          },
-          "licenses": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LicenseInfo"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Лицензии (Только «Максимальный» тариф)"
-          },
-          "phones": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PartyPhoneInfo"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Телефоны, заполнены у 60% действующих компаний (Только «Максимальный» тариф)"
-          },
-          "emails": {
-            "anyOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PartyEmailInfo"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Адреса эл. почты, заполнены у 50% действующих компаний (Только «Максимальный» тариф)"
-          },
-          "address": {
-            "$ref": "#/components/schemas/PartySuggestionDataAddressExtra",
-            "description": "Подробности об адресе организации / о городе ИП"
-          },
-          "inn": {
-            "type": "string",
-            "description": "ИНН"
-          },
-          "kpp": {
-            "type": "string",
-            "description": "КПП"
-          },
-          "kpp_largest": {
-            "type": ["string", "null"],
-            "description": "КПП крупнейшего налогоплательщика"
-          },
-          "ogrn": {
-            "type": "string",
-            "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
-          },
-          "ogrn_date": {
-            "type": "integer",
-            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "hid": {
-            "type": "string",
-            "description": "Внутренний идентификатор в Дадате"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["LEGAL", "INDIVIDUAL"],
-            "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
-          },
-          "name": {
-            "$ref": "#/components/schemas/PartyNameInfo",
-            "description": "Наименование организации"
-          },
-          "okpo": {
-            "type": ["string", "null"],
-            "description": "Код ОКПО"
-          },
-          "okato": {
-            "type": ["string", "null"],
-            "description": "Код ОКАТО (20.9+)"
-          },
-          "oktmo": {
-            "type": ["string", "null"],
-            "description": "Код ОКТМО (20.9+)"
-          },
-          "okogu": {
-            "type": ["string", "null"],
-            "description": "Код ОКОГУ (20.9+)"
-          },
-          "okfs": {
-            "type": ["string", "null"],
-            "description": "Код ОКФС (20.9+)"
-          },
-          "okved": {
-            "type": "string",
-            "description": "Код ОКВЭД"
-          },
-          "okved_type": {
-            "type": "string",
-            "enum": ["2001", "2014"],
-            "description": "Версия справочника ОКВЭД (2001 или 2014)"
-          },
-          "opf": {
-            "$ref": "#/components/schemas/PartyOpfInfo",
-            "description": "Организационно-правовая форма"
-          },
-          "invalid": {
-            "type": ["boolean", "null"],
-            "enum": [true, null],
-            "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
-          },
-          "management": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyManagementInfo"
-              }
-            ],
-            "description": "Руководитель (только для юрлиц)"
-          },
-          "branch_count": {
-            "type": ["number", "null"],
-            "description": "Количество филиалов (только для юрлиц)"
-          },
-          "branch_type": {
-            "type": "string",
-            "enum": ["MAIN", "BRANCH"],
-            "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
-          },
-          "state": {
-            "$ref": "#/components/schemas/PartyStateInfo",
-            "description": "Состояние организации"
-          },
-          "fio": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/FioInfoBasic"
-              }
-            ],
-            "description": "ФИО индивидуального предпринимателя (21.3+)"
-          },
-          "source": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "qc": {
-            "type": "null",
-            "description": "Не заполняется"
-          }
-        },
-        "required": [
-          "address",
-          "authorities",
-          "documents",
-          "emails",
-          "employee_count",
-          "finance",
-          "hid",
-          "inn",
-          "licenses",
-          "name",
-          "ogrn",
-          "ogrn_date",
-          "okato",
-          "okfs",
-          "okogu",
-          "okpo",
-          "oktmo",
-          "okved",
-          "okved_type",
-          "okveds",
-          "opf",
-          "phones",
-          "qc",
-          "source",
-          "state",
-          "type"
-        ],
-        "description": "`suggestion[ ].data` object, returned from 'findById/party' API"
-      },
-      "RichPartySuggestion": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "Краткое наименование организации (data.name.short_with_opf).\nЕсли краткое наименование не указано — полное наименование (data.name.full_with_opf)"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "Краткое наименование организации (То же, что и value)"
-          },
-          "data": {
-            "$ref": "#/components/schemas/RichPartySuggestionData",
-            "description": "Подробности об организации"
-          }
-        },
-        "required": ["data", "unrestricted_value", "value"],
-        "description": "Suggestion object returned from 'findById/party' API\n- {@link https://dadata.ru/api/find-party/}\n- {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=568918058}"
-      },
-      "FindPartyResponse": {
-        "type": "object",
-        "properties": {
-          "suggestions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RichPartySuggestion"
-            },
-            "description": "Массив подсказок или пустой массив"
-          }
-        },
-        "required": ["suggestions"],
-        "description": "Объект с массивом подсказок"
-      },
       "FindPartyByPayload": {
         "type": "object",
         "properties": {
@@ -13816,249 +13833,6 @@
         },
         "required": ["query"],
         "description": "https://dadata.ru/api/find-affiliated/"
-      },
-      "PartyAffiliatedData": {
-        "type": "object",
-        "properties": {
-          "management": {
-            "type": "null",
-            "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
-          },
-          "opf": {
-            "type": "null",
-            "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
-          },
-          "name": {
-            "type": "null",
-            "description": "Не заполняется, используйте метод \"Организация по ИНН\" (`findById/party`)"
-          },
-          "inn": {
-            "type": "string",
-            "description": "ИНН"
-          },
-          "kpp": {
-            "type": "string",
-            "description": "КПП"
-          },
-          "kpp_largest": {
-            "type": ["string", "null"],
-            "description": "КПП крупнейшего налогоплательщика"
-          },
-          "ogrn": {
-            "type": "string",
-            "description": "ОГРН (13 цифр)\nДля представительств иностранных компаний — номер записи об аккредитации (НЗА, 11 цифр) в РАФП."
-          },
-          "ogrn_date": {
-            "type": "integer",
-            "description": "Дата выдачи ОГРН. (unix-время в миллисекундах)\n@format int64",
-            "format": "int64"
-          },
-          "hid": {
-            "type": "string",
-            "description": "Внутренний идентификатор в Дадате"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["LEGAL", "INDIVIDUAL"],
-            "description": "Тип организации\n- `LEGAL` - юридическое лицо\n- `INDIVIDUAL` - индивидуальный предприниматель"
-          },
-          "okpo": {
-            "type": ["string", "null"],
-            "description": "Код ОКПО"
-          },
-          "okato": {
-            "type": ["string", "null"],
-            "description": "Код ОКАТО (20.9+)"
-          },
-          "oktmo": {
-            "type": ["string", "null"],
-            "description": "Код ОКТМО (20.9+)"
-          },
-          "okogu": {
-            "type": ["string", "null"],
-            "description": "Код ОКОГУ (20.9+)"
-          },
-          "okfs": {
-            "type": ["string", "null"],
-            "description": "Код ОКФС (20.9+)"
-          },
-          "okved": {
-            "type": "string",
-            "description": "Код ОКВЭД"
-          },
-          "okved_type": {
-            "type": "string",
-            "enum": ["2001", "2014"],
-            "description": "Версия справочника ОКВЭД (2001 или 2014)"
-          },
-          "invalid": {
-            "type": ["boolean", "null"],
-            "enum": [true, null],
-            "description": "Признак наличия недостоверных сведений (по решению суда, налоговой и некоторым другим причинам; только для юрлиц)\n- {@link https://dadata.ru/api/find-party/#invalidity}\n\nПодробности об этом указываются в полях:\n- `data.founders[ ].invalidity` - об учредителе\n- `data.managers[ ].invalidity` - о руководителе\n- `data.address[ ].invalidity` - об адресе\n\nЕсли хотя бы один учредитель, руководитель или адрес признан недостоверным,\n«Дадата» вернет для организации в целом маркер `data.invalid = true`\n\n* Только «Максимальный» тариф"
-          },
-          "branch_count": {
-            "type": ["number", "null"],
-            "description": "Количество филиалов (только для юрлиц)"
-          },
-          "branch_type": {
-            "type": "string",
-            "enum": ["MAIN", "BRANCH"],
-            "description": "Тип подразделения (только для юрлиц)\n- `MAIN` — головная организация\n- `BRANCH` — филиал"
-          },
-          "address": {
-            "$ref": "#/components/schemas/PartySuggestionDataAddressBasic",
-            "description": "Подробности об адресе. Для юрлиц - о юридическом адресе, для ИП - о городе регистрации"
-          },
-          "state": {
-            "$ref": "#/components/schemas/PartyStateInfo",
-            "description": "Состояние организации"
-          },
-          "fio": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/FioInfoBasic"
-              }
-            ],
-            "description": "ФИО индивидуального предпринимателя (21.3+)"
-          },
-          "employee_count": {
-            "type": "null",
-            "description": "Среднесписочная численность работников (только в «Организация по ИНН»)"
-          },
-          "okveds": {
-            "type": "null",
-            "description": "Коды ОКВЭД дополнительных видов деятельности (только в «Организация по ИНН»)"
-          },
-          "authorities": {
-            "type": "null",
-            "description": "Сведения о налоговой, ПФР и ФСС (только в «Организация по ИНН»)"
-          },
-          "citizenship": {
-            "type": "null",
-            "description": "Гражданство ИП (только в «Организация по ИНН»)"
-          },
-          "founders": {
-            "type": "null",
-            "description": "Учредители компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "managers": {
-            "type": "null",
-            "description": "Руководители компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "predecessors": {
-            "type": "null",
-            "description": "Правопредшественники компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "successors": {
-            "type": "null",
-            "description": "Правопреемники компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "capital": {
-            "type": "null",
-            "description": "Уставной капитал компании, только для юрлиц (только в «Организация по ИНН»)"
-          },
-          "finance": {
-            "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PartyFinanceInfoBasic"
-              }
-            ],
-            "description": "Налоговый режим, доходы, расходы, долги и штрафы (только в «Организация по ИНН»)"
-          },
-          "documents": {
-            "type": "null",
-            "description": "Документы и реестры (только в «Организация по ИНН»)"
-          },
-          "licenses": {
-            "type": "null",
-            "description": "Лицензии (только в «Организация по ИНН»)"
-          },
-          "phones": {
-            "type": "null",
-            "description": "Телефоны (только в «Организация по ИНН»)"
-          },
-          "emails": {
-            "type": "null",
-            "description": "Адреса эл. почты (только в «Организация по ИНН»)"
-          },
-          "source": {
-            "type": "null",
-            "description": "Не заполняется"
-          },
-          "qc": {
-            "type": "null",
-            "description": "Не заполняется"
-          }
-        },
-        "required": [
-          "address",
-          "authorities",
-          "documents",
-          "emails",
-          "employee_count",
-          "finance",
-          "hid",
-          "inn",
-          "licenses",
-          "management",
-          "name",
-          "ogrn",
-          "ogrn_date",
-          "okato",
-          "okfs",
-          "okogu",
-          "okpo",
-          "oktmo",
-          "okved",
-          "okved_type",
-          "okveds",
-          "opf",
-          "phones",
-          "qc",
-          "source",
-          "state",
-          "type"
-        ],
-        "description": "@see https://dadata.ru/api/find-affiliated"
-      },
-      "PartyAffiliatedSuggestion": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string",
-            "description": "Краткое наименование организации (data.name.short_with_opf).\nЕсли краткое наименование не указано — полное наименование (data.name.full_with_opf)"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "description": "Краткое наименование организации (То же, что и value)"
-          },
-          "data": {
-            "$ref": "#/components/schemas/PartyAffiliatedData",
-            "description": "Подробности об организации"
-          }
-        },
-        "required": ["data", "unrestricted_value", "value"],
-        "description": "Suggestion object returned from 'findAffiliated/party' API endpoint\n@see https://dadata.ru/api/find-affiliated/"
-      },
-      "FindAffiliatedResponse": {
-        "type": "object",
-        "properties": {
-          "suggestions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PartyAffiliatedSuggestion"
-            },
-            "description": "Массив подсказок или пустой массив"
-          }
-        },
-        "required": ["suggestions"],
-        "description": "Объект с массивом подсказок"
       },
       "FindPartyByEmailPayload": {
         "type": "object",

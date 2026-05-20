@@ -22,7 +22,6 @@ import type {
   PartyKzSuggestion,
   PartySuggestion,
   PostalUnitSuggestion,
-  RichPartySuggestion,
 } from '@dadata-sdk/api-types';
 
 export type DadataSuggestion =
@@ -44,7 +43,6 @@ export type DadataSuggestion =
   | Okpd2Suggestion
   | OktmoSuggestion
   | Okved2Suggestion
-  | RichPartySuggestion
   | PartyBySuggestion
   | PartyKzSuggestion
   | PartySuggestion

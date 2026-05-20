@@ -8,9 +8,14 @@ type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patc
 type CompositionKey = 'anyOf' | 'oneOf';
 
 export interface ComparisonNormalizationDecision {
-  kind: 'flattened-nullable-composition' | 'inlined-nullable-object-ref';
-  path: string;
+  branchRefs?: string[];
   compositionKey: CompositionKey;
+  kind:
+    | 'flattened-nullable-composition'
+    | 'folded-object-anyof'
+    | 'inlined-nullable-object-ref';
+  objectBranchCount?: number;
+  path: string;
   ref?: string;
 }
 
@@ -151,9 +156,9 @@ function canonicalizeNullableComposition(
     addNullType(schema);
     addNullEnumValue(schema);
     decisions.push({
+      compositionKey,
       kind: 'flattened-nullable-composition',
       path,
-      compositionKey,
     });
     return;
   }
@@ -173,9 +178,9 @@ function canonicalizeNullableComposition(
   replaceCompositionWithSchema(schema, compositionKey, resolved);
   addNullType(schema);
   decisions.push({
+    compositionKey,
     kind: 'inlined-nullable-object-ref',
     path,
-    compositionKey,
     ref,
   });
 }
