@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
-import { OpenApi } from 'vitepress-openapi';
+import { createOpenApiSpec } from 'vitepress-openapi';
 import { useI18n } from 'vue-i18n';
 
 import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
@@ -13,7 +13,7 @@ const { lang = 'en' } = defineProps<{
 const { t, locale } = useI18n();
 locale.value = lang;
 
-const openApi = OpenApi({ spec: spec as any });
+const openApi = createOpenApiSpec({ spec: spec as any });
 const groupedPaths = getGroupedPaths(lang);
 
 function getOperationHref(operationId: string, pathTag?: string) {
