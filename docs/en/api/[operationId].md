@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useRoute } from 'vitepress'
 import MarkDown from '../../components/MarkDown.vue';
-import OpenApiContent from '../../components/OpenApiContent.vue';
 import { getDocsLinks } from '../../utils/getDocsLinks'
 const route = useRoute()
 const operationId = route.data.params?.operationId
 import { titleCase } from 'scule'
 </script>
 
-<OpenApiContent>
 <OAOperation :operationId="operationId" >
 <template #header="p">
   <h1>{{titleCase(operationId)}}</h1>
@@ -26,4 +24,3 @@ import { titleCase } from 'scule'
 </template>
 </template>
 </OAOperation>
-</OpenApiContent>

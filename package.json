@@ -1,6 +1,7 @@
 {
   "name": "dadata-sdk",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.17.1",
   "version": "0.0.0",
   "workspaces": [
@@ -8,12 +9,14 @@
     "docs"
   ],
   "scripts": {
-    "build": "pnpm -r build && pnpm docs:gen-vue-schema && pnpm docs:build",
+    "build": "pnpm -r build && pnpm docs:gen-vue-schema && pnpm docs:type-check && pnpm docs:build",
     "test": "pnpm -r test",
-    "lint": "eslint \"**/*.{ts,tsx,vue}\"",
+    "lint": "eslint \"**/*.{js,mjs,ts,mts,tsx,vue}\"",
+    "type-check": "pnpm -r --if-present type-check && pnpm docs:type-check",
     "dev": "pnpm docs:dev",
     "docs:dev": "rm -rf docs/.vitepress/cache && pnpm vitepress dev docs --host",
     "docs:build": "vitepress build docs",
+    "docs:type-check": "vue-tsc -p docs/tsconfig.json",
     "docs:preview": "vitepress preview docs",
     "docs:gen-vue-schema": "pnpm -F schema-gen schema-gen --input ../../docs/vue-component.types.ts --output ../../docs/vue-component-schema.json",
     "changeset": "changeset",
@@ -37,6 +40,7 @@
     "@vitest/eslint-plugin": "1.3.4",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/tsconfig": "^0.7.0",
     "@vueuse/core": "^13.6.0",
     "eslint": "^9.32.0",
     "eslint-plugin-vue": "^10.3.0",
@@ -54,14 +58,14 @@
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4",
     "vue": "^3.5.18",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.3.1"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
     "scule": "^1.3.0",
-    "vitepress-openapi": "^0.1.19",
+    "vitepress-openapi": "^0.2.0",
     "vue-i18n": "^11.1.11"
   }
 }

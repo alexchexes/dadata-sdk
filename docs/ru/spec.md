@@ -3,10 +3,6 @@ title: OpenAPI спецификация Dadata
 outline: [1, 4]
 ---
 
-<script setup>
-import OpenApiContent from '../components/OpenApiContent.vue'
-</script>
-
 ::: info
 Эта документация была разработана в 2025 году, когда официальная OpenAPI спецификация ещё не была опубликована.
 С тех пор (по состоянию на март 2026) многое изменилось, и хотя данная неофициальная документация по прежнему полезна, она требует обновления. Если хотите помочь, присоединяйтесь [на GitHub](https://github.com/alexchexes/dadata-sdk).
@@ -29,7 +25,5 @@ import OpenApiContent from '../components/OpenApiContent.vue'
 
 :::
 
-<OpenApiContent>
 <OAInfo />
 <OAServers />
-</OpenApiContent>
