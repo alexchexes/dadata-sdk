@@ -47,6 +47,7 @@ export default defineConfig({
   base: siteBase,
 
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${siteBase}favicon.svg` }],
     ['link', { rel: 'icon', href: `${siteBase}favicon.ico` }],
     ...(isProd ? [['script', { type: 'text/javascript' }, getYandexMetrikaInitScript()]] : []),
   ],
