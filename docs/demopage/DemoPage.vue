@@ -81,7 +81,7 @@ const suggestion = ref<DadataSuggestion | undefined>(undefined);
 const shownError = ref<{ title: string; description?: string | null; data: unknown } | null>(null);
 const showTokenError = ref(false);
 
-const vueDadataRef = useTemplateRef('vueDadataRef');
+const vueDadataRef = useTemplateRef<InstanceType<typeof VueDadata>>('vueDadataRef');
 
 const isScreenXl = useMediaQuery('(width >= 80rem)');
 const isScreenMd = useMediaQuery('(width >= 48rem)');
@@ -103,7 +103,7 @@ const displayedOptions = computed(() =>
   isTokenProvided.value ? options.value : { ...options.value, token: TOKEN_PLACEHOLDER },
 );
 
-const suggestionsList = computed(() => vueDadataRef.value?.suggestionsList ?? []);
+const suggestionsList = computed<DadataSuggestion[]>(() => vueDadataRef.value?.suggestionsList ?? []);
 
 const propsLink = (propName: string) => withBase(`/${lang}/vue#${propName.toLowerCase()}`);
 

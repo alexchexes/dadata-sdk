@@ -1,5 +1,5 @@
 import { titleCase } from 'scule';
-import { OpenApi } from 'vitepress-openapi';
+import { createOpenApiSpec } from 'vitepress-openapi';
 
 import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
 import messages from '../locales-spec';
@@ -63,7 +63,7 @@ type GroupedPaths = Record<PathsGroup, Record<string, Record<string, PathUi>>>;
 
 export const getGroupedPaths = (lang: string) => {
   const t = createMiniI18n({ locale: lang, messages: messages });
-  const openApi = OpenApi({ spec: spec as any });
+  const openApi = createOpenApiSpec({ spec: spec as any });
   const paths = openApi.getPaths();
 
   // set in advance to preserve order

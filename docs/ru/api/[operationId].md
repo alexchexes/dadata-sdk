@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { useRoute } from 'vitepress'
 import MarkDown from '../../components/MarkDown.vue';
-import OpenApiContent from '../../components/OpenApiContent.vue';
 import { getDocsLinks } from '../../utils/getDocsLinks'
 const route = useRoute()
 const operationId = route.data.params?.operationId
 </script>
 
-<OpenApiContent>
 <OAOperation :operationId="operationId" >
 <template #description="slotProps">
   <MarkDown :content="slotProps.operation.description"/>
@@ -20,4 +18,3 @@ const operationId = route.data.params?.operationId
   </template>
 </template>
 </OAOperation>
-</OpenApiContent>

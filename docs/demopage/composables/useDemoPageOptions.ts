@@ -8,6 +8,8 @@ import { API_OPTIONS_KEYS, BEHAVIOR_OPTIONS_KEYS } from '../demo-page.const';
 import { useSyncUrlParams } from './useSyncUrlParams';
 
 type Translate = (key: string, ...args: unknown[]) => string;
+type OptionKey = keyof VueDadataOptions;
+type UrlSyncedOptions = Record<string, unknown> & VueDadataOptions;
 
 const TOKEN_PLACEHOLDER = '***************************';
 
@@ -18,17 +20,31 @@ const isEqualWithUndefined = (valueThatIsPossiblyUndefined: unknown, valueToTest
   (typeof valueThatIsPossiblyUndefined === 'undefined' &&
     (valueToTest === false || (typeof valueToTest === 'string' && !valueToTest)));
 
-const getDiff = (defaults: Record<string, unknown>, current: Record<string, unknown>) =>
-  Object.fromEntries(
-    Object.entries(current).filter(
-      ([key, value]) => !isEqualWithUndefined(defaults[key as keyof VueDadataOptions], value),
-    ),
+const getOptionKeys = (options: VueDadataOptions): OptionKey[] =>
+  Object.keys(options) as OptionKey[];
+
+const getGeneralOptionKeys = (options: VueDadataOptions): OptionKey[] =>
+  getOptionKeys(options).filter(
+    (key) => !API_OPTIONS_KEYS.includes(key) && !BEHAVIOR_OPTIONS_KEYS.includes(key),
   );
 
-const resetOptionGroup = (
+const getDiff = (
+  defaults: Partial<VueDadataOptions>,
+  current: VueDadataOptions,
+): Partial<VueDadataOptions> => {
+  const defaultsRecord = defaults as Record<string, unknown>;
+
+  return Object.fromEntries(
+    Object.entries(current).filter(
+      ([key, value]) => !isEqualWithUndefined(defaultsRecord[key], value),
+    ),
+  ) as Partial<VueDadataOptions>;
+};
+
+const resetOptionGroup = <K extends OptionKey>(
   options: VueDadataOptions,
   defaults: VueDadataOptions,
-  keys: readonly (keyof VueDadataOptions)[],
+  keys: readonly K[],
 ) => {
   keys.forEach((key) => {
     options[key] = defaults[key];
@@ -38,11 +54,14 @@ const resetOptionGroup = (
 const isOptionGroupDefault = (
   options: VueDadataOptions,
   defaults: VueDadataOptions,
-  keys: readonly (keyof VueDadataOptions)[],
+  keys: readonly OptionKey[],
 ) => !keys.find((key) => !isEqualWithUndefined(defaults[key], options[key]));
 
-const buildLocationsExamples = (suggestType: SuggestType, t: Translate) => {
-  let examples = {
+const buildLocationsExamples = (
+  suggestType: SuggestType,
+  t: Translate,
+): Record<string, VueDadataOptions['locationsFilter']> => {
+  const examples: Record<string, VueDadataOptions['locationsFilter']> = {
     [t('Without restrictions')]: undefined,
     [t('One region')]: { region: 'краснодарский' },
     [t('One city')]: { region: 'краснодарский', city: 'сочи' },
@@ -58,7 +77,7 @@ const buildLocationsExamples = (suggestType: SuggestType, t: Translate) => {
   };
 
   if (suggestType === 'address') {
-    examples = {
+    return {
       ...examples,
       [t('Country ISO code')]: { country_iso_code: 'KZ' },
       [t('Region ISO code')]: { country_iso_code: 'DE', region_iso_code: 'DE-HE' },
@@ -85,7 +104,7 @@ export function useDemoPageOptions(params: {
       lang.value === 'ru' ? DEFAULT_OPTIONS.suggestionsHint : 'Select suggestion or keep typing',
   }));
 
-  const options = ref<VueDadataOptions>(cloneOptions(defaultOptions.value));
+  const options = ref(cloneOptions(defaultOptions.value)) as Ref<VueDadataOptions>;
 
   const showCustomPayload = ref(false);
   const showCustomHeaders = ref(false);
@@ -99,7 +118,10 @@ export function useDemoPageOptions(params: {
     token: undefined,
   }));
 
-  useSyncUrlParams(options as Ref<VueDadataOptions>, nonDefaultPlaygroundOptions);
+  useSyncUrlParams(
+    options as Ref<UrlSyncedOptions>,
+    nonDefaultPlaygroundOptions as Ref<Partial<UrlSyncedOptions>>,
+  );
 
   const isTokenProvided = computed(() => options.value.token !== envToken);
 
@@ -145,7 +167,7 @@ export function useDemoPageOptions(params: {
     isOptionGroupDefault(
       options.value,
       defaultOptions.value,
-      Object.keys(options.value) as (keyof VueDadataOptions)[],
+      getOptionKeys(options.value),
     ),
   );
 
@@ -161,9 +183,7 @@ export function useDemoPageOptions(params: {
     isOptionGroupDefault(
       options.value,
       defaultOptions.value,
-      (Object.keys(options.value) as (keyof VueDadataOptions)[]).filter(
-        (key) => !API_OPTIONS_KEYS.includes(key) && !BEHAVIOR_OPTIONS_KEYS.includes(key),
-      ),
+      getGeneralOptionKeys(options.value),
     ),
   );
 
@@ -180,9 +200,7 @@ export function useDemoPageOptions(params: {
     resetOptionGroup(
       options.value,
       defaultOptions.value,
-      (Object.keys(options.value) as (keyof VueDadataOptions)[]).filter(
-        (key) => !API_OPTIONS_KEYS.includes(key) && !BEHAVIOR_OPTIONS_KEYS.includes(key),
-      ),
+      getGeneralOptionKeys(options.value),
     );
     showCustomHeaders.value = false;
     showCustomPayload.value = false;

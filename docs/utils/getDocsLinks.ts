@@ -1,8 +1,8 @@
-import { OpenApi } from 'vitepress-openapi';
+import { createOpenApiSpec } from 'vitepress-openapi';
 
 import spec from '../../packages/api-spec/dadata.json' with { type: 'json' };
 
-const openApi = OpenApi({ spec: spec as any });
+const openApi = createOpenApiSpec({ spec: spec as any });
 const paths = openApi.getPaths();
 
 /**

@@ -1,5 +1,5 @@
 {
-  "extends": "../packages/vue-dadata/tsconfig.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
 
   "include": [
     "**/*.js",
@@ -11,7 +11,6 @@
     "../packages/vue-dadata/src/**/*",
     "../packages/api-types/src/**/*",
     "../packages/schema-gen/src/**/*",
-    "tags/[tag].paths.mjs",
     "tags/[tag].paths.mjs"
   ],
 
@@ -26,6 +25,9 @@
     "types": ["vue"],
     "resolveJsonModule": true,
     "checkJs": true,
+    "declaration": false,
+    "emitDeclarationOnly": false,
+    "noEmit": true,
     "moduleResolution": "bundler"
   },
 
