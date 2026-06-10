@@ -193,21 +193,17 @@
 /findById/bank POST response 200 application/json suggestions/items/data/correspondent_account schema-required-added added="correspondent_account"
 /findById/bank POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
 /findById/bank POST response 200 application/json suggestions/items/data/kpp schema-required-added added="kpp"
-/findById/bank POST response 200 application/json suggestions/items/data/name/full schema-property-added added="full"
-/findById/bank POST response 200 application/json suggestions/items/data/name/full schema-required-added added="full"
+/findById/bank POST response 200 application/json suggestions/items/data/name/full schema-property-added added="full" required=true
 /findById/bank POST response 200 application/json suggestions/items/data/name/full_value schema-property-deleted removed="full_value"
 /findById/bank POST response 200 application/json suggestions/items/data/name/payment schema-required-added added="payment"
 /findById/bank POST response 200 application/json suggestions/items/data/name/payment schema-type-changed added=[] removed=["null"]
-/findById/bank POST response 200 application/json suggestions/items/data/name/short schema-property-added added="short"
-/findById/bank POST response 200 application/json suggestions/items/data/name/short schema-required-added added="short"
+/findById/bank POST response 200 application/json suggestions/items/data/name/short schema-property-added added="short" required=true
 /findById/bank POST response 200 application/json suggestions/items/data/name/short_value schema-property-deleted removed="short_value"
 /findById/bank POST response 200 application/json suggestions/items/data/okpo schema-required-added added="okpo"
 /findById/bank POST response 200 application/json suggestions/items/data/okpo schema-type-changed added=[] removed=["string"]
-/findById/bank POST response 200 application/json suggestions/items/data/opf/full schema-property-added added="full"
-/findById/bank POST response 200 application/json suggestions/items/data/opf/full schema-required-added added="full"
+/findById/bank POST response 200 application/json suggestions/items/data/opf/full schema-property-added added="full" required=true
 /findById/bank POST response 200 application/json suggestions/items/data/opf/full_value schema-property-deleted removed="full_value"
-/findById/bank POST response 200 application/json suggestions/items/data/opf/short schema-property-added added="short"
-/findById/bank POST response 200 application/json suggestions/items/data/opf/short schema-required-added added="short"
+/findById/bank POST response 200 application/json suggestions/items/data/opf/short schema-property-added added="short" required=true
 /findById/bank POST response 200 application/json suggestions/items/data/opf/short_value schema-property-deleted removed="short_value"
 /findById/bank POST response 200 application/json suggestions/items/data/opf/type schema-enum-value-deleted removed=null
 /findById/bank POST response 200 application/json suggestions/items/data/opf/type schema-required-added added="type"
@@ -233,12 +229,9 @@
 /findById/car_brand POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/car_brand POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/car_brand POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/car_brand POST response 200 application/json suggestions/items/data/id schema-property-added added="id"
-/findById/car_brand POST response 200 application/json suggestions/items/data/id schema-required-added added="id"
-/findById/car_brand POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/car_brand POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/findById/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
+/findById/car_brand POST response 200 application/json suggestions/items/data/id schema-property-added added="id" required=true
+/findById/car_brand POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
 /findById/car_brand POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/car_brand POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/car_brand POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -247,16 +240,11 @@
 /findById/country POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/country POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/country POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/country POST response 200 application/json suggestions/items/data/alfa2 schema-property-added added="alfa2"
-/findById/country POST response 200 application/json suggestions/items/data/alfa2 schema-required-added added="alfa2"
-/findById/country POST response 200 application/json suggestions/items/data/alfa3 schema-property-added added="alfa3"
-/findById/country POST response 200 application/json suggestions/items/data/alfa3 schema-required-added added="alfa3"
-/findById/country POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/findById/country POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/findById/country POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/country POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/country POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/findById/country POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
+/findById/country POST response 200 application/json suggestions/items/data/alfa2 schema-property-added added="alfa2" required=true
+/findById/country POST response 200 application/json suggestions/items/data/alfa3 schema-property-added added="alfa3" required=true
+/findById/country POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/findById/country POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/country POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
 /findById/country POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/country POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/country POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -265,22 +253,14 @@
 /findById/court POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/court POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/court POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/court POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/findById/court POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/findById/court POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/findById/court POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/findById/court POST response 200 application/json suggestions/items/data/court_type schema-property-added added="court_type"
-/findById/court POST response 200 application/json suggestions/items/data/court_type schema-required-added added="court_type"
-/findById/court POST response 200 application/json suggestions/items/data/court_type_name schema-property-added added="court_type_name"
-/findById/court POST response 200 application/json suggestions/items/data/court_type_name schema-required-added added="court_type_name"
-/findById/court POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/findById/court POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/findById/court POST response 200 application/json suggestions/items/data/legal_address schema-property-added added="legal_address"
-/findById/court POST response 200 application/json suggestions/items/data/legal_address schema-required-added added="legal_address"
-/findById/court POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/court POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/court POST response 200 application/json suggestions/items/data/website schema-property-added added="website"
-/findById/court POST response 200 application/json suggestions/items/data/website schema-required-added added="website"
+/findById/court POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/findById/court POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/findById/court POST response 200 application/json suggestions/items/data/court_type schema-property-added added="court_type" required=true
+/findById/court POST response 200 application/json suggestions/items/data/court_type_name schema-property-added added="court_type_name" required=true
+/findById/court POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/findById/court POST response 200 application/json suggestions/items/data/legal_address schema-property-added added="legal_address" required=true
+/findById/court POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/court POST response 200 application/json suggestions/items/data/website schema-property-added added="website" required=true
 /findById/court POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/court POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/court POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -289,14 +269,10 @@
 /findById/currency POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/currency POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/currency POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/currency POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/findById/currency POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/findById/currency POST response 200 application/json suggestions/items/data/country schema-property-added added="country"
-/findById/currency POST response 200 application/json suggestions/items/data/country schema-required-added added="country"
-/findById/currency POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/currency POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/currency POST response 200 application/json suggestions/items/data/strcode schema-property-added added="strcode"
-/findById/currency POST response 200 application/json suggestions/items/data/strcode schema-required-added added="strcode"
+/findById/currency POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/findById/currency POST response 200 application/json suggestions/items/data/country schema-property-added added="country" required=true
+/findById/currency POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/currency POST response 200 application/json suggestions/items/data/strcode schema-property-added added="strcode" required=true
 /findById/currency POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/currency POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/currency POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -305,16 +281,11 @@
 /findById/delivery POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/delivery POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/delivery POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/delivery POST response 200 application/json suggestions/items/data/boxberry_id schema-property-added added="boxberry_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/boxberry_id schema-required-added added="boxberry_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/cdek_id schema-property-added added="cdek_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/cdek_id schema-required-added added="cdek_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/dpd_id schema-property-added added="dpd_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/dpd_id schema-required-added added="dpd_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/fias_id schema-property-added added="fias_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/fias_id schema-required-added added="fias_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/kladr_id schema-property-added added="kladr_id"
-/findById/delivery POST response 200 application/json suggestions/items/data/kladr_id schema-required-added added="kladr_id"
+/findById/delivery POST response 200 application/json suggestions/items/data/boxberry_id schema-property-added added="boxberry_id" required=true
+/findById/delivery POST response 200 application/json suggestions/items/data/cdek_id schema-property-added added="cdek_id" required=true
+/findById/delivery POST response 200 application/json suggestions/items/data/dpd_id schema-property-added added="dpd_id" required=true
+/findById/delivery POST response 200 application/json suggestions/items/data/fias_id schema-property-added added="fias_id" required=true
+/findById/delivery POST response 200 application/json suggestions/items/data/kladr_id schema-property-added added="kladr_id" required=true
 /findById/delivery POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/delivery POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/delivery POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -397,44 +368,25 @@
 /findById/fns_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fns_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/fns_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/fns_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-property-added added="bank_account"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-required-added added="bank_account"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-property-added added="bank_bic"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-required-added added="bank_bic"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-property-added added="bank_correspondent_account"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-required-added added="bank_correspondent_account"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-property-added added="bank_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-required-added added="bank_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/comment schema-property-added added="comment"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/comment schema-required-added added="comment"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-property-added added="kpp"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-required-added added="kpp"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-required-added added="oktmo"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-property-added added="parent_address"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-required-added added="parent_address"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-property-added added="parent_code"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-required-added added="parent_code"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-property-added added="parent_comment"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-required-added added="parent_comment"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-property-added added="parent_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-required-added added="parent_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-property-added added="parent_phone"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-required-added added="parent_phone"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-property-added added="payment_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-required-added added="payment_name"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone"
-/findById/fns_unit POST response 200 application/json suggestions/items/data/phone schema-required-added added="phone"
+/findById/fns_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-property-added added="bank_account" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-property-added added="bank_bic" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-property-added added="bank_correspondent_account" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-property-added added="bank_name" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/comment schema-property-added added="comment" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-property-added added="kpp" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-property-added added="parent_address" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-property-added added="parent_code" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-property-added added="parent_comment" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-property-added added="parent_name" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-property-added added="parent_phone" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-property-added added="payment_name" required=true
+/findById/fns_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone" required=true
 /findById/fns_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/fns_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/fns_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -443,28 +395,17 @@
 /findById/fts_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fts_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/fts_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/fts_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/email schema-property-added added="email"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/email schema-required-added added="email"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/fax schema-property-added added="fax"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/fax schema-required-added added="fax"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-property-added added="ogrn"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-required-added added="ogrn"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-property-added added="okpo"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-required-added added="okpo"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/osf schema-property-added added="osf"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/osf schema-required-added added="osf"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone"
-/findById/fts_unit POST response 200 application/json suggestions/items/data/phone schema-required-added added="phone"
+/findById/fts_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/email schema-property-added added="email" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/fax schema-property-added added="fax" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-property-added added="ogrn" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-property-added added="okpo" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/osf schema-property-added added="osf" required=true
+/findById/fts_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone" required=true
 /findById/fts_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/fts_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/fts_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -473,16 +414,11 @@
 /findById/mktu POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/mktu POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/mktu POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/mktu POST response 200 application/json suggestions/items/data/class schema-property-added added="class"
-/findById/mktu POST response 200 application/json suggestions/items/data/class schema-required-added added="class"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_en schema-property-added added="name_en"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_en schema-required-added added="name_en"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_fr schema-property-added added="name_fr"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_fr schema-required-added added="name_fr"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/findById/mktu POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
-/findById/mktu POST response 200 application/json suggestions/items/data/number schema-property-added added="number"
-/findById/mktu POST response 200 application/json suggestions/items/data/number schema-required-added added="number"
+/findById/mktu POST response 200 application/json suggestions/items/data/class schema-property-added added="class" required=true
+/findById/mktu POST response 200 application/json suggestions/items/data/name_en schema-property-added added="name_en" required=true
+/findById/mktu POST response 200 application/json suggestions/items/data/name_fr schema-property-added added="name_fr" required=true
+/findById/mktu POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
+/findById/mktu POST response 200 application/json suggestions/items/data/number schema-property-added added="number" required=true
 /findById/mktu POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/mktu POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/mktu POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -491,14 +427,10 @@
 /findById/okpd2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okpd2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/okpd2 POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/okpd2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/idx schema-required-added added="idx"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/kod schema-required-added added="kod"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel"
-/findById/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-required-added added="razdel"
+/findById/okpd2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx" required=true
+/findById/okpd2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod" required=true
+/findById/okpd2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel" required=true
 /findById/okpd2 POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/okpd2 POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/okpd2 POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -507,20 +439,13 @@
 /findById/oktmo POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/oktmo POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/oktmo POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/oktmo POST response 200 application/json suggestions/items/data/area schema-property-added added="area"
-/findById/oktmo POST response 200 application/json suggestions/items/data/area schema-required-added added="area"
-/findById/oktmo POST response 200 application/json suggestions/items/data/area_code schema-property-added added="area_code"
-/findById/oktmo POST response 200 application/json suggestions/items/data/area_code schema-required-added added="area_code"
-/findById/oktmo POST response 200 application/json suggestions/items/data/area_type schema-property-added added="area_type"
-/findById/oktmo POST response 200 application/json suggestions/items/data/area_type schema-required-added added="area_type"
-/findById/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo"
-/findById/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-required-added added="oktmo"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea schema-property-added added="subarea"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea schema-required-added added="subarea"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-property-added added="subarea_code"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-required-added added="subarea_code"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-property-added added="subarea_type"
-/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-required-added added="subarea_type"
+/findById/oktmo POST response 200 application/json suggestions/items/data/area schema-property-added added="area" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/area_code schema-property-added added="area_code" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/area_type schema-property-added added="area_type" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/subarea schema-property-added added="subarea" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-property-added added="subarea_code" required=true
+/findById/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-property-added added="subarea_type" required=true
 /findById/oktmo POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/oktmo POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/oktmo POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -529,14 +454,10 @@
 /findById/okved2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okved2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/okved2 POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/okved2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx"
-/findById/okved2 POST response 200 application/json suggestions/items/data/idx schema-required-added added="idx"
-/findById/okved2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod"
-/findById/okved2 POST response 200 application/json suggestions/items/data/kod schema-required-added added="kod"
-/findById/okved2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/findById/okved2 POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/findById/okved2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel"
-/findById/okved2 POST response 200 application/json suggestions/items/data/razdel schema-required-added added="razdel"
+/findById/okved2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx" required=true
+/findById/okved2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod" required=true
+/findById/okved2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/findById/okved2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel" required=true
 /findById/okved2 POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/okved2 POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/okved2 POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -555,40 +476,23 @@
 /findById/party_by POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_by POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/party_by POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-property-added added="actuality_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-required-added added="actuality_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/findById/party_by POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/findById/party_by POST response 200 application/json suggestions/items/data/fio_by schema-property-added added="fio_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/fio_by schema-required-added added="fio_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-property-added added="fio_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-required-added added="fio_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-property-added added="full_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-required-added added="full_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-property-added added="full_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-required-added added="full_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked"
-/findById/party_by POST response 200 application/json suggestions/items/data/oked schema-required-added added="oked"
-/findById/party_by POST response 200 application/json suggestions/items/data/oked_name schema-property-added added="oked_name"
-/findById/party_by POST response 200 application/json suggestions/items/data/oked_name schema-required-added added="oked_name"
-/findById/party_by POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/registration_date schema-required-added added="registration_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/removal_date schema-property-added added="removal_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/removal_date schema-required-added added="removal_date"
-/findById/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-property-added added="short_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-required-added added="short_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-property-added added="short_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-required-added added="short_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/status schema-property-added added="status"
-/findById/party_by POST response 200 application/json suggestions/items/data/status schema-required-added added="status"
-/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-property-added added="trade_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-required-added added="trade_name_by"
-/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-property-added added="trade_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-required-added added="trade_name_ru"
-/findById/party_by POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/findById/party_by POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
-/findById/party_by POST response 200 application/json suggestions/items/data/unp schema-property-added added="unp"
-/findById/party_by POST response 200 application/json suggestions/items/data/unp schema-required-added added="unp"
+/findById/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-property-added added="actuality_date" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/fio_by schema-property-added added="fio_by" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-property-added added="fio_ru" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-property-added added="full_name_by" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-property-added added="full_name_ru" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/oked_name schema-property-added added="oked_name" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/removal_date schema-property-added added="removal_date" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-property-added added="short_name_by" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-property-added added="short_name_ru" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/status schema-property-added added="status" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-property-added added="trade_name_by" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-property-added added="trade_name_ru" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/type schema-property-added added="type" required=true
+/findById/party_by POST response 200 application/json suggestions/items/data/unp schema-property-added added="unp" required=true
 /findById/party_by POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/party_by POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/party_by POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -597,56 +501,31 @@
 /findById/party_kz POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_kz POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/party_kz POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-property-added added="address_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-required-added added="address_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_local schema-property-added added="address_local"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_local schema-required-added added="address_local"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-property-added added="address_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-required-added added="address_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-property-added added="address_settlement_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-required-added added="address_settlement_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-property-added added="address_settlement_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-required-added added="address_settlement_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/bin schema-property-added added="bin"
-/findById/party_kz POST response 200 application/json suggestions/items/data/bin schema-required-added added="bin"
-/findById/party_kz POST response 200 application/json suggestions/items/data/fio schema-property-added added="fio"
-/findById/party_kz POST response 200 application/json suggestions/items/data/fio schema-required-added added="fio"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kato schema-property-added added="kato"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kato schema-required-added added="kato"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs schema-property-added added="kfs"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs schema-required-added added="kfs"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-property-added added="kfs_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-required-added added="kfs_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-property-added added="kfs_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-required-added added="kfs_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp schema-property-added added="krp"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp schema-required-added added="krp"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-property-added added="krp_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-required-added added="krp_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-property-added added="krp_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-required-added added="krp_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse schema-property-added added="kse"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse schema-required-added added="kse"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-property-added added="kse_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-required-added added="kse_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-property-added added="kse_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-required-added added="kse_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-property-added added="name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-required-added added="name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked schema-required-added added="oked"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-property-added added="oked_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-required-added added="oked_name_kz"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-property-added added="oked_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-required-added added="oked_name_ru"
-/findById/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date"
-/findById/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-required-added added="registration_date"
-/findById/party_kz POST response 200 application/json suggestions/items/data/status schema-property-added added="status"
-/findById/party_kz POST response 200 application/json suggestions/items/data/status schema-required-added added="status"
-/findById/party_kz POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/findById/party_kz POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
+/findById/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-property-added added="address_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/address_local schema-property-added added="address_local" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-property-added added="address_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-property-added added="address_settlement_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-property-added added="address_settlement_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/bin schema-property-added added="bin" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/fio schema-property-added added="fio" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kato schema-property-added added="kato" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kfs schema-property-added added="kfs" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-property-added added="kfs_name_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-property-added added="kfs_name_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/krp schema-property-added added="krp" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-property-added added="krp_name_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-property-added added="krp_name_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kse schema-property-added added="kse" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-property-added added="kse_name_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-property-added added="kse_name_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-property-added added="name_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-property-added added="oked_name_kz" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-property-added added="oked_name_ru" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/status schema-property-added added="status" required=true
+/findById/party_kz POST response 200 application/json suggestions/items/data/type schema-property-added added="type" required=true
 /findById/party_kz POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/party_kz POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/party_kz POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -655,36 +534,21 @@
 /findById/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/postal_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /findById/postal_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-required-added added="address_kladr_id"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-required-added added="address_qc"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-required-added added="address_str"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-required-added added="geo_lat"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-required-added added="geo_lon"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-required-added added="is_closed"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-required-added added="postal_code"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-required-added added="schedule_fri"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-required-added added="schedule_mon"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-required-added added="schedule_sat"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-required-added added="schedule_sun"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-required-added added="schedule_thu"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-required-added added="schedule_tue"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-required-added added="schedule_wed"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code"
-/findById/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-required-added added="type_code"
+/findById/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed" required=true
+/findById/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code" required=true
 /findById/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /findById/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /findById/postal_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -710,36 +574,21 @@
 /geolocate/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /geolocate/postal_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /geolocate/postal_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-required-added added="address_kladr_id"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-required-added added="address_qc"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-required-added added="address_str"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-required-added added="geo_lat"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-required-added added="geo_lon"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-required-added added="is_closed"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-required-added added="postal_code"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-required-added added="schedule_fri"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-required-added added="schedule_mon"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-required-added added="schedule_sat"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-required-added added="schedule_sun"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-required-added added="schedule_thu"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-required-added added="schedule_tue"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-required-added added="schedule_wed"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code"
-/geolocate/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-required-added added="type_code"
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed" required=true
+/geolocate/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code" required=true
 /geolocate/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /geolocate/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /geolocate/postal_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -923,21 +772,17 @@
 /suggest/bank POST response 200 application/json suggestions/items/data/correspondent_account schema-required-added added="correspondent_account"
 /suggest/bank POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
 /suggest/bank POST response 200 application/json suggestions/items/data/kpp schema-required-added added="kpp"
-/suggest/bank POST response 200 application/json suggestions/items/data/name/full schema-property-added added="full"
-/suggest/bank POST response 200 application/json suggestions/items/data/name/full schema-required-added added="full"
+/suggest/bank POST response 200 application/json suggestions/items/data/name/full schema-property-added added="full" required=true
 /suggest/bank POST response 200 application/json suggestions/items/data/name/full_value schema-property-deleted removed="full_value"
 /suggest/bank POST response 200 application/json suggestions/items/data/name/payment schema-required-added added="payment"
 /suggest/bank POST response 200 application/json suggestions/items/data/name/payment schema-type-changed added=[] removed=["null"]
-/suggest/bank POST response 200 application/json suggestions/items/data/name/short schema-property-added added="short"
-/suggest/bank POST response 200 application/json suggestions/items/data/name/short schema-required-added added="short"
+/suggest/bank POST response 200 application/json suggestions/items/data/name/short schema-property-added added="short" required=true
 /suggest/bank POST response 200 application/json suggestions/items/data/name/short_value schema-property-deleted removed="short_value"
 /suggest/bank POST response 200 application/json suggestions/items/data/okpo schema-required-added added="okpo"
 /suggest/bank POST response 200 application/json suggestions/items/data/okpo schema-type-changed added=[] removed=["string"]
-/suggest/bank POST response 200 application/json suggestions/items/data/opf/full schema-property-added added="full"
-/suggest/bank POST response 200 application/json suggestions/items/data/opf/full schema-required-added added="full"
+/suggest/bank POST response 200 application/json suggestions/items/data/opf/full schema-property-added added="full" required=true
 /suggest/bank POST response 200 application/json suggestions/items/data/opf/full_value schema-property-deleted removed="full_value"
-/suggest/bank POST response 200 application/json suggestions/items/data/opf/short schema-property-added added="short"
-/suggest/bank POST response 200 application/json suggestions/items/data/opf/short schema-required-added added="short"
+/suggest/bank POST response 200 application/json suggestions/items/data/opf/short schema-property-added added="short" required=true
 /suggest/bank POST response 200 application/json suggestions/items/data/opf/short_value schema-property-deleted removed="short_value"
 /suggest/bank POST response 200 application/json suggestions/items/data/opf/type schema-enum-value-deleted removed=null
 /suggest/bank POST response 200 application/json suggestions/items/data/opf/type schema-required-added added="type"
@@ -966,12 +811,9 @@
 /suggest/car_brand POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/car_brand POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/car_brand POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/car_brand POST response 200 application/json suggestions/items/data/id schema-property-added added="id"
-/suggest/car_brand POST response 200 application/json suggestions/items/data/id schema-required-added added="id"
-/suggest/car_brand POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/car_brand POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/suggest/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
+/suggest/car_brand POST response 200 application/json suggestions/items/data/id schema-property-added added="id" required=true
+/suggest/car_brand POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/car_brand POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
 /suggest/car_brand POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/car_brand POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/car_brand POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -983,16 +825,11 @@
 /suggest/country POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/country POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/country POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/country POST response 200 application/json suggestions/items/data/alfa2 schema-property-added added="alfa2"
-/suggest/country POST response 200 application/json suggestions/items/data/alfa2 schema-required-added added="alfa2"
-/suggest/country POST response 200 application/json suggestions/items/data/alfa3 schema-property-added added="alfa3"
-/suggest/country POST response 200 application/json suggestions/items/data/alfa3 schema-required-added added="alfa3"
-/suggest/country POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/country POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/country POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/country POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/country POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/suggest/country POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
+/suggest/country POST response 200 application/json suggestions/items/data/alfa2 schema-property-added added="alfa2" required=true
+/suggest/country POST response 200 application/json suggestions/items/data/alfa3 schema-property-added added="alfa3" required=true
+/suggest/country POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/country POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/country POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
 /suggest/country POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/country POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/country POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1005,22 +842,14 @@
 /suggest/court POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/court POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/court POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/court POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/suggest/court POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/suggest/court POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/court POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/court POST response 200 application/json suggestions/items/data/court_type schema-property-added added="court_type"
-/suggest/court POST response 200 application/json suggestions/items/data/court_type schema-required-added added="court_type"
-/suggest/court POST response 200 application/json suggestions/items/data/court_type_name schema-property-added added="court_type_name"
-/suggest/court POST response 200 application/json suggestions/items/data/court_type_name schema-required-added added="court_type_name"
-/suggest/court POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/suggest/court POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/suggest/court POST response 200 application/json suggestions/items/data/legal_address schema-property-added added="legal_address"
-/suggest/court POST response 200 application/json suggestions/items/data/legal_address schema-required-added added="legal_address"
-/suggest/court POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/court POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/court POST response 200 application/json suggestions/items/data/website schema-property-added added="website"
-/suggest/court POST response 200 application/json suggestions/items/data/website schema-required-added added="website"
+/suggest/court POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/court_type schema-property-added added="court_type" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/court_type_name schema-property-added added="court_type_name" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/legal_address schema-property-added added="legal_address" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/court POST response 200 application/json suggestions/items/data/website schema-property-added added="website" required=true
 /suggest/court POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/court POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/court POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1032,14 +861,10 @@
 /suggest/currency POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/currency POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/currency POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/currency POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/currency POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/currency POST response 200 application/json suggestions/items/data/country schema-property-added added="country"
-/suggest/currency POST response 200 application/json suggestions/items/data/country schema-required-added added="country"
-/suggest/currency POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/currency POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/currency POST response 200 application/json suggestions/items/data/strcode schema-property-added added="strcode"
-/suggest/currency POST response 200 application/json suggestions/items/data/strcode schema-required-added added="strcode"
+/suggest/currency POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/currency POST response 200 application/json suggestions/items/data/country schema-property-added added="country" required=true
+/suggest/currency POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/currency POST response 200 application/json suggestions/items/data/strcode schema-property-added added="strcode" required=true
 /suggest/currency POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/currency POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/currency POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1169,14 +994,10 @@
 /suggest/fms_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/fms_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/fms_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/region_code schema-property-added added="region_code"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/region_code schema-required-added added="region_code"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/suggest/fms_unit POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
+/suggest/fms_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/fms_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/fms_unit POST response 200 application/json suggestions/items/data/region_code schema-property-added added="region_code" required=true
+/suggest/fms_unit POST response 200 application/json suggestions/items/data/type schema-property-added added="type" required=true
 /suggest/fms_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/fms_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/fms_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1189,44 +1010,25 @@
 /suggest/fns_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/fns_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/fns_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-property-added added="bank_account"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-required-added added="bank_account"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-property-added added="bank_bic"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-required-added added="bank_bic"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-property-added added="bank_correspondent_account"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-required-added added="bank_correspondent_account"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-property-added added="bank_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-required-added added="bank_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/comment schema-property-added added="comment"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/comment schema-required-added added="comment"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-property-added added="kpp"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-required-added added="kpp"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-required-added added="oktmo"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-property-added added="parent_address"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-required-added added="parent_address"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-property-added added="parent_code"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-required-added added="parent_code"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-property-added added="parent_comment"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-required-added added="parent_comment"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-property-added added="parent_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-required-added added="parent_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-property-added added="parent_phone"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-required-added added="parent_phone"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-property-added added="payment_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-required-added added="payment_name"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone"
-/suggest/fns_unit POST response 200 application/json suggestions/items/data/phone schema-required-added added="phone"
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_account schema-property-added added="bank_account" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_bic schema-property-added added="bank_bic" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_correspondent_account schema-property-added added="bank_correspondent_account" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/bank_name schema-property-added added="bank_name" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/comment schema-property-added added="comment" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/kpp schema-property-added added="kpp" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_address schema-property-added added="parent_address" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_code schema-property-added added="parent_code" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_comment schema-property-added added="parent_comment" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_name schema-property-added added="parent_name" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/parent_phone schema-property-added added="parent_phone" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/payment_name schema-property-added added="payment_name" required=true
+/suggest/fns_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone" required=true
 /suggest/fns_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/fns_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/fns_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1238,28 +1040,17 @@
 /suggest/fts_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/fts_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/fts_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/code schema-required-added added="code"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/email schema-property-added added="email"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/email schema-required-added added="email"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/fax schema-property-added added="fax"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/fax schema-required-added added="fax"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/inn schema-required-added added="inn"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-required-added added="name_short"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-property-added added="ogrn"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-required-added added="ogrn"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-property-added added="okpo"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-required-added added="okpo"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/osf schema-property-added added="osf"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/osf schema-required-added added="osf"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone"
-/suggest/fts_unit POST response 200 application/json suggestions/items/data/phone schema-required-added added="phone"
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/code schema-property-added added="code" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/email schema-property-added added="email" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/fax schema-property-added added="fax" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/inn schema-property-added added="inn" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/name_short schema-property-added added="name_short" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/ogrn schema-property-added added="ogrn" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/okpo schema-property-added added="okpo" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/osf schema-property-added added="osf" required=true
+/suggest/fts_unit POST response 200 application/json suggestions/items/data/phone schema-property-added added="phone" required=true
 /suggest/fts_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/fts_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/fts_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1276,26 +1067,16 @@
 /suggest/metro POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/metro POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/metro POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/metro POST response 200 application/json suggestions/items/data/city schema-property-added added="city"
-/suggest/metro POST response 200 application/json suggestions/items/data/city schema-required-added added="city"
-/suggest/metro POST response 200 application/json suggestions/items/data/city_fias_id schema-property-added added="city_fias_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/city_fias_id schema-required-added added="city_fias_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/city_kladr_id schema-property-added added="city_kladr_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/city_kladr_id schema-required-added added="city_kladr_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/color schema-property-added added="color"
-/suggest/metro POST response 200 application/json suggestions/items/data/color schema-required-added added="color"
-/suggest/metro POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat"
-/suggest/metro POST response 200 application/json suggestions/items/data/geo_lat schema-required-added added="geo_lat"
-/suggest/metro POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon"
-/suggest/metro POST response 200 application/json suggestions/items/data/geo_lon schema-required-added added="geo_lon"
-/suggest/metro POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed"
-/suggest/metro POST response 200 application/json suggestions/items/data/is_closed schema-required-added added="is_closed"
-/suggest/metro POST response 200 application/json suggestions/items/data/line_id schema-property-added added="line_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/line_id schema-required-added added="line_id"
-/suggest/metro POST response 200 application/json suggestions/items/data/line_name schema-property-added added="line_name"
-/suggest/metro POST response 200 application/json suggestions/items/data/line_name schema-required-added added="line_name"
-/suggest/metro POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/metro POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
+/suggest/metro POST response 200 application/json suggestions/items/data/city schema-property-added added="city" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/city_fias_id schema-property-added added="city_fias_id" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/city_kladr_id schema-property-added added="city_kladr_id" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/color schema-property-added added="color" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/line_id schema-property-added added="line_id" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/line_name schema-property-added added="line_name" required=true
+/suggest/metro POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
 /suggest/metro POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/metro POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/metro POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1308,16 +1089,11 @@
 /suggest/mktu POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/mktu POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/mktu POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/mktu POST response 200 application/json suggestions/items/data/class schema-property-added added="class"
-/suggest/mktu POST response 200 application/json suggestions/items/data/class schema-required-added added="class"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_en schema-property-added added="name_en"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_en schema-required-added added="name_en"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_fr schema-property-added added="name_fr"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_fr schema-required-added added="name_fr"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/suggest/mktu POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
-/suggest/mktu POST response 200 application/json suggestions/items/data/number schema-property-added added="number"
-/suggest/mktu POST response 200 application/json suggestions/items/data/number schema-required-added added="number"
+/suggest/mktu POST response 200 application/json suggestions/items/data/class schema-property-added added="class" required=true
+/suggest/mktu POST response 200 application/json suggestions/items/data/name_en schema-property-added added="name_en" required=true
+/suggest/mktu POST response 200 application/json suggestions/items/data/name_fr schema-property-added added="name_fr" required=true
+/suggest/mktu POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
+/suggest/mktu POST response 200 application/json suggestions/items/data/number schema-property-added added="number" required=true
 /suggest/mktu POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/mktu POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/mktu POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1330,14 +1106,10 @@
 /suggest/okpd2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/okpd2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/okpd2 POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/idx schema-required-added added="idx"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/kod schema-required-added added="kod"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel"
-/suggest/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-required-added added="razdel"
+/suggest/okpd2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx" required=true
+/suggest/okpd2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod" required=true
+/suggest/okpd2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/okpd2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel" required=true
 /suggest/okpd2 POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/okpd2 POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/okpd2 POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1349,20 +1121,13 @@
 /suggest/oktmo POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/oktmo POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/oktmo POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area schema-property-added added="area"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area schema-required-added added="area"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area_code schema-property-added added="area_code"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area_code schema-required-added added="area_code"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area_type schema-property-added added="area_type"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/area_type schema-required-added added="area_type"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-required-added added="oktmo"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea schema-property-added added="subarea"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea schema-required-added added="subarea"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-property-added added="subarea_code"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-required-added added="subarea_code"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-property-added added="subarea_type"
-/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-required-added added="subarea_type"
+/suggest/oktmo POST response 200 application/json suggestions/items/data/area schema-property-added added="area" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/area_code schema-property-added added="area_code" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/area_type schema-property-added added="area_type" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/oktmo schema-property-added added="oktmo" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea schema-property-added added="subarea" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_code schema-property-added added="subarea_code" required=true
+/suggest/oktmo POST response 200 application/json suggestions/items/data/subarea_type schema-property-added added="subarea_type" required=true
 /suggest/oktmo POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/oktmo POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/oktmo POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1375,14 +1140,10 @@
 /suggest/okved2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/okved2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/okved2 POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/okved2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/idx schema-required-added added="idx"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/kod schema-required-added added="kod"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/name schema-required-added added="name"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel"
-/suggest/okved2 POST response 200 application/json suggestions/items/data/razdel schema-required-added added="razdel"
+/suggest/okved2 POST response 200 application/json suggestions/items/data/idx schema-property-added added="idx" required=true
+/suggest/okved2 POST response 200 application/json suggestions/items/data/kod schema-property-added added="kod" required=true
+/suggest/okved2 POST response 200 application/json suggestions/items/data/name schema-property-added added="name" required=true
+/suggest/okved2 POST response 200 application/json suggestions/items/data/razdel schema-property-added added="razdel" required=true
 /suggest/okved2 POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/okved2 POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/okved2 POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1407,40 +1168,23 @@
 /suggest/party_by POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/party_by POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/party_by POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-property-added added="actuality_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-required-added added="actuality_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/address schema-property-added added="address"
-/suggest/party_by POST response 200 application/json suggestions/items/data/address schema-required-added added="address"
-/suggest/party_by POST response 200 application/json suggestions/items/data/fio_by schema-property-added added="fio_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/fio_by schema-required-added added="fio_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-property-added added="fio_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-required-added added="fio_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-property-added added="full_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-required-added added="full_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-property-added added="full_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-required-added added="full_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked"
-/suggest/party_by POST response 200 application/json suggestions/items/data/oked schema-required-added added="oked"
-/suggest/party_by POST response 200 application/json suggestions/items/data/oked_name schema-property-added added="oked_name"
-/suggest/party_by POST response 200 application/json suggestions/items/data/oked_name schema-required-added added="oked_name"
-/suggest/party_by POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/registration_date schema-required-added added="registration_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/removal_date schema-property-added added="removal_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/removal_date schema-required-added added="removal_date"
-/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-property-added added="short_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-required-added added="short_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-property-added added="short_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-required-added added="short_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/status schema-property-added added="status"
-/suggest/party_by POST response 200 application/json suggestions/items/data/status schema-required-added added="status"
-/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-property-added added="trade_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-required-added added="trade_name_by"
-/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-property-added added="trade_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-required-added added="trade_name_ru"
-/suggest/party_by POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/suggest/party_by POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
-/suggest/party_by POST response 200 application/json suggestions/items/data/unp schema-property-added added="unp"
-/suggest/party_by POST response 200 application/json suggestions/items/data/unp schema-required-added added="unp"
+/suggest/party_by POST response 200 application/json suggestions/items/data/actuality_date schema-property-added added="actuality_date" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/address schema-property-added added="address" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/fio_by schema-property-added added="fio_by" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/fio_ru schema-property-added added="fio_ru" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_by schema-property-added added="full_name_by" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/full_name_ru schema-property-added added="full_name_ru" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/oked_name schema-property-added added="oked_name" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/removal_date schema-property-added added="removal_date" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_by schema-property-added added="short_name_by" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/short_name_ru schema-property-added added="short_name_ru" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/status schema-property-added added="status" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_by schema-property-added added="trade_name_by" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/trade_name_ru schema-property-added added="trade_name_ru" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/type schema-property-added added="type" required=true
+/suggest/party_by POST response 200 application/json suggestions/items/data/unp schema-property-added added="unp" required=true
 /suggest/party_by POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/party_by POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/party_by POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1453,56 +1197,31 @@
 /suggest/party_kz POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/party_kz POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/party_kz POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-property-added added="address_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-required-added added="address_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_local schema-property-added added="address_local"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_local schema-required-added added="address_local"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-property-added added="address_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-required-added added="address_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-property-added added="address_settlement_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-required-added added="address_settlement_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-property-added added="address_settlement_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-required-added added="address_settlement_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/bin schema-property-added added="bin"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/bin schema-required-added added="bin"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/fio schema-property-added added="fio"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/fio schema-required-added added="fio"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kato schema-property-added added="kato"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kato schema-required-added added="kato"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs schema-property-added added="kfs"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs schema-required-added added="kfs"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-property-added added="kfs_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-required-added added="kfs_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-property-added added="kfs_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-required-added added="kfs_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp schema-property-added added="krp"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp schema-required-added added="krp"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-property-added added="krp_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-required-added added="krp_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-property-added added="krp_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-required-added added="krp_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse schema-property-added added="kse"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse schema-required-added added="kse"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-property-added added="kse_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-required-added added="kse_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-property-added added="kse_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-required-added added="kse_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-property-added added="name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-required-added added="name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-required-added added="name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked schema-required-added added="oked"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-property-added added="oked_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-required-added added="oked_name_kz"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-property-added added="oked_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-required-added added="oked_name_ru"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-required-added added="registration_date"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/status schema-property-added added="status"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/status schema-required-added added="status"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/type schema-property-added added="type"
-/suggest/party_kz POST response 200 application/json suggestions/items/data/type schema-required-added added="type"
+/suggest/party_kz POST response 200 application/json suggestions/items/data/address_kz schema-property-added added="address_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/address_local schema-property-added added="address_local" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/address_ru schema-property-added added="address_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_kz schema-property-added added="address_settlement_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/address_settlement_ru schema-property-added added="address_settlement_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/bin schema-property-added added="bin" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/fio schema-property-added added="fio" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kato schema-property-added added="kato" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs schema-property-added added="kfs" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_kz schema-property-added added="kfs_name_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kfs_name_ru schema-property-added added="kfs_name_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/krp schema-property-added added="krp" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_kz schema-property-added added="krp_name_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/krp_name_ru schema-property-added added="krp_name_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kse schema-property-added added="kse" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_kz schema-property-added added="kse_name_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/kse_name_ru schema-property-added added="kse_name_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/name_kz schema-property-added added="name_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/name_ru schema-property-added added="name_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/oked schema-property-added added="oked" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_kz schema-property-added added="oked_name_kz" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/oked_name_ru schema-property-added added="oked_name_ru" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/registration_date schema-property-added added="registration_date" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/status schema-property-added added="status" required=true
+/suggest/party_kz POST response 200 application/json suggestions/items/data/type schema-property-added added="type" required=true
 /suggest/party_kz POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/party_kz POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/party_kz POST response 200 application/json suggestions/items/value schema-required-added added="value"
@@ -1517,36 +1236,21 @@
 /suggest/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /suggest/postal_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
 /suggest/postal_unit POST response 200 application/json suggestions/items/data schema-type-changed added=[] removed=["null"]
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-required-added added="address_kladr_id"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-required-added added="address_qc"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-required-added added="address_str"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-required-added added="geo_lat"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-required-added added="geo_lon"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-required-added added="is_closed"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-required-added added="postal_code"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-required-added added="schedule_fri"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-required-added added="schedule_mon"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-required-added added="schedule_sat"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-required-added added="schedule_sun"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-required-added added="schedule_thu"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-required-added added="schedule_tue"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-required-added added="schedule_wed"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code"
-/suggest/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-required-added added="type_code"
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_kladr_id schema-property-added added="address_kladr_id" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_qc schema-property-added added="address_qc" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/address_str schema-property-added added="address_str" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lat schema-property-added added="geo_lat" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/geo_lon schema-property-added added="geo_lon" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/is_closed schema-property-added added="is_closed" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/postal_code schema-property-added added="postal_code" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_fri schema-property-added added="schedule_fri" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_mon schema-property-added added="schedule_mon" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sat schema-property-added added="schedule_sat" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_sun schema-property-added added="schedule_sun" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_thu schema-property-added added="schedule_thu" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_tue schema-property-added added="schedule_tue" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/schedule_wed schema-property-added added="schedule_wed" required=true
+/suggest/postal_unit POST response 200 application/json suggestions/items/data/type_code schema-property-added added="type_code" required=true
 /suggest/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-required-added added="unrestricted_value"
 /suggest/postal_unit POST response 200 application/json suggestions/items/unrestricted_value schema-type-changed added=[] removed=["null"]
 /suggest/postal_unit POST response 200 application/json suggestions/items/value schema-required-added added="value"

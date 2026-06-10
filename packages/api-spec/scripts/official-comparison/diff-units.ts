@@ -15,6 +15,10 @@ export interface DiffUnit {
   to?: unknown;
 }
 
+interface SnapshotDiffUnit extends DiffUnit {
+  required?: boolean;
+}
+
 export interface DiffUnitsByPathOperation {
   request: DiffUnit[];
   responses: Record<string, DiffUnit[]>;
@@ -112,11 +116,28 @@ export function buildDiffUnitsByPath(units: DiffUnit[]): DiffUnitsByPath {
   return sortDiffUnitsByPath(grouped);
 }
 
-/** Renders one deterministic factual line per diff unit for future snapshot baselines. */
+/** Renders deterministic review-oriented lines while leaving raw diff units unchanged. */
 export function renderDiffUnitSnapshot(units: DiffUnit[]): string {
-  const lines = sortDiffUnits([...units]).map(formatDiffUnitSnapshotLine);
+  const lines = sortDiffUnits(coalesceDiffUnitsForSnapshot(units)).map(formatDiffUnitSnapshotLine);
 
   return lines.length > 0 ? `${lines.join('\n')}\n` : '';
+}
+
+/** Coalesces derivative requiredness changes into matching property add/delete units. */
+function coalesceDiffUnitsForSnapshot(units: DiffUnit[]): SnapshotDiffUnit[] {
+  const unitIdentities = new Set(units.map(getDiffUnitIdentity));
+
+  return units.flatMap((unit): SnapshotDiffUnit[] => {
+    const counterpartKind = getRequirednessCounterpartKind(unit.kind);
+
+    if (!counterpartKind || !unitIdentities.has(getDiffUnitIdentity({ ...unit, kind: counterpartKind }))) {
+      return [{ ...unit }];
+    }
+
+    return unit.kind === 'schema-property-added' || unit.kind === 'schema-property-deleted'
+      ? [{ ...unit, required: true }]
+      : [];
+  });
 }
 
 /** Extracts request schema units from one operation diff. */
@@ -450,6 +471,28 @@ function sortDiffUnits(units: DiffUnit[]): DiffUnit[] {
   );
 }
 
+/** Maps property and requiredness kinds to their coalescing counterpart. */
+function getRequirednessCounterpartKind(kind: string): string | null {
+  if (kind === 'schema-property-added') {
+    return 'schema-required-added';
+  }
+
+  if (kind === 'schema-property-deleted') {
+    return 'schema-required-deleted';
+  }
+
+  if (kind === 'schema-required-added') {
+    return 'schema-property-added';
+  }
+
+  return kind === 'schema-required-deleted' ? 'schema-property-deleted' : null;
+}
+
+/** Builds a stable complete identity for one diff unit. */
+function getDiffUnitIdentity(unit: DiffUnit): string {
+  return JSON.stringify(canonicalizeSnapshotValue(unit));
+}
+
 /** Sorts grouped units so the path-first JSON artifact is stable. */
 function sortDiffUnitsByPath(grouped: DiffUnitsByPath): DiffUnitsByPath {
   const sorted: DiffUnitsByPath = {};
@@ -482,7 +525,7 @@ function sortDiffUnitsByPath(grouped: DiffUnitsByPath): DiffUnitsByPath {
 }
 
 /** Formats one diff unit as a stable single-line snapshot record. */
-function formatDiffUnitSnapshotLine(unit: DiffUnit): string {
+function formatDiffUnitSnapshotLine(unit: SnapshotDiffUnit): string {
   return [
     unit.path,
     unit.method,
@@ -505,6 +548,10 @@ function formatDiffUnitValueFields(unit: DiffUnit): string[] {
   appendDiffUnitValueField(fields, unit, 'removed');
   appendDiffUnitValueField(fields, unit, 'from');
   appendDiffUnitValueField(fields, unit, 'to');
+
+  if ('required' in unit) {
+    fields.push(`required=${String(unit.required)}`);
+  }
 
   return fields;
 }

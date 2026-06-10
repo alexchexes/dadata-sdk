@@ -40,7 +40,9 @@ With `--keep-temp`, inspect:
 
 - `stage-b-diff-units.json` for the flat finding-shaped artifact.
 - `stage-b-diff-units.by-path.json` for the path-first review artifact.
-- `stage-b-diff-units.snapshot.txt` for the deterministic one-unit-per-line snapshot candidate.
+- `stage-b-diff-units.snapshot.txt` for the deterministic review-oriented snapshot. It coalesces
+  derivative requiredness changes into matching property add/delete lines while the JSON artifacts
+  retain the raw factual units.
 - `oasdiff-full-diff.json` for the raw full diff.
 
 The committed accepted snapshot lives at `packages/api-spec/official/snapshots/suggestions.diff.txt`.
