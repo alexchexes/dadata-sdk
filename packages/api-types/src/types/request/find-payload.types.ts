@@ -41,6 +41,7 @@ export interface FindAddressPayload extends BaseFindByIdPayload {
    * @example {"query": "77000000000292300"} // КЛАДР
    * @example {"query": "way:208547592"} // OpenStreetMap
    * @example {"query": "1857910", "language":"en"} // Geonames, вернуть результат на английском
+   * @maxLength 300
    */
   query: string;
   /**
@@ -78,6 +79,8 @@ export interface FindFiasPayload extends BaseFindByIdPayload {
    *
    * @example { "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" } // ФИАС
    * @example { "query": "77000000000292300" } // КЛАДР
+   *
+   * @maxLength 300
    */
   query: string;
   /**
@@ -141,6 +144,7 @@ export interface FindPartyPayload extends BaseFindByIdPayload {
 export interface FindPartyByPayload extends BaseFindByIdPayload {
   /**
    * УНП (учетный номер налогоплательщика)
+   * @maxLength 300
    */
   query: string;
 }
@@ -152,6 +156,7 @@ export interface FindPartyByPayload extends BaseFindByIdPayload {
 export interface FindPartyKzPayload extends BaseFindByIdPayload {
   /**
    * БИН (бизнес-идентификационный номер)
+   * @maxLength 300
    */
   query: string;
 }
@@ -174,6 +179,7 @@ export interface FindBankPayload extends BaseFindByIdPayload {
    * используйте API `suggest` (https://dadata.ru/api/suggest/bank/)
    *
    * * ИНН и КПП начиная с версиии подсказок 20.3+
+   * @maxLength 300
    */
   query: string;
   /**
@@ -192,6 +198,7 @@ export interface FindPostalUnitPayload extends BaseFindByIdPayload {
   /**
    * Почтовый индекс
    * @example { "query": "127642" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -205,6 +212,7 @@ export interface FindFnsUnitPayload extends BaseFindByIdPayload {
    * Код инспекции или ИНН
    * @example { "query": "5257" } // код инспекции
    * @example { "query": "7727406020" } // ИНН
+   * @maxLength 300
    */
   query: string;
 }
@@ -217,6 +225,7 @@ export interface FindFtsUnitPayload extends BaseFindByIdPayload {
   /**
    * Код таможни
    * @example { "query": "10002000" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -229,6 +238,7 @@ export interface FindCourtPayload extends BaseFindByIdPayload {
   /**
    * Код суда
    * @example { "query": "52MS0022" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -241,6 +251,7 @@ export interface FindCarBrandPayload extends BaseFindByIdPayload {
   /**
    * Идентификатор марки
    * @example { "query": "FORD" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -259,6 +270,7 @@ export interface FindCountryPayload extends BaseFindByIdPayload {
    * @example { "query": "764" } // Цифровой код
    * @example { "query": "TH" } // alpha-2
    * @example { "query": "THA" } // alpha-3
+   * @maxLength 300
    */
   query: string;
 }
@@ -272,6 +284,7 @@ export interface FindCurrencyPayload extends BaseFindByIdPayload {
    * Цифровой или буквенный код валюты
    * @example { "query": "RUB" } // Буквенный код
    * @example { "query": "643" } // Цифровой код
+   * @maxLength 300
    */
   query: string;
 }
@@ -284,6 +297,7 @@ export interface FindMktuPayload extends BaseFindByIdPayload {
   /**
    * Уникальный номер из МКТУ
    * @example { "query": "250173" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -296,6 +310,7 @@ export interface FindOkved2Payload extends BaseFindByIdPayload {
   /**
    * Код ОКВЭД
    * @example { "query": "51.22.3" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -308,6 +323,7 @@ export interface FindOkpd2Payload extends BaseFindByIdPayload {
   /**
    * Код ОКПД
    * @example { "query": "95.23.10.133" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -333,6 +349,7 @@ export interface FindOktmoPayload extends BaseFindByIdPayload {
    * Чтобы получить муниципальное образование по 11-значному коду ОКТМО, возьмите первые 8 цифр.
    *
    * @example { "query": "54623425" }
+   * @maxLength 300
    */
   query: string;
 }
@@ -345,6 +362,7 @@ export interface FindDeliveryPayload extends BaseFindByIdPayload {
   /**
    * КЛАДР-код города
    * @example { "query": "3100400100000" }
+   * @maxLength 300
    */
   query: string;
 }

@@ -1,4 +1,5 @@
 /findAffiliated/party POST request application/json count schema-max-changed from=null to=300
+/findAffiliated/party POST request application/json query schema-maxLength-changed from=null to=300
 /findAffiliated/party POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findAffiliated/party POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findAffiliated/party POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -15,6 +16,7 @@
 /findAffiliated/party POST response 429 <response> response-status-added
 /findAffiliated/party POST response 5XX <response> response-status-added
 /findByEmail/company POST request application/json count schema-property-deleted removed="count"
+/findByEmail/company POST request application/json query schema-maxLength-changed from=null to=300
 /findByEmail/company POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findByEmail/company POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findByEmail/company POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -66,6 +68,7 @@
 /findById/address POST request application/json from_bound/value schema-enum-value-added added="region"
 /findById/address POST request application/json from_bound/value schema-enum-value-added added="settlement"
 /findById/address POST request application/json from_bound/value schema-enum-value-added added="street"
+/findById/address POST request application/json query schema-maxLength-changed from=null to=300
 /findById/address POST request application/json to_bound/value schema-enum-value-added added="area"
 /findById/address POST request application/json to_bound/value schema-enum-value-added added="city"
 /findById/address POST request application/json to_bound/value schema-enum-value-added added="country"
@@ -264,6 +267,7 @@
 /findById/address POST response 429 <response> response-status-added
 /findById/address POST response 5XX <response> response-status-added
 /findById/bank POST request application/json count schema-max-changed from=null to=20
+/findById/bank POST request application/json query schema-maxLength-changed from=null to=300
 /findById/bank POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/bank POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/bank POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -526,6 +530,7 @@
 /findById/bank POST response 429 <response> response-status-added
 /findById/bank POST response 5XX <response> response-status-added
 /findById/car_brand POST request application/json count schema-max-changed from=null to=20
+/findById/car_brand POST request application/json query schema-maxLength-changed from=null to=300
 /findById/car_brand POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/car_brand POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/car_brand POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -546,6 +551,7 @@
 /findById/car_brand POST response 429 <response> response-status-added
 /findById/car_brand POST response 5XX <response> response-status-added
 /findById/country POST request application/json count schema-max-changed from=null to=20
+/findById/country POST request application/json query schema-maxLength-changed from=null to=300
 /findById/country POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/country POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/country POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -568,6 +574,7 @@
 /findById/country POST response 429 <response> response-status-added
 /findById/country POST response 5XX <response> response-status-added
 /findById/court POST request application/json count schema-max-changed from=null to=20
+/findById/court POST request application/json query schema-maxLength-changed from=null to=300
 /findById/court POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/court POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/court POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -593,6 +600,7 @@
 /findById/court POST response 429 <response> response-status-added
 /findById/court POST response 5XX <response> response-status-added
 /findById/currency POST request application/json count schema-max-changed from=null to=20
+/findById/currency POST request application/json query schema-maxLength-changed from=null to=300
 /findById/currency POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/currency POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/currency POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -614,6 +622,7 @@
 /findById/currency POST response 429 <response> response-status-added
 /findById/currency POST response 5XX <response> response-status-added
 /findById/delivery POST request application/json count schema-max-changed from=null to=20
+/findById/delivery POST request application/json query schema-maxLength-changed from=null to=300
 /findById/delivery POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/delivery POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/delivery POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -643,6 +652,7 @@
 /findById/fias POST request application/json from_bound/value schema-enum-value-added added="region"
 /findById/fias POST request application/json from_bound/value schema-enum-value-added added="settlement"
 /findById/fias POST request application/json from_bound/value schema-enum-value-added added="street"
+/findById/fias POST request application/json query schema-maxLength-changed from=null to=300
 /findById/fias POST request application/json to_bound/value schema-enum-value-added added="area"
 /findById/fias POST request application/json to_bound/value schema-enum-value-added added="city"
 /findById/fias POST request application/json to_bound/value schema-enum-value-added added="house"
@@ -745,6 +755,7 @@
 /findById/fias POST response 429 <response> response-status-added
 /findById/fias POST response 5XX <response> response-status-added
 /findById/fns_unit POST request application/json count schema-max-changed from=null to=20
+/findById/fns_unit POST request application/json query schema-maxLength-changed from=null to=300
 /findById/fns_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/fns_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fns_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -781,6 +792,7 @@
 /findById/fns_unit POST response 429 <response> response-status-added
 /findById/fns_unit POST response 5XX <response> response-status-added
 /findById/fts_unit POST request application/json count schema-max-changed from=null to=20
+/findById/fts_unit POST request application/json query schema-maxLength-changed from=null to=300
 /findById/fts_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/fts_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/fts_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -809,6 +821,7 @@
 /findById/fts_unit POST response 429 <response> response-status-added
 /findById/fts_unit POST response 5XX <response> response-status-added
 /findById/mktu POST request application/json count schema-max-changed from=null to=20
+/findById/mktu POST request application/json query schema-maxLength-changed from=null to=300
 /findById/mktu POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/mktu POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/mktu POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -831,6 +844,7 @@
 /findById/mktu POST response 429 <response> response-status-added
 /findById/mktu POST response 5XX <response> response-status-added
 /findById/okpd2 POST request application/json count schema-max-changed from=null to=20
+/findById/okpd2 POST request application/json query schema-maxLength-changed from=null to=300
 /findById/okpd2 POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/okpd2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okpd2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -852,6 +866,7 @@
 /findById/okpd2 POST response 429 <response> response-status-added
 /findById/okpd2 POST response 5XX <response> response-status-added
 /findById/oktmo POST request application/json count schema-max-changed from=null to=20
+/findById/oktmo POST request application/json query schema-maxLength-changed from=null to=300
 /findById/oktmo POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/oktmo POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/oktmo POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -876,6 +891,7 @@
 /findById/oktmo POST response 429 <response> response-status-added
 /findById/oktmo POST response 5XX <response> response-status-added
 /findById/okved2 POST request application/json count schema-max-changed from=null to=20
+/findById/okved2 POST request application/json query schema-maxLength-changed from=null to=300
 /findById/okved2 POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/okved2 POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/okved2 POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -917,6 +933,7 @@
 /findById/party POST response 429 <response> response-status-added
 /findById/party POST response 5XX <response> response-status-added
 /findById/party_by POST request application/json count schema-max-changed from=null to=20
+/findById/party_by POST request application/json query schema-maxLength-changed from=null to=300
 /findById/party_by POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/party_by POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_by POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -951,6 +968,7 @@
 /findById/party_by POST response 429 <response> response-status-added
 /findById/party_by POST response 5XX <response> response-status-added
 /findById/party_kz POST request application/json count schema-max-changed from=null to=20
+/findById/party_kz POST request application/json query schema-maxLength-changed from=null to=300
 /findById/party_kz POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/party_kz POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/party_kz POST response 200 application/json suggestions/items/data schema-required-added added="data"
@@ -993,6 +1011,7 @@
 /findById/party_kz POST response 429 <response> response-status-added
 /findById/party_kz POST response 5XX <response> response-status-added
 /findById/postal_unit POST request application/json count schema-max-changed from=null to=20
+/findById/postal_unit POST request application/json query schema-maxLength-changed from=null to=300
 /findById/postal_unit POST response 200 application/json suggestions schema-required-added added="suggestions"
 /findById/postal_unit POST response 200 application/json suggestions schema-type-changed added=[] removed=["null"]
 /findById/postal_unit POST response 200 application/json suggestions/items/data schema-required-added added="data"

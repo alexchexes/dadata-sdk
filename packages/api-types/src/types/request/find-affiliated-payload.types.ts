@@ -6,6 +6,7 @@ export type AffilatedSearchScope = 'FOUNDERS' | 'MANAGERS';
 export interface FindAffiliatedPayload {
   /**
    * Текст запроса
+   * @maxLength 300
    */
   query: string;
   /**

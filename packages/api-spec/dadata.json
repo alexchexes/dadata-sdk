@@ -11903,7 +11903,7 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Любой из идентификаторов адреса:\n- ФИАС-код до дома, он же ГАР-код (`fias_id`), только для России (19.7+)\n- ФИАС-код квартиры (`flat_fias_id`), только для России (21.2+)\n- КЛАДР-код до улицы (`kladr_id`) - только для России\n- Идентификатор OpenStreetMap (`fias_id`) - для Беларуси, Казахстана и Узбекистана (20.7+)\n- Идентификатор GeoNames (`geoname_id`) - для всех остальных стран (20.7+)\n- кадастровый номер (`stead_cadnum`, `house_cadnum` или `flat_cadnum`) - только для России (22.5+)\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+\n\n@example {\"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\"} // ФИАС\n@example {\"query\": \"77000000000292300\"} // КЛАДР\n@example {\"query\": \"way:208547592\"} // OpenStreetMap\n@example {\"query\": \"1857910\", \"language\":\"en\"} // Geonames, вернуть результат на английском",
+            "description": "Любой из идентификаторов адреса:\n- ФИАС-код до дома, он же ГАР-код (`fias_id`), только для России (19.7+)\n- ФИАС-код квартиры (`flat_fias_id`), только для России (21.2+)\n- КЛАДР-код до улицы (`kladr_id`) - только для России\n- Идентификатор OpenStreetMap (`fias_id`) - для Беларуси, Казахстана и Узбекистана (20.7+)\n- Идентификатор GeoNames (`geoname_id`) - для всех остальных стран (20.7+)\n- кадастровый номер (`stead_cadnum`, `house_cadnum` или `flat_cadnum`) - только для России (22.5+)\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+\n\n@example {\"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\"} // ФИАС\n@example {\"query\": \"77000000000292300\"} // КЛАДР\n@example {\"query\": \"way:208547592\"} // OpenStreetMap\n@example {\"query\": \"1857910\", \"language\":\"en\"} // Geonames, вернуть результат на английском\n@maxLength 300",
             "examples": [
               {
                 "query": "5f96fd6b-b3de-451f-b280-8fedf859e683"
@@ -11918,7 +11918,8 @@
                 "query": "1857910",
                 "language": "en"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -11969,7 +11970,7 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код КЛАДР или ФИАС, по которому нужно получить адрес\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР",
+            "description": "Код КЛАДР или ФИАС, по которому нужно получить адрес\n\n@example { \"query\": \"5f96fd6b-b3de-451f-b280-8fedf859e683\" } // ФИАС\n@example { \"query\": \"77000000000292300\" } // КЛАДР\n\n@maxLength 300",
             "examples": [
               {
                 "query": "5f96fd6b-b3de-451f-b280-8fedf859e683"
@@ -11977,7 +11978,8 @@
               {
                 "query": "77000000000292300"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12094,7 +12096,8 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "УНП (учетный номер налогоплательщика)"
+            "description": "УНП (учетный номер налогоплательщика)\n@maxLength 300",
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12112,7 +12115,8 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "БИН (бизнес-идентификационный номер)"
+            "description": "БИН (бизнес-идентификационный номер)\n@maxLength 300",
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12130,7 +12134,8 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Любой из идентификаторов банка:\n- БИК,\n- SWIFT,\n- ИНН,\n- ИНН + КПП (для филиалов),\n- регистрационному номеру, присвоенному Банком России.\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+"
+            "description": "Любой из идентификаторов банка:\n- БИК,\n- SWIFT,\n- ИНН,\n- ИНН + КПП (для филиалов),\n- регистрационному номеру, присвоенному Банком России.\n\nИщет только по точному совпадению, для частичного совпадения\nиспользуйте API `suggest` (https://dadata.ru/api/suggest/bank/)\n\n* ИНН и КПП начиная с версиии подсказок 20.3+\n@maxLength 300",
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12434,12 +12439,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Почтовый индекс\n@example { \"query\": \"127642\" }",
+            "description": "Почтовый индекс\n@example { \"query\": \"127642\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "127642"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12457,7 +12463,7 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код инспекции или ИНН\n@example { \"query\": \"5257\" } // код инспекции\n@example { \"query\": \"7727406020\" } // ИНН",
+            "description": "Код инспекции или ИНН\n@example { \"query\": \"5257\" } // код инспекции\n@example { \"query\": \"7727406020\" } // ИНН\n@maxLength 300",
             "examples": [
               {
                 "query": "5257"
@@ -12465,7 +12471,8 @@
               {
                 "query": "7727406020"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12483,12 +12490,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код таможни\n@example { \"query\": \"10002000\" }",
+            "description": "Код таможни\n@example { \"query\": \"10002000\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "10002000"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12506,12 +12514,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код суда\n@example { \"query\": \"52MS0022\" }",
+            "description": "Код суда\n@example { \"query\": \"52MS0022\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "52MS0022"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12529,12 +12538,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Идентификатор марки\n@example { \"query\": \"FORD\" }",
+            "description": "Идентификатор марки\n@example { \"query\": \"FORD\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "FORD"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12552,7 +12562,7 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Название или один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3",
+            "description": "Название или один из кодов страны:\n- Цифровой код страны (поле `code` в ответе)\n- Буквенный код альфа-2 (поле `alfa2` в ответе)\n- Буквенный код альфа-3 (поле `alfa3` в ответе)\n\n@example { \"query\": \"764\" } // Цифровой код\n@example { \"query\": \"TH\" } // alpha-2\n@example { \"query\": \"THA\" } // alpha-3\n@maxLength 300",
             "examples": [
               {
                 "query": "764"
@@ -12563,7 +12573,8 @@
               {
                 "query": "THA"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12581,7 +12592,7 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Цифровой или буквенный код валюты\n@example { \"query\": \"RUB\" } // Буквенный код\n@example { \"query\": \"643\" } // Цифровой код",
+            "description": "Цифровой или буквенный код валюты\n@example { \"query\": \"RUB\" } // Буквенный код\n@example { \"query\": \"643\" } // Цифровой код\n@maxLength 300",
             "examples": [
               {
                 "query": "RUB"
@@ -12589,7 +12600,8 @@
               {
                 "query": "643"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12607,12 +12619,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Уникальный номер из МКТУ\n@example { \"query\": \"250173\" }",
+            "description": "Уникальный номер из МКТУ\n@example { \"query\": \"250173\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "250173"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12630,12 +12643,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код ОКВЭД\n@example { \"query\": \"51.22.3\" }",
+            "description": "Код ОКВЭД\n@example { \"query\": \"51.22.3\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "51.22.3"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12653,12 +12667,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код ОКПД\n@example { \"query\": \"95.23.10.133\" }",
+            "description": "Код ОКПД\n@example { \"query\": \"95.23.10.133\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "95.23.10.133"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -12676,12 +12691,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Код ОКТМО\n\nОсобенности:\n\nОригинальный справочник ОКТМО содержит 4 уровня муниципальных образований:\n- регион\n- муниципальный район,\n- муниципальное поселение,\n- населенный пункт.\n\nСправочник ОКТМО «Дадаты» содержит только 2 уровня — муниципальные районы и поселения.\nЭто объекты с 8-значным кодом ОКТМО.\nЧтобы получить муниципальное образование по 11-значному коду ОКТМО, возьмите первые 8 цифр.\n\n@example { \"query\": \"54623425\" }",
+            "description": "Код ОКТМО\n\nОсобенности:\n\nОригинальный справочник ОКТМО содержит 4 уровня муниципальных образований:\n- регион\n- муниципальный район,\n- муниципальное поселение,\n- населенный пункт.\n\nСправочник ОКТМО «Дадаты» содержит только 2 уровня — муниципальные районы и поселения.\nЭто объекты с 8-значным кодом ОКТМО.\nЧтобы получить муниципальное образование по 11-значному коду ОКТМО, возьмите первые 8 цифр.\n\n@example { \"query\": \"54623425\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "54623425"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -13880,7 +13896,8 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Текст запроса"
+            "description": "Текст запроса\n@maxLength 300",
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],
@@ -13924,8 +13941,9 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "Адрес эл. почты\n@example 'info@dadata.ru'",
-            "examples": ["info@dadata.ru"]
+            "description": "Адрес эл. почты\n@example 'info@dadata.ru'\n@maxLength 300",
+            "examples": ["info@dadata.ru"],
+            "maxLength": 300
           }
         },
         "required": ["query"],
@@ -14095,12 +14113,13 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "КЛАДР-код города\n@example { \"query\": \"3100400100000\" }",
+            "description": "КЛАДР-код города\n@example { \"query\": \"3100400100000\" }\n@maxLength 300",
             "examples": [
               {
                 "query": "3100400100000"
               }
-            ]
+            ],
+            "maxLength": 300
           },
           "count": {
             "type": ["integer", "null"],

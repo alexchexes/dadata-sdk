@@ -12343,12 +12343,14 @@ components:
             @example {"query": "77000000000292300"} // КЛАДР
             @example {"query": "way:208547592"} // OpenStreetMap
             @example {"query": "1857910", "language":"en"} // Geonames, вернуть результат на английском
+            @maxLength 300
           examples:
             - query: 5f96fd6b-b3de-451f-b280-8fedf859e683
             - query: '77000000000292300'
             - query: way:208547592
             - query: '1857910'
               language: en
+          maxLength: 300
         count:
           type:
             - integer
@@ -12409,9 +12411,12 @@ components:
 
             @example { "query": "5f96fd6b-b3de-451f-b280-8fedf859e683" } // ФИАС
             @example { "query": "77000000000292300" } // КЛАДР
+
+            @maxLength 300
           examples:
             - query: 5f96fd6b-b3de-451f-b280-8fedf859e683
             - query: '77000000000292300'
+          maxLength: 300
         count:
           type:
             - integer
@@ -12539,7 +12544,10 @@ components:
       properties:
         query:
           type: string
-          description: УНП (учетный номер налогоплательщика)
+          description: |-
+            УНП (учетный номер налогоплательщика)
+            @maxLength 300
+          maxLength: 300
         count:
           type:
             - integer
@@ -12562,7 +12570,10 @@ components:
       properties:
         query:
           type: string
-          description: БИН (бизнес-идентификационный номер)
+          description: |-
+            БИН (бизнес-идентификационный номер)
+            @maxLength 300
+          maxLength: 300
         count:
           type:
             - integer
@@ -12597,6 +12608,8 @@ components:
             используйте API `suggest` (https://dadata.ru/api/suggest/bank/)
 
             * ИНН и КПП начиная с версиии подсказок 20.3+
+            @maxLength 300
+          maxLength: 300
         count:
           type:
             - integer
@@ -12886,8 +12899,10 @@ components:
           description: |-
             Почтовый индекс
             @example { "query": "127642" }
+            @maxLength 300
           examples:
             - query: '127642'
+          maxLength: 300
         count:
           type:
             - integer
@@ -12914,9 +12929,11 @@ components:
             Код инспекции или ИНН
             @example { "query": "5257" } // код инспекции
             @example { "query": "7727406020" } // ИНН
+            @maxLength 300
           examples:
             - query: '5257'
             - query: '7727406020'
+          maxLength: 300
         count:
           type:
             - integer
@@ -12942,8 +12959,10 @@ components:
           description: |-
             Код таможни
             @example { "query": "10002000" }
+            @maxLength 300
           examples:
             - query: '10002000'
+          maxLength: 300
         count:
           type:
             - integer
@@ -12969,8 +12988,10 @@ components:
           description: |-
             Код суда
             @example { "query": "52MS0022" }
+            @maxLength 300
           examples:
             - query: 52MS0022
+          maxLength: 300
         count:
           type:
             - integer
@@ -12996,8 +13017,10 @@ components:
           description: |-
             Идентификатор марки
             @example { "query": "FORD" }
+            @maxLength 300
           examples:
             - query: FORD
+          maxLength: 300
         count:
           type:
             - integer
@@ -13029,10 +13052,12 @@ components:
             @example { "query": "764" } // Цифровой код
             @example { "query": "TH" } // alpha-2
             @example { "query": "THA" } // alpha-3
+            @maxLength 300
           examples:
             - query: '764'
             - query: TH
             - query: THA
+          maxLength: 300
         count:
           type:
             - integer
@@ -13059,9 +13084,11 @@ components:
             Цифровой или буквенный код валюты
             @example { "query": "RUB" } // Буквенный код
             @example { "query": "643" } // Цифровой код
+            @maxLength 300
           examples:
             - query: RUB
             - query: '643'
+          maxLength: 300
         count:
           type:
             - integer
@@ -13087,8 +13114,10 @@ components:
           description: |-
             Уникальный номер из МКТУ
             @example { "query": "250173" }
+            @maxLength 300
           examples:
             - query: '250173'
+          maxLength: 300
         count:
           type:
             - integer
@@ -13114,8 +13143,10 @@ components:
           description: |-
             Код ОКВЭД
             @example { "query": "51.22.3" }
+            @maxLength 300
           examples:
             - query: 51.22.3
+          maxLength: 300
         count:
           type:
             - integer
@@ -13141,8 +13172,10 @@ components:
           description: |-
             Код ОКПД
             @example { "query": "95.23.10.133" }
+            @maxLength 300
           examples:
             - query: 95.23.10.133
+          maxLength: 300
         count:
           type:
             - integer
@@ -13181,8 +13214,10 @@ components:
             Чтобы получить муниципальное образование по 11-значному коду ОКТМО, возьмите первые 8 цифр.
 
             @example { "query": "54623425" }
+            @maxLength 300
           examples:
             - query: '54623425'
+          maxLength: 300
         count:
           type:
             - integer
@@ -14999,7 +15034,10 @@ components:
       properties:
         query:
           type: string
-          description: Текст запроса
+          description: |-
+            Текст запроса
+            @maxLength 300
+          maxLength: 300
         count:
           type:
             - integer
@@ -15053,8 +15091,10 @@ components:
           description: |-
             Адрес эл. почты
             @example 'info@dadata.ru'
+            @maxLength 300
           examples:
             - info@dadata.ru
+          maxLength: 300
       required:
         - query
       description: '@see https://dadata.ru/api/find-company/by-email/'
@@ -15258,8 +15298,10 @@ components:
           description: |-
             КЛАДР-код города
             @example { "query": "3100400100000" }
+            @maxLength 300
           examples:
             - query: '3100400100000'
+          maxLength: 300
         count:
           type:
             - integer

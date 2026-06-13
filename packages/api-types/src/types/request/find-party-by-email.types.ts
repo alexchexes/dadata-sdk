@@ -5,6 +5,7 @@ export interface FindPartyByEmailPayload {
   /**
    * Адрес эл. почты
    * @example 'info@dadata.ru'
+   * @maxLength 300
    */
   query: string;
 }

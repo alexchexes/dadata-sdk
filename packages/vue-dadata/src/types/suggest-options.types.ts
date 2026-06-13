@@ -43,7 +43,10 @@ export interface BaseSuggestOptions {
   /** Type of Dadata suggestions (determines which Dadata API endpoint to use) */
   suggestType: SuggestType;
 
-  /** Query text */
+  /**
+   * Query text
+   * @maxLength 300
+   */
   query: string;
 
   /** Max results to fetch from Dadata (max - 20) */
