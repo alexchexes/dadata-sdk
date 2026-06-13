@@ -219,6 +219,21 @@ export interface VueDadataOptions {
    */
   fromBound?: BoundType;
   /**
+   * Включать ли объекты уровня `fromBound` в результаты. По умолчанию `true`.
+   *
+   * При `false` - подсказки, имеющие указанный в `from_bound` уровень, исключаются из результатов.
+   *
+   * Соответствует параметру `from_bound.include` API.
+   *
+   * @locale EN
+   * Whether results include objects at the `fromBound` level. Default is `true`.
+   *
+   * When `false` - suggestions having specified `from_bound` boundary level are excluded from the results.
+   *
+   * Corresponds to the `from_bound.include` API field.
+   */
+  fromBoundInclude?: boolean;
+  /**
    * Ограничивает тип адресного объекта, до которого DaData выполняет поиск:
    * - `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`
    *
@@ -235,6 +250,21 @@ export interface VueDadataOptions {
    * {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}
    */
   toBound?: BoundType;
+  /**
+   * Включать ли объекты уровня `toBound` в результаты. По умолчанию `true`.
+   *
+   * При `false` - подсказки, имеющие указанный в `to_bound` уровень, исключаются из результатов.
+   *
+   * Соответствует параметру `to_bound.include` API.
+   *
+   * @locale EN
+   * Whether results include objects at the `toBound` level. Default is `true`.
+   *
+   * When `false` - suggestions having specified `to_bound` boundary level are excluded from the results.
+   *
+   * Corresponds to the `to_bound.include` API field.
+   */
+  toBoundInclude?: boolean;
   /**
    * Используется вместе с `locationsFilter`. Если `true`, отображаемая подсказка
    * (то есть поле `value`) будет без частей адреса до уровня ограничения.
@@ -706,6 +736,8 @@ export type InternalVueDadataOptions = MakeRequired<
   | 'suggestType'
   | 'language'
   | 'division'
+  | 'fromBoundInclude'
+  | 'toBoundInclude'
   | 'count'
   | 'token'
   | 'httpCache'

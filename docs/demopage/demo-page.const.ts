@@ -34,7 +34,9 @@ export const ORDERED_SUGGEST_TYPES: SuggestType[] = [
 export const API_OPTIONS_KEYS: (keyof VueDadataOptions)[] = [
   'count',
   'fromBound',
+  'fromBoundInclude',
   'toBound',
+  'toBoundInclude',
   'locationsFilter',
   'restrictValue',
   'locationsBoost',

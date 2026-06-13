@@ -103,7 +103,9 @@ const displayedOptions = computed(() =>
   isTokenProvided.value ? options.value : { ...options.value, token: TOKEN_PLACEHOLDER },
 );
 
-const suggestionsList = computed<DadataSuggestion[]>(() => vueDadataRef.value?.suggestionsList ?? []);
+const suggestionsList = computed<DadataSuggestion[]>(
+  () => vueDadataRef.value?.suggestionsList ?? [],
+);
 
 const propsLink = (propName: string) => withBase(`/${lang}/vue#${propName.toLowerCase()}`);
 

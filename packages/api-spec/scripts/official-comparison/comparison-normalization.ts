@@ -3,6 +3,7 @@
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
 import { cloneJson, isRecord } from './io.js';
+import { escapeJsonPointerSegment, parseCanonicalLocalRef } from './json-pointer.js';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
 type CompositionKey = 'anyOf' | 'oneOf';
@@ -10,10 +11,7 @@ type CompositionKey = 'anyOf' | 'oneOf';
 export interface ComparisonNormalizationDecision {
   branchRefs?: string[];
   compositionKey: CompositionKey;
-  kind:
-    | 'flattened-nullable-composition'
-    | 'folded-object-anyof'
-    | 'inlined-nullable-object-ref';
+  kind: 'flattened-nullable-composition' | 'folded-object-anyof' | 'inlined-nullable-object-ref';
   objectBranchCount?: number;
   path: string;
   ref?: string;
@@ -24,7 +22,16 @@ export const COMPARISON_INFO = {
   version: '0.0.0',
 };
 
-const HTTP_METHODS: HttpMethod[] = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+const HTTP_METHODS: HttpMethod[] = [
+  'get',
+  'put',
+  'post',
+  'delete',
+  'options',
+  'head',
+  'patch',
+  'trace',
+];
 
 /** Normalizes a temporary comparison document and returns every schema rewrite decision. */
 export function normalizeComparisonDocument(
@@ -256,7 +263,7 @@ function resolveLocalRef(root: Record<string, unknown>, ref: string): unknown {
 
   let current: unknown = root;
 
-  for (const segment of ref.slice(2).split('/').map(unescapeJsonPointerSegment)) {
+  for (const segment of parseCanonicalLocalRef(ref, 'comparison normalization $ref')) {
     if (!isRecord(current) && !Array.isArray(current)) {
       return null;
     }
@@ -298,12 +305,4 @@ function addNullEnumValue(schema: Record<string, unknown>): void {
   }
 
   schema.enum = [...enumValues, null];
-}
-
-function escapeJsonPointerSegment(value: string): string {
-  return value.replaceAll('~', '~0').replaceAll('/', '~1');
-}
-
-function unescapeJsonPointerSegment(value: string): string {
-  return value.replaceAll('~1', '/').replaceAll('~0', '~');
 }

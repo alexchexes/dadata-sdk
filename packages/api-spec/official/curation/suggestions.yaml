@@ -186,14 +186,220 @@ operations:
     - our:
         path: /iplocate/address
         method: get
-#
-# comparison:
-#   anyOfFolding:
-#     - target: official
-#       operation:
-#         path: /findAffiliated/party
-#         method: post
-#       response:
-#         status: '200'
-#         mediaType: application/json
-#       schemaPath: suggestions/items/data
+comparison:
+  anyOfFolding:
+    - target: ours
+      operation:
+        path: /suggest/address
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: ''
+      expectedNullBranch: false
+      expectedObjectBranches:
+        - ref: '#/components/schemas/SuggestAddressAdminResponse'
+          onlyProperties: []
+          onlyRequired: []
+        - ref: '#/components/schemas/SuggestAddressMunicipalResponse'
+          onlyProperties: []
+          onlyRequired: []
+      allowedRecursiveMerges:
+        - schemaPath: properties/suggestions
+          kind: array
+          expectedBranchCount: 2
+          expectedBranchRefs: []
+        - schemaPath: properties/suggestions/items
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+            - ref: '#/components/schemas/AddressMunicipalSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+        - schemaPath: properties/suggestions/items/properties/data
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminData'
+              onlyProperties:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+              onlyRequired:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+            - ref: '#/components/schemas/AddressMunicipalData'
+              onlyProperties:
+                - sub_area
+                - sub_area_fias_id
+                - sub_area_kladr_id
+                - sub_area_type
+                - sub_area_type_full
+                - sub_area_with_type
+              onlyRequired: []
+    - target: ours
+      operation:
+        path: /geolocate/address
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: ''
+      expectedNullBranch: false
+      expectedObjectBranches:
+        - ref: '#/components/schemas/SuggestAddressAdminResponse'
+          onlyProperties: []
+          onlyRequired: []
+        - ref: '#/components/schemas/SuggestAddressMunicipalResponse'
+          onlyProperties: []
+          onlyRequired: []
+      allowedRecursiveMerges:
+        - schemaPath: properties/suggestions
+          kind: array
+          expectedBranchCount: 2
+          expectedBranchRefs: []
+        - schemaPath: properties/suggestions/items
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+            - ref: '#/components/schemas/AddressMunicipalSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+        - schemaPath: properties/suggestions/items/properties/data
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminData'
+              onlyProperties:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+              onlyRequired:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+            - ref: '#/components/schemas/AddressMunicipalData'
+              onlyProperties:
+                - sub_area
+                - sub_area_fias_id
+                - sub_area_kladr_id
+                - sub_area_type
+                - sub_area_type_full
+                - sub_area_with_type
+              onlyRequired: []
+    - target: ours
+      operation:
+        path: /findById/address
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: ''
+      expectedNullBranch: false
+      expectedObjectBranches:
+        - ref: '#/components/schemas/SuggestAddressAdminResponse'
+          onlyProperties: []
+          onlyRequired: []
+        - ref: '#/components/schemas/SuggestAddressMunicipalResponse'
+          onlyProperties: []
+          onlyRequired: []
+      allowedRecursiveMerges:
+        - schemaPath: properties/suggestions
+          kind: array
+          expectedBranchCount: 2
+          expectedBranchRefs: []
+        - schemaPath: properties/suggestions/items
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+            - ref: '#/components/schemas/AddressMunicipalSuggestion'
+              onlyProperties: []
+              onlyRequired: []
+        - schemaPath: properties/suggestions/items/properties/data
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminData'
+              onlyProperties:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+              onlyRequired:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+            - ref: '#/components/schemas/AddressMunicipalData'
+              onlyProperties:
+                - sub_area
+                - sub_area_fias_id
+                - sub_area_kladr_id
+                - sub_area_type
+                - sub_area_type_full
+                - sub_area_with_type
+              onlyRequired: []
+    - target: ours
+      operation:
+        path: /iplocate/address
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: properties/location
+      expectedNullBranch: true
+      expectedObjectBranches:
+        - ref: '#/components/schemas/AddressAdminSuggestion'
+          onlyProperties: []
+          onlyRequired: []
+        - ref: '#/components/schemas/AddressMunicipalSuggestion'
+          onlyProperties: []
+          onlyRequired: []
+      allowedRecursiveMerges:
+        - schemaPath: properties/data
+          kind: object
+          expectedObjectBranches:
+            - ref: '#/components/schemas/AddressAdminData'
+              onlyProperties:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+              onlyRequired:
+                - city_district
+                - city_district_fias_id
+                - city_district_kladr_id
+                - city_district_type
+                - city_district_type_full
+                - city_district_with_type
+            - ref: '#/components/schemas/AddressMunicipalData'
+              onlyProperties:
+                - sub_area
+                - sub_area_fias_id
+                - sub_area_kladr_id
+                - sub_area_type
+                - sub_area_type_full
+                - sub_area_with_type
+              onlyRequired: []

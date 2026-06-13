@@ -4432,6 +4432,11 @@
       "Bound": {
         "type": "object",
         "properties": {
+          "include": {
+            "type": ["boolean", "null"],
+            "description": "Включать ли объекты указанного в `to_bound/from_bound` в результаты.\n\nПри `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.\n\n@default true",
+            "default": true
+          },
           "value": {
             "type": "string",
             "enum": [
@@ -4834,6 +4839,61 @@
           }
         }
       },
+      "AddressDivisionsMunicipal": {
+        "type": "object",
+        "properties": {
+          "area": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "settlement": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "planning_structure": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          },
+          "sub_area": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsAdministrativeItem"
+              }
+            ]
+          }
+        }
+      },
       "AddressDivisions": {
         "type": "object",
         "properties": {
@@ -4842,8 +4902,15 @@
             "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
           },
           "municipal": {
-            "type": "null",
-            "description": "Поле отсутствует в новых версиях API, в старых не заполнялось."
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AddressDivisionsMunicipal"
+              }
+            ],
+            "description": "Компоненты адреса в муниципальном делении. Отсутствует в новых версиях API, в старых не заполнялось."
           }
         },
         "required": ["administrative"]
@@ -5992,6 +6059,11 @@
       "BoundFias": {
         "type": "object",
         "properties": {
+          "include": {
+            "type": ["boolean", "null"],
+            "description": "Включать ли объекты указанного в `to_bound/from_bound` в результаты.\n\nПри `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.\n\n@default true",
+            "default": true
+          },
           "value": {
             "type": "string",
             "enum": [
@@ -6007,7 +6079,7 @@
           }
         },
         "required": ["value"],
-        "description": "Объект для передачи границы поиска в параметрах подсказок по ФИАС"
+        "description": "Объект для передачи границы поиска (ФИАС)"
       },
       "LocationRestrictionFias": {
         "type": "object",
@@ -6032,10 +6104,6 @@
           "area_fias_id": {
             "type": ["string", "null"],
             "description": "Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`."
-          },
-          "sub_area_fias_id": {
-            "type": ["string", "null"],
-            "description": "Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`."
           },
           "city_fias_id": {
             "type": ["string", "null"],
@@ -6065,10 +6133,6 @@
             "type": ["string", "null"],
             "description": "Ограничение по названию административного района"
           },
-          "sub_area": {
-            "type": ["string", "null"],
-            "description": "Ограничение по названию муниципального поселения"
-          },
           "city": {
             "type": ["string", "null"],
             "description": "Ограничение по названию города"
@@ -6097,10 +6161,6 @@
             "type": ["string", "null"],
             "description": "Ограничение по полному типу адм. района в регионе. Например: `улус`"
           },
-          "sub_area_type_full": {
-            "type": ["string", "null"],
-            "description": "Ограничение по полному типу муниципального поселения"
-          },
           "city_type_full": {
             "type": ["string", "null"],
             "description": "Ограничение по полному типу города. Например: `поселок городского типа`"
@@ -6122,7 +6182,7 @@
             "description": "Ограничение по полному типу улицы. Например: `проспект`"
           }
         },
-        "description": "Ограничение сектора поиска ФИАС.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974"
+        "description": "Ограничение сектора поиска ФИАС.\n\nОграничения по стране, ISO-кодам и муниципальному поселению недоступны.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974"
       },
       "SuggestFiasPayload": {
         "type": "object",
@@ -9097,6 +9157,11 @@
             "type": "string",
             "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"],
             "description": "Тип организации"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "INACTIVE", "LIQUIDATED", "LIQUIDATING", "SUSPENDED"],
+            "description": "Статус организации.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
           }
         }
       },
@@ -10615,6 +10680,10 @@
           "region_code": {
             "type": "string",
             "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
+          },
+          "parent_code": {
+            "type": "string",
+            "description": "Код регистрирующей инспекции.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
           }
         }
       },
@@ -11858,6 +11927,14 @@
             "format": "int32",
             "maximum": 20
           },
+          "from_bound": {
+            "$ref": "#/components/schemas/Bound",
+            "description": "Левая граница уровня адреса.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
+          },
+          "to_bound": {
+            "$ref": "#/components/schemas/Bound",
+            "description": "Правая граница уровня адреса.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
+          },
           "language": {
             "anyOf": [
               {
@@ -11908,6 +11985,14 @@
             "default": 10,
             "format": "int32",
             "maximum": 20
+          },
+          "from_bound": {
+            "$ref": "#/components/schemas/BoundFias",
+            "description": "Левая граница уровня адреса.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
+          },
+          "to_bound": {
+            "$ref": "#/components/schemas/BoundFias",
+            "description": "Правая граница уровня адреса.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
           }
         },
         "required": ["query"],
@@ -13289,7 +13374,7 @@
           "qc": {
             "type": "number",
             "enum": [0, 1],
-            "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Проверить? | Описание |\n| --- | ---------- | ---------------------------------- |\n| 0   | Нет        | Исходное значение распознано уверенно |\n| 1   | Да         | Исходное значение распознано с допущениями или не распознано |\n| 2   | Нет        | Исходное значение пустое или заведомо «мусорное» |"
+            "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Проверить? | Описание |\n| --- | ---------- | ---------------------------------- |\n| 0   | Нет        | Исходное значение распознано уверенно |\n| 1   | Да         | Исходное значение распознано с допущениями или не распознано |"
           }
         },
         "required": [

@@ -2,6 +2,11 @@
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
 import { isRecord } from './io.js';
+import {
+  escapeJsonPointerSegment,
+  formatLocalRef,
+  parseCanonicalLocalRef,
+} from './json-pointer.js';
 
 export interface ComponentPruningResult {
   after: Record<string, number>;
@@ -30,7 +35,9 @@ const COMPONENT_COLLECTION_KEYS = new Set([
 ]);
 
 /** Removes unreferenced standard component entries after all comparison normalizations are complete. */
-export function pruneUnreferencedComponents(document: OpenAPIV3_1.Document): ComponentPruningResult {
+export function pruneUnreferencedComponents(
+  document: OpenAPIV3_1.Document,
+): ComponentPruningResult {
   const root = document as unknown as Record<string, unknown>;
   const before = countComponents(root.components);
   const requiredComponents = new Map<string, Set<string>>();
@@ -104,8 +111,12 @@ function collectReachableComponentRefs(
 
   const ref = value.$ref;
 
+  if ('$ref' in value && typeof ref !== 'string') {
+    throw new Error(`Cannot prune comparison components; non-string $ref at ${path}.`);
+  }
+
   if (typeof ref === 'string' && isLocalRef(ref)) {
-    const pointer = parseLocalRef(ref);
+    const pointer = parseCanonicalLocalRef(ref, `${path} $ref`);
     const canonicalRef = formatLocalRef(pointer);
 
     markRequiredComponent(pointer, requiredComponents);
@@ -220,10 +231,14 @@ function collectLocalRefValidationIssues(
 
   const ref = value.$ref;
 
+  if ('$ref' in value && typeof ref !== 'string') {
+    throw new Error(`Component pruning left non-string $ref at ${path}.`);
+  }
+
   if (typeof ref === 'string' && isLocalRef(ref)) {
     result.localRefCount += 1;
 
-    const pointer = parseLocalRef(ref);
+    const pointer = parseCanonicalLocalRef(ref, `${path} $ref`);
 
     if (resolvePointer(root, pointer) === undefined) {
       result.unresolvedRefs.push(`${path} -> ${ref}`);
@@ -231,7 +246,12 @@ function collectLocalRefValidationIssues(
   }
 
   for (const [key, child] of Object.entries(value)) {
-    collectLocalRefValidationIssues(child, root, `${path}/${escapeJsonPointerSegment(key)}`, result);
+    collectLocalRefValidationIssues(
+      child,
+      root,
+      `${path}/${escapeJsonPointerSegment(key)}`,
+      result,
+    );
   }
 }
 
@@ -255,7 +275,10 @@ function countComponents(components: unknown): Record<string, number> {
 }
 
 /** Marks the root component entry for a local component pointer, including nested refs. */
-function markRequiredComponent(pointer: string[], requiredComponents: Map<string, Set<string>>): void {
+function markRequiredComponent(
+  pointer: string[],
+  requiredComponents: Map<string, Set<string>>,
+): void {
   if (pointer[0] !== 'components' || pointer.length < 3) {
     return;
   }
@@ -292,28 +315,8 @@ function isLocalRef(ref: string): boolean {
   return ref === '#' || ref.startsWith('#/');
 }
 
-function parseLocalRef(ref: string): string[] {
-  if (ref === '#') {
-    return [];
-  }
-
-  return ref.slice(2).split('/').map(unescapeJsonPointerSegment);
-}
-
-function formatLocalRef(pointer: string[]): string {
-  return pointer.length === 0 ? '#' : `#/${pointer.map(escapeJsonPointerSegment).join('/')}`;
-}
-
 function sortComponentNameRecords(records: Record<string, string[]>): void {
   for (const names of Object.values(records)) {
     names.sort((left, right) => left.localeCompare(right));
   }
-}
-
-function escapeJsonPointerSegment(value: string): string {
-  return value.replaceAll('~', '~0').replaceAll('/', '~1');
-}
-
-function unescapeJsonPointerSegment(value: string): string {
-  return value.replaceAll('~1', '/').replaceAll('~0', '~');
 }

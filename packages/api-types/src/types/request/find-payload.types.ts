@@ -1,6 +1,7 @@
 // payload types for every /findById endpoint
 import type { BranchType, PartyStatus, PartyType } from '../common.types';
-import type { DivisionType, Language } from './suggest-payload-address.types';
+import type { Bound, DivisionType, Language } from './suggest-payload-address.types';
+import type { BoundFias } from './suggest-payload-fias.types';
 
 export interface BaseFindByIdPayload {
   /**
@@ -43,6 +44,18 @@ export interface FindAddressPayload extends BaseFindByIdPayload {
    */
   query: string;
   /**
+   * Левая граница уровня адреса.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  from_bound?: Bound;
+  /**
+   * Правая граница уровня адреса.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  to_bound?: Bound;
+  /**
    * На каком языке вернуть результат (ru / en)
    */
   language?: Language | null;
@@ -67,6 +80,18 @@ export interface FindFiasPayload extends BaseFindByIdPayload {
    * @example { "query": "77000000000292300" } // КЛАДР
    */
   query: string;
+  /**
+   * Левая граница уровня адреса.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  from_bound?: BoundFias;
+  /**
+   * Правая граница уровня адреса.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  to_bound?: BoundFias;
 }
 
 /**

@@ -164,20 +164,38 @@ const entityStatusOptions = computed(() => {
 
     <template v-if="showBoundTypes">
       <div class="flex flex-wrap gap-3">
-        <SelectOptions
-          v-model="options.fromBound"
-          :helpLink="props.helpLink('fromBound')"
-          helpTooltip
-          :label="t('fromBound:')"
-          :options="props.boundTypesOptionsFrom"
-        />
-        <SelectOptions
-          v-model="options.toBound"
-          :helpLink="props.helpLink('toBound')"
-          helpTooltip
-          :label="t('toBound:')"
-          :options="props.boundTypesOptions"
-        />
+        <div class="flex flex-col gap-1.5">
+          <SelectOptions
+            v-model="options.fromBound"
+            :helpLink="props.helpLink('fromBound')"
+            helpTooltip
+            :label="t('fromBound:')"
+            :options="props.boundTypesOptionsFrom"
+          />
+          <CheckBox
+            v-model="options.fromBoundInclude"
+            :disabled="!options.fromBound"
+            :helpLink="props.helpLink('fromBoundInclude')"
+            helpTooltip
+            :label="t('Include from-bound level')"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <SelectOptions
+            v-model="options.toBound"
+            :helpLink="props.helpLink('toBound')"
+            helpTooltip
+            :label="t('toBound:')"
+            :options="props.boundTypesOptions"
+          />
+          <CheckBox
+            v-model="options.toBoundInclude"
+            :disabled="!options.toBound"
+            :helpLink="props.helpLink('toBoundInclude')"
+            helpTooltip
+            :label="t('Include to-bound level')"
+          />
+        </div>
       </div>
     </template>
 

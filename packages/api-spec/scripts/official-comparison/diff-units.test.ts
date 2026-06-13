@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { renderDiffUnitSnapshot, type DiffUnit } from './diff-units.js';
+import { buildDiffUnits, renderDiffUnitSnapshot, type DiffUnit } from './diff-units.js';
 
 const baseUnit = {
   location: 'suggestions/items/data/geo_lat',
@@ -58,6 +58,49 @@ describe('renderDiffUnitSnapshot', () => {
     assert.equal(
       renderDiffUnitSnapshot([unit]),
       '/suggest/metro POST response 200 application/json suggestions/items/data/geo_lat schema-required-added added="geo_lat"\n',
+    );
+  });
+});
+
+describe('buildDiffUnits', () => {
+  it('preserves composition type-set changes reported by oasdiff', () => {
+    const diff = {
+      paths: {
+        modified: {
+          '/suggest/party': {
+            operations: {
+              modified: {
+                POST: {
+                  requestBody: {
+                    content: {
+                      modified: {
+                        'application/json': {
+                          schema: {
+                            properties: {
+                              modified: {
+                                branch_type: {
+                                  listOfTypes: {
+                                    added: ['string', 'null'],
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    assert.equal(
+      renderDiffUnitSnapshot(buildDiffUnits(diff)),
+      '/suggest/party POST request application/json branch_type schema-composition-types-changed added=["null","string"] removed=[]\n',
     );
   });
 });

@@ -218,6 +218,12 @@ function collectSchemaUnits(schemaDiff: unknown, location: string[], context: Un
   }
 
   collectAddedRemovedUnit(schemaDiff.type, context, 'schema-type-changed', location);
+  collectAddedRemovedUnit(
+    schemaDiff.listOfTypes,
+    context,
+    'schema-composition-types-changed',
+    location,
+  );
   collectFromToUnit(schemaDiff.format, context, 'schema-format-changed', location);
   collectEnumUnits(schemaDiff.enum, context, location);
   collectRequiredUnits(schemaDiff.required, context, location);

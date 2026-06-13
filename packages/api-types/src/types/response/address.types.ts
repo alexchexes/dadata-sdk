@@ -30,12 +30,15 @@ export interface AddressDivisionsAdministrativeItem {
 }
 
 export type AddressDivisionsAdministrative = {
-  [K in
-    | 'area'
-    | 'city'
-    | 'city_district'
-    | 'settlement'
-    | 'planning_structure']?: null | AddressDivisionsAdministrativeItem;
+  [
+    K in 'area' | 'city' | 'city_district' | 'settlement' | 'planning_structure'
+  ]?: null | AddressDivisionsAdministrativeItem;
+};
+
+export type AddressDivisionsMunicipal = {
+  [
+    K in 'area' | 'city' | 'settlement' | 'planning_structure' | 'sub_area'
+  ]?: null | AddressDivisionsAdministrativeItem;
 };
 
 export interface AddressDivisions {
@@ -49,8 +52,10 @@ export interface AddressDivisions {
    * - `planning_structure` — планировочная структура.
    */
   administrative: AddressDivisionsAdministrative;
-  /** Поле отсутствует в новых версиях API, в старых не заполнялось. */
-  municipal?: null;
+  /**
+   * Компоненты адреса в муниципальном делении. Отсутствует в новых версиях API, в старых не заполнялось.
+   */
+  municipal?: null | AddressDivisionsMunicipal;
 }
 
 export type FiasAddressFiasLevel =
@@ -781,215 +786,218 @@ type MunicipalOnlyFields =
 /**
  * Fields returned by the API when using the suggestions endpoint with the ADMINISTRATIVE division.
  */
-export interface AddressAdminData
-  extends Pick<AllAddressFields, SuggestAddressCommonFields | AdminOnlyFields> {}
+export interface AddressAdminData extends Pick<
+  AllAddressFields,
+  SuggestAddressCommonFields | AdminOnlyFields
+> {}
 
 /**
  * Fields returned by the API when using the suggestions endpoint with the MUNICIPAL division. *
  */
-export interface AddressMunicipalData
-  extends Pick<AllAddressFields, SuggestAddressCommonFields | MunicipalOnlyFields> {}
+export interface AddressMunicipalData extends Pick<
+  AllAddressFields,
+  SuggestAddressCommonFields | MunicipalOnlyFields
+> {}
 
 /**
  * Address fields returned by the Standardization ("clean") API.
  *
  * @see https://dadata.ru/api/clean/address/
  */
-export interface AddressClean
-  extends PickAndOverride<
-    AllAddressFields,
-    | 'postal_code'
-    | 'country'
-    | 'country_iso_code'
-    | 'federal_district'
-    | 'region_fias_id'
-    | 'region_kladr_id'
-    | 'region_iso_code'
-    | 'region_with_type'
-    | 'region_type'
-    | 'region_type_full'
-    | 'region'
-    | 'area_fias_id'
-    | 'area_kladr_id'
-    | 'area_with_type'
-    | 'area_type'
-    | 'area_type_full'
-    | 'area'
-    | 'city_fias_id'
-    | 'city_kladr_id'
-    | 'city_with_type'
-    | 'city_type'
-    | 'city_type_full'
-    | 'city'
-    | 'city_district_fias_id'
-    | 'city_district_kladr_id'
-    | 'city_district_with_type'
-    | 'city_district_type'
-    | 'city_district_type_full'
-    | 'city_district'
-    | 'settlement_fias_id'
-    | 'settlement_kladr_id'
-    | 'settlement_with_type'
-    | 'settlement_type'
-    | 'settlement_type_full'
-    | 'settlement'
-    | 'street_fias_id'
-    | 'street_kladr_id'
-    | 'street_with_type'
-    | 'street_type'
-    | 'street_type_full'
-    | 'street'
-    | 'stead_fias_id'
-    | 'stead_kladr_id'
-    | 'stead_type'
-    | 'stead_type_full'
-    | 'stead'
-    | 'house_fias_id'
-    | 'house_kladr_id'
-    | 'house_type'
-    | 'house_type_full'
-    | 'house'
-    | 'house_flat_count'
-    | 'block_type'
-    | 'block_type_full'
-    | 'block'
-    | 'flat_fias_id'
-    | 'flat_type'
-    | 'flat_type_full'
-    | 'flat'
-    | 'postal_box'
-    | 'room_type'
-    | 'room_type_full'
-    | 'room'
-    | 'fias_id'
-    | 'kladr_id'
-    | 'geoname_id'
-    | 'capital_marker'
-    | 'okato'
-    | 'oktmo'
-    | 'tax_office'
-    | 'tax_office_legal'
-    | 'geo_lat'
-    | 'geo_lon'
-    | 'fias_actuality_state'
-    | 'city_area'
-    | 'beltway_hit'
-    | 'beltway_distance'
-    | 'stead_cadnum'
-    | 'house_cadnum'
-    | 'flat_cadnum'
-    | 'flat_area'
-    | 'square_meter_price'
-    | 'flat_price'
-    | 'timezone'
-    | 'metro'
-    | 'entrance'
-    | 'floor'
-    | 'fias_code',
-    // overrides:
-    {
-      /** Исходный адрес одной строкой */
-      source: string;
+export interface AddressClean extends PickAndOverride<
+  AllAddressFields,
+  | 'postal_code'
+  | 'country'
+  | 'country_iso_code'
+  | 'federal_district'
+  | 'region_fias_id'
+  | 'region_kladr_id'
+  | 'region_iso_code'
+  | 'region_with_type'
+  | 'region_type'
+  | 'region_type_full'
+  | 'region'
+  | 'area_fias_id'
+  | 'area_kladr_id'
+  | 'area_with_type'
+  | 'area_type'
+  | 'area_type_full'
+  | 'area'
+  | 'city_fias_id'
+  | 'city_kladr_id'
+  | 'city_with_type'
+  | 'city_type'
+  | 'city_type_full'
+  | 'city'
+  | 'city_district_fias_id'
+  | 'city_district_kladr_id'
+  | 'city_district_with_type'
+  | 'city_district_type'
+  | 'city_district_type_full'
+  | 'city_district'
+  | 'settlement_fias_id'
+  | 'settlement_kladr_id'
+  | 'settlement_with_type'
+  | 'settlement_type'
+  | 'settlement_type_full'
+  | 'settlement'
+  | 'street_fias_id'
+  | 'street_kladr_id'
+  | 'street_with_type'
+  | 'street_type'
+  | 'street_type_full'
+  | 'street'
+  | 'stead_fias_id'
+  | 'stead_kladr_id'
+  | 'stead_type'
+  | 'stead_type_full'
+  | 'stead'
+  | 'house_fias_id'
+  | 'house_kladr_id'
+  | 'house_type'
+  | 'house_type_full'
+  | 'house'
+  | 'house_flat_count'
+  | 'block_type'
+  | 'block_type_full'
+  | 'block'
+  | 'flat_fias_id'
+  | 'flat_type'
+  | 'flat_type_full'
+  | 'flat'
+  | 'postal_box'
+  | 'room_type'
+  | 'room_type_full'
+  | 'room'
+  | 'fias_id'
+  | 'kladr_id'
+  | 'geoname_id'
+  | 'capital_marker'
+  | 'okato'
+  | 'oktmo'
+  | 'tax_office'
+  | 'tax_office_legal'
+  | 'geo_lat'
+  | 'geo_lon'
+  | 'fias_actuality_state'
+  | 'city_area'
+  | 'beltway_hit'
+  | 'beltway_distance'
+  | 'stead_cadnum'
+  | 'house_cadnum'
+  | 'flat_cadnum'
+  | 'flat_area'
+  | 'square_meter_price'
+  | 'flat_price'
+  | 'timezone'
+  | 'metro'
+  | 'entrance'
+  | 'floor'
+  | 'fias_code',
+  // overrides:
+  {
+    /** Исходный адрес одной строкой */
+    source: string;
 
-      /** Стандартизированный адрес одной строкой */
-      result: string;
+    /** Стандартизированный адрес одной строкой */
+    result: string;
 
-      /**
-       * Нераспознанная часть адреса.
-       * Для адреса `Москва, Митинская улица, 40, вход с торца` вернет `"ВХОД, С, ТОРЦА"`
-       */
-      unparsed_parts: null | string;
+    /**
+     * Нераспознанная часть адреса.
+     * Для адреса `Москва, Митинская улица, 40, вход с торца` вернет `"ВХОД, С, ТОРЦА"`
+     */
+    unparsed_parts: null | string;
 
-      /**
-       * Код точности координат:
-       * - 0 — точные координаты
-       * - 1 — ближайший дом
-       * - 2 — улица
-       * - 3 — населенный пункт
-       * - 4 — город
-       * - 5 — координаты не определены, или отсутствуют в справочнике
-       */
-      qc_geo: 0 | 1 | 2 | 3 | 4 | 5;
+    /**
+     * Код точности координат:
+     * - 0 — точные координаты
+     * - 1 — ближайший дом
+     * - 2 — улица
+     * - 3 — населенный пункт
+     * - 4 — город
+     * - 5 — координаты не определены, или отсутствуют в справочнике
+     */
+    qc_geo: 0 | 1 | 2 | 3 | 4 | 5;
 
-      /**
-       * Код пригодности к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete}.
-       *
-       * Годится ли адрес для доставки корреспонденции:
-       * | Код | Подходит для рассылки? | Описание |
-       * |-|-|-|
-       * | 0 | Да | Пригоден для почтовой рассылки |
-       * | 10 | Под вопросом | Дома нет в ФИАС |
-       * | 5 | Под вопросом | Нет квартиры. Подходит для юридических лиц или частных владений |
-       * | 8 | Под вопросом | До почтового отделения — абонентский ящик или адрес до востребования. Подходит для писем, но не для курьерской доставки. |
-       * | 9 | Под вопросом | Сначала проверьте, правильно ли Дадата разобрала исходный адрес |
-       * | 1 | Нет | Нет региона |
-       * | 2 | Нет | Нет города |
-       * | 3 | Нет | Нет улицы |
-       * | 4 | Нет | Нет дома |
-       * | 6 | Нет | Адрес неполный |
-       * | 7 | Нет | Иностранный адрес |
-       */
-      qc_complete: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+    /**
+     * Код пригодности к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete}.
+     *
+     * Годится ли адрес для доставки корреспонденции:
+     * | Код | Подходит для рассылки? | Описание |
+     * |-|-|-|
+     * | 0 | Да | Пригоден для почтовой рассылки |
+     * | 10 | Под вопросом | Дома нет в ФИАС |
+     * | 5 | Под вопросом | Нет квартиры. Подходит для юридических лиц или частных владений |
+     * | 8 | Под вопросом | До почтового отделения — абонентский ящик или адрес до востребования. Подходит для писем, но не для курьерской доставки. |
+     * | 9 | Под вопросом | Сначала проверьте, правильно ли Дадата разобрала исходный адрес |
+     * | 1 | Нет | Нет региона |
+     * | 2 | Нет | Нет города |
+     * | 3 | Нет | Нет улицы |
+     * | 4 | Нет | Нет дома |
+     * | 6 | Нет | Адрес неполный |
+     * | 7 | Нет | Иностранный адрес |
+     */
+    qc_complete: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-      /**
-       * Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house}
-       *
-       * - 2 — дом в ФИАС есть
-       * - 3 — в ФИАС есть похожий дом и разница только в корпусе или строении
-       * - 10 — дом в ФИАС не найден
-       *
-       * * (see {@link https://support.dadata.ru/communities/1/topics/3174-proverka-suschestvovaniya-adresa-cherez-api})
-       *
-       * В кобинации с полем `qc_geo` Уточняют вероятность успешной доставки письма:
-       * | Код `qc_house` | Код `qc_geo` | Вероятность доставки | Описание
-       * |-|-|-|-|
-       * | 2 | любой | Высокая | Дом найден в ФИАС
-       * | 10 | 0 | Высокая | Дом не найден в ФИАС, но есть на картах
-       * | 10 | 1 | Средняя | Дом не найден в ФИАС, но есть похожий на картах
-       * | 10 | ≥ 2 | Низкая | Дом не найден в ФИАС и на картах
-       */
-      qc_house: 2 | 3 | 10;
+    /**
+     * Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house}
+     *
+     * - 2 — дом в ФИАС есть
+     * - 3 — в ФИАС есть похожий дом и разница только в корпусе или строении
+     * - 10 — дом в ФИАС не найден
+     *
+     * * (see {@link https://support.dadata.ru/communities/1/topics/3174-proverka-suschestvovaniya-adresa-cherez-api})
+     *
+     * В кобинации с полем `qc_geo` Уточняют вероятность успешной доставки письма:
+     * | Код `qc_house` | Код `qc_geo` | Вероятность доставки | Описание
+     * |-|-|-|-|
+     * | 2 | любой | Высокая | Дом найден в ФИАС
+     * | 10 | 0 | Высокая | Дом не найден в ФИАС, но есть на картах
+     * | 10 | 1 | Средняя | Дом не найден в ФИАС, но есть похожий на картах
+     * | 10 | ≥ 2 | Низкая | Дом не найден в ФИАС и на картах
+     */
+    qc_house: 2 | 3 | 10;
 
-      /**
-       * Код проверки адреса {@link https://dadata.ru/api/clean/address/#qc}
-       *
-       * Нужно ли вручную проверить распознанный адрес:
-       * | Код | Нужно проверить вручную? | Описание |
-       * |-|-|-|
-       * | 0 | Нет | Адрес распознан уверенно |
-       * | 1 | Да | Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область». Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона и города. |
-       * | 2 | Нет | Адрес пустой или заведомо «мусорный» |
-       * | 3 | Да | Есть альтернативные варианты. Пример: «Москва Тверская-Ямская» — в Москве четыре Тверских-Ямских улицы |
-       */
-      qc: 0 | 1 | 2 | 3;
+    /**
+     * Код проверки адреса {@link https://dadata.ru/api/clean/address/#qc}
+     *
+     * Нужно ли вручную проверить распознанный адрес:
+     * | Код | Нужно проверить вручную? | Описание |
+     * |-|-|-|
+     * | 0 | Нет | Адрес распознан уверенно |
+     * | 1 | Да | Остались «лишние» части. Пример: «109341 Тверская область Москва Верхние Поля» — здесь лишняя «Тверская область». Либо в исходном адресе недостаточно данных для уверенного разбора. Пример: «Сходня Красная 12» — здесь нет региона и города. |
+     * | 2 | Нет | Адрес пустой или заведомо «мусорный» |
+     * | 3 | Да | Есть альтернативные варианты. Пример: «Москва Тверская-Ямская» — в Москве четыре Тверских-Ямских улицы |
+     */
+    qc: 0 | 1 | 2 | 3;
 
-      /** Компоненты адреса в административном/муниципальном делении. */
-      divisions: null | AddressDivisions;
+    /** Компоненты адреса в административном/муниципальном делении. */
+    divisions: null | AddressDivisions;
 
-      /**
-       * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
-       * Чаще всего вам нужен не он, а `fias_id` */
-      fias_code: null | string;
+    /**
+     * Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД).
+     * Чаще всего вам нужен не он, а `fias_id` */
+    fias_code: null | string;
 
-      /**
-       * Уровень детализации, до которого адрес найден в ФИАС:
-       * - 0 — страна
-       * - 1 — регион
-       * - 3 — район
-       * - 4 — город
-       * - 5 — район города
-       * - 6 — населенный пункт
-       * - 7 — улица
-       * - 8 — дом
-       * - 9 — квартира (подсказки: v21.4+)
-       * - 65 — планировочная структура
-       * - 90 — доп. территория
-       * - 91 — улица в доп. территории
-       * - -1 — иностранный или пустой.
-       */
-      fias_level: CleanAddressFiasLevel;
-    }
-  > {}
+    /**
+     * Уровень детализации, до которого адрес найден в ФИАС:
+     * - 0 — страна
+     * - 1 — регион
+     * - 3 — район
+     * - 4 — город
+     * - 5 — район города
+     * - 6 — населенный пункт
+     * - 7 — улица
+     * - 8 — дом
+     * - 9 — квартира (подсказки: v21.4+)
+     * - 65 — планировочная структура
+     * - 90 — доп. территория
+     * - 91 — улица в доп. территории
+     * - -1 — иностранный или пустой.
+     */
+    fias_level: CleanAddressFiasLevel;
+  }
+> {}
 
 export type CleanAddressResponse = CleanResponse<AddressClean>;
 
@@ -1000,133 +1008,130 @@ export type CleanAddressResponse = CleanResponse<AddressClean>;
  * @see https://dadata.ru/api/find-fias/
  * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835937
  */
-export interface FiasSuggestionData
-  extends PickAndOverride<
-    AllAddressFields,
-    | 'postal_code'
-    | 'region_fias_id'
-    | 'region_kladr_id'
-    | 'region_with_type'
-    | 'region_type'
-    | 'region_type_full'
-    | 'region'
-    | 'area_fias_id'
-    | 'area_kladr_id'
-    | 'area_with_type'
-    | 'area_type'
-    | 'area_type_full'
-    | 'area'
-    | 'city_fias_id'
-    | 'city_kladr_id'
-    | 'city_with_type'
-    | 'city_type'
-    | 'city_type_full'
-    | 'city'
-    | 'city_district_fias_id'
-    | 'city_district_with_type'
-    | 'city_district_type'
-    | 'city_district_type_full'
-    | 'city_district'
-    | 'settlement_fias_id'
-    | 'settlement_kladr_id'
-    | 'settlement_with_type'
-    | 'settlement_type'
-    | 'settlement_type_full'
-    | 'settlement'
-    | 'planning_structure_fias_id'
-    | 'planning_structure_kladr_id'
-    | 'planning_structure_with_type'
-    | 'planning_structure_type'
-    | 'planning_structure_type_full'
-    | 'planning_structure'
-    | 'street_fias_id'
-    | 'street_kladr_id'
-    | 'street_with_type'
-    | 'street_type'
-    | 'street_type_full'
-    | 'street'
-    | 'house_fias_id'
-    | 'house_kladr_id'
-    | 'house_type'
-    | 'house'
-    | 'block'
-    | 'building_type'
-    | 'building'
-    | 'fias_id'
-    | 'kladr_id'
-    | 'capital_marker'
-    | 'okato'
-    | 'oktmo'
-    | 'cadastral_number'
-    | 'tax_office'
-    | 'tax_office_legal'
-    | 'source'
-    | 'history_values'
-    | 'fias_actuality_state'
-    | 'fias_code'
-    | 'qc',
-    // overrides:
-    {
-      /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
-      fias_code: null | string;
+export interface FiasSuggestionData extends PickAndOverride<
+  AllAddressFields,
+  | 'postal_code'
+  | 'region_fias_id'
+  | 'region_kladr_id'
+  | 'region_with_type'
+  | 'region_type'
+  | 'region_type_full'
+  | 'region'
+  | 'area_fias_id'
+  | 'area_kladr_id'
+  | 'area_with_type'
+  | 'area_type'
+  | 'area_type_full'
+  | 'area'
+  | 'city_fias_id'
+  | 'city_kladr_id'
+  | 'city_with_type'
+  | 'city_type'
+  | 'city_type_full'
+  | 'city'
+  | 'city_district_fias_id'
+  | 'city_district_with_type'
+  | 'city_district_type'
+  | 'city_district_type_full'
+  | 'city_district'
+  | 'settlement_fias_id'
+  | 'settlement_kladr_id'
+  | 'settlement_with_type'
+  | 'settlement_type'
+  | 'settlement_type_full'
+  | 'settlement'
+  | 'planning_structure_fias_id'
+  | 'planning_structure_kladr_id'
+  | 'planning_structure_with_type'
+  | 'planning_structure_type'
+  | 'planning_structure_type_full'
+  | 'planning_structure'
+  | 'street_fias_id'
+  | 'street_kladr_id'
+  | 'street_with_type'
+  | 'street_type'
+  | 'street_type_full'
+  | 'street'
+  | 'house_fias_id'
+  | 'house_kladr_id'
+  | 'house_type'
+  | 'house'
+  | 'block'
+  | 'building_type'
+  | 'building'
+  | 'fias_id'
+  | 'kladr_id'
+  | 'capital_marker'
+  | 'okato'
+  | 'oktmo'
+  | 'cadastral_number'
+  | 'tax_office'
+  | 'tax_office_legal'
+  | 'source'
+  | 'history_values'
+  | 'fias_actuality_state'
+  | 'fias_code'
+  | 'qc',
+  // overrides:
+  {
+    /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
+    fias_code: null | string;
 
-      /**
-       * Уровень детализации, до которого адрес найден в ФИАС:
-       * - 1 — регион
-       * - 3 — район
-       * - 4 — город
-       * - 5 — район города
-       * - 6 — населенный пункт
-       * - 65 — планировочная структура
-       * - 7 — улица
-       * - 8 — дом
-       */
-      fias_level: FiasAddressFiasLevel;
+    /**
+     * Уровень детализации, до которого адрес найден в ФИАС:
+     * - 1 — регион
+     * - 3 — район
+     * - 4 — город
+     * - 5 — район города
+     * - 6 — населенный пункт
+     * - 65 — планировочная структура
+     * - 7 — улица
+     * - 8 — дом
+     */
+    fias_level: FiasAddressFiasLevel;
 
-      /** КЛАДР-код района города */
-      city_district_kladr_id: null | string;
-    }
-  > {}
+    /** КЛАДР-код района города */
+    city_district_kladr_id: null | string;
+  }
+> {}
 
-export interface PartySuggestionAddressData
-  extends Override<
-    AddressAdminData,
-    {
-      /** Исходный адрес из ЕГРЮЛ одной строкой */
-      source: string;
-      /**
-       * код качества адреса (19.1+)
-       * - `0` – Адрес из ЕГРЮЛ распознан уверенно
-       * - `1` – Остались «лишние» части
-       * - `3` – Есть альтернативные варианты
-       */
-      qc: '0' | '1' | '3';
-      /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
-      fias_code: null | string;
-    }
-  > {}
+export interface PartySuggestionAddressData extends Override<
+  AddressAdminData,
+  {
+    /** Исходный адрес из ЕГРЮЛ одной строкой */
+    source: string;
+    /**
+     * код качества адреса (19.1+)
+     * - `0` – Адрес из ЕГРЮЛ распознан уверенно
+     * - `1` – Остались «лишние» части
+     * - `3` – Есть альтернативные варианты
+     */
+    qc: '0' | '1' | '3';
+    /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
+    fias_code: null | string;
+  }
+> {}
 
-export interface BankSuggestionAddressData
-  extends Override<
-    AddressAdminData,
-    {
-      /** Адрес одной строкой как в справочнике БИК */
-      source: string;
-      /** Код пригодности адреса к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete} */
-      qc_complete: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
-      /** Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house} */
-      qc_house: '2' | '3' | '10';
-      /**
-       * код качества адреса (19.1+)
-       * - `0` – Адрес из БИК распознан уверенно
-       * - `1` – Остались «лишние» части
-       * - `3` – Есть альтернативные варианты
-       */
-      qc: '0' | '1' | '3';
-      /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
-      fias_code: null | string;
-    }
-  > {}
+export interface BankSuggestionAddressData extends Override<
+  AddressAdminData,
+  {
+    /** Адрес одной строкой как в справочнике БИК */
+    source: string;
+    /** Код пригодности адреса к рассылке {@link https://dadata.ru/api/clean/address/#qc_complete} */
+    qc_complete: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
+    /** Признак наличия дома в ФИАС {@link https://dadata.ru/api/clean/address/#qc_house} */
+    qc_house: '2' | '3' | '10';
+    /**
+     * код качества адреса (19.1+)
+     * - `0` – Адрес из БИК распознан уверенно
+     * - `1` – Остались «лишние» части
+     * - `3` – Есть альтернативные варианты
+     */
+    qc: '0' | '1' | '3';
+    /** Иерархический код адреса в ФИАС (СС+РРР+ГГГ+ППП+СССС+УУУУ+ДДДД). Чаще всего вам нужен не он, а `fias_id` */
+    fias_code: null | string;
+  }
+> {}
 
 /** Common for AddressSuggestion and FiasSuggestion */
 export interface BaseAddressSuggestion<T = AddressAdminData | AddressMunicipalData> {

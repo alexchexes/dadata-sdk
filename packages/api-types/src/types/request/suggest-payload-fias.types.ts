@@ -9,15 +9,31 @@ export type BoundTypeFias = Exclude<BoundType, 'country' | 'flat'>;
 
 /**
  * Ограничение сектора поиска ФИАС.
+ *
+ * Ограничения по стране, ISO-кодам и муниципальному поселению недоступны.
+ *
  * @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974
  */
 export type LocationRestrictionFias = Omit<
   LocationRestriction,
-  'country' | 'country_iso_code' | 'region_iso_code'
+  | 'country'
+  | 'country_iso_code'
+  | 'region_iso_code'
+  | 'sub_area'
+  | 'sub_area_fias_id'
+  | 'sub_area_type_full'
 >;
 
-/** Объект для передачи границы поиска в параметрах подсказок по ФИАС */
+/** Объект для передачи границы поиска (ФИАС) */
 export interface BoundFias {
+  /**
+   * Включать ли объекты указанного в `to_bound/from_bound` в результаты.
+   *
+   * При `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.
+   *
+   * @default true
+   */
+  include?: boolean | null;
   /**
    * Возможные значения:
    * - `region` - Регион

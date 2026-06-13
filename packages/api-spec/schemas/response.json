@@ -195,6 +195,18 @@
         }
       }
     },
+    "AddressDivisionsMunicipal": {
+      "type": "object",
+      "properties": {
+        "area": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }] },
+        "city": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }] },
+        "settlement": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }] },
+        "planning_structure": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }]
+        },
+        "sub_area": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsAdministrativeItem" }] }
+      }
+    },
     "AddressDivisions": {
       "type": "object",
       "properties": {
@@ -202,7 +214,10 @@
           "$ref": "#/definitions/AddressDivisionsAdministrative",
           "description": "Компоненты адреса в административном делении:\n\n- `area` — район региона;\n- `city` — город;\n- `city_district` — район города;\n- `settlement` — населенный пункт;\n- `planning_structure` — планировочная структура."
         },
-        "municipal": { "type": "null", "description": "Поле отсутствует в новых версиях API, в старых не заполнялось." }
+        "municipal": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/AddressDivisionsMunicipal" }],
+          "description": "Компоненты адреса в муниципальном делении. Отсутствует в новых версиях API, в старых не заполнялось."
+        }
       },
       "required": ["administrative"]
     },
@@ -2703,7 +2718,7 @@
         "qc": {
           "type": "number",
           "enum": [0, 1],
-          "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Проверить? | Описание |\n| --- | ---------- | ---------------------------------- |\n| 0   | Нет        | Исходное значение распознано уверенно |\n| 1   | Да         | Исходное значение распознано с допущениями или не распознано |\n| 2   | Нет        | Исходное значение пустое или заведомо «мусорное» |"
+          "description": "Код проверки {@link https://dadata.ru/api/clean/name/#qc}\n\nТребуется ли вручную проверить распознанное значение:\n| Код | Проверить? | Описание |\n| --- | ---------- | ---------------------------------- |\n| 0   | Нет        | Исходное значение распознано уверенно |\n| 1   | Да         | Исходное значение распознано с допущениями или не распознано |"
         }
       },
       "required": [

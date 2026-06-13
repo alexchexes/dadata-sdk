@@ -14,4 +14,10 @@ export interface SuggestFnsUnitPayload extends BaseSuggestPayload {
 export interface SuggestFnsUnitFilter {
   /** первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции */
   region_code?: string;
+  /**
+   * Код регистрирующей инспекции.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  parent_code?: string;
 }

@@ -187,7 +187,9 @@ export default {
     },
     // Bounds:
     'fromBound:': 'Верхняя граница поиска:',
+    'Include from-bound level': 'Включать верхнюю границу',
     'toBound:': 'Нижняя граница поиска:',
+    'Include to-bound level': 'Включать нижнюю границу',
     'country': 'страна',
     'region': 'регион',
     'area': 'адм. район',

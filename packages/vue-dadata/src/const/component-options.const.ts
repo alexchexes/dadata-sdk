@@ -1,4 +1,9 @@
-import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from '@dadata-sdk/api-types';
+import {
+  DEFAULT_BOUND_INCLUDE,
+  DEFAULT_COUNT,
+  DEFAULT_DIVISION,
+  DEFAULT_LANGUAGE,
+} from '@dadata-sdk/api-types';
 import type { OnlyPrimitives, SuggestType } from '@dadata-sdk/api-types';
 
 import type { InternalVueDadataOptions } from '../types';
@@ -60,6 +65,8 @@ export const DEFAULT_OPTIONS = {
   suggestType: DEFAULT_TYPE,
   language: DEFAULT_LANGUAGE,
   division: DEFAULT_DIVISION,
+  fromBoundInclude: DEFAULT_BOUND_INCLUDE,
+  toBoundInclude: DEFAULT_BOUND_INCLUDE,
   count: DEFAULT_COUNT,
   minChars: 1,
 } as const satisfies Omit<InternalVueDadataOptions, 'token'> satisfies OnlyPrimitives;

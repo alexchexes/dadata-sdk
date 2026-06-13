@@ -1,17 +1,9 @@
-import { DEFAULT_COUNT, DEFAULT_DIVISION, DEFAULT_LANGUAGE } from '@dadata-sdk/api-types';
-import type {
-  LocationsFilterItem,
-  SuggestAddressOptions,
-  SuggestBankOptions,
-  SuggestFiasOptions,
-  SuggestFioOptions,
-  SuggestOptions,
-  SuggestOptionsWithFilters,
-  SuggestPartyByOptions,
-  SuggestPartyKzOptions,
-  SuggestPartyOptions,
-  SuggestPayload,
-} from '../types';
+import {
+  DEFAULT_BOUND_INCLUDE,
+  DEFAULT_COUNT,
+  DEFAULT_DIVISION,
+  DEFAULT_LANGUAGE,
+} from '@dadata-sdk/api-types';
 import type {
   BaseSuggestPayload,
   KladrIdFilter,
@@ -33,6 +25,20 @@ import type {
   SuggestPostalUnitPayload,
 } from '@dadata-sdk/api-types';
 
+import type {
+  LocationsFilterItem,
+  SuggestAddressOptions,
+  SuggestBankOptions,
+  SuggestFiasOptions,
+  SuggestFioOptions,
+  SuggestOptions,
+  SuggestOptionsWithFilters,
+  SuggestPartyByOptions,
+  SuggestPartyKzOptions,
+  SuggestPartyOptions,
+  SuggestPayload,
+} from '../types';
+
 /** Any of payloads that have `filters` option */
 type SuggestPayloadWithFilters =
   | SuggestFmsUnitPayload
@@ -44,6 +50,8 @@ type SuggestPayloadWithFilters =
   | SuggestPartyByPayload
   | SuggestPartyKzPayload
   | SuggestPostalUnitPayload;
+
+type SuggestPayloadFilters = NonNullable<SuggestPayloadWithFilters['filters']>;
 
 /**
  * Normalizes value of a given type to array of values of the same type
@@ -111,7 +119,7 @@ const buildBasePayload = (options: SuggestOptions): BaseSuggestPayload => {
 const buildBasePayloadWithFilters = (options: SuggestOptionsWithFilters) => {
   const payload = buildBasePayload(options) as SuggestPayloadWithFilters;
   if (options.filters) {
-    const filtersArr = toArray(options.filters);
+    const filtersArr = toArray(options.filters) as SuggestPayloadFilters; // TS cannot preserve correlation between options and suggestType
     payload.filters = filtersArr;
   }
 
@@ -125,10 +133,7 @@ const buildPayloadWithLocationsOptions = (
   options: SuggestAddressOptions | SuggestFiasOptions | SuggestPartyOptions | SuggestBankOptions,
 ) => {
   const payload = buildBasePayload(options) as
-    | SuggestAddressPayload
-    | SuggestFiasPayload
-    | SuggestAddressPayload
-    | SuggestFiasPayload;
+    SuggestAddressPayload | SuggestFiasPayload | SuggestAddressPayload | SuggestFiasPayload;
 
   if (options.locationsBoost) {
     const locationsBoostArray = normalizeKladrIdFilter(options.locationsBoost);
@@ -154,15 +159,23 @@ const buildPayloadWithLocationsOptions = (
  */
 const buildBaseAddressPayload = (options: SuggestAddressOptions | SuggestFiasOptions) => {
   const payload = buildPayloadWithLocationsOptions(options) as
-    | SuggestAddressPayload
-    | SuggestFiasPayload;
+    SuggestAddressPayload | SuggestFiasPayload;
 
   if (options.toBound) {
     payload.to_bound = { value: options.toBound };
+    if (options.toBoundInclude !== undefined && options.toBoundInclude !== DEFAULT_BOUND_INCLUDE) {
+      payload.to_bound.include = false;
+    }
   }
 
   if (options.fromBound) {
     payload.from_bound = { value: options.fromBound };
+    if (
+      options.fromBoundInclude !== undefined &&
+      options.fromBoundInclude !== DEFAULT_BOUND_INCLUDE
+    ) {
+      payload.from_bound.include = false;
+    }
   }
 
   if (options.restrictValue) {
@@ -204,8 +217,7 @@ const buildFiasPayload = (options: SuggestFiasOptions) =>
  */
 const buildBaseOrganizationPayload = (options: SuggestBankOptions | SuggestPartyOptions) => {
   const payload = buildPayloadWithLocationsOptions(options) as
-    | SuggestBankPayload
-    | SuggestPartyPayload;
+    SuggestBankPayload | SuggestPartyPayload;
 
   if (options.entityStatus) {
     const statusArray = toArray(options.entityStatus);

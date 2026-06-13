@@ -89,10 +89,18 @@
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
           "description": "Ограничивает тип адресного объекта, с которого DaData начинает поиск:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house`\n\nСоответствует параметру API `from_bound`.\n\n- Для `address`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n- Для `fias`: {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}\n\n@locale EN\nLimits the type of address object from which DaData begins searching:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house`\n\nCorresponds to the `from_bound` API parameter.\n\n- For 'address': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n- 'fias': {@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=968425521}"
         },
+        "fromBoundInclude": {
+          "type": "boolean",
+          "description": "Включать ли объекты уровня `fromBound` в результаты. По умолчанию `true`.\n\nПри `false` - подсказки, имеющие указанный в `from_bound` уровень, исключаются из результатов.\n\nСоответствует параметру `from_bound.include` API.\n\n@locale EN\nWhether results include objects at the `fromBound` level. Default is `true`.\n\nWhen `false` - suggestions having specified `from_bound` boundary level are excluded from the results.\n\nCorresponds to the `from_bound.include` API field."
+        },
         "toBound": {
           "type": "string",
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
           "description": "Ограничивает тип адресного объекта, до которого DaData выполняет поиск:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nСоответствует параметру API `to_bound`.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}\n\n@locale EN\nLimits the type of address object to which DaData performs the search:\n- `country` | `region` | `area` | `city` | `settlement` | `planning_structure` | `street` | `house` | `flat`\n\nCorresponds to the `to_bound` API parameter.\n\n{@link https://confluence.hflabs.ru/pages/viewpage.action?pageId=222888017}"
+        },
+        "toBoundInclude": {
+          "type": "boolean",
+          "description": "Включать ли объекты уровня `toBound` в результаты. По умолчанию `true`.\n\nПри `false` - подсказки, имеющие указанный в `to_bound` уровень, исключаются из результатов.\n\nСоответствует параметру `to_bound.include` API.\n\n@locale EN\nWhether results include objects at the `toBound` level. Default is `true`.\n\nWhen `false` - suggestions having specified `to_bound` boundary level are excluded from the results.\n\nCorresponds to the `to_bound.include` API field."
         },
         "restrictValue": {
           "type": "boolean",
@@ -642,6 +650,11 @@
     "Bound": {
       "type": "object",
       "properties": {
+        "include": {
+          "type": ["boolean", "null"],
+          "description": "Включать ли объекты указанного в `to_bound/from_bound` в результаты.\n\nПри `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.\n\n@default true",
+          "default": true
+        },
         "value": {
           "type": "string",
           "enum": ["country", "region", "area", "city", "settlement", "planning_structure", "street", "house", "flat"],
@@ -658,6 +671,11 @@
     "BoundFias": {
       "type": "object",
       "properties": {
+        "include": {
+          "type": ["boolean", "null"],
+          "description": "Включать ли объекты указанного в `to_bound/from_bound` в результаты.\n\nПри `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.\n\n@default true",
+          "default": true
+        },
         "value": {
           "type": "string",
           "enum": ["region", "area", "city", "settlement", "planning_structure", "street", "house"],
@@ -665,7 +683,7 @@
         }
       },
       "required": ["value"],
-      "description": "Объект для передачи границы поиска в параметрах подсказок по ФИАС"
+      "description": "Объект для передачи границы поиска (ФИАС)"
     },
     "BoundTypeFias": {
       "type": "string",
@@ -798,10 +816,6 @@
           "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`."
         },
-        "sub_area_fias_id": {
-          "type": ["string", "null"],
-          "description": "Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`."
-        },
         "city_fias_id": {
           "type": ["string", "null"],
           "description": "Ограничение по ФИАС-коду города. Лучшая альтернатива - `fias_id`."
@@ -824,7 +838,6 @@
         },
         "region": { "type": ["string", "null"], "description": "Ограничение по названию региона" },
         "area": { "type": ["string", "null"], "description": "Ограничение по названию административного района" },
-        "sub_area": { "type": ["string", "null"], "description": "Ограничение по названию муниципального поселения" },
         "city": { "type": ["string", "null"], "description": "Ограничение по названию города" },
         "city_district": {
           "type": ["string", "null"],
@@ -843,10 +856,6 @@
         "area_type_full": {
           "type": ["string", "null"],
           "description": "Ограничение по полному типу адм. района в регионе. Например: `улус`"
-        },
-        "sub_area_type_full": {
-          "type": ["string", "null"],
-          "description": "Ограничение по полному типу муниципального поселения"
         },
         "city_type_full": {
           "type": ["string", "null"],
@@ -869,7 +878,7 @@
           "description": "Ограничение по полному типу улицы. Например: `проспект`"
         }
       },
-      "description": "Ограничение сектора поиска ФИАС.\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974"
+      "description": "Ограничение сектора поиска ФИАС.\n\nОграничения по стране, ISO-кодам и муниципальному поселению недоступны.\n\n@see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974"
     },
     "RadiusFilter": {
       "type": "object",
@@ -927,6 +936,10 @@
         "region_code": {
           "type": "string",
           "description": "первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции"
+        },
+        "parent_code": {
+          "type": "string",
+          "description": "Код регистрирующей инспекции.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
         }
       }
     },
@@ -989,6 +1002,11 @@
           "type": "string",
           "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"],
           "description": "Тип организации"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "INACTIVE", "LIQUIDATED", "LIQUIDATING", "SUSPENDED"],
+          "description": "Статус организации.\n\nФильтр поддерживается API, хотя не указан в текущей публичной документации метода."
         }
       }
     },
@@ -996,6 +1014,7 @@
       "type": "string",
       "enum": ["LEGAL", "INDIVIDUAL", "INDIVIDUAL_JOINT_VENTURE", "BRANCH", "FOREIGN_BRANCH"]
     },
+    "PartyKzStatus": { "type": "string", "enum": ["ACTIVE", "INACTIVE", "LIQUIDATED", "LIQUIDATING", "SUSPENDED"] },
     "SuggestPostalUnitFilter": {
       "type": "object",
       "properties": {

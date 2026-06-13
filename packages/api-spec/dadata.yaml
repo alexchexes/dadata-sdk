@@ -3166,6 +3166,17 @@ components:
     Bound:
       type: object
       properties:
+        include:
+          type:
+            - boolean
+            - 'null'
+          description: |-
+            Включать ли объекты указанного в `to_bound/from_bound` в результаты.
+
+            При `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.
+
+            @default true
+          default: true
         value:
           type: string
           enum:
@@ -3690,6 +3701,29 @@ components:
           anyOf:
             - type: 'null'
             - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
+    AddressDivisionsMunicipal:
+      type: object
+      properties:
+        area:
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
+        city:
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
+        settlement:
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
+        planning_structure:
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
+        sub_area:
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsAdministrativeItem'
     AddressDivisions:
       type: object
       properties:
@@ -3704,8 +3738,10 @@ components:
             - `settlement` — населенный пункт;
             - `planning_structure` — планировочная структура.
         municipal:
-          type: 'null'
-          description: Поле отсутствует в новых версиях API, в старых не заполнялось.
+          anyOf:
+            - type: 'null'
+            - $ref: '#/components/schemas/AddressDivisionsMunicipal'
+          description: Компоненты адреса в муниципальном делении. Отсутствует в новых версиях API, в старых не заполнялось.
       required:
         - administrative
     AddressAdminData:
@@ -5463,6 +5499,17 @@ components:
     BoundFias:
       type: object
       properties:
+        include:
+          type:
+            - boolean
+            - 'null'
+          description: |-
+            Включать ли объекты указанного в `to_bound/from_bound` в результаты.
+
+            При `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.
+
+            @default true
+          default: true
         value:
           type: string
           enum:
@@ -5484,7 +5531,7 @@ components:
             - `house` - Дом
       required:
         - value
-      description: Объект для передачи границы поиска в параметрах подсказок по ФИАС
+      description: Объект для передачи границы поиска (ФИАС)
     LocationRestrictionFias:
       type: object
       properties:
@@ -5535,11 +5582,6 @@ components:
             - string
             - 'null'
           description: Ограничение по ФИАС-коду административного района. Лучшая альтернатива - `fias_id`.
-        sub_area_fias_id:
-          type:
-            - string
-            - 'null'
-          description: Ограничение по ФИАС-коду муниципального поселения. Лучшая альтернатива - `fias_id`.
         city_fias_id:
           type:
             - string
@@ -5577,11 +5619,6 @@ components:
             - string
             - 'null'
           description: Ограничение по названию административного района
-        sub_area:
-          type:
-            - string
-            - 'null'
-          description: Ограничение по названию муниципального поселения
         city:
           type:
             - string
@@ -5621,11 +5658,6 @@ components:
             - string
             - 'null'
           description: 'Ограничение по полному типу адм. района в регионе. Например: `улус`'
-        sub_area_type_full:
-          type:
-            - string
-            - 'null'
-          description: Ограничение по полному типу муниципального поселения
         city_type_full:
           type:
             - string
@@ -5657,6 +5689,9 @@ components:
           description: 'Ограничение по полному типу улицы. Например: `проспект`'
       description: |-
         Ограничение сектора поиска ФИАС.
+
+        Ограничения по стране, ISO-кодам и муниципальному поселению недоступны.
+
         @see https://confluence.hflabs.ru/pages/viewpage.action?pageId=967835974
     SuggestFiasPayload:
       type: object
@@ -9126,6 +9161,18 @@ components:
             - BRANCH
             - FOREIGN_BRANCH
           description: Тип организации
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - LIQUIDATED
+            - LIQUIDATING
+            - SUSPENDED
+          description: |-
+            Статус организации.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
     SuggestPartyKzPayload:
       type: object
       properties:
@@ -11026,6 +11073,12 @@ components:
         region_code:
           type: string
           description: первые 2 цифры КЛАДР-кода региона (`77` или `04`) налоговой инспекции
+        parent_code:
+          type: string
+          description: |-
+            Код регистрирующей инспекции.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
     SuggestFnsUnitPayload:
       type: object
       properties:
@@ -12308,6 +12361,18 @@ components:
           default: 10
           format: int32
           maximum: 20
+        from_bound:
+          $ref: '#/components/schemas/Bound'
+          description: |-
+            Левая граница уровня адреса.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+        to_bound:
+          $ref: '#/components/schemas/Bound'
+          description: |-
+            Правая граница уровня адреса.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
         language:
           anyOf:
             - type: string
@@ -12359,6 +12424,18 @@ components:
           default: 10
           format: int32
           maximum: 20
+        from_bound:
+          $ref: '#/components/schemas/BoundFias'
+          description: |-
+            Левая граница уровня адреса.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+        to_bound:
+          $ref: '#/components/schemas/BoundFias'
+          description: |-
+            Правая граница уровня адреса.
+
+            Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
       required:
         - query
       description: |-
@@ -14206,7 +14283,6 @@ components:
             | --- | ---------- | ---------------------------------- |
             | 0   | Нет        | Исходное значение распознано уверенно |
             | 1   | Да         | Исходное значение распознано с допущениями или не распознано |
-            | 2   | Нет        | Исходное значение пустое или заведомо «мусорное» |
       required:
         - source
         - result

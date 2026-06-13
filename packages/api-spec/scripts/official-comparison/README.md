@@ -18,6 +18,7 @@ Temporary parts:
 - `oasdiff breaking` output is useful for reports, but not trusted as the semantic source of truth.
 - `stage-b-diff-units.json` is the first own finding-shaped artifact built from `oasdiff diff -f json`; accepted-difference curation is intentionally not wired yet.
 - Component pruning is comparison-only, follows local `$ref`s from the compared paths before removing unused standard component entries, and validates remaining local `$ref`s after pruning.
+- Explicit `anyOfFolding` rules are fail-closed comparison-only projections. All selectors use the canonical `properties/<JSON-Pointer-escaped-name>` / `items` grammar. Rules validate ordered branch lineage, exact branch-local property/required differences, exact null branches, and every recursively merged schema path. Branch-local annotations such as `description` are intentionally discarded by the fold; target-level annotations are preserved.
 - The broad legacy comparer should not receive deep refactors unless it is needed to preserve coverage while the staged pipeline is incomplete.
 
 Useful quick commands:

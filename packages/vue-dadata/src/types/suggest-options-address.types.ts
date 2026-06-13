@@ -1,13 +1,14 @@
-import type { BaseSuggestOptions } from './suggest-options.types';
 import type {
   BoundType,
   DivisionType,
   KladrIdFilter,
   Language,
   LocationRestriction,
-  RadiusFilter,
   OneOrMany,
+  RadiusFilter,
 } from '@dadata-sdk/api-types';
+
+import type { BaseSuggestOptions } from './suggest-options.types';
 
 export type LocationsFilterItem = string | number | LocationRestriction | KladrIdFilter;
 
@@ -20,7 +21,11 @@ export interface SuggestAddressOptions extends BaseSuggestOptions {
   suggestType: 'address';
   locationsBoost?: OneOrMany<KladrIdFilter | string | number>;
   fromBound?: BoundType;
+  /** Whether `fromBound` includes its selected level. Default `true`. */
+  fromBoundInclude?: boolean;
   toBound?: BoundType;
+  /** Whether `toBound` includes its selected level. Default `true`. */
+  toBoundInclude?: boolean;
   locationsFilter?: OneOrMany<LocationsFilterItem>;
   restrictValue?: boolean;
   radiusFilter?: RadiusFilter;

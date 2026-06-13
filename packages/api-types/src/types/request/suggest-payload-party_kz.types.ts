@@ -1,4 +1,4 @@
-import type { PartyKzType } from '../common.types';
+import type { PartyKzStatus, PartyKzType } from '../common.types';
 import type { BaseSuggestPayload } from './suggest-payload.types';
 
 /**
@@ -12,4 +12,10 @@ export interface SuggestPartyKzPayload extends BaseSuggestPayload {
 export interface SuggestPartyKzFilter {
   /** Тип организации */
   type?: PartyKzType;
+  /**
+   * Статус организации.
+   *
+   * Фильтр поддерживается API, хотя не указан в текущей публичной документации метода.
+   */
+  status?: PartyKzStatus;
 }

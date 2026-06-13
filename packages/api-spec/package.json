@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "pnpm run gen:artifacts",
-    "test": "node --import tsx --test ./scripts/official-comparison/diff-units.test.ts",
+    "test": "node --import tsx --test ./scripts/official-comparison/anyof-folding.test.ts ./scripts/official-comparison/comparison-safety.test.ts ./scripts/official-comparison/diff-units.test.ts",
     "type-check": "tsc -p tsconfig.scripts.json --noEmit",
     "gen:schemas": "pnpm exec schema-gen --input ../api-types/schema-types --output ./schemas",
     "gen:bundle": "pnpm exec tsx ./scripts/bundle-openapi.ts ./source/dadata-src.yaml ./dadata.json ./dadata.yaml",

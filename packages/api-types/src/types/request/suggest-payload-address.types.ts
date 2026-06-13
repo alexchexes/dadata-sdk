@@ -34,6 +34,14 @@ export type DivisionType = (typeof DIVISION_TYPES)[number];
 /** Объект для передачи границы поиска */
 export interface Bound {
   /**
+   * Включать ли объекты указанного в `to_bound/from_bound` в результаты.
+   *
+   * При `false` - подсказки, имеющие указанный в `to_bound/from_bound` уровень, исключаются из результатов.
+   *
+   * @default true
+   */
+  include?: boolean | null;
+  /**
    * Возможные значения:
    * - `country` - Страна
    * - `region` - Регион

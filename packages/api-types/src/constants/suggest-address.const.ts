@@ -25,3 +25,5 @@ export const BOUND_TYPES = [
   'house',
   'flat',
 ] as const;
+
+export const DEFAULT_BOUND_INCLUDE = true;
