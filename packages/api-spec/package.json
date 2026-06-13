@@ -37,6 +37,8 @@
     "gen:artifacts": "pnpm run gen:schemas && pnpm run gen:bundle",
     "check:official-upstream": "pnpm exec tsx ./scripts/check-official-upstream.ts",
     "compare:official": "pnpm exec tsx ./scripts/compare-official.ts",
+    "compare:official:cleaner-stage-a": "pnpm exec tsx ./scripts/compare-official-cleaner-stage-a.ts",
+    "compare:official:profile-stage-a": "pnpm exec tsx ./scripts/compare-official-profile-stage-a.ts",
     "compare:official:suggestions-stage-a": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-a.ts",
     "compare:official:suggestions-stage-b": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts",
     "compare:official:suggestions-stage-b:check-snapshot": "pnpm exec tsx ./scripts/compare-official-suggestions-stage-b.ts --check-snapshot",

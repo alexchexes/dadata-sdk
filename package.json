@@ -17,6 +17,8 @@
     "gen:api-artifacts": "pnpm --filter @dadata-sdk/api-spec gen:artifacts",
     "check:official-upstream": "pnpm --filter @dadata-sdk/api-spec check:official-upstream",
     "compare:official": "pnpm --filter @dadata-sdk/api-spec compare:official",
+    "compare:official:cleaner-stage-a": "pnpm --filter @dadata-sdk/api-spec compare:official:cleaner-stage-a",
+    "compare:official:profile-stage-a": "pnpm --filter @dadata-sdk/api-spec compare:official:profile-stage-a",
     "compare:official:suggestions-stage-a": "pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-a",
     "compare:official:suggestions-stage-b": "pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b",
     "compare:official:suggestions-stage-b:check-snapshot": "pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b:check-snapshot",

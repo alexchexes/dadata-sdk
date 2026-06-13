@@ -5,8 +5,9 @@ This directory holds shared helpers for the temporary staged official-vs-ours co
 Current script roles:
 
 - `compare-official.ts`: legacy broad report across checked-in official specs. Keep it as a reference until the staged pipeline covers the same surface.
-- `compare-official-suggestions-stage-a.ts`: Stage A for `suggestions`; validates curated operation mappings and can write a projected official spec.
+- `compare-official-*-stage-a.ts`: Stage A entrypoints for one official source family; they validate curated operation mappings and can write projected official specs.
 - `compare-official-suggestions-stage-b.ts`: Stage B for `suggestions`; runs Stage A projection, builds the matching slice from `dadata.json`, applies comparison-only normalization and component pruning, then runs `oasdiff`.
+- `official-comparison/stage-a/`: shared Stage A inventory/projection runner used by the family entrypoints.
 
 Naming:
 
@@ -26,6 +27,11 @@ Useful quick commands:
 ```sh
 # Show the compact Stage B console report.
 pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --max-groups 20 --max-samples 5
+
+# Check family operation inventory/projection gates.
+pnpm --filter @dadata-sdk/api-spec compare:official:cleaner-stage-a
+pnpm --filter @dadata-sdk/api-spec compare:official:profile-stage-a
+pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-a
 
 # Keep raw and normalized JSON artifacts for inspection.
 pnpm --filter @dadata-sdk/api-spec compare:official:suggestions-stage-b -- --keep-temp --max-groups 20 --max-samples 5

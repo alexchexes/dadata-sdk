@@ -1,0 +1,46 @@
+version: 1
+family: cleaner
+operations:
+  templateExpansions:
+    - our:
+        path: /clean/address
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/birthdate
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/email
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/name
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/passport
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/phone
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
+    - our:
+        path: /clean/vehicle
+        method: post
+      official:
+        pathTemplate: '/clean/{type}'
+        method: post
