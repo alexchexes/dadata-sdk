@@ -2,8 +2,8 @@
 // Keep each transform narrow and logged; source specs must not be rewritten here.
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
-import { cloneJson, isRecord } from './io.js';
-import { escapeJsonPointerSegment, parseCanonicalLocalRef } from './json-pointer.js';
+import { cloneJson, isRecord } from '../io.js';
+import { escapeJsonPointerSegment, parseCanonicalLocalRef } from '../json-pointer.js';
 
 type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
 type CompositionKey = 'anyOf' | 'oneOf';
@@ -11,14 +11,18 @@ type CompositionKey = 'anyOf' | 'oneOf';
 export interface ComparisonNormalizationDecision {
   branchRefs?: string[];
   compositionKey: CompositionKey;
-  kind: 'flattened-nullable-composition' | 'folded-object-anyof' | 'inlined-nullable-object-ref';
+  kind:
+    | 'flattened-nullable-composition'
+    | 'folded-object-anyof'
+    | 'inlined-nullable-object-ref'
+    | 'selected-anyof-branch';
   objectBranchCount?: number;
   path: string;
   ref?: string;
 }
 
 export const COMPARISON_INFO = {
-  title: 'DaData suggestions comparison',
+  title: 'DaData official comparison',
   version: '0.0.0',
 };
 

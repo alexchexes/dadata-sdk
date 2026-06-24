@@ -1743,7 +1743,8 @@ paths:
         '200':
           description: Запрос успешно обработан
           content:
-            application/json: { schema: { $ref: '../schemas/response.json#/definitions/FioClean' } }
+            application/json:
+              { schema: { $ref: '../schemas/response.json#/definitions/CleanFioResponse' } }
         '400': { $ref: '#/components/responses/CleanBadRequest' }
         '401': { $ref: '#/components/responses/CleanUnauthorized' }
         '403': { $ref: '#/components/responses/CleanForbidden' }
@@ -2278,6 +2279,7 @@ paths:
       summary: Статистика использования
       description: |
         Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:
+        - бренд по ИНН (`brand`)
         - стандартизация (`clean`)
         - компания по email (`company`)
         - поиск дублей (`merging`)

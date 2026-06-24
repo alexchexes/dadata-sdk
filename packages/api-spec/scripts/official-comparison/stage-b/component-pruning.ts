@@ -1,12 +1,12 @@
 // Comparison-only component pruning. The source specs stay untouched; temporary specs keep only reachable refs.
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
-import { isRecord } from './io.js';
+import { isRecord } from '../io.js';
 import {
   escapeJsonPointerSegment,
   formatLocalRef,
   parseCanonicalLocalRef,
-} from './json-pointer.js';
+} from '../json-pointer.js';
 
 export interface ComponentPruningResult {
   after: Record<string, number>;

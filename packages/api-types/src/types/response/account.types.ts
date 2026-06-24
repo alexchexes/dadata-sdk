@@ -47,6 +47,8 @@ export interface DailyStats {
 }
 
 export interface DailyStatsServices {
+  /** Кол-во запросов к сервису "Бренд по ИНН" с начала суток */
+  brand: number;
   /** Кол-во запросов к "Стандартизации" с начала суток */
   clean: number;
   /** Кол-во запросов к сервису "Компания по Email" с начала суток */
@@ -62,6 +64,8 @@ export interface DailyStatsServices {
 }
 
 export interface DailyStatsRemaining {
+  /** Расчётное количество оставшихся запросов к сервису "Бренд по ИНН" */
+  brand: number;
   /** Расчётное количество оставшихся запросов "Стандартизации" */
   clean: number;
   /** Расчётное количество оставшихся запросов "Компаний по емейлу" */

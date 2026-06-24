@@ -1,20 +1,26 @@
 import { resolve } from 'node:path';
 import YAML from 'yaml';
 
+import { isRecord, readText } from '../io.js';
+import { HTTP_METHODS, type HttpMethod } from '../openapi.js';
 import {
   type AllowedRecursiveMerge,
   type AnyOfFoldingRule,
   type ExpectedObjectBranch,
-  assertCanonicalSchemaPath,
 } from './anyof-folding.js';
-import { isRecord, readText } from './io.js';
-import { HTTP_METHODS, type HttpMethod } from './openapi.js';
+import type { AnyOfSelectionRule } from './anyof-selection.js';
+import {
+  assertCanonicalSchemaPath,
+  type ComparisonTarget,
+  type OperationSchemaTarget,
+} from './schema-target.js';
 
 export interface ComparisonCuration {
   anyOfFolding: AnyOfFoldingRule[];
+  anyOfSelections: AnyOfSelectionRule[];
 }
 
-/** Reads Stage B comparison curation from the shared official suggestions curation file. */
+/** Reads Stage B comparison curation from one official-family curation file. */
 export function readComparisonCuration(
   curationPath: string | null,
   defaultCurationPath: string,
@@ -27,25 +33,79 @@ export function readComparisonCuration(
   const parsed = YAML.parse(readText(path)) as unknown;
 
   if (!isRecord(parsed)) {
-    throw new Error('Suggestions curation must be a YAML object.');
+    throw new Error('Stage B curation must be a YAML object.');
   }
 
   const comparison = parsed.comparison;
 
   if (comparison === undefined) {
-    return { anyOfFolding: [] };
+    return { anyOfFolding: [], anyOfSelections: [] };
   }
 
   if (!isRecord(comparison)) {
     throw new Error('comparison must be an object.');
   }
 
+  assertOnlyKeys(comparison, ['anyOfFolding', 'anyOfSelections'], 'comparison');
+
   return {
     anyOfFolding: parseAnyOfFoldingRules(comparison.anyOfFolding),
+    anyOfSelections: parseAnyOfSelectionRules(comparison.anyOfSelections),
   };
 }
 
-/** Parses explicit anyOf folding rules from suggestions curation. */
+/** Parses explicit anyOf branch-selection rules from Stage B curation. */
+function parseAnyOfSelectionRules(value: unknown): AnyOfSelectionRule[] {
+  if (value === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    throw new Error('comparison.anyOfSelections must be an array.');
+  }
+
+  return value.map((item, index) => parseAnyOfSelectionRule(item, index));
+}
+
+/** Parses one explicit anyOf branch-selection rule. */
+function parseAnyOfSelectionRule(value: unknown, index: number): AnyOfSelectionRule {
+  const path = `comparison.anyOfSelections[${index}]`;
+  const record = requireRecord(value, path);
+
+  assertOnlyKeys(
+    record,
+    [
+      'expectedBranchRefs',
+      'operation',
+      'request',
+      'response',
+      'schemaPath',
+      'selectedRef',
+      'target',
+    ],
+    path,
+  );
+
+  return {
+    ...parseOperationSchemaTarget(record, path),
+    expectedBranchRefs: parseSelectionExpectedBranchRefs(record.expectedBranchRefs, path),
+    selectedRef: requireString(record.selectedRef, `${path}.selectedRef`),
+    target: requireTarget(record.target, `${path}.target`),
+  };
+}
+
+function parseSelectionExpectedBranchRefs(value: unknown, parentPath: string): string[] {
+  const path = `${parentPath}.expectedBranchRefs`;
+  const refs = requireStringArray(value, path);
+
+  if (refs.length < 2) {
+    throw new Error(`${path} must contain at least two refs.`);
+  }
+
+  return refs;
+}
+
+/** Parses explicit anyOf folding rules from Stage B curation. */
 function parseAnyOfFoldingRules(value: unknown): AnyOfFoldingRule[] {
   if (value === undefined) {
     return [];
@@ -62,9 +122,6 @@ function parseAnyOfFoldingRules(value: unknown): AnyOfFoldingRule[] {
 function parseAnyOfFoldingRule(value: unknown, index: number): AnyOfFoldingRule {
   const path = `comparison.anyOfFolding[${index}]`;
   const record = requireRecord(value, path);
-  const operation = requireRecord(record.operation, `${path}.operation`);
-  const request = record.request;
-  const response = record.response;
 
   assertOnlyKeys(
     record,
@@ -80,6 +137,27 @@ function parseAnyOfFoldingRule(value: unknown, index: number): AnyOfFoldingRule 
     ],
     path,
   );
+
+  return {
+    ...parseOperationSchemaTarget(record, path),
+    allowedRecursiveMerges: parseAllowedRecursiveMerges(record.allowedRecursiveMerges, path),
+    expectedNullBranch: requireBoolean(record.expectedNullBranch, `${path}.expectedNullBranch`),
+    expectedObjectBranches: parseExpectedObjectBranches(
+      record.expectedObjectBranches,
+      `${path}.expectedObjectBranches`,
+    ),
+    target: requireTarget(record.target, `${path}.target`),
+  };
+}
+
+function parseOperationSchemaTarget(
+  record: Record<string, unknown>,
+  path: string,
+): OperationSchemaTarget {
+  const operation = requireRecord(record.operation, `${path}.operation`);
+  const request = record.request;
+  const response = record.response;
+
   assertOnlyKeys(operation, ['method', 'path'], `${path}.operation`);
 
   if ((request === undefined) === (response === undefined)) {
@@ -87,12 +165,6 @@ function parseAnyOfFoldingRule(value: unknown, index: number): AnyOfFoldingRule 
   }
 
   return {
-    allowedRecursiveMerges: parseAllowedRecursiveMerges(record.allowedRecursiveMerges, path),
-    expectedNullBranch: requireBoolean(record.expectedNullBranch, `${path}.expectedNullBranch`),
-    expectedObjectBranches: parseExpectedObjectBranches(
-      record.expectedObjectBranches,
-      `${path}.expectedObjectBranches`,
-    ),
     operation: {
       method: requireHttpMethod(operation.method, `${path}.operation.method`),
       path: requireString(operation.path, `${path}.operation.path`),
@@ -106,15 +178,15 @@ function parseAnyOfFoldingRule(value: unknown, index: number): AnyOfFoldingRule 
               `${path}.request.mediaType`,
             ),
           },
-    response: response === undefined ? undefined : parseAnyOfFoldingResponse(response, index),
+    response: response === undefined ? undefined : parseResponseSelector(response, `${path}.response`),
     schemaPath: requireSchemaPath(record.schemaPath, `${path}.schemaPath`, true),
-    target: requireTarget(record.target, `${path}.target`),
   };
 }
 
-/** Parses the response selector for one anyOf folding rule. */
-function parseAnyOfFoldingResponse(value: unknown, index: number): AnyOfFoldingRule['response'] {
-  const path = `comparison.anyOfFolding[${index}].response`;
+function parseResponseSelector(
+  value: unknown,
+  path: string,
+): NonNullable<OperationSchemaTarget['response']> {
   const response = requireRecord(value, path);
 
   assertOnlyKeys(response, ['mediaType', 'status'], path);
@@ -282,7 +354,7 @@ function requireHttpMethod(value: unknown, path: string): HttpMethod {
   return method as HttpMethod;
 }
 
-function requireTarget(value: unknown, path: string): AnyOfFoldingRule['target'] {
+function requireTarget(value: unknown, path: string): ComparisonTarget {
   if (value !== 'official' && value !== 'ours') {
     throw new Error(`${path} must be "official" or "ours".`);
   }

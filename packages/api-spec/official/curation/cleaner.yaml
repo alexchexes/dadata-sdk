@@ -8,39 +8,117 @@ operations:
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/birthdate
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/email
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/name
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/passport
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/phone
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
     - our:
         path: /clean/vehicle
         method: post
       official:
         pathTemplate: '/clean/{type}'
         method: post
+
+comparison:
+  anyOfSelections:
+    - target: official
+      operation:
+        path: /clean/address
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Address'
+
+    - target: official
+      operation:
+        path: /clean/birthdate
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Birthdate'
+
+    - target: official
+      operation:
+        path: /clean/email
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Email'
+
+    - target: official
+      operation:
+        path: /clean/name
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Name'
+
+    - target: official
+      operation:
+        path: /clean/passport
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Passport'
+
+    - target: official
+      operation:
+        path: /clean/phone
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Phone'
+
+    - target: official
+      operation:
+        path: /clean/vehicle
+        method: post
+      response:
+        status: '200'
+        mediaType: application/json
+      schemaPath: items
+      selectedRef: '#/components/schemas/Vehicle'

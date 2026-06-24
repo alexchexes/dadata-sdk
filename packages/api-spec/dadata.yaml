@@ -2162,7 +2162,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FioClean'
+                $ref: '#/components/schemas/CleanFioResponse'
         '400':
           $ref: '#/components/responses/CleanBadRequest'
         '401':
@@ -2896,6 +2896,7 @@ paths:
       summary: Статистика использования
       description: |
         Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:
+        - бренд по ИНН (`brand`)
         - стандартизация (`clean`)
         - компания по email (`company`)
         - поиск дублей (`merging`)
@@ -14330,6 +14331,12 @@ components:
         - gender
         - qc
       description: '@see https://dadata.ru/api/clean/name/'
+    CleanFioResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/FioClean'
+      minItems: 1
+      maxItems: 1
     EmailClean:
       type: object
       properties:
@@ -15386,6 +15393,9 @@ components:
     DailyStatsServices:
       type: object
       properties:
+        brand:
+          type: number
+          description: Кол-во запросов к сервису "Бренд по ИНН" с начала суток
         clean:
           type: number
           description: Кол-во запросов к "Стандартизации" с начала суток
@@ -15399,6 +15409,7 @@ components:
           type: number
           description: Кол-во запросов к "Подсказкам" с начала суток
       required:
+        - brand
         - clean
         - company
         - merging
@@ -15406,6 +15417,9 @@ components:
     DailyStatsRemaining:
       type: object
       properties:
+        brand:
+          type: number
+          description: Расчётное количество оставшихся запросов к сервису "Бренд по ИНН"
         clean:
           type: number
           description: Расчётное количество оставшихся запросов "Стандартизации"
@@ -15419,6 +15433,7 @@ components:
           type: number
           description: Расчётное количество оставшихся запросов к "Подсказкам"
       required:
+        - brand
         - clean
         - company
         - merging

@@ -3031,7 +3031,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FioClean"
+                  "$ref": "#/components/schemas/CleanFioResponse"
                 }
               }
             }
@@ -4060,7 +4060,7 @@
       "get": {
         "tags": ["account", "stats"],
         "summary": "Статистика использования",
-        "description": "Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:\n- стандартизация (`clean`)\n- компания по email (`company`)\n- поиск дублей (`merging`)\n- подсказки (`suggestions`)\n\nВ поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.\nВ поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.\n\n> **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**\n",
+        "description": "Возвращает агрегированную статистику и остатки за сегодняшний день по каждому из сервисов:\n- бренд по ИНН (`brand`)\n- стандартизация (`clean`)\n- компания по email (`company`)\n- поиск дублей (`merging`)\n- подсказки (`suggestions`)\n\nВ поле `services` возвращается суммарное количество запросов, израсходованное по каждому сервису с начала суток.\nВ поле `remaining` возвращается расчетное количество оставшихся запросов согласно балансу и тарифу.\n\n> **Вызовы к этому API из браузера запрещены CORS-политикой сервера «Дадаты».**\n",
         "externalDocs": {
           "url": "https://dadata.ru/api/stat/"
         },
@@ -13407,6 +13407,14 @@
         ],
         "description": "@see https://dadata.ru/api/clean/name/"
       },
+      "CleanFioResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FioClean"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
       "EmailClean": {
         "type": "object",
         "properties": {
@@ -14194,6 +14202,10 @@
       "DailyStatsServices": {
         "type": "object",
         "properties": {
+          "brand": {
+            "type": "number",
+            "description": "Кол-во запросов к сервису \"Бренд по ИНН\" с начала суток"
+          },
           "clean": {
             "type": "number",
             "description": "Кол-во запросов к \"Стандартизации\" с начала суток"
@@ -14211,11 +14223,15 @@
             "description": "Кол-во запросов к \"Подсказкам\" с начала суток"
           }
         },
-        "required": ["clean", "company", "merging", "suggestions"]
+        "required": ["brand", "clean", "company", "merging", "suggestions"]
       },
       "DailyStatsRemaining": {
         "type": "object",
         "properties": {
+          "brand": {
+            "type": "number",
+            "description": "Расчётное количество оставшихся запросов к сервису \"Бренд по ИНН\""
+          },
           "clean": {
             "type": "number",
             "description": "Расчётное количество оставшихся запросов \"Стандартизации\""
@@ -14233,7 +14249,7 @@
             "description": "Расчётное количество оставшихся запросов к \"Подсказкам\""
           }
         },
-        "required": ["clean", "company", "merging", "suggestions"]
+        "required": ["brand", "clean", "company", "merging", "suggestions"]
       },
       "DailyStats": {
         "type": "object",

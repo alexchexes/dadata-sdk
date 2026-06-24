@@ -1,5 +1,5 @@
 // Converts raw oasdiff full JSON into small report units. This is intentionally path-schema focused.
-import { isRecord } from './io.js';
+import { isRecord } from '../io.js';
 
 export interface DiffUnit {
   added?: unknown;
@@ -38,9 +38,11 @@ interface UnitContext {
 
 const SCHEMA_CONSTRAINT_KEYS = new Set([
   'max',
+  'maxItems',
   'maximum',
   'maxLength',
   'min',
+  'minItems',
   'minimum',
   'minLength',
   'pattern',

@@ -1,13 +1,16 @@
 import type { OpenAPIV3_1 } from '@scalar/openapi-types';
 
 import type { ComparisonNormalizationDecision } from './comparison-normalization.js';
-import { cloneJson, isRecord } from './io.js';
+import { cloneJson, isRecord } from '../io.js';
+import { escapeJsonPointerSegment } from '../json-pointer.js';
 import {
-  escapeJsonPointerSegment,
-  parseCanonicalLocalRef,
-  unescapeJsonPointerSegment,
-} from './json-pointer.js';
-import type { HttpMethod } from './openapi.js';
+  assertCanonicalSchemaPath,
+  findAndMaterializeOperationSchema,
+  formatOperationSchemaTarget,
+  materializeSchema,
+  type ComparisonTarget,
+  type OperationSchemaTarget,
+} from './schema-target.js';
 
 export interface ExpectedObjectBranch {
   onlyProperties: string[];
@@ -23,61 +26,11 @@ export interface AllowedRecursiveMerge {
   schemaPath: string;
 }
 
-export interface AnyOfFoldingRule {
+export interface AnyOfFoldingRule extends OperationSchemaTarget {
   allowedRecursiveMerges: AllowedRecursiveMerge[];
   expectedNullBranch: boolean;
   expectedObjectBranches: ExpectedObjectBranch[];
-  operation: {
-    method: HttpMethod;
-    path: string;
-  };
-  request?: {
-    mediaType: string;
-  };
-  response?: {
-    mediaType: string;
-    status: string;
-  };
-  schemaPath: string;
-  target: 'official' | 'ours';
-}
-
-/** Validates the canonical comparison schema-path grammar. */
-export function assertCanonicalSchemaPath(value: string, path: string, allowEmpty: boolean): void {
-  if (value === '') {
-    if (allowEmpty) {
-      return;
-    }
-
-    throw new Error(`${path} must not be empty.`);
-  }
-
-  const segments = value.split('/');
-
-  if (segments.some((segment) => segment.length === 0)) {
-    throw new Error(`${path} must not contain empty path segments.`);
-  }
-
-  for (let index = 0; index < segments.length; ) {
-    const segment = segments[index];
-
-    if (segment === 'items') {
-      index += 1;
-      continue;
-    }
-
-    if (segment !== 'properties' || index + 1 >= segments.length) {
-      throw new Error(`${path} must use only properties/<escaped-name> and items segments.`);
-    }
-
-    const propertySegment = segments[index + 1] ?? '';
-
-    if (escapeJsonPointerSegment(unescapeJsonPointerSegment(propertySegment)) !== propertySegment) {
-      throw new Error(`${path} contains a noncanonical JSON Pointer property segment.`);
-    }
-
-    index += 2;
-  }
+  target: ComparisonTarget;
 }
 
 interface MergeContext {
@@ -112,15 +65,8 @@ export function applyAnyOfFoldingRules(
   const decisions: ComparisonNormalizationDecision[] = [];
 
   for (const rule of rules) {
-    assertCanonicalSchemaPath(rule.schemaPath, `${formatRuleIdentity(rule)} schemaPath`, true);
-    const schema = findOperationSchema(document, root, rule);
-    const targetSchema = materializeSchemaPath(
-      root,
-      schema,
-      rule.schemaPath,
-      formatRuleIdentity(rule),
-    );
-    const decisionPath = formatRuleDecisionPath(rule);
+    const targetSchema = findAndMaterializeOperationSchema(document, rule, 'AnyOf folding');
+    const decisionPath = formatOperationSchemaTarget(rule);
     const context = createMergeContext(root, rule, decisionPath);
     const decision = foldObjectAnyOf(targetSchema, rule, context);
 
@@ -160,207 +106,6 @@ function createMergeContext(
     rulePath,
     usedPermissions: new Set(),
   };
-}
-
-/** Finds and materializes the request/response schema root for one folding rule. */
-function findOperationSchema(
-  document: OpenAPIV3_1.Document,
-  root: Record<string, unknown>,
-  rule: AnyOfFoldingRule,
-): Record<string, unknown> {
-  const pathItem = document.paths?.[rule.operation.path];
-
-  if (!isRecord(pathItem)) {
-    throw new Error(`AnyOf folding rule points to missing path: ${rule.operation.path}.`);
-  }
-
-  const operation = pathItem[rule.operation.method];
-
-  if (!isRecord(operation)) {
-    throw new Error(
-      `AnyOf folding rule points to missing operation: ${rule.operation.method.toUpperCase()} ${rule.operation.path}.`,
-    );
-  }
-
-  if (rule.request) {
-    return findRequestSchema(root, operation, rule);
-  }
-
-  if (rule.response) {
-    return findResponseSchema(root, operation, rule);
-  }
-
-  throw new Error(
-    `AnyOf folding rule must specify request or response: ${formatRuleIdentity(rule)}.`,
-  );
-}
-
-/** Finds and materializes the media schema for one request folding rule. */
-function findRequestSchema(
-  root: Record<string, unknown>,
-  operation: Record<string, unknown>,
-  rule: AnyOfFoldingRule,
-): Record<string, unknown> {
-  const mediaType = rule.request?.mediaType;
-  const requestBody = requireRecord(
-    operation.requestBody,
-    `requestBody for ${formatRuleIdentity(rule)}`,
-  );
-  const content = requireRecord(
-    requestBody.content,
-    `requestBody.content for ${formatRuleIdentity(rule)}`,
-  );
-  const media = requireRecord(
-    content[mediaType ?? ''],
-    `request media ${mediaType} for ${formatRuleIdentity(rule)}`,
-  );
-
-  return materializeSchemaProperty(
-    root,
-    media,
-    'schema',
-    `request schema for ${formatRuleIdentity(rule)}`,
-  );
-}
-
-/** Finds and materializes the media schema for one response folding rule. */
-function findResponseSchema(
-  root: Record<string, unknown>,
-  operation: Record<string, unknown>,
-  rule: AnyOfFoldingRule,
-): Record<string, unknown> {
-  const response = rule.response;
-  const responses = requireRecord(operation.responses, `responses for ${formatRuleIdentity(rule)}`);
-  const responseObject = requireRecord(
-    responses[response?.status ?? ''],
-    `response ${response?.status} for ${formatRuleIdentity(rule)}`,
-  );
-  const content = requireRecord(
-    responseObject.content,
-    `response.content for ${formatRuleIdentity(rule)}`,
-  );
-  const media = requireRecord(
-    content[response?.mediaType ?? ''],
-    `response media ${response?.mediaType} for ${formatRuleIdentity(rule)}`,
-  );
-
-  return materializeSchemaProperty(
-    root,
-    media,
-    'schema',
-    `response schema for ${formatRuleIdentity(rule)}`,
-  );
-}
-
-/** Follows a compact schema path through properties/items, materializing refs on that path. */
-function materializeSchemaPath(
-  root: Record<string, unknown>,
-  schema: Record<string, unknown>,
-  schemaPath: string,
-  ruleIdentity: string,
-): Record<string, unknown> {
-  assertCanonicalSchemaPath(schemaPath, `${ruleIdentity} schemaPath`, true);
-
-  const segments = schemaPath === '' ? [] : schemaPath.split('/');
-  let current = schema;
-
-  for (let index = 0; index < segments.length; ) {
-    const segment = segments[index] ?? '';
-
-    if (segment === 'items') {
-      current = materializeSchemaProperty(
-        root,
-        current,
-        'items',
-        `${ruleIdentity} schemaPath ${schemaPath}`,
-      );
-      index += 1;
-      continue;
-    }
-
-    const propertySegment = segments[index + 1] ?? '';
-    const propertyName = unescapeJsonPointerSegment(propertySegment);
-    const prefix = segments.slice(0, index).join('/') || '<schema>';
-    const properties = requireRecord(current.properties, `${ruleIdentity} properties at ${prefix}`);
-
-    current = materializeSchemaProperty(
-      root,
-      properties,
-      propertyName,
-      `${ruleIdentity} property ${propertyName} in schemaPath ${schemaPath}`,
-    );
-    index += 2;
-  }
-
-  return current;
-}
-
-/** Replaces a schema property with a cloned local $ref target when needed. */
-function materializeSchemaProperty(
-  root: Record<string, unknown>,
-  owner: Record<string, unknown>,
-  key: string,
-  context: string,
-): Record<string, unknown> {
-  const value = owner[key];
-
-  if (!isRecord(value)) {
-    throw new Error(`${context} must be a schema object.`);
-  }
-
-  const materialized = materializeSchema(root, value, context);
-
-  if (materialized !== value) {
-    owner[key] = materialized;
-  }
-
-  return materialized;
-}
-
-/** Clones a local $ref schema target and preserves non-$ref siblings. */
-function materializeSchema(
-  root: Record<string, unknown>,
-  schema: Record<string, unknown>,
-  context: string,
-  visitedRefs = new Set<string>(),
-): Record<string, unknown> {
-  if (!('$ref' in schema)) {
-    return schema;
-  }
-
-  if (typeof schema.$ref !== 'string') {
-    throw new Error(`${context} has a non-string $ref.`);
-  }
-
-  assertRefHasOnlyAnnotationSiblings(schema, context);
-  const ref = schema.$ref;
-
-  if (visitedRefs.has(ref)) {
-    throw new Error(`${context} has a cyclic local $ref chain at ${ref}.`);
-  }
-
-  const resolved = resolveLocalRef(root, ref, context);
-
-  if (!isRecord(resolved)) {
-    throw new Error(`Failed to resolve local schema ref ${ref}.`);
-  }
-
-  const nextVisitedRefs = new Set(visitedRefs);
-  nextVisitedRefs.add(ref);
-  const materialized = materializeSchema(
-    root,
-    cloneJson(resolved),
-    `${context} -> ${ref}`,
-    nextVisitedRefs,
-  );
-
-  for (const [key, value] of Object.entries(schema)) {
-    if (key !== '$ref') {
-      materialized[key] = cloneJson(value);
-    }
-  }
-
-  return materialized;
 }
 
 /** Folds the explicitly expected root anyOf into one comparison-only object schema. */
@@ -711,20 +456,8 @@ function resolveSchemaForMerge(
 
   return {
     ref,
-    schema: ref ? materializeSchema(root, value, path) : value,
+    schema: ref ? materializeSchema(root, value, path, 'AnyOf folding') : value,
   };
-}
-
-function assertRefHasOnlyAnnotationSiblings(schema: Record<string, unknown>, path: string): void {
-  const unsupportedSiblings = Object.keys(schema).filter(
-    (key) => key !== '$ref' && !ANNOTATION_KEYS.has(key),
-  );
-
-  if (unsupportedSiblings.length > 0) {
-    throw new Error(
-      `AnyOf folding found structural $ref siblings ${unsupportedSiblings.sort().join(', ')} at ${path}.`,
-    );
-  }
 }
 
 function assertExactNullBranch(branch: ResolvedSchema, context: MergeContext): void {
@@ -791,21 +524,6 @@ function replaceSchemaWithFoldedAnyOf(
   }
 }
 
-/** Resolves canonical local JSON Pointer refs inside the temporary comparison document. */
-function resolveLocalRef(root: Record<string, unknown>, ref: string, context: string): unknown {
-  let current: unknown = root;
-
-  for (const segment of parseCanonicalLocalRef(ref, `${context} $ref`)) {
-    if (!isRecord(current) && !Array.isArray(current)) {
-      return null;
-    }
-
-    current = (current as Record<string, unknown>)[segment];
-  }
-
-  return current;
-}
-
 function requireRecord(value: unknown, path: string): Record<string, unknown> {
   if (!isRecord(value)) {
     throw new Error(`${path} must be an object.`);
@@ -834,25 +552,6 @@ function isNullSchema(value: unknown): boolean {
 
 function addNullType(schema: Record<string, unknown>): void {
   schema.type = ['object', 'null'];
-}
-
-function formatRuleIdentity(rule: AnyOfFoldingRule): string {
-  return `${rule.operation.method.toUpperCase()} ${rule.operation.path}`;
-}
-
-function formatRuleDecisionPath(rule: AnyOfFoldingRule): string {
-  const operation = formatRuleIdentity(rule);
-  const schemaPath = rule.schemaPath ? ` ${rule.schemaPath}` : '';
-
-  if (rule.request) {
-    return `${operation} request ${rule.request.mediaType}${schemaPath}`;
-  }
-
-  if (rule.response) {
-    return `${operation} response ${rule.response.status} ${rule.response.mediaType}${schemaPath}`;
-  }
-
-  return `${operation}${schemaPath}`;
 }
 
 function pathLabel(schemaPath: string, context: MergeContext): string {

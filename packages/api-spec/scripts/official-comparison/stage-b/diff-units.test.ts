@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { buildDiffUnits, renderDiffUnitSnapshot, type DiffUnit } from './diff-units.js';
+
+import { type DiffUnit, buildDiffUnits, renderDiffUnitSnapshot } from './diff-units.js';
 
 const baseUnit = {
   location: 'suggestions/items/data/geo_lat',
@@ -63,6 +64,44 @@ describe('renderDiffUnitSnapshot', () => {
 });
 
 describe('buildDiffUnits', () => {
+  it('preserves array item bounds reported by oasdiff', () => {
+    const diff = {
+      paths: {
+        modified: {
+          '/clean/birthdate': {
+            operations: {
+              modified: {
+                POST: {
+                  requestBody: {
+                    content: {
+                      modified: {
+                        'application/json': {
+                          schema: {
+                            maxItems: { from: null, to: 1 },
+                            minItems: { from: 0, to: 1 },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    assert.equal(
+      renderDiffUnitSnapshot(buildDiffUnits(diff)),
+      [
+        '/clean/birthdate POST request application/json <schema> schema-maxItems-changed from=null to=1',
+        '/clean/birthdate POST request application/json <schema> schema-minItems-changed from=0 to=1',
+        '',
+      ].join('\n'),
+    );
+  });
+
   it('preserves composition type-set changes reported by oasdiff', () => {
     const diff = {
       paths: {

@@ -28,6 +28,7 @@
     "DailyStatsServices": {
       "type": "object",
       "properties": {
+        "brand": { "type": "number", "description": "Кол-во запросов к сервису \"Бренд по ИНН\" с начала суток" },
         "clean": { "type": "number", "description": "Кол-во запросов к \"Стандартизации\" с начала суток" },
         "company": {
           "type": "number",
@@ -39,11 +40,15 @@
         },
         "suggestions": { "type": "number", "description": "Кол-во запросов к \"Подсказкам\" с начала суток" }
       },
-      "required": ["clean", "company", "merging", "suggestions"]
+      "required": ["brand", "clean", "company", "merging", "suggestions"]
     },
     "DailyStatsRemaining": {
       "type": "object",
       "properties": {
+        "brand": {
+          "type": "number",
+          "description": "Расчётное количество оставшихся запросов к сервису \"Бренд по ИНН\""
+        },
         "clean": { "type": "number", "description": "Расчётное количество оставшихся запросов \"Стандартизации\"" },
         "company": {
           "type": "number",
@@ -55,7 +60,7 @@
         },
         "suggestions": { "type": "number", "description": "Расчётное количество оставшихся запросов к \"Подсказкам\"" }
       },
-      "required": ["clean", "company", "merging", "suggestions"]
+      "required": ["brand", "clean", "company", "merging", "suggestions"]
     },
     "ServiceVersions": {
       "type": "object",
