@@ -61,6 +61,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Address'
 
     - target: official
@@ -71,6 +80,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Birthdate'
 
     - target: official
@@ -81,6 +99,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Email'
 
     - target: official
@@ -91,6 +118,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Name'
 
     - target: official
@@ -101,6 +137,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Passport'
 
     - target: official
@@ -111,6 +156,15 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Phone'
 
     - target: official
@@ -121,4 +175,13 @@ comparison:
         status: '200'
         mediaType: application/json
       schemaPath: items
+      expectedBranchRefs:
+        - '#/components/schemas/Address'
+        - '#/components/schemas/AsIs'
+        - '#/components/schemas/Birthdate'
+        - '#/components/schemas/Email'
+        - '#/components/schemas/Name'
+        - '#/components/schemas/Passport'
+        - '#/components/schemas/Phone'
+        - '#/components/schemas/Vehicle'
       selectedRef: '#/components/schemas/Vehicle'
